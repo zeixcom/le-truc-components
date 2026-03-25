@@ -1,0 +1,55 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as BasicButtonStories from './basic-button.stories';
+
+<Meta of={BasicButtonStories} />
+
+### Basic Button
+
+A reusable button component designed to be controlled by a parent component via `pass()`. Demonstrates `asBoolean()` and `asString()` parsers — including a reader fallback that reads the initial label from the DOM — and shows how optional UI elements (`span.label`, `span.badge`) are handled gracefully: when absent, the corresponding `setText()` and `setProperty()` effects simply have no target.
+
+#### Tag Name
+
+`basic-button`
+
+#### Preview
+
+<Canvas of={BasicButtonStories.Default} />
+
+#### Controls
+
+<Controls of={BasicButtonStories.Default} />
+
+Classes are applied to the native button element.
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('button')</code></td>
+      <td><code>HTMLButtonElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Native <code>button</code> element</td>
+    </tr>
+    <tr>
+      <td><code>first('span.badge')</code></td>
+      <td><code>HTMLSpanElement</code></td>
+      <td>optional</td>
+      <td>Setting <code>badge</code> property has no effect if the element is missing</td>
+    </tr>
+    <tr>
+      <td><code>first('span.label')</code></td>
+      <td><code>HTMLSpanElement</code></td>
+      <td>optional</td>
+      <td>Setting <code>label</code> property has no effect if the element is missing</td>
+    </tr>
+  </tbody>
+</table>
