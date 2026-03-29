@@ -1,0 +1,122 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as FormListboxStories from './form-listbox.stories';
+
+<Meta of={FormListboxStories} />
+
+### Form Listbox
+
+A full-featured listbox with client-side filtering and optional remote option loading. Demonstrates `createElementsMemo()` used directly as a property initializer to create a reactive live collection of visible options, `createTask()` for async JSON fetching with abort support, `dangerouslySetInnerHTML()` to render fetched HTML, and inline `createEffect()` calls inside the `options` effects to update individual option state. The `options` reactive property is a `Memo<HTMLButtonElement[]>` that tracks only currently visible (non-hidden) options.
+
+#### Tag Name
+
+`form-listbox`
+
+#### Preview
+
+<Canvas of={FormListboxStories.Default} />
+
+#### Controls
+
+<Controls of={FormListboxStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>value</code></td>
+      <td><code>string</code></td>
+      <td><code>''</code></td>
+      <td>Selected option value (<code>button[role="option"][aria-selected="true"]</code>)</td>
+    </tr>
+    <tr>
+      <td><code>options</code></td>
+      <td><code>HTMLButtonElement[]</code></td>
+      <td>Visible <code>button[role="option"]</code> elements</td>
+      <td>Live collection of selectable (non-hidden) options</td>
+    </tr>
+    <tr>
+      <td><code>filter</code></td>
+      <td><code>string</code></td>
+      <td><code>''</code></td>
+      <td>Filter text; hides options whose text does not contain it (case-insensitive)</td>
+    </tr>
+    <tr>
+      <td><code>src</code></td>
+      <td><code>string</code></td>
+      <td><code>''</code></td>
+      <td>URL for loading options JSON (flat array or grouped object)</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('input[type="hidden"]')</code></td>
+      <td><code>HTMLInputElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Hidden form input synchronized with selected <code>value</code></td>
+    </tr>
+    <tr>
+      <td><code>first('[role="listbox"]')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Container for option buttons</td>
+    </tr>
+    <tr>
+      <td><code>first('input.filter')</code></td>
+      <td><code>HTMLInputElement</code></td>
+      <td>optional</td>
+      <td>Text input for client-side filtering</td>
+    </tr>
+    <tr>
+      <td><code>first('button.clear')</code></td>
+      <td><code>HTMLButtonElement</code></td>
+      <td>optional</td>
+      <td>Clears current filter; hidden when filter is empty</td>
+    </tr>
+    <tr>
+      <td><code>first('card-callout')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Loading/error callout when <code>src</code> is used; gets <code>danger</code> class on error</td>
+    </tr>
+    <tr>
+      <td><code>first('.loading')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Shown while <code>src</code> fetch is pending</td>
+    </tr>
+    <tr>
+      <td><code>first('.error')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Shown and populated with error text when <code>src</code> fetch fails</td>
+    </tr>
+    <tr>
+      <td><code>all('button[role="option"]')</code></td>
+      <td><code>Memo&lt;HTMLButtonElement[]&gt;</code></td>
+      <td>optional</td>
+      <td>Option buttons (inline and/or rendered from <code>src</code>)</td>
+    </tr>
+  </tbody>
+</table>

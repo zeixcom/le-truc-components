@@ -1,0 +1,86 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ModuleCarouselStories from './module-carousel.stories';
+
+<Meta of={ModuleCarouselStories} />
+
+### Module Carousel
+
+A scroll-snap carousel with dot navigation and keyboard controls. Demonstrates using raw effect functions on `host` — returning custom cleanup functions — to integrate native browser APIs (`IntersectionObserver`, `createEffect`) alongside standard Le Truc effects. `asInteger()` with a reader fallback initialises `index` from the DOM. The `all()` Memo targets (`dots`, `slides`, `buttons`) show how `setProperty()` and `on()` effects automatically iterate over dynamic element collections.
+
+#### Tag Name
+
+`module-carousel`
+
+#### Preview
+
+<Canvas of={ModuleCarouselStories.Default} />
+
+#### Controls
+
+<Controls of={ModuleCarouselStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>index</code></td>
+      <td><code>number</code> (integer)</td>
+      <td>Index of the first slide with <code>aria-current="true"</code> (fallback <code>0</code>)</td>
+      <td>Current active slide index, clamped to valid slide range</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('button.prev')</code></td>
+      <td><code>HTMLButtonElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Previous-slide button; hidden on the first slide</td>
+    </tr>
+    <tr>
+      <td><code>first('button.next')</code></td>
+      <td><code>HTMLButtonElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Next-slide button; hidden on the last slide</td>
+    </tr>
+    <tr>
+      <td><code>all('button[role="tab"]')</code></td>
+      <td><code>Memo&lt;HTMLButtonElement[]&gt;</code></td>
+      <td>optional</td>
+      <td>Dot/tab navigation buttons; <code>aria-selected</code> and <code>tabIndex</code> kept in sync with <code>index</code></td>
+    </tr>
+    <tr>
+      <td><code>all('[role="tabpanel"]')</code></td>
+      <td><code>Memo&lt;HTMLElement[]&gt;</code></td>
+      <td>optional</td>
+      <td>Slide panels; <code>aria-current</code> reflects which is active</td>
+    </tr>
+    <tr>
+      <td><code>all('nav button')</code></td>
+      <td><code>Memo&lt;HTMLElement[]&gt;</code></td>
+      <td>optional</td>
+      <td>All navigation buttons; handles keyboard (←/→/Home/End) navigation</td>
+    </tr>
+  </tbody>
+</table>

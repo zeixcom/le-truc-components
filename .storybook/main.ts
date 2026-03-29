@@ -11,6 +11,12 @@ const config: StorybookConfig = {
     "@storybook/addon-a11y",
     "@storybook/addon-docs"
   ],
-  "framework": "@storybook/web-components-vite"
+  "framework": "@storybook/web-components-vite",
+  "staticDirs": [
+    "../public",
+    { from: "../src/module/lazyload/mocks", to: "/mocks/lazyload" },
+    { from: "../src/module/listnav/mocks", to: "/pages" },
+    { from: "../src/form/listbox/mocks", to: "/mocks/listbox" },
+  ],
 };
 export default config;

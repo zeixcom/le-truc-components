@@ -1,0 +1,108 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as CardMediaqueriesStories from './card-mediaqueries.stories';
+
+<Meta of={CardMediaqueriesStories} />
+
+### Card Mediaqueries
+
+A demo card that displays live media query values received via context. Demonstrates `requestContext()` — properties are initialised to a fallback value (`"unknown"`) when no `context-media` ancestor is present, and automatically updated when one is. The four context keys are provided by the `context-media` component.
+
+#### Tag Name
+
+`card-mediaqueries`
+
+#### Preview
+
+<Canvas of={CardMediaqueriesStories.SideBySide} />
+
+#### Reactive Properties
+
+All properties are read-only — they are set by the context provider, not by attributes or direct assignment.
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Fallback</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>motion</code></td>
+      <td><code>"no-preference" | "reduce"</code></td>
+      <td><code>"unknown"</code></td>
+      <td><code>prefers-reduced-motion</code> from <code>context-media</code></td>
+    </tr>
+    <tr>
+      <td><code>theme</code></td>
+      <td><code>"light" | "dark"</code></td>
+      <td><code>"unknown"</code></td>
+      <td><code>prefers-color-scheme</code> from <code>context-media</code></td>
+    </tr>
+    <tr>
+      <td><code>viewport</code></td>
+      <td><code>"xs" | "sm" | "md" | "lg" | "xl"</code></td>
+      <td><code>"unknown"</code></td>
+      <td>Current breakpoint from <code>context-media</code></td>
+    </tr>
+    <tr>
+      <td><code>orientation</code></td>
+      <td><code>"portrait" | "landscape"</code></td>
+      <td><code>"unknown"</code></td>
+      <td>Screen orientation from <code>context-media</code></td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+All descendant elements are optional.
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('.motion')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>Displays the <code>motion</code> context value</td>
+    </tr>
+    <tr>
+      <td><code>first('.theme')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>Displays the <code>theme</code> context value</td>
+    </tr>
+    <tr>
+      <td><code>first('.viewport')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>Displays the <code>viewport</code> context value</td>
+    </tr>
+    <tr>
+      <td><code>first('.orientation')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>Displays the <code>orientation</code> context value</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Context Provider
+
+Wrap with `context-media` to receive live media query values. Without it, all properties show `"unknown"`.
+
+```html
+<context-media>
+  <card-mediaqueries>
+    <dl>
+      <dt>Theme:</dt><dd class="theme"></dd>
+      <dt>Viewport:</dt><dd class="viewport"></dd>
+    </dl>
+  </card-mediaqueries>
+</context-media>
+```

@@ -1,0 +1,109 @@
+import type { Meta, StoryObj } from "@storybook/web-components";
+import { expect, userEvent, within } from "storybook/test";
+import "../../basic/button/basic-button.ts";
+import "../../basic/button/basic-button.css";
+import "../../module/scrollarea/module-scrollarea.ts";
+import "../../module/scrollarea/module-scrollarea.css";
+import "./module-codeblock.ts";
+import "./module-codeblock.css";
+import type { Component } from "@zeix/le-truc";
+import type { ModuleCodeblockProps } from "./module-codeblock.ts";
+
+type ModuleCodeblockArgs = {
+  collapsed: boolean;
+};
+
+const meta: Meta<ModuleCodeblockArgs> = {
+  title: "Module/Codeblock",
+  argTypes: {
+    collapsed: {
+      control: "boolean",
+      table: {
+        defaultValue: { summary: "false" },
+        category: "Reactive Properties",
+      },
+    },
+  },
+};
+export default meta;
+type Story = StoryObj<ModuleCodeblockArgs>;
+
+const sampleCode = `function greet(name) {
+  return \`Hello, \${name}!\`;
+}
+
+console.log(greet("World"));`;
+
+export const Default: Story = {
+  args: { collapsed: false },
+  render: ({ collapsed }) => `
+    <module-codeblock${collapsed ? " collapsed" : ""}>
+      <module-scrollarea orientation="horizontal">
+        <pre><code class="language-js">${sampleCode}</code></pre>
+      </module-scrollarea>
+      <basic-button class="copy" copy-success="Copied!" copy-error="Error!">
+        <button type="button" class="secondary small">
+          <span class="label">Copy</span>
+        </button>
+      </basic-button>
+      <button type="button" class="overlay" aria-expanded="${collapsed ? "false" : "true"}">
+        Expand
+      </button>
+    </module-codeblock>
+  `,
+};
+
+export const Collapsed: Story = {
+  render: () => `
+    <module-codeblock collapsed>
+      <module-scrollarea orientation="horizontal">
+        <pre><code class="language-js">${sampleCode}</code></pre>
+      </module-scrollarea>
+      <basic-button class="copy" copy-success="Copied!" copy-error="Error!">
+        <button type="button" class="secondary small">
+          <span class="label">Copy</span>
+        </button>
+      </basic-button>
+      <button type="button" class="overlay" aria-expanded="false">Expand</button>
+    </module-codeblock>
+  `,
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("module-codeblock");
+    const canvas = within(canvasElement);
+    const el = canvasElement.querySelector(
+      "module-codeblock",
+    ) as Component<ModuleCodeblockProps>;
+
+    await expect(el.collapsed).toBe(true);
+    await expect(el).toHaveAttribute("collapsed");
+
+    await userEvent.click(canvas.getByText("Expand"));
+    await expect(el.collapsed).toBe(false);
+    await expect(el).not.toHaveAttribute("collapsed");
+  },
+};
+
+export const PropertyChanges: Story = {
+  render: () => `
+    <module-codeblock>
+      <module-scrollarea orientation="horizontal">
+        <pre><code class="language-js">${sampleCode}</code></pre>
+      </module-scrollarea>
+      <button type="button" class="overlay" aria-expanded="true">Expand</button>
+    </module-codeblock>
+  `,
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("module-codeblock");
+    const el = canvasElement.querySelector(
+      "module-codeblock",
+    ) as Component<ModuleCodeblockProps>;
+
+    await expect(el.collapsed).toBe(false);
+
+    el.collapsed = true;
+    await expect(el).toHaveAttribute("collapsed");
+
+    el.collapsed = false;
+    await expect(el).not.toHaveAttribute("collapsed");
+  },
+};

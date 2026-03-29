@@ -1,0 +1,47 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as ModuleListnavStories from './module-listnav.stories';
+
+<Meta of={ModuleListnavStories} />
+
+### Module Listnav
+
+A navigation coordinator that syncs `form-listbox` selection with `module-lazyload` and the browser's location hash. Uses `pass()` to reactively push `listbox.value` as the `src` of the lazyload. Uses `createEffect` to write `location.hash` when the selection changes, and a `hashchange` listener to update the listbox when the user navigates with the browser back/forward buttons.
+
+#### Tag Name
+
+`module-listnav`
+
+#### Preview
+
+<Canvas of={ModuleListnavStories.Default} />
+
+#### Reactive Properties
+
+None. This component coordinates child component properties through effects.
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('form-listbox')</code></td>
+      <td><code>Component&lt;FormListboxProps&gt;</code></td>
+      <td><strong>required</strong></td>
+      <td>Listbox whose <code>value</code> is the URL of the page to load; selection is synced with the location hash</td>
+    </tr>
+    <tr>
+      <td><code>first('module-lazyload')</code></td>
+      <td><code>Component&lt;ModuleLazyloadProps&gt;</code></td>
+      <td><strong>required</strong></td>
+      <td>Receives the selected <code>value</code> as its <code>src</code> via <code>pass()</code></td>
+    </tr>
+  </tbody>
+</table>

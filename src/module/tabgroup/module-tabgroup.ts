@@ -33,7 +33,8 @@ const getSelected = (
 ) => {
   const currentIndex = tabs.findIndex(isCurrent);
   const newIndex = (currentIndex + offset + tabs.length) % tabs.length;
-  return getAriaControls(tabs[newIndex]);
+  const tab = tabs[newIndex];
+  return tab ? getAriaControls(tab) : "";
 };
 
 export default defineComponent<ModuleTabgroupProps, ModuleTabgroupUI>(
@@ -63,17 +64,20 @@ export default defineComponent<ModuleTabgroupProps, ModuleTabgroupUI>(
             event.preventDefault();
             event.stopPropagation();
             const tabs = ui.tabs.get();
+            const first = tabs[0];
+            const last = tabs[tabs.length - 1];
+            if (!first || !last) return;
             const next =
               key === "Home"
-                ? getAriaControls(tabs[0])
+                ? getAriaControls(first)
                 : key === "End"
-                  ? getAriaControls(tabs[tabs.length - 1])
+                  ? getAriaControls(last)
                   : getSelected(
                       tabs,
                       (tab) => tab === target,
                       key === "ArrowLeft" || key === "ArrowUp" ? -1 : 1,
                     );
-            tabs.filter((tab) => getAriaControls(tab) === next)[0].focus();
+            tabs.filter((tab) => getAriaControls(tab) === next)[0]?.focus();
             return next;
           }
         },

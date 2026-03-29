@@ -1,0 +1,47 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as BasicCounterStories from './basic-counter.stories';
+
+<Meta of={BasicCounterStories} />
+
+### Basic Counter
+
+The canonical introductory example for Le Truc. Demonstrates `read()` combined with `asInteger()` to initialise a reactive property from existing DOM content rather than an attribute, `on('click')` to update `host.count` imperatively, and `setText()` to keep the display in sync.
+
+#### Tag Name
+
+`basic-counter`
+
+#### Preview
+
+<Canvas of={BasicCounterStories.Default} />
+
+#### Controls
+
+<Controls of={BasicCounterStories.Default} />
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('button')</code></td>
+      <td><code>HTMLButtonElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Increments the count on click</td>
+    </tr>
+    <tr>
+      <td><code>first('span')</code></td>
+      <td><code>HTMLSpanElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Displays the current count; its initial text content seeds the <code>count</code> property</td>
+    </tr>
+  </tbody>
+</table>

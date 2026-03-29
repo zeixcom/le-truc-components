@@ -1,0 +1,77 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as ModuleTodoStories from './module-todo.stories';
+
+<Meta of={ModuleTodoStories} />
+
+### Module Todo
+
+A full-featured to-do list orchestrator. Uses `createElementsMemo` to derive reactive `active` and `completed` item counts from live DOM queries. Demonstrates `pass()` to push `disabled` and `badge` into child components, `setAttribute('filter')` on `module-list` to drive CSS-based filtering, and event delegation on the form submit. Relies on `module-list`, `form-textbox`, `basic-button`, `basic-pluralize`, and `form-radiogroup` as descendant components.
+
+#### Tag Name
+
+`module-todo`
+
+#### Preview
+
+<Canvas of={ModuleTodoStories.Default} />
+
+#### Reactive Properties
+
+None. This component orchestrates child component properties through effects.
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('form')</code></td>
+      <td><code>HTMLFormElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Submit handler adds a new todo item via <code>list.add()</code></td>
+    </tr>
+    <tr>
+      <td><code>first('form-textbox')</code></td>
+      <td><code>Component&lt;FormTextboxProps&gt;</code></td>
+      <td><strong>required</strong></td>
+      <td>Text input for the new todo; cleared after each add; its <code>length</code> drives the submit button's <code>disabled</code> state</td>
+    </tr>
+    <tr>
+      <td><code>first('basic-button.submit')</code></td>
+      <td><code>Component&lt;BasicButtonProps&gt;</code></td>
+      <td><strong>required</strong></td>
+      <td>Submit button; disabled when textbox is empty via <code>pass()</code></td>
+    </tr>
+    <tr>
+      <td><code>first('module-list')</code></td>
+      <td><code>Component&lt;ModuleListProps&gt;</code></td>
+      <td><strong>required</strong></td>
+      <td>List of todo items; receives the current filter value as a <code>filter</code> attribute</td>
+    </tr>
+    <tr>
+      <td><code>first('basic-pluralize')</code></td>
+      <td><code>Component&lt;BasicPluralizeProps&gt;</code></td>
+      <td><strong>required</strong></td>
+      <td>Displays the count of active (incomplete) items via <code>pass({ count })</code></td>
+    </tr>
+    <tr>
+      <td><code>first('form-radiogroup')</code></td>
+      <td><code>Component&lt;FormRadiogroupProps&gt;</code></td>
+      <td><strong>required</strong></td>
+      <td>Filter control (All / Active / Completed); its <code>value</code> is passed as the <code>filter</code> attribute to the list</td>
+    </tr>
+    <tr>
+      <td><code>first('basic-button.clear-completed')</code></td>
+      <td><code>Component&lt;BasicButtonProps&gt;</code></td>
+      <td><strong>required</strong></td>
+      <td>Removes all completed items on click; <code>disabled</code> when there are none; shows completed count as <code>badge</code></td>
+    </tr>
+  </tbody>
+</table>

@@ -1,0 +1,97 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as FormRadiogroupStories from './form-radiogroup.stories';
+
+<Meta of={FormRadiogroupStories} />
+
+### Form Radiogroup
+
+A roving-tabindex radio group that works both controlled and uncontrolled. Demonstrates `read()` to initialise `value` from the currently checked radio, and `on('change', ...)` applied to the `radios` Memo so that user interaction propagates back to `host.value`. A `createEffect` on each radio element drives `checked`, `tabIndex`, and the `selected` label class from `host.value` — assigning `host.value = 'option'` programmatically moves the selection without needing a browser event.
+
+#### Tag Name
+
+`form-radiogroup`
+
+#### Preview
+
+<Canvas of={FormRadiogroupStories.Default} />
+
+#### Controls
+
+<Controls of={FormRadiogroupStories.Default} />
+
+#### All Variants
+
+<Canvas of={FormRadiogroupStories.AllVariants} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>value</code></td>
+      <td><code>string</code></td>
+      <td><code>''</code></td>
+      <td>Value of the currently checked radio; settable for controlled use</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Classes
+
+<table>
+  <thead>
+    <tr>
+      <th>Class</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><em>none</em> (default)</td>
+      <td>Default browser style</td>
+    </tr>
+    <tr>
+      <td><code>radio-group</code></td>
+      <td>Styled radio group with custom indicators</td>
+    </tr>
+    <tr>
+      <td><code>split-button</code></td>
+      <td>Segmented/split-button display</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>all('input[type="radio"]')</code></td>
+      <td><code>Memo&lt;HTMLInputElement[]&gt;</code></td>
+      <td><strong>required</strong></td>
+      <td>Native radio inputs (at least two); drives <code>checked</code> and <code>tabIndex</code></td>
+    </tr>
+    <tr>
+      <td><code>label</code> (wrapping each radio)</td>
+      <td><code>HTMLLabelElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Wraps each radio; receives the <code>selected</code> class when its radio is checked</td>
+    </tr>
+  </tbody>
+</table>

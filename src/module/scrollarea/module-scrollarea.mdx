@@ -1,0 +1,62 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as ModuleScrollareaStories from './module-scrollarea.stories';
+
+<Meta of={ModuleScrollareaStories} />
+
+### Module Scrollarea
+
+Detects and reflects scroll overflow state as CSS classes. Uses `IntersectionObserver` to detect when the first child element overflows its container, and an `on('scroll')` handler to track scroll position. Demonstrates `createState` for `overflowStart` and `overflowEnd` booleans, `toggleClass` to reactively add/remove overflow classes, and cleanup via returned functions. The `orientation` attribute switches between vertical and horizontal overflow detection.
+
+#### Tag Name
+
+`module-scrollarea`
+
+#### Preview
+
+<Canvas of={ModuleScrollareaStories.Default} />
+
+#### Attributes
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>orientation</code></td>
+      <td><code>"vertical" | "horizontal"</code></td>
+      <td><code>"vertical"</code></td>
+      <td>Read once on init; determines whether vertical or horizontal scroll overflow is tracked</td>
+    </tr>
+  </tbody>
+</table>
+
+#### CSS Classes (applied to host)
+
+<table>
+  <thead>
+    <tr>
+      <th>Class</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>overflow</code></td>
+      <td>Present when there is any overflow (start or end)</td>
+    </tr>
+    <tr>
+      <td><code>overflow-start</code></td>
+      <td>Present when scrolled past the start (content hidden at the top/left)</td>
+    </tr>
+    <tr>
+      <td><code>overflow-end</code></td>
+      <td>Present when there is more content beyond the visible end (bottom/right)</td>
+    </tr>
+  </tbody>
+</table>

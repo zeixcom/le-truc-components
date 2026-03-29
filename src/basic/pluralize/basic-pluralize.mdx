@@ -1,0 +1,73 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as BasicPluralizeStories from './basic-pluralize.stories';
+
+<Meta of={BasicPluralizeStories} />
+
+### Basic Pluralize
+
+A locale-aware pluralisation component driven by `Intl.PluralRules`. Demonstrates writing a custom parser (`asPositiveInteger`) that wraps `asInteger()` with additional validation, `show()` for conditional visibility, and `setText()` for the count display. The setup function builds the effects object dynamically — only attaching `show()` effects for the plural categories that the given locale actually uses.
+
+#### Tag Name
+
+`basic-pluralize`
+
+#### Preview
+
+<Canvas of={BasicPluralizeStories.Default} />
+
+#### Controls
+
+<Controls of={BasicPluralizeStories.Default} />
+
+#### Descendant Elements
+
+All descendant elements are optional. Any `HTMLElement` with one of the following classes will receive the corresponding effect.
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('.count')</code></td>
+      <td>Displays the current count value</td>
+    </tr>
+    <tr>
+      <td><code>first('.none')</code></td>
+      <td>Shown when <code>count === 0</code></td>
+    </tr>
+    <tr>
+      <td><code>first('.some')</code></td>
+      <td>Shown when <code>count &gt; 0</code></td>
+    </tr>
+    <tr>
+      <td><code>first('.zero')</code></td>
+      <td>Shown when count matches the <code>zero</code> plural category</td>
+    </tr>
+    <tr>
+      <td><code>first('.one')</code></td>
+      <td>Shown when count matches the <code>one</code> plural category</td>
+    </tr>
+    <tr>
+      <td><code>first('.two')</code></td>
+      <td>Shown when count matches the <code>two</code> plural category</td>
+    </tr>
+    <tr>
+      <td><code>first('.few')</code></td>
+      <td>Shown when count matches the <code>few</code> plural category</td>
+    </tr>
+    <tr>
+      <td><code>first('.many')</code></td>
+      <td>Shown when count matches the <code>many</code> plural category</td>
+    </tr>
+    <tr>
+      <td><code>first('.other')</code></td>
+      <td>Shown when count matches the <code>other</code> plural category</td>
+    </tr>
+  </tbody>
+</table>
+
+Effects for `.count`, `.none`, and `.some` are always attached. Effects for the plural category classes (`.zero`, `.one`, `.two`, `.few`, `.many`, `.other`) are only attached for the categories supported by the active locale — for example English only uses `one` and `other` for cardinal, and `one`, `two`, `few`, `other` for ordinal.

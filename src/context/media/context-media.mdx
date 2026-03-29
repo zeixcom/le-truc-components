@@ -1,0 +1,129 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as ContextMediaStories from './context-media.stories';
+
+<Meta of={ContextMediaStories} />
+
+### Context Media
+
+A context provider that exposes live media query state to descendant components via the W3C Context Protocol. Demonstrates using initializer functions that return a `createState()` signal — rather than a static value or parser — to wire `MediaQueryList` change events into reactive properties, reading `host` attributes inside a property initializer to configure breakpoints before any effects run, and using `provideContexts()` as the sole effect to broadcast all four properties as typed `Context` tokens that consumers can request with `requestContext()`.
+
+#### Tag Name
+
+`context-media`
+
+#### Preview
+
+<Canvas of={ContextMediaStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>media-motion</code></td>
+      <td><code>"no-preference" | "reduce"</code></td>
+      <td><code>"no-preference"</code></td>
+      <td><code>prefers-reduced-motion</code> media query</td>
+    </tr>
+    <tr>
+      <td><code>media-theme</code></td>
+      <td><code>"light" | "dark"</code></td>
+      <td><code>"light"</code></td>
+      <td><code>prefers-color-scheme</code> media query</td>
+    </tr>
+    <tr>
+      <td><code>media-viewport</code></td>
+      <td><code>"xs" | "sm" | "md" | "lg" | "xl"</code></td>
+      <td><code>"xs"</code></td>
+      <td>Current breakpoint derived from <code>min-width</code> media queries</td>
+    </tr>
+    <tr>
+      <td><code>media-orientation</code></td>
+      <td><code>"portrait" | "landscape"</code></td>
+      <td><code>"portrait"</code></td>
+      <td><code>orientation</code> media query</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Attributes
+
+The following attributes configure the `min-width` breakpoints for the `media-viewport` context. Values are parsed as `px` or `em`.
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>sm</code></td>
+      <td><code>32em</code> (512px)</td>
+      <td>Minimum width for the <code>sm</code> breakpoint</td>
+    </tr>
+    <tr>
+      <td><code>md</code></td>
+      <td><code>48em</code> (768px)</td>
+      <td>Minimum width for the <code>md</code> breakpoint</td>
+    </tr>
+    <tr>
+      <td><code>lg</code></td>
+      <td><code>72em</code> (1152px)</td>
+      <td>Minimum width for the <code>lg</code> breakpoint</td>
+    </tr>
+    <tr>
+      <td><code>xl</code></td>
+      <td><code>104em</code> (1664px)</td>
+      <td>Minimum width for the <code>xl</code> breakpoint</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Provided Contexts
+
+<table>
+  <thead>
+    <tr>
+      <th>Token</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>MEDIA_MOTION</code></td>
+      <td><code>"no-preference" | "reduce"</code></td>
+      <td>Motion preference; use with <code>requestContext(MEDIA_MOTION, "unknown")</code></td>
+    </tr>
+    <tr>
+      <td><code>MEDIA_THEME</code></td>
+      <td><code>"light" | "dark"</code></td>
+      <td>Color scheme preference; use with <code>requestContext(MEDIA_THEME, "unknown")</code></td>
+    </tr>
+    <tr>
+      <td><code>MEDIA_VIEWPORT</code></td>
+      <td><code>"xs" | "sm" | "md" | "lg" | "xl"</code></td>
+      <td>Current breakpoint; use with <code>requestContext(MEDIA_VIEWPORT, "unknown")</code></td>
+    </tr>
+    <tr>
+      <td><code>MEDIA_ORIENTATION</code></td>
+      <td><code>"portrait" | "landscape"</code></td>
+      <td>Screen orientation; use with <code>requestContext(MEDIA_ORIENTATION, "unknown")</code></td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+Arbitrary HTML containing one or more context consumers. All four context tokens are broadcast to any descendant that calls `requestContext()` with a matching token.

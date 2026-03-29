@@ -1,0 +1,123 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as FormComboboxStories from './form-combobox.stories';
+
+<Meta of={FormComboboxStories} />
+
+### Form Combobox
+
+An advanced form component that coordinates a text input with a popup `form-listbox`. Demonstrates `createEventsSensor()` for the read-only `length` property, `createState()` and `createMemo()` for private reactive state inside the setup function, `pass()` to push the filter value into the child listbox reactively, multiple effects per UI element, and `setAttribute()` for dynamic ARIA attributes. The `clear` method property shows the MethodProducer pattern.
+
+#### Tag Name
+
+`form-combobox`
+
+#### Preview
+
+<Canvas of={FormComboboxStories.Default} />
+
+#### Controls
+
+<Controls of={FormComboboxStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>value</code></td>
+      <td><code>string</code></td>
+      <td><code>''</code></td>
+      <td>Current input value</td>
+    </tr>
+    <tr>
+      <td><code>length</code></td>
+      <td><code>number</code> (readonly)</td>
+      <td><code>0</code></td>
+      <td>Length of current input value; updated via <code>createEventsSensor()</code></td>
+    </tr>
+    <tr>
+      <td><code>error</code></td>
+      <td><code>string</code></td>
+      <td><code>''</code></td>
+      <td>Validation error text shown in <code>.error</code></td>
+    </tr>
+    <tr>
+      <td><code>description</code></td>
+      <td><code>string</code></td>
+      <td>Text content of <code>.description</code></td>
+      <td>Assistive/help text shown in <code>.description</code></td>
+    </tr>
+  </tbody>
+</table>
+
+#### Methods
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>clear</code></td>
+      <td><code>() =&gt; void</code></td>
+      <td>Clears the textbox and emits <code>input</code>/<code>change</code> events</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('input')</code></td>
+      <td><code>HTMLInputElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Textbox for combobox input</td>
+    </tr>
+    <tr>
+      <td><code>first('form-listbox')</code></td>
+      <td><code>Component&lt;FormListboxProps&gt;</code></td>
+      <td><strong>required</strong></td>
+      <td>Popup listbox; receives filter value via <code>pass()</code> and is shown/hidden based on <code>isExpanded</code></td>
+    </tr>
+    <tr>
+      <td><code>first('button.clear')</code></td>
+      <td><code>HTMLButtonElement</code></td>
+      <td>optional</td>
+      <td>Clear action button; hidden when value is empty</td>
+    </tr>
+    <tr>
+      <td><code>first('form-combobox &gt; .error')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Validation message target linked by <code>aria-errormessage</code></td>
+    </tr>
+    <tr>
+      <td><code>first('.description')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Description target linked by <code>aria-describedby</code></td>
+    </tr>
+  </tbody>
+</table>

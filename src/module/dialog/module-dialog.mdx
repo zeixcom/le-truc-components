@@ -1,0 +1,74 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ModuleDialogStories from './module-dialog.stories';
+
+<Meta of={ModuleDialogStories} />
+
+### Module Dialog
+
+A modal dialog component that manages `open` state and handles scroll locking. Demonstrates `createEffect` for imperative side-effects: `showModal()`, `close()`, scroll-lock body styles, and focus management. Uses `on('click')` on the open button, backdrop click, and close button to toggle `host.open`.
+
+#### Tag Name
+
+`module-dialog`
+
+#### Preview
+
+<Canvas of={ModuleDialogStories.Default} />
+
+#### Controls
+
+<Controls of={ModuleDialogStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>open</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Whether the dialog is open; controls <code>showModal()</code> / <code>close()</code> and scroll locking</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('button[aria-haspopup="dialog"]')</code></td>
+      <td><code>HTMLButtonElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Trigger button; sets <code>open = true</code> on click</td>
+    </tr>
+    <tr>
+      <td><code>first('dialog')</code></td>
+      <td><code>HTMLDialogElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Native dialog element; backdrop click sets <code>open = false</code></td>
+    </tr>
+    <tr>
+      <td><code>first('dialog button.close')</code></td>
+      <td><code>HTMLButtonElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Close button inside the dialog; sets <code>open = false</code> on click and receives focus when dialog opens</td>
+    </tr>
+  </tbody>
+</table>

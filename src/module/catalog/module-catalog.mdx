@@ -1,0 +1,47 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as ModuleCatalogStories from './module-catalog.stories';
+
+<Meta of={ModuleCatalogStories} />
+
+### Module Catalog
+
+A coordinator component with no reactive properties of its own. Demonstrates the `pass()` effect as the primary composition tool: `createMemo()` derives a `total` from the reactive `value` properties of all descendant `form-spinbutton` elements (read via an `all()` Memo), then `pass()` pushes `disabled` and `badge` values into `basic-button` reactively. Shows how Le Truc components can act as pure orchestrators without exposing any public state.
+
+#### Tag Name
+
+`module-catalog`
+
+#### Preview
+
+<Canvas of={ModuleCatalogStories.Default} />
+
+#### Reactive Properties
+
+None. This component coordinates child component properties through effects.
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('basic-button')</code></td>
+      <td><code>Component&lt;BasicButtonProps&gt;</code></td>
+      <td><strong>required</strong></td>
+      <td>Shopping cart button receiving <code>disabled</code> and <code>badge</code> via <code>pass()</code></td>
+    </tr>
+    <tr>
+      <td><code>all('form-spinbutton')</code></td>
+      <td><code>Memo&lt;Component&lt;FormSpinbuttonProps&gt;[]&gt;</code></td>
+      <td><strong>required</strong></td>
+      <td>Spinbuttons whose <code>value</code> properties are summed to compute the cart total</td>
+    </tr>
+  </tbody>
+</table>

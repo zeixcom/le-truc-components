@@ -5,7 +5,7 @@ import {
   type Memo,
   on,
   read,
-} from "../..";
+} from "@zeix/le-truc";
 import { manageFocus } from "../../_common/focus";
 
 export type FormRadiogroupProps = {

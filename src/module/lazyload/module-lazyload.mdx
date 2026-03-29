@@ -1,0 +1,101 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ModuleLazyloadStories from './module-lazyload.stories';
+
+<Meta of={ModuleLazyloadStories} />
+
+### Module Lazyload
+
+Fetches and injects remote HTML content into the page. Uses `createTask` to manage async fetch state (pending, success, error) reactively. Demonstrates `dangerouslySetInnerHTML()` for injecting fetched HTML, `show()` to switch between loading/error/content states, and `toggleClass('danger')` on the callout. The `allow-scripts` attribute opts in to executing inline scripts in loaded content.
+
+#### Tag Name
+
+`module-lazyload`
+
+#### Preview
+
+<Canvas of={ModuleLazyloadStories.Default} />
+
+#### Controls
+
+<Controls of={ModuleLazyloadStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>src</code></td>
+      <td><code>string</code></td>
+      <td><code>''</code></td>
+      <td>URL of the HTML partial to fetch and inject; changing it triggers a new fetch</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Attributes
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>allow-scripts</code></td>
+      <td><code>boolean</code></td>
+      <td><em>absent</em></td>
+      <td>When present, inline <code>&lt;script&gt;</code> tags in the fetched HTML are executed</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('card-callout')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Shown while loading or on error; gets <code>danger</code> class on error</td>
+    </tr>
+    <tr>
+      <td><code>first('.loading')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Shown while the fetch is pending</td>
+    </tr>
+    <tr>
+      <td><code>first('.error')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Shown on fetch error; text is set to the error message</td>
+    </tr>
+    <tr>
+      <td><code>first('.content')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Shown on success; fetched HTML is injected here via <code>dangerouslySetInnerHTML</code></td>
+    </tr>
+  </tbody>
+</table>

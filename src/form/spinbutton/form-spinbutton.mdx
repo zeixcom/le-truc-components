@@ -1,0 +1,98 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as FormSpinbuttonStories from './form-spinbutton.stories';
+
+<Meta of={FormSpinbuttonStories} />
+
+### Form Spinbutton
+
+A quantity spinbutton with increment/decrement buttons, clamped values, and keyboard support that works both controlled and uncontrolled. Demonstrates `read()` to initialise both `value` and `max` from DOM state, and `on()` effects on the shared `controls` collection for all three event types (`change`, `click`, `keydown`). `createMemo()` derives a private `nonZero` signal used to show/hide zero-state UI without exposing it as a reactive property.
+
+#### Tag Name
+
+`form-spinbutton`
+
+#### Preview
+
+<Canvas of={FormSpinbuttonStories.Default} />
+
+#### Controls
+
+<Controls of={FormSpinbuttonStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>value</code></td>
+      <td><code>number</code> (integer)</td>
+      <td>Parsed from <code>input.value</code> (<code>0</code> if invalid/missing)</td>
+      <td>Current clamped value in range <code>0..max</code>; settable for controlled use</td>
+    </tr>
+    <tr>
+      <td><code>max</code></td>
+      <td><code>number</code> (integer)</td>
+      <td><code>10</code></td>
+      <td>Maximum allowed value (read from <code>input.max</code>)</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('button.increment')</code></td>
+      <td><code>HTMLButtonElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Increments <code>value</code>; becomes disabled at <code>max</code></td>
+    </tr>
+    <tr>
+      <td><code>first('button.decrement')</code></td>
+      <td><code>HTMLButtonElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Decrements <code>value</code>; hidden when <code>value === 0</code></td>
+    </tr>
+    <tr>
+      <td><code>first('input.value')</code></td>
+      <td><code>HTMLInputElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Numeric value source and sync target; hidden when <code>value === 0</code></td>
+    </tr>
+    <tr>
+      <td><code>all('button, input:not([disabled])')</code></td>
+      <td><code>Memo&lt;(HTMLButtonElement | HTMLInputElement)[]&gt;</code></td>
+      <td><strong>required</strong></td>
+      <td>Interactive controls tracked for <code>change</code>, <code>click</code>, and <code>keydown</code> events</td>
+    </tr>
+    <tr>
+      <td><code>first('.zero')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Shown when <code>value === 0</code>; its text is used as the increment button's aria-label at zero</td>
+    </tr>
+    <tr>
+      <td><code>first('.other')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Shown when <code>value !== 0</code></td>
+    </tr>
+  </tbody>
+</table>

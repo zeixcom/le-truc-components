@@ -1,0 +1,80 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as FormCheckboxStories from './form-checkbox.stories';
+
+<Meta of={FormCheckboxStories} />
+
+### Form Checkbox
+
+A wrapper for a native checkbox that shows `read()` as the `checked` state's initial value to read the current DOM state, `asString()` with a reader fallback for the label, and `toggleAttribute()` applied to `host` to reflect `checked` as an attribute for CSS styling.
+
+#### Tag Name
+
+`form-checkbox`
+
+#### Preview
+
+<Canvas of={FormCheckboxStories.Default} />
+
+#### Controls
+
+<Controls of={FormCheckboxStories.Default} />
+
+#### All Variants
+
+<Canvas of={FormCheckboxStories.AllVariants} />
+
+#### Classes
+
+<table>
+  <thead>
+    <tr>
+      <th>Class</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><em>none</em> (default)</td>
+      <td>Default browser style</td>
+    </tr>
+    <tr>
+      <td><code>checkbox</code></td>
+      <td>Styled checkbox</td>
+    </tr>
+    <tr>
+      <td><code>todo</code></td>
+      <td>Action item that can be active or completed</td>
+    </tr>
+    <tr>
+      <td><code>toggle</code></td>
+      <td>Toggle on/off switch</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('input[type="checkbox"]')</code></td>
+      <td><code>HTMLInputElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Native checkbox element</td>
+    </tr>
+    <tr>
+      <td><code>first('.label')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Text target for <code>label</code> property; when absent, label reads from the nearest <code>label</code> element's text content</td>
+    </tr>
+  </tbody>
+</table>

@@ -1,0 +1,74 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ModuleCodeblockStories from './module-codeblock.stories';
+
+<Meta of={ModuleCodeblockStories} />
+
+### Module Codeblock
+
+A progressively enhanced code block that can collapse, expand, and copy its content. Demonstrates `asBoolean()` for a boolean attribute-backed property, `toggleAttribute()` to reflect `collapsed` back to the host element for CSS styling, and `on('click')` with simple imperative property updates. The `copy` effect is a custom reusable function (`copyToClipboard`) that returns an `Effect` — showing how to extract and share effect logic across components.
+
+#### Tag Name
+
+`module-codeblock`
+
+#### Preview
+
+<Canvas of={ModuleCodeblockStories.Default} />
+
+#### Controls
+
+<Controls of={ModuleCodeblockStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>collapsed</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Whether the code block is collapsed; reflected as a <code>collapsed</code> attribute on the host for CSS</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('code')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Source container used for copy-to-clipboard</td>
+    </tr>
+    <tr>
+      <td><code>first('button.overlay')</code></td>
+      <td><code>HTMLButtonElement</code></td>
+      <td>optional</td>
+      <td>Expands the block by setting <code>collapsed = false</code> on click</td>
+    </tr>
+    <tr>
+      <td><code>first('basic-button.copy')</code></td>
+      <td><code>Component&lt;BasicButtonProps&gt;</code></td>
+      <td>optional</td>
+      <td>Copy-to-clipboard trigger; reads <code>copy-success</code> and <code>copy-error</code> attributes for feedback messages</td>
+    </tr>
+  </tbody>
+</table>

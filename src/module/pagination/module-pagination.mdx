@@ -1,0 +1,92 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ModulePaginationStories from './module-pagination.stories';
+
+<Meta of={ModulePaginationStories} />
+
+### Module Pagination
+
+A pagination control with previous/next buttons and a number input. Both `value` and `max` are read from the DOM input element via `read()` with `asInteger()`. Demonstrates `setAttribute` to reflect `value` and `max` onto the host element, `setProperty` to drive the input and button `disabled` states reactively, and keyboard shortcuts (Arrow keys, `+`/`-`) via `on('keyup')` on the host. The component hides itself when `max` is 1 or less via `show()`.
+
+#### Tag Name
+
+`module-pagination`
+
+#### Preview
+
+<Canvas of={ModulePaginationStories.Default} />
+
+#### Controls
+
+<Controls of={ModulePaginationStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>value</code></td>
+      <td><code>number</code></td>
+      <td><code>parsed from input value (1 if missing)</code></td>
+      <td>Current page number; clamped between 1 and <code>max</code></td>
+    </tr>
+    <tr>
+      <td><code>max</code></td>
+      <td><code>number</code></td>
+      <td><code>parsed from input max (1 if missing)</code></td>
+      <td>Total number of pages; component hides itself when max ≤ 1</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('input')</code></td>
+      <td><code>HTMLInputElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Number input used to initialise and display <code>value</code> and <code>max</code></td>
+    </tr>
+    <tr>
+      <td><code>first('button.prev')</code></td>
+      <td><code>HTMLButtonElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Decrements <code>value</code>; disabled when <code>value ≤ 1</code></td>
+    </tr>
+    <tr>
+      <td><code>first('button.next')</code></td>
+      <td><code>HTMLButtonElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Increments <code>value</code>; disabled when <code>value ≥ max</code></td>
+    </tr>
+    <tr>
+      <td><code>first('.value')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Text node updated with the current page number</td>
+    </tr>
+    <tr>
+      <td><code>first('.max')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Text node updated with the total page count</td>
+    </tr>
+  </tbody>
+</table>

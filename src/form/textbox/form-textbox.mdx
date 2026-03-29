@@ -1,0 +1,134 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as FormTextboxStories from './form-textbox.stories';
+
+<Meta of={FormTextboxStories} />
+
+### Form Textbox
+
+A general-purpose text field wrapper for `input` or `textarea` elements. Demonstrates `createEventsSensor()` for the read-only `length` property, a conditional Reader initializer for `description` that produces either a static string or a computed function (remaining characters) depending on DOM attributes, the MethodProducer pattern for `clear`, and `setAttribute()` for dynamic ARIA linkage. Designed to be composable — `form-combobox` and `module-todo` both embed it and drive it via `pass()`.
+
+#### Tag Name
+
+`form-textbox`
+
+#### Preview
+
+<Canvas of={FormTextboxStories.Default} />
+
+#### Controls
+
+<Controls of={FormTextboxStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>value</code></td>
+      <td><code>string</code></td>
+      <td><code>''</code></td>
+      <td>Current textbox value</td>
+    </tr>
+    <tr>
+      <td><code>length</code></td>
+      <td><code>number</code> (readonly)</td>
+      <td><code>0</code></td>
+      <td>Length of current textbox value; updated via <code>createEventsSensor()</code> on <code>input</code> events</td>
+    </tr>
+    <tr>
+      <td><code>error</code></td>
+      <td><code>string</code></td>
+      <td><code>''</code></td>
+      <td>Validation error text shown in <code>.error</code></td>
+    </tr>
+    <tr>
+      <td><code>description</code></td>
+      <td><code>string</code></td>
+      <td>Text content of <code>.description</code></td>
+      <td>Description/help text; when <code>data-remaining</code> is set on <code>.description</code>, shows remaining character count using <code>${"{n}"}</code> as placeholder</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Methods
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>clear</code></td>
+      <td><code>() =&gt; void</code></td>
+      <td>Clears the textbox and emits <code>input</code>/<code>change</code> events</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Attributes
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>clearable</code></td>
+      <td>Signals that a <code>button.clear</code> descendant is present; the button is shown/hidden automatically based on <code>length</code></td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('input, textarea')</code></td>
+      <td><code>HTMLInputElement | HTMLTextAreaElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Native text field bound to <code>value</code></td>
+    </tr>
+    <tr>
+      <td><code>first('button.clear')</code></td>
+      <td><code>HTMLButtonElement</code></td>
+      <td>optional</td>
+      <td>Clear action button; shown when <code>length &gt; 0</code></td>
+    </tr>
+    <tr>
+      <td><code>first('.error')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Validation message target linked by <code>aria-errormessage</code></td>
+    </tr>
+    <tr>
+      <td><code>first('.description')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Description target linked by <code>aria-describedby</code>; add <code>data-remaining="${"{n}"} chars left"</code> for character countdown</td>
+    </tr>
+  </tbody>
+</table>

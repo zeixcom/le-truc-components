@@ -1,0 +1,64 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as ModuleTabgroupStories from './module-tabgroup.stories';
+
+<Meta of={ModuleTabgroupStories} />
+
+### Module Tabgroup
+
+An accessible tab group with keyboard navigation. Uses `createEventsSensor` to derive `selected` from both click events and keyboard events (ArrowLeft/Right/Up/Down, Home, End) on the tab buttons. The initial selection is read from the DOM via `read()`. Demonstrates `setProperty('ariaSelected')` and `setProperty('tabIndex')` applied to `all('button[role="tab"]')`, and `show()` applied to `all('[role="tabpanel"]')`.
+
+#### Tag Name
+
+`module-tabgroup`
+
+#### Preview
+
+<Canvas of={ModuleTabgroupStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>selected</code></td>
+      <td><code>string</code> (readonly)</td>
+      <td><code>''</code></td>
+      <td>The <code>aria-controls</code> value of the currently selected tab; read-only, driven by user interaction</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>all('button[role="tab"]')</code></td>
+      <td><code>Memo&lt;HTMLButtonElement[]&gt;</code></td>
+      <td><strong>required</strong></td>
+      <td>Tab buttons (at least 2); each must have <code>aria-controls</code> pointing to a panel <code>id</code>; receives <code>ariaSelected</code> and <code>tabIndex</code></td>
+    </tr>
+    <tr>
+      <td><code>all('[role="tabpanel"]')</code></td>
+      <td><code>Memo&lt;HTMLElement[]&gt;</code></td>
+      <td><strong>required</strong></td>
+      <td>Tab panels (at least 2); each must have a unique <code>id</code> matching a tab's <code>aria-controls</code>; shown/hidden by <code>show()</code></td>
+    </tr>
+  </tbody>
+</table>
