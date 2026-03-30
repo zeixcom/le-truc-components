@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
+import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "../../basic/button/basic-button.ts";
 import "../../basic/button/basic-button.css";
@@ -15,12 +16,12 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
-const spinbuttonItem = (name: string, label: string, max: number) => `
+const spinbuttonItem = (name: string, label: string, max: number) => html`
   <li>
     <p>${label}</p>
     <form-spinbutton>
       <button type="button" class="decrement" aria-label="Decrement" hidden>−</button>
-      <input type="number" class="value" name="${name}" value="0" min="0" max="${max}" readonly disabled hidden />
+      <input type="number" class="value" name=${name} value="0" min="0" max=${max} readonly disabled hidden />
       <button type="button" class="increment" aria-label="Increment">
         <span class="zero">Add to Cart</span>
         <span class="other" hidden>+</span>
@@ -30,7 +31,7 @@ const spinbuttonItem = (name: string, label: string, max: number) => `
 `;
 
 export const Default: Story = {
-  render: () => `
+  render: () => html`
     <module-catalog>
       <header>
         <p>Shop</p>

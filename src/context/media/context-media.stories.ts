@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
+import { html, nothing } from "lit";
 import { expect, within } from "storybook/test";
 import "./context-media.ts";
 import "../../card/mediaqueries/card-mediaqueries.ts";
@@ -12,8 +13,36 @@ type ContextMediaArgs = {
   xl: string;
 };
 
+const consumerTemplate = () => html`
+  <card-mediaqueries>
+    <h2>With Context</h2>
+    <dl>
+      <dt>Motion Preference:</dt>
+      <dd class="motion"></dd>
+      <dt>Theme Preference:</dt>
+      <dd class="theme"></dd>
+      <dt>Device Viewport:</dt>
+      <dd class="viewport"></dd>
+      <dt>Device Orientation:</dt>
+      <dd class="orientation"></dd>
+    </dl>
+  </card-mediaqueries>
+`;
+
+const render = ({ sm, md, lg, xl }: ContextMediaArgs) => html`
+  <context-media
+    sm=${sm || nothing}
+    md=${md || nothing}
+    lg=${lg || nothing}
+    xl=${xl || nothing}
+  >
+    ${consumerTemplate()}
+  </context-media>
+`;
+
 const meta: Meta<ContextMediaArgs> = {
   title: "Context/Media",
+  render,
   argTypes: {
     sm: {
       control: "text",
@@ -40,28 +69,8 @@ const meta: Meta<ContextMediaArgs> = {
 export default meta;
 type Story = StoryObj<ContextMediaArgs>;
 
-const consumerTemplate = () => `
-  <card-mediaqueries>
-    <h2>With Context</h2>
-    <dl>
-      <dt>Motion Preference:</dt>
-      <dd class="motion"></dd>
-      <dt>Theme Preference:</dt>
-      <dd class="theme"></dd>
-      <dt>Device Viewport:</dt>
-      <dd class="viewport"></dd>
-      <dt>Device Orientation:</dt>
-      <dd class="orientation"></dd>
-    </dl>
-  </card-mediaqueries>
-`;
-
 export const Default: Story = {
-  render: () => `
-    <context-media>
-      ${consumerTemplate()}
-    </context-media>
-  `,
+  args: { sm: "", md: "", lg: "", xl: "" },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("context-media");
     await customElements.whenDefined("card-mediaqueries");
@@ -95,15 +104,11 @@ export const CustomBreakpoints: Story = {
     lg: "80em",
     xl: "120em",
   },
-  render: ({ sm, md, lg, xl }) => `
-    <context-media sm="${sm}" md="${md}" lg="${lg}" xl="${xl}">
-      ${consumerTemplate()}
-    </context-media>
-  `,
 };
 
+// ⚠️ Custom render: renders two card-mediaqueries consumers inside the same provider to verify both receive context values
 export const MultipleConsumers: Story = {
-  render: () => `
+  render: () => html`
     <context-media>
       <card-mediaqueries>
         <h2>Consumer A</h2>

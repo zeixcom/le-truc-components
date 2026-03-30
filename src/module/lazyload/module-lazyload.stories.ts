@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
+import { html, nothing } from "lit";
 import { expect, waitFor } from "storybook/test";
 import "./module-lazyload.ts";
 import "../../card/callout/card-callout.css";
@@ -10,8 +11,19 @@ type ModuleLazyloadArgs = {
   "allow-scripts": boolean;
 };
 
+const render = ({ src, "allow-scripts": allowScripts }: ModuleLazyloadArgs) => html`
+  <module-lazyload src=${src || nothing} ?allow-scripts=${allowScripts}>
+    <card-callout>
+      <p class="loading" role="status">Loading...</p>
+      <p class="error" role="alert" aria-live="assertive" hidden></p>
+    </card-callout>
+    <div class="content" hidden></div>
+  </module-lazyload>
+`;
+
 const meta: Meta<ModuleLazyloadArgs> = {
   title: "Module/Lazyload",
+  render,
   argTypes: {
     src: {
       control: "text",
@@ -37,15 +49,6 @@ export const Default: Story = {
     src: "",
     "allow-scripts": false,
   },
-  render: ({ src, "allow-scripts": allowScripts }) => `
-    <module-lazyload${src ? ` src="${src}"` : ""}${allowScripts ? " allow-scripts" : ""}>
-      <card-callout>
-        <p class="loading" role="status">Loading...</p>
-        <p class="error" role="alert" aria-live="assertive" hidden></p>
-      </card-callout>
-      <div class="content" hidden></div>
-    </module-lazyload>
-  `,
 };
 
 export const WithContent: Story = {
@@ -53,15 +56,6 @@ export const WithContent: Story = {
     src: "/mocks/lazyload/simple-text.html",
     "allow-scripts": false,
   },
-  render: ({ src, "allow-scripts": allowScripts }) => `
-    <module-lazyload${src ? ` src="${src}"` : ""}${allowScripts ? " allow-scripts" : ""}>
-      <card-callout>
-        <p class="loading" role="status">Loading...</p>
-        <p class="error" role="alert" aria-live="assertive" hidden></p>
-      </card-callout>
-      <div class="content" hidden></div>
-    </module-lazyload>
-  `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-lazyload");
     const el = canvasElement.querySelector(
@@ -75,15 +69,7 @@ export const WithContent: Story = {
 };
 
 export const NoSrc: Story = {
-  render: () => `
-    <module-lazyload>
-      <card-callout>
-        <p class="loading" role="status">Loading...</p>
-        <p class="error" role="alert" aria-live="assertive" hidden></p>
-      </card-callout>
-      <div class="content" hidden></div>
-    </module-lazyload>
-  `,
+  args: { src: "", "allow-scripts": false },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-lazyload");
     const el = canvasElement.querySelector(
@@ -95,15 +81,7 @@ export const NoSrc: Story = {
 };
 
 export const InvalidURL: Story = {
-  render: () => `
-    <module-lazyload src="not-a-valid-url">
-      <card-callout>
-        <p class="loading" role="status">Loading...</p>
-        <p class="error" role="alert" aria-live="assertive" hidden></p>
-      </card-callout>
-      <div class="content" hidden></div>
-    </module-lazyload>
-  `,
+  args: { src: "not-a-valid-url", "allow-scripts": false },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-lazyload");
     const el = canvasElement.querySelector(
@@ -117,15 +95,7 @@ export const InvalidURL: Story = {
 };
 
 export const PropertyChanges: Story = {
-  render: () => `
-    <module-lazyload>
-      <card-callout>
-        <p class="loading" role="status">Loading...</p>
-        <p class="error" role="alert" aria-live="assertive" hidden></p>
-      </card-callout>
-      <div class="content" hidden></div>
-    </module-lazyload>
-  `,
+  args: { src: "", "allow-scripts": false },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-lazyload");
     const el = canvasElement.querySelector(

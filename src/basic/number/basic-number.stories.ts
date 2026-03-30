@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
+import { html, nothing } from "lit";
 import { expect } from "storybook/test";
 import "./basic-number.ts";
 import type { Component } from "@zeix/le-truc";
@@ -10,8 +11,17 @@ type BasicNumberArgs = {
   lang: string;
 };
 
+const render = ({ value, options, lang }: BasicNumberArgs) => html`
+  <basic-number
+    value=${value}
+    options=${options || nothing}
+    lang=${lang || nothing}
+  ></basic-number>
+`;
+
 const meta: Meta<BasicNumberArgs> = {
   title: "Basic/Number",
+  render,
   argTypes: {
     value: {
       control: "number",
@@ -41,17 +51,11 @@ export const Default: Story = {
     options: '{"style":"unit","unit":"liter","unitDisplay":"long"}',
     lang: "",
   },
-  render: ({ value, options, lang }) => `
-    <basic-number
-      value="${value}"
-      options='${options}'
-      ${lang ? `lang="${lang}"` : ""}
-    ></basic-number>
-  `,
 };
 
+// ⚠️ Custom render: shows two instances side-by-side with locale labels, each with a different lang
 export const Currency: Story = {
-  render: () => `
+  render: () => html`
     <p>German (Switzerland):<br />
     <basic-number
       lang="de-CH"
@@ -67,8 +71,9 @@ export const Currency: Story = {
   `,
 };
 
+// ⚠️ Custom render: shows two instances side-by-side with locale labels, each with a different lang
 export const Unit: Story = {
-  render: () => `
+  render: () => html`
     <p>Arabic speed (km/h):<br />
     <basic-number
       lang="ar-EG"
@@ -84,8 +89,9 @@ export const Unit: Story = {
   `,
 };
 
+// ⚠️ Custom render: component is wrapped in a div[lang] to test locale inheritance from the DOM ancestor
 export const LocaleInheritance: Story = {
-  render: () => `
+  render: () => html`
     <div lang="de-DE">
       <p>Euro currency, inherited German (Germany) locale:<br />
       <basic-number
@@ -104,12 +110,11 @@ export const LocaleInheritance: Story = {
 };
 
 export const DecimalFormatting: Story = {
-  render: () => `
-    <basic-number
-      value="1234.56789"
-      options='{"style":"decimal","minimumFractionDigits":2,"maximumFractionDigits":3}'
-    ></basic-number>
-  `,
+  args: {
+    value: 1234.56789,
+    options: '{"style":"decimal","minimumFractionDigits":2,"maximumFractionDigits":3}',
+    lang: "",
+  },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-number");
     const el = canvasElement.querySelector(
@@ -120,9 +125,7 @@ export const DecimalFormatting: Story = {
 };
 
 export const PropertyChanges: Story = {
-  render: () => `
-    <basic-number value="0"></basic-number>
-  `,
+  args: { value: 0, options: "", lang: "" },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-number");
     const el = canvasElement.querySelector(

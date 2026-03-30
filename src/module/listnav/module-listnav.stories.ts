@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
+import { html } from "lit";
 import "./module-listnav.ts";
 import "./module-listnav.css";
 import "../../form/listbox/form-listbox.ts";
@@ -13,7 +14,7 @@ export default meta;
 type Story = StoryObj;
 
 export const Default: Story = {
-  render: () => `
+  render: () => html`
     <module-listnav>
       <nav>
         <h2 id="listnav-label" class="visually-hidden">Pages</h2>

@@ -1,17 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
+import { html } from "lit";
 import { expect, within } from "storybook/test";
 import "../../context/media/context-media.ts";
 import "./card-mediaqueries.ts";
 import type { Component } from "@zeix/le-truc";
 import type { CardMediaqueriesProps } from "./card-mediaqueries.ts";
 
-const meta: Meta = {
-  title: "Card/Mediaqueries",
+type CardMediaqueriesArgs = {
+  heading: string;
 };
-export default meta;
-type Story = StoryObj;
 
-const cardTemplate = (heading: string) => `
+const cardTemplate = (heading: string) => html`
   <card-mediaqueries>
     <h2>${heading}</h2>
     <dl>
@@ -27,8 +26,23 @@ const cardTemplate = (heading: string) => `
   </card-mediaqueries>
 `;
 
+const render = ({ heading }: CardMediaqueriesArgs) => cardTemplate(heading);
+
+const meta: Meta<CardMediaqueriesArgs> = {
+  title: "Card/Mediaqueries",
+  render,
+  argTypes: {
+    heading: {
+      control: "text",
+      table: { category: "Content" },
+    },
+  },
+};
+export default meta;
+type Story = StoryObj<CardMediaqueriesArgs>;
+
 export const WithoutContext: Story = {
-  render: () => cardTemplate("Without Context"),
+  args: { heading: "Without Context" },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("card-mediaqueries");
     const el = canvasElement.querySelector(
@@ -42,8 +56,9 @@ export const WithoutContext: Story = {
   },
 };
 
+// ⚠️ Custom render: wraps the card inside a context-media provider to test that values are populated
 export const WithContext: Story = {
-  render: () => `
+  render: () => html`
     <context-media>
       ${cardTemplate("With Context")}
     </context-media>
@@ -74,8 +89,9 @@ export const WithContext: Story = {
   },
 };
 
+// ⚠️ Custom render: renders two cards simultaneously — one inside context-media, one outside — to compare outputs
 export const SideBySide: Story = {
-  render: () => `
+  render: () => html`
     <context-media>
       ${cardTemplate("With Context")}
     </context-media>

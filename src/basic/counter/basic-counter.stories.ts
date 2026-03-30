@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
+import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./basic-counter.ts";
 import "./basic-counter.css";
@@ -9,8 +10,15 @@ type BasicCounterArgs = {
   count: number;
 };
 
+const render = ({ count }: BasicCounterArgs) => html`
+  <basic-counter>
+    <button type="button">💐 <span>${count}</span></button>
+  </basic-counter>
+`;
+
 const meta: Meta<BasicCounterArgs> = {
   title: "Basic/Counter",
+  render,
   argTypes: {
     count: {
       control: "number",
@@ -28,19 +36,10 @@ export const Default: Story = {
   args: {
     count: 42,
   },
-  render: ({ count }) => `
-    <basic-counter>
-      <button type="button">💐 <span>${count}</span></button>
-    </basic-counter>
-  `,
 };
 
 export const DynamicUpdates: Story = {
-  render: () => `
-    <basic-counter>
-      <button type="button">Count: <span>0</span></button>
-    </basic-counter>
-  `,
+  args: { count: 0 },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-counter");
     const canvas = within(canvasElement);
@@ -62,11 +61,7 @@ export const DynamicUpdates: Story = {
 };
 
 export const InitialDOMValue: Story = {
-  render: () => `
-    <basic-counter>
-      <button type="button">+ <span>100</span></button>
-    </basic-counter>
-  `,
+  args: { count: 100 },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-counter");
     const canvas = within(canvasElement);
@@ -84,11 +79,7 @@ export const InitialDOMValue: Story = {
 };
 
 export const NegativeInitialValue: Story = {
-  render: () => `
-    <basic-counter>
-      <button type="button">Value: <span>-5</span></button>
-    </basic-counter>
-  `,
+  args: { count: -5 },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-counter");
     const canvas = within(canvasElement);
@@ -108,11 +99,7 @@ export const NegativeInitialValue: Story = {
 };
 
 export const PropertyChanges: Story = {
-  render: () => `
-    <basic-counter>
-      <button type="button">Count: <span>0</span></button>
-    </basic-counter>
-  `,
+  args: { count: 0 },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-counter");
     const el = canvasElement.querySelector(

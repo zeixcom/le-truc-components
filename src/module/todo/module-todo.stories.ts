@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
+import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./module-todo.ts";
 import "./module-todo.css";
@@ -14,13 +15,7 @@ import "../../form/textbox/form-textbox.css";
 import "../../module/list/module-list.ts";
 import "../../module/list/module-list.css";
 
-const meta: Meta = {
-  title: "Module/Todo",
-};
-export default meta;
-type Story = StoryObj;
-
-const todoHTML = `
+const todoTemplate = html`
   <module-todo>
     <form action="#">
       <form-textbox clearable>
@@ -91,12 +86,16 @@ const todoHTML = `
   </module-todo>
 `;
 
-export const Default: Story = {
-  render: () => todoHTML,
+const meta: Meta = {
+  title: "Module/Todo",
+  render: () => todoTemplate,
 };
+export default meta;
+type Story = StoryObj;
+
+export const Default: Story = {};
 
 export const AddAndComplete: Story = {
-  render: () => todoHTML,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-todo");
     const canvas = within(canvasElement);
@@ -130,7 +129,6 @@ export const AddAndComplete: Story = {
 };
 
 export const WithFilter: Story = {
-  render: () => todoHTML,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-todo");
     const canvas = within(canvasElement);

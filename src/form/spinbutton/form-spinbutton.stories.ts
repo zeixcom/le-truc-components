@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
+import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./form-spinbutton.ts";
 import "./form-spinbutton.css";
@@ -10,8 +11,30 @@ type FormSpinbuttonArgs = {
   max: number;
 };
 
+const render = ({ value, max }: FormSpinbuttonArgs) => html`
+  <form-spinbutton>
+    <button type="button" class="decrement" aria-label="Decrement" ?hidden=${value === 0}>−</button>
+    <input
+      type="number"
+      class="value"
+      name="amount"
+      value=${value}
+      min="0"
+      max=${max}
+      readonly
+      disabled
+      ?hidden=${value === 0}
+    />
+    <button type="button" class="increment" aria-label="Increment">
+      <span class="zero" ?hidden=${value !== 0}>Add to Cart</span>
+      <span class="other" ?hidden=${value === 0}>+</span>
+    </button>
+  </form-spinbutton>
+`;
+
 const meta: Meta<FormSpinbuttonArgs> = {
   title: "Form/Spinbutton",
+  render,
   argTypes: {
     value: {
       control: "number",
@@ -37,48 +60,10 @@ export const Default: Story = {
     value: 0,
     max: 10,
   },
-  render: ({ value, max }) => `
-    <form-spinbutton>
-      <button type="button" class="decrement" aria-label="Decrement"${value === 0 ? " hidden" : ""}>−</button>
-      <input
-        type="number"
-        class="value"
-        name="amount"
-        value="${value}"
-        min="0"
-        max="${max}"
-        readonly
-        disabled
-        ${value === 0 ? "hidden" : ""}
-      />
-      <button type="button" class="increment" aria-label="Increment">
-        <span class="zero"${value !== 0 ? " hidden" : ""}>Add to Cart</span>
-        <span class="other"${value === 0 ? " hidden" : ""}>+</span>
-      </button>
-    </form-spinbutton>
-  `,
 };
 
 export const WithInitialValue: Story = {
-  render: () => `
-    <form-spinbutton>
-      <button type="button" class="decrement" aria-label="Decrement">−</button>
-      <input
-        type="number"
-        class="value"
-        name="amount"
-        value="3"
-        min="0"
-        max="15"
-        readonly
-        disabled
-      />
-      <button type="button" class="increment" aria-label="Increment">
-        <span class="zero" hidden>Add</span>
-        <span class="other">+</span>
-      </button>
-    </form-spinbutton>
-  `,
+  args: { value: 3, max: 15 },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-spinbutton");
     const el = canvasElement.querySelector(
@@ -91,26 +76,7 @@ export const WithInitialValue: Story = {
 };
 
 export const IncrementDecrement: Story = {
-  render: () => `
-    <form-spinbutton>
-      <button type="button" class="decrement" aria-label="Decrement" hidden>−</button>
-      <input
-        type="number"
-        class="value"
-        name="qty"
-        value="0"
-        min="0"
-        max="5"
-        readonly
-        disabled
-        hidden
-      />
-      <button type="button" class="increment" aria-label="Increment">
-        <span class="zero">Add</span>
-        <span class="other" hidden>+</span>
-      </button>
-    </form-spinbutton>
-  `,
+  args: { value: 0, max: 5 },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-spinbutton");
     const canvas = within(canvasElement);
@@ -135,16 +101,7 @@ export const IncrementDecrement: Story = {
 };
 
 export const ClampedAtMax: Story = {
-  render: () => `
-    <form-spinbutton>
-      <button type="button" class="decrement" aria-label="Decrement">−</button>
-      <input type="number" class="value" name="qty" value="4" min="0" max="5" readonly disabled />
-      <button type="button" class="increment" aria-label="Increment">
-        <span class="zero" hidden>Add</span>
-        <span class="other">+</span>
-      </button>
-    </form-spinbutton>
-  `,
+  args: { value: 4, max: 5 },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-spinbutton");
     const canvas = within(canvasElement);
@@ -162,16 +119,7 @@ export const ClampedAtMax: Story = {
 };
 
 export const PropertyChanges: Story = {
-  render: () => `
-    <form-spinbutton>
-      <button type="button" class="decrement" aria-label="Decrement" hidden>−</button>
-      <input type="number" class="value" name="qty" value="0" min="0" max="10" readonly disabled hidden />
-      <button type="button" class="increment" aria-label="Increment">
-        <span class="zero">Add</span>
-        <span class="other" hidden>+</span>
-      </button>
-    </form-spinbutton>
-  `,
+  args: { value: 0, max: 10 },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-spinbutton");
     const el = canvasElement.querySelector(

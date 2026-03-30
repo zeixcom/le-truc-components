@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
+import { html, nothing } from "lit";
 import "./card-callout.css";
 
 type CardCalloutArgs = {
@@ -6,8 +7,13 @@ type CardCalloutArgs = {
   content: string;
 };
 
+const render = ({ variant, content }: CardCalloutArgs) => html`
+  <card-callout class=${variant !== "info" ? variant : nothing}>${content}</card-callout>
+`;
+
 const meta: Meta<CardCalloutArgs> = {
   title: "Card/Callout",
+  render,
   argTypes: {
     variant: {
       control: { type: "select" },
@@ -28,13 +34,11 @@ export const Default: Story = {
     variant: "info",
     content: "This is an informational message.",
   },
-  render: ({ variant, content }) => `
-    <card-callout${variant !== "info" ? ` class="${variant}"` : ""}>${content}</card-callout>
-  `,
 };
 
+// ⚠️ Custom render: shows all five variants side-by-side with representative messages
 export const AllVariants: Story = {
-  render: () => `
+  render: () => html`
     <card-callout>This is an informational message.</card-callout>
     <card-callout class="tip">Remember to hydrate while coding!</card-callout>
     <card-callout class="caution">Be careful with this operation.</card-callout>
@@ -43,8 +47,9 @@ export const AllVariants: Story = {
   `,
 };
 
+// ⚠️ Custom render: uses multi-paragraph rich HTML content that cannot be expressed as a plain text arg
 export const WithRichContent: Story = {
-  render: () => `
+  render: () => html`
     <card-callout class="tip">
       <p>You can include <strong>rich content</strong> inside a callout.</p>
       <p>Multiple paragraphs work too — the last child's bottom margin is removed automatically.</p>

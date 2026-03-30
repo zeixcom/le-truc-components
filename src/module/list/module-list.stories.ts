@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
+import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./module-list.ts";
 import "./module-list.css";
@@ -11,8 +12,35 @@ type ModuleListArgs = {
   max: number;
 };
 
+const render = ({ max }: ModuleListArgs) => html`
+  <module-list max=${max}>
+    <ul data-container></ul>
+    <template>
+      <li>
+        <span><slot></slot></span>
+        <basic-button class="delete">
+          <button type="button" class="tertiary destructive small">Remove</button>
+        </basic-button>
+      </li>
+    </template>
+    <form>
+      <form-textbox clearable>
+        <label for="new-item-input">New item</label>
+        <div class="input">
+          <input type="text" id="new-item-input" name="new-item" autocomplete="off" />
+          <button type="button" class="clear" aria-label="Clear input" hidden>✕</button>
+        </div>
+      </form-textbox>
+      <basic-button class="add">
+        <button type="submit" class="constructive">Add</button>
+      </basic-button>
+    </form>
+  </module-list>
+`;
+
 const meta: Meta<ModuleListArgs> = {
   title: "Module/List",
+  render,
   argTypes: {
     max: {
       control: "number",
@@ -30,59 +58,10 @@ export const Default: Story = {
   args: {
     max: 1000,
   },
-  render: () => `
-    <module-list>
-      <ul data-container></ul>
-      <template>
-        <li>
-          <span><slot></slot></span>
-          <basic-button class="delete">
-            <button type="button" class="tertiary destructive small">Remove</button>
-          </basic-button>
-        </li>
-      </template>
-      <form>
-        <form-textbox clearable>
-          <label for="new-item-input">New item</label>
-          <div class="input">
-            <input type="text" id="new-item-input" name="new-item" autocomplete="off" />
-            <button type="button" class="clear" aria-label="Clear input" hidden>✕</button>
-          </div>
-        </form-textbox>
-        <basic-button class="add">
-          <button type="submit" class="constructive">Add</button>
-        </basic-button>
-      </form>
-    </module-list>
-  `,
 };
 
 export const AddItem: Story = {
-  render: () => `
-    <module-list>
-      <ul data-container></ul>
-      <template>
-        <li>
-          <span><slot></slot></span>
-          <basic-button class="delete">
-            <button type="button" class="tertiary destructive small">Remove</button>
-          </basic-button>
-        </li>
-      </template>
-      <form>
-        <form-textbox clearable>
-          <label for="add-item-input">New item</label>
-          <div class="input">
-            <input type="text" id="add-item-input" name="new-item" autocomplete="off" />
-            <button type="button" class="clear" aria-label="Clear input" hidden>✕</button>
-          </div>
-        </form-textbox>
-        <basic-button class="add">
-          <button type="submit" class="constructive">Add</button>
-        </basic-button>
-      </form>
-    </module-list>
-  `,
+  args: { max: 1000 },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-list");
     const canvas = within(canvasElement);
@@ -104,8 +83,9 @@ export const AddItem: Story = {
   },
 };
 
+// ⚠️ Custom render: pre-populates the container with existing items to test that the component recognises them
 export const WithInitialItems: Story = {
-  render: () => `
+  render: () => html`
     <module-list>
       <ul data-container>
         <li data-key="0">
@@ -145,8 +125,9 @@ export const WithInitialItems: Story = {
   `,
 };
 
+// ⚠️ Custom render: pre-populates the container at the max limit to verify the add button starts disabled
 export const WithMax: Story = {
-  render: () => `
+  render: () => html`
     <module-list max="3">
       <ul data-container>
         <li data-key="0">

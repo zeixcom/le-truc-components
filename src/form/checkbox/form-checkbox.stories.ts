@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
+import { html, nothing } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./form-checkbox.ts";
 import "./form-checkbox.css";
@@ -11,8 +12,22 @@ type FormCheckboxArgs = {
   variant: "none" | "checkbox" | "todo" | "toggle";
 };
 
+const render = ({ checked, label, variant }: FormCheckboxArgs) => html`
+  <form-checkbox class=${variant !== "none" ? variant : nothing}>
+    <label>
+      <input
+        type="checkbox"
+        class=${variant !== "none" ? "visually-hidden" : nothing}
+        ?checked=${checked}
+      />
+      <span class="label">${label}</span>
+    </label>
+  </form-checkbox>
+`;
+
 const meta: Meta<FormCheckboxArgs> = {
   title: "Form/Checkbox",
+  render,
   argTypes: {
     checked: {
       control: "boolean",
@@ -41,60 +56,25 @@ export const Default: Story = {
     label: "Checkbox",
     variant: "checkbox",
   },
-  render: ({ checked, label, variant }) => {
-    const cls = variant !== "none" ? ` class="${variant}"` : "";
-    return `
-      <form-checkbox${cls}>
-        <label>
-          <input type="checkbox" class="visually-hidden"${checked ? " checked" : ""} />
-          <span class="label">${label}</span>
-        </label>
-      </form-checkbox>
-    `;
-  },
 };
 
+const allVariants: FormCheckboxArgs[] = [
+  { checked: false, label: "Default (native)", variant: "none" },
+  { checked: false, label: "Checkbox", variant: "checkbox" },
+  { checked: false, label: "Todo item", variant: "todo" },
+  { checked: false, label: "Toggle switch", variant: "toggle" },
+];
+
 export const AllVariants: Story = {
-  render: () => `
-    <form-checkbox>
-      <label>
-        <input type="checkbox" />
-        <span class="label">Default (native)</span>
-      </label>
-    </form-checkbox>
-    <br />
-    <form-checkbox class="checkbox">
-      <label>
-        <input type="checkbox" class="visually-hidden" />
-        <span class="label">Checkbox</span>
-      </label>
-    </form-checkbox>
-    <br />
-    <form-checkbox class="todo">
-      <label>
-        <input type="checkbox" class="visually-hidden" />
-        <span class="label">Todo item</span>
-      </label>
-    </form-checkbox>
-    <br />
-    <form-checkbox class="toggle">
-      <label>
-        <input type="checkbox" class="visually-hidden" />
-        <span class="label">Toggle switch</span>
-      </label>
-    </form-checkbox>
-  `,
+  render: () => html`${allVariants.map((args, i) => html`${render(args)}${i < allVariants.length - 1 ? html`<br />` : nothing}`)}`,
 };
 
 export const InitialChecked: Story = {
-  render: () => `
-    <form-checkbox class="checkbox">
-      <label>
-        <input type="checkbox" class="visually-hidden" checked />
-        <span class="label">Initially checked</span>
-      </label>
-    </form-checkbox>
-  `,
+  args: {
+    checked: true,
+    label: "Initially checked",
+    variant: "checkbox",
+  },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-checkbox");
     const el = canvasElement.querySelector(
@@ -107,14 +87,11 @@ export const InitialChecked: Story = {
 };
 
 export const DynamicUpdates: Story = {
-  render: () => `
-    <form-checkbox class="checkbox">
-      <label>
-        <input type="checkbox" class="visually-hidden" />
-        <span class="label">Click me</span>
-      </label>
-    </form-checkbox>
-  `,
+  args: {
+    checked: false,
+    label: "Click me",
+    variant: "checkbox",
+  },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-checkbox");
     const canvas = within(canvasElement);
@@ -135,14 +112,11 @@ export const DynamicUpdates: Story = {
 };
 
 export const PropertyChanges: Story = {
-  render: () => `
-    <form-checkbox class="todo">
-      <label>
-        <input type="checkbox" class="visually-hidden" />
-        <span class="label">Task label</span>
-      </label>
-    </form-checkbox>
-  `,
+  args: {
+    checked: false,
+    label: "Task label",
+    variant: "todo",
+  },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-checkbox");
     const el = canvasElement.querySelector(

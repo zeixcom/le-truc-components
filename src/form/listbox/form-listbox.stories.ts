@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
+import { html, nothing } from "lit";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import "../../card/callout/card-callout.css";
 import "../../module/scrollarea/module-scrollarea.ts";
@@ -14,8 +15,24 @@ type FormListboxArgs = {
   src: string;
 };
 
+const render = ({ value }: FormListboxArgs) => html`
+  <form>
+    <form-listbox id="colors" value=${value || nothing}>
+      <input type="hidden" name="color" />
+      <div role="listbox" aria-label="Colors">
+        <button type="button" role="option" tabindex="-1" value="red" aria-selected=${value === "red" ? "true" : nothing}>Red</button>
+        <button type="button" role="option" tabindex="-1" value="green" aria-selected=${value === "green" ? "true" : nothing}>Green</button>
+        <button type="button" role="option" tabindex="-1" value="blue" aria-selected=${value === "blue" ? "true" : nothing}>Blue</button>
+        <button type="button" role="option" tabindex="-1" value="yellow" aria-selected=${value === "yellow" ? "true" : nothing}>Yellow</button>
+        <button type="button" role="option" tabindex="-1" value="purple" aria-selected=${value === "purple" ? "true" : nothing}>Purple</button>
+      </div>
+    </form-listbox>
+  </form>
+`;
+
 const meta: Meta<FormListboxArgs> = {
   title: "Form/Listbox",
+  render,
   argTypes: {
     value: {
       control: "text",
@@ -50,24 +67,11 @@ export const Default: Story = {
     value: "",
     filter: "",
   },
-  render: ({ value }) => `
-    <form>
-      <form-listbox id="colors"${value ? ` value="${value}"` : ""}>
-        <input type="hidden" name="color" />
-        <div role="listbox" aria-label="Colors">
-          <button type="button" role="option" tabindex="-1" value="red"${value === "red" ? ' aria-selected="true"' : ""}>Red</button>
-          <button type="button" role="option" tabindex="-1" value="green"${value === "green" ? ' aria-selected="true"' : ""}>Green</button>
-          <button type="button" role="option" tabindex="-1" value="blue"${value === "blue" ? ' aria-selected="true"' : ""}>Blue</button>
-          <button type="button" role="option" tabindex="-1" value="yellow"${value === "yellow" ? ' aria-selected="true"' : ""}>Yellow</button>
-          <button type="button" role="option" tabindex="-1" value="purple"${value === "purple" ? ' aria-selected="true"' : ""}>Purple</button>
-        </div>
-      </form-listbox>
-    </form>
-  `,
 };
 
+// ⚠️ Custom render: includes a filter input and clear button inside the listbox for testing filter functionality
 export const WithFilter: Story = {
-  render: () => `
+  render: () => html`
     <form>
       <form-listbox id="fruits">
         <input type="hidden" name="fruit" />
@@ -107,8 +111,9 @@ export const WithFilter: Story = {
   },
 };
 
+// ⚠️ Custom render: uses grouped options structure (role="group") with two categories
 export const WithGroups: Story = {
-  render: () => `
+  render: () => html`
     <form>
       <form-listbox id="grouped-fruits">
         <input type="hidden" name="fruit" />
@@ -142,13 +147,14 @@ export const WithGroups: Story = {
   },
 };
 
+// ⚠️ Custom render: uses src attribute with a loading/error state card-callout and an empty listbox container
 export const WithSrc: Story = {
   args: {
     src: "/mocks/listbox/simple-options.json",
   },
-  render: ({ src }) => `
+  render: ({ src }) => html`
     <form>
-      <form-listbox id="remote-options"${src ? ` src="${src}"` : ""}>
+      <form-listbox id="remote-options" src=${src || nothing}>
         <input type="hidden" name="option" />
         <card-callout>
           <p class="loading" role="status">Loading...</p>
@@ -175,8 +181,9 @@ export const WithSrc: Story = {
   },
 };
 
+// ⚠️ Custom render: uses language options with a pre-selected item (aria-selected="true", tabindex="0") to test initial selection state
 export const Selection: Story = {
-  render: () => `
+  render: () => html`
     <form>
       <form-listbox id="langs">
         <input type="hidden" name="language" />

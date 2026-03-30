@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
+import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./basic-hello.ts";
 import type { Component } from "@zeix/le-truc";
@@ -8,8 +9,17 @@ type BasicHelloArgs = {
   name: string;
 };
 
+const render = ({ name }: BasicHelloArgs) => html`
+  <basic-hello>
+    <label for="hello-name">Your name</label><br />
+    <input id="hello-name" name="name" type="text" autocomplete="given-name" />
+    <p>Hello, <output for="hello-name">${name}</output>!</p>
+  </basic-hello>
+`;
+
 const meta: Meta<BasicHelloArgs> = {
   title: "Basic/Hello",
+  render,
   argTypes: {
     name: {
       control: "text",
@@ -27,23 +37,10 @@ export const Default: Story = {
   args: {
     name: "World",
   },
-  render: ({ name }) => `
-    <basic-hello>
-      <label for="hello-name">Your name</label><br />
-      <input id="hello-name" name="name" type="text" autocomplete="given-name" />
-      <p>Hello, <output for="hello-name">${name}</output>!</p>
-    </basic-hello>
-  `,
 };
 
 export const DynamicUpdates: Story = {
-  render: () => `
-    <basic-hello>
-      <label for="hello-name">Your name</label><br />
-      <input id="hello-name" name="name" type="text" autocomplete="given-name" />
-      <p>Hello, <output for="hello-name">World</output>!</p>
-    </basic-hello>
-  `,
+  args: { name: "World" },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-hello");
     const canvas = within(canvasElement);
@@ -66,13 +63,7 @@ export const DynamicUpdates: Story = {
 };
 
 export const FallbackOnClear: Story = {
-  render: () => `
-    <basic-hello>
-      <label for="hello-name">Your name</label><br />
-      <input id="hello-name" name="name" type="text" autocomplete="given-name" />
-      <p>Hello, <output for="hello-name">World</output>!</p>
-    </basic-hello>
-  `,
+  args: { name: "World" },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-hello");
     const canvas = within(canvasElement);
@@ -91,13 +82,7 @@ export const FallbackOnClear: Story = {
 };
 
 export const InitialDOMValue: Story = {
-  render: () => `
-    <basic-hello>
-      <label for="hello-name">Your name</label><br />
-      <input id="hello-name" name="name" type="text" autocomplete="given-name" />
-      <p>Hello, <output for="hello-name">Alice</output>!</p>
-    </basic-hello>
-  `,
+  args: { name: "Alice" },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-hello");
     const el = canvasElement.querySelector(
@@ -111,13 +96,7 @@ export const InitialDOMValue: Story = {
 };
 
 export const PropertyChanges: Story = {
-  render: () => `
-    <basic-hello>
-      <label for="hello-name">Your name</label><br />
-      <input id="hello-name" name="name" type="text" autocomplete="given-name" />
-      <p>Hello, <output for="hello-name">World</output>!</p>
-    </basic-hello>
-  `,
+  args: { name: "World" },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-hello");
     const el = canvasElement.querySelector(

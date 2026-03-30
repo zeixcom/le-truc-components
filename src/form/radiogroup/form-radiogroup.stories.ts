@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
+import { html, nothing } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./form-radiogroup.ts";
 import "./form-radiogroup.css";
@@ -10,8 +11,29 @@ type FormRadiogroupArgs = {
   variant: "none" | "radio-group" | "split-button";
 };
 
+const render = ({ value, variant }: FormRadiogroupArgs) => html`
+  <form-radiogroup class=${variant !== "none" ? variant : nothing}>
+    <fieldset>
+      <legend>Theme</legend>
+      <label class=${value === "light" ? "selected" : nothing}>
+        <input type="radio" class="visually-hidden" name="theme" value="light" ?checked=${value === "light"} />
+        <span>Light</span>
+      </label>
+      <label class=${value === "dark" ? "selected" : nothing}>
+        <input type="radio" class="visually-hidden" name="theme" value="dark" ?checked=${value === "dark"} />
+        <span>Dark</span>
+      </label>
+      <label class=${value === "system" ? "selected" : nothing}>
+        <input type="radio" class="visually-hidden" name="theme" value="system" ?checked=${value === "system"} />
+        <span>System</span>
+      </label>
+    </fieldset>
+  </form-radiogroup>
+`;
+
 const meta: Meta<FormRadiogroupArgs> = {
   title: "Form/Radiogroup",
+  render,
   argTypes: {
     value: {
       control: "text",
@@ -35,32 +57,11 @@ export const Default: Story = {
     value: "system",
     variant: "radio-group",
   },
-  render: ({ value, variant }) => {
-    const cls = variant !== "none" ? ` class="${variant}"` : "";
-    return `
-      <form-radiogroup${cls}>
-        <fieldset>
-          <legend>Theme</legend>
-          <label${value === "light" ? ' class="selected"' : ""}>
-            <input type="radio" class="visually-hidden" name="theme" value="light"${value === "light" ? " checked" : ""} />
-            <span>Light</span>
-          </label>
-          <label${value === "dark" ? ' class="selected"' : ""}>
-            <input type="radio" class="visually-hidden" name="theme" value="dark"${value === "dark" ? " checked" : ""} />
-            <span>Dark</span>
-          </label>
-          <label${value === "system" ? ' class="selected"' : ""}>
-            <input type="radio" class="visually-hidden" name="theme" value="system"${value === "system" ? " checked" : ""} />
-            <span>System</span>
-          </label>
-        </fieldset>
-      </form-radiogroup>
-    `;
-  },
 };
 
+// ⚠️ Custom render: shows all three variants side-by-side, each with different option sets and legends
 export const AllVariants: Story = {
-  render: () => `
+  render: () => html`
     <p>Default (native):</p>
     <form-radiogroup>
       <fieldset>
@@ -119,25 +120,7 @@ export const AllVariants: Story = {
 };
 
 export const DynamicUpdates: Story = {
-  render: () => `
-    <form-radiogroup class="radio-group">
-      <fieldset>
-        <legend>Size</legend>
-        <label class="selected">
-          <input type="radio" class="visually-hidden" name="size" value="small" checked />
-          <span>Small</span>
-        </label>
-        <label>
-          <input type="radio" class="visually-hidden" name="size" value="medium" />
-          <span>Medium</span>
-        </label>
-        <label>
-          <input type="radio" class="visually-hidden" name="size" value="large" />
-          <span>Large</span>
-        </label>
-      </fieldset>
-    </form-radiogroup>
-  `,
+  args: { value: "light", variant: "radio-group" },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-radiogroup");
     const canvas = within(canvasElement);
@@ -145,36 +128,18 @@ export const DynamicUpdates: Story = {
       "form-radiogroup",
     ) as Component<FormRadiogroupProps>;
 
-    await expect(el.value).toBe("small");
+    await expect(el.value).toBe("light");
 
-    await userEvent.click(canvas.getByLabelText("Medium"));
-    await expect(el.value).toBe("medium");
+    await userEvent.click(canvas.getByLabelText("Dark"));
+    await expect(el.value).toBe("dark");
 
-    await userEvent.click(canvas.getByLabelText("Large"));
-    await expect(el.value).toBe("large");
+    await userEvent.click(canvas.getByLabelText("System"));
+    await expect(el.value).toBe("system");
   },
 };
 
 export const PropertyChanges: Story = {
-  render: () => `
-    <form-radiogroup class="split-button">
-      <fieldset>
-        <legend class="visually-hidden">Priority</legend>
-        <label class="selected">
-          <input type="radio" class="visually-hidden" name="priority" value="low" checked />
-          <span>Low</span>
-        </label>
-        <label>
-          <input type="radio" class="visually-hidden" name="priority" value="medium" />
-          <span>Medium</span>
-        </label>
-        <label>
-          <input type="radio" class="visually-hidden" name="priority" value="high" />
-          <span>High</span>
-        </label>
-      </fieldset>
-    </form-radiogroup>
-  `,
+  args: { value: "light", variant: "split-button" },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-radiogroup");
     const el = canvasElement.querySelector(
@@ -182,11 +147,11 @@ export const PropertyChanges: Story = {
     ) as Component<FormRadiogroupProps>;
     const labels = el.querySelectorAll("label");
 
-    await expect(el.value).toBe("low");
+    await expect(el.value).toBe("light");
     await expect(labels[0]).toHaveClass("selected");
 
-    el.value = "high";
-    await expect(el.value).toBe("high");
+    el.value = "system";
+    await expect(el.value).toBe("system");
     await expect(labels[2]).toHaveClass("selected");
     await expect(labels[0]).not.toHaveClass("selected");
   },

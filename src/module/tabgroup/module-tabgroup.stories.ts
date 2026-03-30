@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
+import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./module-tabgroup.ts";
 import "./module-tabgroup.css";
@@ -12,7 +13,7 @@ export default meta;
 type Story = StoryObj;
 
 export const Default: Story = {
-  render: () => `
+  render: () => html`
     <module-tabgroup>
       <div role="tablist">
         <button type="button" role="tab" aria-controls="panel1" aria-selected="true" tabindex="0">Tab 1</button>
@@ -35,7 +36,7 @@ export const Default: Story = {
 };
 
 export const TabNavigation: Story = {
-  render: () => `
+  render: () => html`
     <module-tabgroup>
       <div role="tablist">
         <button type="button" role="tab" aria-controls="nav-panel1" aria-selected="true" tabindex="0">Settings</button>
@@ -74,7 +75,7 @@ export const TabNavigation: Story = {
 };
 
 export const SecondTabInitial: Story = {
-  render: () => `
+  render: () => html`
     <module-tabgroup>
       <div role="tablist">
         <button type="button" role="tab" aria-controls="init-panel1" aria-selected="false" tabindex="-1">Home</button>
@@ -97,7 +98,7 @@ export const SecondTabInitial: Story = {
 };
 
 export const KeyboardNavigation: Story = {
-  render: () => `
+  render: () => html`
     <module-tabgroup>
       <div role="tablist">
         <button type="button" role="tab" aria-controls="key-panel1" aria-selected="true" tabindex="0">First</button>

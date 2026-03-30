@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
+import { html, nothing } from "lit";
 import { expect } from "storybook/test";
 import "./basic-button.ts";
 import "./basic-button.css";
@@ -18,8 +19,26 @@ type BasicButtonArgs = {
   size: "small" | "medium" | "large";
 };
 
+const render = ({ label, badge, disabled, variant, size }: BasicButtonArgs) => {
+  const classes = [
+    variant !== "secondary" ? variant : undefined,
+    size !== "medium" ? size : undefined,
+  ]
+    .filter(Boolean)
+    .join(" ");
+  return html`
+    <basic-button ?disabled=${disabled} label=${label} badge=${badge}>
+      <button type="button" class=${classes || nothing}>
+        <span class="label">${label}</span>
+        <span class="badge">${badge}</span>
+      </button>
+    </basic-button>
+  `;
+};
+
 const meta: Meta<BasicButtonArgs> = {
   title: "Basic/Button",
+  render,
   argTypes: {
     label: { control: "text", table: { category: "Reactive Properties" } },
     badge: { control: "text", table: { category: "Reactive Properties" } },
@@ -59,26 +78,11 @@ export const Default: Story = {
     variant: "secondary",
     size: "medium",
   },
-  render: ({ label, badge, disabled, variant, size }) => {
-    const classes = [
-      variant !== "secondary" ? variant : undefined,
-      size !== "medium" ? size : undefined,
-    ]
-      .filter(Boolean)
-      .join(" ");
-    return `
-    <basic-button${disabled ? " disabled" : ""} label="${label}" badge="${badge}">
-      <button type="button"${classes ? ` class="${classes}"` : ""}>
-        <span class="label">${label}</span>
-        <span class="badge">${badge}</span>
-      </button>
-    </basic-button>
-  `;
-  },
 };
 
+// ⚠️ Custom render: tests attribute-driven updates on a button without initial label/badge in DOM
 export const DynamicUpdates: Story = {
-  render: () => `
+  render: () => html`
     <basic-button>
       <button type="button">
         <span class="label">🛒 Shopping Cart</span>
@@ -120,8 +124,9 @@ export const DynamicUpdates: Story = {
   },
 };
 
+// ⚠️ Custom render: tests that host attributes override mismatched initial DOM content
 export const InitialAttributes: Story = {
-  render: () => `
+  render: () => html`
     <basic-button disabled="true" label="Delete Item" badge="99">
       <button type="button" class="destructive">
         <span class="label">Default Label</span>
@@ -141,8 +146,9 @@ export const InitialAttributes: Story = {
   },
 };
 
+// ⚠️ Custom render: tests property assignment on a button with a class not derived from variant/size args
 export const PropertyChanges: Story = {
-  render: () => `
+  render: () => html`
     <basic-button>
       <button type="button" class="large">
         <span class="label">🛒 Shopping Cart</span>
@@ -172,8 +178,9 @@ export const PropertyChanges: Story = {
   },
 };
 
+// ⚠️ Custom render: tests graceful handling when .label and .badge spans are absent
 export const MissingOptionalElements: Story = {
-  render: () => `
+  render: () => html`
     <basic-button label="No Spans" badge="Missing">
       <button type="button" class="small tertiary">Just Button Text</button>
     </basic-button>
@@ -193,8 +200,9 @@ export const MissingOptionalElements: Story = {
   },
 };
 
+// ⚠️ Custom render: tests label fallback to button text content when .label span is absent
 export const TextFallback: Story = {
-  render: () => `
+  render: () => html`
     <basic-button>
       <button type="button" class="primary">Button Text Only</button>
     </basic-button>
@@ -214,8 +222,9 @@ export const TextFallback: Story = {
   },
 };
 
+// ⚠️ Custom render: tests asBoolean attribute parsing edge cases (empty string, "false", "0", "disabled")
 export const BooleanAttributes: Story = {
-  render: () => `
+  render: () => html`
     <basic-button>
       <button type="button" class="constructive">
         <span class="label">Boolean Test</span>

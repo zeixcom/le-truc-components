@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
+import { html, nothing } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./form-textbox.ts";
 import "./form-textbox.css";
@@ -11,8 +12,21 @@ type FormTextboxArgs = {
   clearable: boolean;
 };
 
+const render = ({ error, description, clearable }: FormTextboxArgs) => html`
+  <form-textbox ?clearable=${clearable}>
+    <label for="name-input">Name</label>
+    <div class="input">
+      <input type="text" id="name-input" name="name" autocomplete="name" required />
+      ${clearable ? html`<button type="button" class="clear" aria-label="Clear input" hidden>✕</button>` : nothing}
+    </div>
+    <p class="error" role="alert" aria-live="assertive" id="name-error">${error}</p>
+    <p class="description" aria-live="polite" id="name-description">${description}</p>
+  </form-textbox>
+`;
+
 const meta: Meta<FormTextboxArgs> = {
   title: "Form/Textbox",
+  render,
   argTypes: {
     error: {
       control: "text",
@@ -48,21 +62,11 @@ export const Default: Story = {
     description: "Tell us how you want us to call you.",
     clearable: false,
   },
-  render: ({ error, description, clearable }) => `
-    <form-textbox${clearable ? " clearable" : ""}>
-      <label for="name-input">Name</label>
-      <div class="input">
-        <input type="text" id="name-input" name="name" autocomplete="name" required />
-        ${clearable ? `<button type="button" class="clear" aria-label="Clear input" hidden>✕</button>` : ""}
-      </div>
-      <p class="error" role="alert" aria-live="assertive" id="name-error">${error}</p>
-      <p class="description" aria-live="polite" id="name-description">${description}</p>
-    </form-textbox>
-  `,
 };
 
+// ⚠️ Custom render: uses a different field (search terms) with different name, placeholder, and no error/description
 export const WithClear: Story = {
-  render: () => `
+  render: () => html`
     <form-textbox clearable>
       <label for="search-input">Search terms</label>
       <div class="input">
@@ -97,8 +101,9 @@ export const WithClear: Story = {
   },
 };
 
+// ⚠️ Custom render: uses a <textarea> instead of <input>, with maxlength and a data-remaining description template
 export const WithTextarea: Story = {
-  render: () => `
+  render: () => html`
     <form-textbox>
       <label for="comment-input">Comment</label>
       <div class="input">
@@ -135,8 +140,9 @@ export const WithTextarea: Story = {
   },
 };
 
+// ⚠️ Custom render: uses type="email" input with required validation and no description paragraph
 export const WithValidation: Story = {
-  render: () => `
+  render: () => html`
     <form-textbox>
       <label for="email-input">Email</label>
       <div class="input">

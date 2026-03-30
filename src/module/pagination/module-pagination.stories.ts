@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
+import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./module-pagination.ts";
 import "./module-pagination.css";
@@ -10,8 +11,26 @@ type ModulePaginationArgs = {
   max: number;
 };
 
+const render = ({ value, max }: ModulePaginationArgs) => html`
+  <module-pagination>
+    <div>
+      <label>
+        <span class="visually-hidden">Page</span>
+        <input type="number" name="page" min="1" max=${max} value=${value} />
+      </label>
+      <span class="value visually-hidden" aria-current="page">${value}</span> of
+      <span class="max">${max}</span>
+    </div>
+    <div class="buttons">
+      <button type="button" class="prev" ?disabled=${value <= 1} aria-label="Previous page">❮</button>
+      <button type="button" class="next" ?disabled=${value >= max} aria-label="Next page">❯</button>
+    </div>
+  </module-pagination>
+`;
+
 const meta: Meta<ModulePaginationArgs> = {
   title: "Module/Pagination",
+  render,
   argTypes: {
     value: {
       control: "number",
@@ -37,41 +56,10 @@ export const Default: Story = {
     value: 1,
     max: 10,
   },
-  render: ({ value, max }) => `
-    <module-pagination>
-      <div>
-        <label>
-          <span class="visually-hidden">Page</span>
-          <input type="number" name="page" min="1" max="${max}" value="${value}" />
-        </label>
-        <span class="value visually-hidden" aria-current="page">${value}</span> of
-        <span class="max">${max}</span>
-      </div>
-      <div class="buttons">
-        <button type="button" class="prev"${value <= 1 ? " disabled" : ""} aria-label="Previous page">❮</button>
-        <button type="button" class="next"${value >= max ? " disabled" : ""} aria-label="Next page">❯</button>
-      </div>
-    </module-pagination>
-  `,
 };
 
 export const Navigation: Story = {
-  render: () => `
-    <module-pagination>
-      <div>
-        <label>
-          <span class="visually-hidden">Page</span>
-          <input type="number" name="page" min="1" max="5" value="1" />
-        </label>
-        <span class="value visually-hidden" aria-current="page">1</span> of
-        <span class="max">5</span>
-      </div>
-      <div class="buttons">
-        <button type="button" class="prev" disabled aria-label="Previous page">❮</button>
-        <button type="button" class="next" aria-label="Next page">❯</button>
-      </div>
-    </module-pagination>
-  `,
+  args: { value: 1, max: 5 },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-pagination");
     const canvas = within(canvasElement);
@@ -98,22 +86,7 @@ export const Navigation: Story = {
 };
 
 export const ClampedAtBounds: Story = {
-  render: () => `
-    <module-pagination>
-      <div>
-        <label>
-          <span class="visually-hidden">Page</span>
-          <input type="number" name="page" min="1" max="3" value="3" />
-        </label>
-        <span class="value visually-hidden" aria-current="page">3</span> of
-        <span class="max">3</span>
-      </div>
-      <div class="buttons">
-        <button type="button" class="prev" aria-label="Previous page">❮</button>
-        <button type="button" class="next" disabled aria-label="Next page">❯</button>
-      </div>
-    </module-pagination>
-  `,
+  args: { value: 3, max: 3 },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-pagination");
     const canvas = within(canvasElement);
@@ -129,22 +102,7 @@ export const ClampedAtBounds: Story = {
 };
 
 export const PropertyChanges: Story = {
-  render: () => `
-    <module-pagination>
-      <div>
-        <label>
-          <span class="visually-hidden">Page</span>
-          <input type="number" name="page" min="1" max="10" value="1" />
-        </label>
-        <span class="value visually-hidden" aria-current="page">1</span> of
-        <span class="max">10</span>
-      </div>
-      <div class="buttons">
-        <button type="button" class="prev" disabled aria-label="Previous page">❮</button>
-        <button type="button" class="next" aria-label="Next page">❯</button>
-      </div>
-    </module-pagination>
-  `,
+  args: { value: 1, max: 10 },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-pagination");
     const el = canvasElement.querySelector(
