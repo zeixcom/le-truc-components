@@ -70,9 +70,8 @@ export default defineComponent<ModuleDialogProps, ModuleDialogUI>(
             dialog.close();
           };
         }),
-      openButton: on("click", () => {
-        host.open = true;
-      }),
+      openButton: on("click", () => ({ open: true })),
+      closeButton: on("click", () => ({ open: false })),
       dialog: [
         on("click", ({ target }) => {
           if (target === dialog) host.open = false;
@@ -81,9 +80,6 @@ export default defineComponent<ModuleDialogProps, ModuleDialogUI>(
           if (key === "Escape") host.open = false;
         }),
       ],
-      closeButton: on("click", () => {
-        host.open = false;
-      }),
     };
   },
 );

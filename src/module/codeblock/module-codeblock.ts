@@ -32,11 +32,9 @@ export default defineComponent<ModuleCodeblockProps, ModuleCodeblockUI>(
     overlay: first("button.overlay"),
     copy: first("basic-button.copy"),
   }),
-  ({ host, code, copy }) => ({
+  ({ code, copy }) => ({
     host: toggleAttribute("collapsed"),
-    overlay: on("click", () => {
-      host.collapsed = false;
-    }),
+    overlay: on("click", () => ({ collapsed: false })),
     copy: copyToClipboard(code, {
       success: copy?.getAttribute("copy-success") || "Copied!",
       error:

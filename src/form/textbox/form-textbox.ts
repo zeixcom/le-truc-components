@@ -50,7 +50,7 @@ export default defineComponent<FormTextboxProps, FormTextboxUI>(
       textbox,
     }: ComponentUI<FormTextboxProps, FormTextboxUI>) => {
       if (description) {
-        if (textbox.maxLength && description.dataset.remaining) {
+        if (textbox.maxLength > 0 && description.dataset.remaining) {
           return () =>
             description.dataset.remaining?.replace(
               // biome-ignore lint/suspicious/noTemplateCurlyInString: template literal look-alike

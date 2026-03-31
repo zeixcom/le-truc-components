@@ -1,14 +1,4 @@
-/**
- * Escapes HTML entities to prevent XSS attacks
- */
-function escapeHTML(text: string): string {
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
+import { escapeHTML } from "./escape";
 
 /**
  * Safely creates HTML with highlighted matches
@@ -31,9 +21,6 @@ export function highlightMatch(
         )
       : highlightPattern;
 
-  // Escape the entire text first
-  const escapedText = escapeHTML(text);
-
   // Find all matches in the original text to get correct positions
   const matches: Array<{ start: number; end: number; text: string }> = [];
   let match: RegExpExecArray | null;
@@ -52,7 +39,7 @@ export function highlightMatch(
     if (match.index === pattern.lastIndex) pattern.lastIndex++;
   }
 
-  if (matches.length === 0) return escapedText;
+  if (matches.length === 0) return escapeHTML(text);
 
   // Build result by escaping and wrapping matches
   let result = "";

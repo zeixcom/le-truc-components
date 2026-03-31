@@ -1,5 +1,7 @@
 import {
   batch,
+  type Component,
+  type ComponentProps,
   createState,
   defineComponent,
   on,
@@ -8,6 +10,12 @@ import {
 
 const MIN_INTERSECTION_RATIO = 0;
 const MAX_INTERSECTION_RATIO = 0.99; // ignore rounding errors of fraction pixels
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "module-scrollarea": Component<ComponentProps>;
+  }
+}
 
 const observeOverflow =
   (
