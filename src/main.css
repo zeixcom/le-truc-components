@@ -4,6 +4,7 @@
 @import "./card/callout/card-callout.css";
 @import "./form/checkbox/form-checkbox.css";
 @import "./form/combobox/form-combobox.css";
+@import "./form/inplace-edit/form-inplace-edit.css";
 @import "./form/listbox/form-listbox.css";
 @import "./form/radiogroup/form-radiogroup.css";
 @import "./form/spinbutton/form-spinbutton.css";
@@ -12,7 +13,6 @@
 @import "./module/catalog/module-catalog.css";
 @import "./module/codeblock/module-codeblock.css";
 @import "./module/dialog/module-dialog.css";
-@import "./module/list/module-list.css";
 @import "./module/listnav/module-listnav.css";
 @import "./module/pagination/module-pagination.css";
 @import "./module/scrollarea/module-scrollarea.css";

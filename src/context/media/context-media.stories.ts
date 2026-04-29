@@ -3,7 +3,6 @@ import { html, nothing } from "lit";
 import { expect, within } from "storybook/test";
 import "./context-media.ts";
 import "../../card/mediaqueries/card-mediaqueries.ts";
-import type { Component } from "@zeix/le-truc";
 import type { CardMediaqueriesProps } from "../../card/mediaqueries/card-mediaqueries.ts";
 
 type ContextMediaArgs = {
@@ -77,7 +76,7 @@ export const Default: Story = {
     const canvas = within(canvasElement);
     const card = canvasElement.querySelector(
       "card-mediaqueries",
-    ) as Component<CardMediaqueriesProps>;
+    ) as HTMLElement & CardMediaqueriesProps;
 
     await expect(card.querySelector(".motion")).not.toHaveTextContent(
       "unknown",
@@ -113,15 +112,19 @@ export const MultipleConsumers: Story = {
       <card-mediaqueries>
         <h2>Consumer A</h2>
         <dl>
-          <dt>Theme:</dt><dd class="theme"></dd>
-          <dt>Viewport:</dt><dd class="viewport"></dd>
+          <dt>Theme:</dt>
+          <dd class="theme"></dd>
+          <dt>Viewport:</dt>
+          <dd class="viewport"></dd>
         </dl>
       </card-mediaqueries>
       <card-mediaqueries>
         <h2>Consumer B</h2>
         <dl>
-          <dt>Motion:</dt><dd class="motion"></dd>
-          <dt>Orientation:</dt><dd class="orientation"></dd>
+          <dt>Motion:</dt>
+          <dd class="motion"></dd>
+          <dt>Orientation:</dt>
+          <dd class="orientation"></dd>
         </dl>
       </card-mediaqueries>
     </context-media>

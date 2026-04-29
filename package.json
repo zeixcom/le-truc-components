@@ -1,6 +1,6 @@
 {
   "name": "le-truc-components",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,20 +10,22 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@zeix/le-truc": "^1.0.1"
+    "@types/culori": "^4.0.1",
+    "@zeix/le-truc": "^2.0.1",
+    "culori": "^4.0.2"
   },
   "devDependencies": {
     "typescript": "~5.9.3",
-    "vite": "^8.0.3",
-    "storybook": "^10.3.3",
-    "@storybook/web-components-vite": "^10.3.3",
-    "@chromatic-com/storybook": "^5.1.1",
-    "@storybook/addon-vitest": "^10.3.3",
-    "@storybook/addon-a11y": "^10.3.3",
-    "@storybook/addon-docs": "^10.3.3",
-    "vitest": "^4.1.2",
-    "playwright": "^1.58.2",
-    "@vitest/browser-playwright": "^4.1.2",
-    "@vitest/coverage-v8": "^4.1.2"
+    "vite": "^8.0.10",
+    "storybook": "^10.3.6",
+    "@storybook/web-components-vite": "^10.3.6",
+    "@chromatic-com/storybook": "^5.1.2",
+    "@storybook/addon-vitest": "^10.3.6",
+    "@storybook/addon-a11y": "^10.3.6",
+    "@storybook/addon-docs": "^10.3.6",
+    "vitest": "^4.1.5",
+    "playwright": "^1.59.1",
+    "@vitest/browser-playwright": "^4.1.5",
+    "@vitest/coverage-v8": "^4.1.5"
   }
 }

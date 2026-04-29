@@ -3,7 +3,6 @@ import { html, nothing } from "lit";
 import { expect, waitFor } from "storybook/test";
 import "./module-lazyload.ts";
 import "../../card/callout/card-callout.css";
-import type { Component } from "@zeix/le-truc";
 import type { ModuleLazyloadProps } from "./module-lazyload.ts";
 
 type ModuleLazyloadArgs = {
@@ -11,7 +10,10 @@ type ModuleLazyloadArgs = {
   "allow-scripts": boolean;
 };
 
-const render = ({ src, "allow-scripts": allowScripts }: ModuleLazyloadArgs) => html`
+const render = ({
+  src,
+  "allow-scripts": allowScripts,
+}: ModuleLazyloadArgs) => html`
   <module-lazyload src=${src || nothing} ?allow-scripts=${allowScripts}>
     <card-callout>
       <p class="loading" role="status">Loading...</p>
@@ -58,9 +60,8 @@ export const WithContent: Story = {
   },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-lazyload");
-    const el = canvasElement.querySelector(
-      "module-lazyload",
-    ) as Component<ModuleLazyloadProps>;
+    const el = canvasElement.querySelector("module-lazyload") as HTMLElement &
+      ModuleLazyloadProps;
     const content = canvasElement.querySelector(".content");
 
     await waitFor(() => expect(content).toBeVisible());
@@ -72,9 +73,8 @@ export const NoSrc: Story = {
   args: { src: "", "allow-scripts": false },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-lazyload");
-    const el = canvasElement.querySelector(
-      "module-lazyload",
-    ) as Component<ModuleLazyloadProps>;
+    const el = canvasElement.querySelector("module-lazyload") as HTMLElement &
+      ModuleLazyloadProps;
 
     await expect(el.src).toBe("");
   },
@@ -84,9 +84,8 @@ export const InvalidURL: Story = {
   args: { src: "not-a-valid-url", "allow-scripts": false },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-lazyload");
-    const el = canvasElement.querySelector(
-      "module-lazyload",
-    ) as Component<ModuleLazyloadProps>;
+    const el = canvasElement.querySelector("module-lazyload") as HTMLElement &
+      ModuleLazyloadProps;
     const errorEl = canvasElement.querySelector(".error");
 
     await expect(el.src).toBe("not-a-valid-url");
@@ -98,9 +97,8 @@ export const PropertyChanges: Story = {
   args: { src: "", "allow-scripts": false },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-lazyload");
-    const el = canvasElement.querySelector(
-      "module-lazyload",
-    ) as Component<ModuleLazyloadProps>;
+    const el = canvasElement.querySelector("module-lazyload") as HTMLElement &
+      ModuleLazyloadProps;
 
     await expect(el.src).toBe("");
 

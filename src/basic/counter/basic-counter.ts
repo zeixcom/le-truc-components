@@ -1,43 +1,30 @@
-import {
-  asInteger,
-  type Component,
-  defineComponent,
-  on,
-  read,
-  setText,
-} from "@zeix/le-truc";
+import { bindText, defineComponent } from "@zeix/le-truc";
 
 export type BasicCounterProps = {
   count: number;
 };
 
-type BasicCounterUI = {
-  increment: HTMLButtonElement;
-  count: HTMLSpanElement;
-};
-
 declare global {
   interface HTMLElementTagNameMap {
-    "basic-counter": Component<BasicCounterProps>;
+    "basic-counter": HTMLElement & BasicCounterProps;
   }
 }
 
-export default defineComponent<BasicCounterProps, BasicCounterUI>(
+export default defineComponent<BasicCounterProps>(
   "basic-counter",
-  {
-    count: read((ui) => ui.count.textContent, asInteger()),
-  },
-  ({ first }) => ({
-    increment: first(
+  ({ expose, first, host, on, watch }) => {
+    const increment = first(
       "button",
       "Add a native button element to increment the count.",
-    ),
-    count: first("span", "Add a span to display the count."),
-  }),
-  ({ host }) => ({
-    increment: on("click", () => {
-      host.count++;
-    }),
-    count: setText("count"),
-  }),
+    );
+    const count = first("span", "Add a span to display the count.");
+
+    expose({ count: Number.parseInt(count.textContent || "0", 10) });
+
+    return [
+      on(increment, "click", () => ({ count: host.count + 1 })),
+
+      watch("count", bindText(count, true)),
+    ];
+  },
 );

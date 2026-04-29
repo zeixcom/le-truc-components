@@ -1,4 +1,4 @@
-import { escapeHTML } from "./escape";
+import { escapeHTML } from "@zeix/le-truc";
 
 /**
  * Safely creates HTML with highlighted matches
@@ -28,7 +28,7 @@ export function highlightMatch(
   // Reset lastIndex for global RegExp
   pattern.lastIndex = 0;
 
-  // biome-ignore lint/suspicious/noAssignInExpressions: cleaner
+  // biome-ignore  lint/suspicious/noAssignInExpressions: optimization
   while ((match = pattern.exec(text)) !== null) {
     matches.push({
       start: match.index,

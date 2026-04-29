@@ -3,7 +3,6 @@ import { html, nothing } from "lit";
 import { expect } from "storybook/test";
 import "./basic-button.ts";
 import "./basic-button.css";
-import type { Component } from "@zeix/le-truc";
 import type { BasicButtonProps } from "./basic-button.ts";
 
 type BasicButtonArgs = {
@@ -80,72 +79,6 @@ export const Default: Story = {
   },
 };
 
-// ⚠️ Custom render: tests attribute-driven updates on a button without initial label/badge in DOM
-export const DynamicUpdates: Story = {
-  render: () => html`
-    <basic-button>
-      <button type="button">
-        <span class="label">🛒 Shopping Cart</span>
-        <span class="badge">5</span>
-      </button>
-    </basic-button>
-  `,
-  play: async ({ canvasElement }) => {
-    await customElements.whenDefined("basic-button");
-    const el = canvasElement.querySelector(
-      "basic-button",
-    ) as Component<BasicButtonProps>;
-    const button = el.querySelector("button");
-    const label = el.querySelector(".label");
-    const badge = el.querySelector(".badge");
-
-    await expect(button).not.toBeDisabled();
-    await expect(label).toHaveTextContent("🛒 Shopping Cart");
-    await expect(badge).toHaveTextContent("5");
-
-    el.setAttribute("disabled", "true");
-    await expect(button).toBeDisabled();
-
-    el.removeAttribute("disabled");
-    await expect(button).not.toBeDisabled();
-
-    el.setAttribute("label", "Wishlist");
-    await expect(label).toHaveTextContent("Wishlist");
-
-    el.setAttribute("badge", "10");
-    await expect(badge).toHaveTextContent("10");
-
-    el.setAttribute("disabled", "true");
-    el.setAttribute("label", "Back to Store");
-    el.setAttribute("badge", "0");
-    await expect(button).toBeDisabled();
-    await expect(label).toHaveTextContent("Back to Store");
-    await expect(badge).toHaveTextContent("0");
-  },
-};
-
-// ⚠️ Custom render: tests that host attributes override mismatched initial DOM content
-export const InitialAttributes: Story = {
-  render: () => html`
-    <basic-button disabled="true" label="Delete Item" badge="99">
-      <button type="button" class="destructive">
-        <span class="label">Default Label</span>
-        <span class="badge">0</span>
-      </button>
-    </basic-button>
-  `,
-  play: async ({ canvasElement }) => {
-    await customElements.whenDefined("basic-button");
-    const el = canvasElement.querySelector(
-      "basic-button",
-    ) as Component<BasicButtonProps>;
-
-    await expect(el.querySelector("button")).toBeDisabled();
-    await expect(el.querySelector(".label")).toHaveTextContent("Delete Item");
-    await expect(el.querySelector(".badge")).toHaveTextContent("99");
-  },
-};
-
 // ⚠️ Custom render: tests property assignment on a button with a class not derived from variant/size args
 export const PropertyChanges: Story = {
   render: () => html`
@@ -159,9 +92,8 @@ export const PropertyChanges: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-button");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const el = canvasElement.querySelector(
-      "basic-button",
-    ) as Component<BasicButtonProps>;
+    const el = canvasElement.querySelector("basic-button") as HTMLElement &
+      BasicButtonProps;
     const button = el.querySelector("button");
     const label = el.querySelector(".label");
     const badge = el.querySelector(".badge");
@@ -187,15 +119,14 @@ export const MissingOptionalElements: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-button");
-    const el = canvasElement.querySelector(
-      "basic-button",
-    ) as Component<BasicButtonProps>;
+    const el = canvasElement.querySelector("basic-button") as HTMLElement &
+      BasicButtonProps;
     const button = el.querySelector("button");
 
     await expect(button).not.toBeDisabled();
     await expect(button).toHaveTextContent("Just Button Text");
 
-    el.setAttribute("disabled", "true");
+    el.disabled = true;
     await expect(button).toBeDisabled();
   },
 };
@@ -209,54 +140,14 @@ export const TextFallback: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-button");
-    const el = canvasElement.querySelector(
-      "basic-button",
-    ) as Component<BasicButtonProps>;
+    const el = canvasElement.querySelector("basic-button") as HTMLElement &
+      BasicButtonProps;
     const button = el.querySelector("button");
 
     await expect(el.label).toBe("Button Text Only");
 
-    el.setAttribute("label", "New Label");
+    el.label = "New Label";
     // No .label span, so the button's own text content is unchanged
     await expect(button).toHaveTextContent("Button Text Only");
-  },
-};
-
-// ⚠️ Custom render: tests asBoolean attribute parsing edge cases (empty string, "false", "0", "disabled")
-export const BooleanAttributes: Story = {
-  render: () => html`
-    <basic-button>
-      <button type="button" class="constructive">
-        <span class="label">Boolean Test</span>
-        <span class="badge">Test</span>
-      </button>
-    </basic-button>
-  `,
-  play: async ({ canvasElement }) => {
-    await customElements.whenDefined("basic-button");
-    const el = canvasElement.querySelector(
-      "basic-button",
-    ) as Component<BasicButtonProps>;
-    const button = el.querySelector("button");
-
-    el.setAttribute("disabled", "");
-    await expect(button).toBeDisabled();
-
-    // asBoolean special case: "false" is the only string that returns false.
-    // toBeDisabled() can't be used here: @testing-library/jest-dom walks ancestor
-    // custom elements and treats any presence of the "disabled" attribute (regardless
-    // of value) as disabling. Check the native button's own property instead.
-    el.setAttribute("disabled", "false");
-    await expect(button).not.toHaveAttribute("disabled");
-
-    el.setAttribute("disabled", "disabled");
-    await expect(button).toBeDisabled();
-
-    // "0" is truthy in asBoolean, so disabled stays enabled
-    el.setAttribute("disabled", "0");
-    await expect(button).toBeDisabled();
-
-    el.removeAttribute("disabled");
-    await expect(button).not.toBeDisabled();
   },
 };

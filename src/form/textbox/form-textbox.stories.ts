@@ -3,7 +3,6 @@ import { html, nothing } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./form-textbox.ts";
 import "./form-textbox.css";
-import type { Component } from "@zeix/le-truc";
 import type { FormTextboxProps } from "./form-textbox.ts";
 
 type FormTextboxArgs = {
@@ -16,11 +15,30 @@ const render = ({ error, description, clearable }: FormTextboxArgs) => html`
   <form-textbox ?clearable=${clearable}>
     <label for="name-input">Name</label>
     <div class="input">
-      <input type="text" id="name-input" name="name" autocomplete="name" required />
-      ${clearable ? html`<button type="button" class="clear" aria-label="Clear input" hidden>✕</button>` : nothing}
+      <input
+        type="text"
+        id="name-input"
+        name="name"
+        autocomplete="name"
+        required
+      />
+      ${clearable
+        ? html`<button
+            type="button"
+            class="clear"
+            aria-label="Clear input"
+            hidden
+          >
+            ✕
+          </button>`
+        : nothing}
     </div>
-    <p class="error" role="alert" aria-live="assertive" id="name-error">${error}</p>
-    <p class="description" aria-live="polite" id="name-description">${description}</p>
+    <p class="error" role="alert" aria-live="assertive" id="name-error">
+      ${error}
+    </p>
+    <p class="description" aria-live="polite" id="name-description">
+      ${description}
+    </p>
   </form-textbox>
 `;
 
@@ -77,16 +95,17 @@ export const WithClear: Story = {
           autocomplete="off"
           placeholder="apple banana"
         />
-        <button type="button" class="clear" aria-label="Clear input" hidden>✕</button>
+        <button type="button" class="clear" aria-label="Clear input" hidden>
+          ✕
+        </button>
       </div>
     </form-textbox>
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-textbox");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "form-textbox",
-    ) as Component<FormTextboxProps>;
+    const el = canvasElement.querySelector("form-textbox") as HTMLElement &
+      FormTextboxProps;
     const input = canvas.getByRole("textbox");
 
     await expect(el.length).toBe(0);
@@ -114,7 +133,12 @@ export const WithTextarea: Story = {
           maxlength="200"
         ></textarea>
       </div>
-      <p class="error" role="alert" aria-live="assertive" id="comment-error"></p>
+      <p
+        class="error"
+        role="alert"
+        aria-live="assertive"
+        id="comment-error"
+      ></p>
       <p
         class="description"
         aria-live="polite"
@@ -126,9 +150,8 @@ export const WithTextarea: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-textbox");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "form-textbox",
-    ) as Component<FormTextboxProps>;
+    const el = canvasElement.querySelector("form-textbox") as HTMLElement &
+      FormTextboxProps;
     const textarea = canvas.getByRole("textbox");
     const description = el.querySelector(".description");
 
@@ -153,9 +176,8 @@ export const WithValidation: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-textbox");
-    const el = canvasElement.querySelector(
-      "form-textbox",
-    ) as Component<FormTextboxProps>;
+    const el = canvasElement.querySelector("form-textbox") as HTMLElement &
+      FormTextboxProps;
     const errorEl = el.querySelector(".error");
 
     el.error = "Please enter a valid email address.";

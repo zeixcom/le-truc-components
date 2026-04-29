@@ -3,7 +3,6 @@ import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./form-spinbutton.ts";
 import "./form-spinbutton.css";
-import type { Component } from "@zeix/le-truc";
 import type { FormSpinbuttonProps } from "./form-spinbutton.ts";
 
 type FormSpinbuttonArgs = {
@@ -13,7 +12,14 @@ type FormSpinbuttonArgs = {
 
 const render = ({ value, max }: FormSpinbuttonArgs) => html`
   <form-spinbutton>
-    <button type="button" class="decrement" aria-label="Decrement" ?hidden=${value === 0}>−</button>
+    <button
+      type="button"
+      class="decrement"
+      aria-label="Decrement"
+      ?hidden=${value === 0}
+    >
+      −
+    </button>
     <input
       type="number"
       class="value"
@@ -66,9 +72,8 @@ export const WithInitialValue: Story = {
   args: { value: 3, max: 15 },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-spinbutton");
-    const el = canvasElement.querySelector(
-      "form-spinbutton",
-    ) as Component<FormSpinbuttonProps>;
+    const el = canvasElement.querySelector("form-spinbutton") as HTMLElement &
+      FormSpinbuttonProps;
 
     await expect(el.value).toBe(3);
     await expect(el.max).toBe(15);
@@ -80,9 +85,8 @@ export const IncrementDecrement: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-spinbutton");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "form-spinbutton",
-    ) as Component<FormSpinbuttonProps>;
+    const el = canvasElement.querySelector("form-spinbutton") as HTMLElement &
+      FormSpinbuttonProps;
     const increment = canvas.getByLabelText("Increment");
 
     await expect(el.value).toBe(0);
@@ -105,9 +109,8 @@ export const ClampedAtMax: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-spinbutton");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "form-spinbutton",
-    ) as Component<FormSpinbuttonProps>;
+    const el = canvasElement.querySelector("form-spinbutton") as HTMLElement &
+      FormSpinbuttonProps;
     const increment = canvas.getByLabelText("Increment");
 
     await expect(el.value).toBe(4);
@@ -122,9 +125,8 @@ export const PropertyChanges: Story = {
   args: { value: 0, max: 10 },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-spinbutton");
-    const el = canvasElement.querySelector(
-      "form-spinbutton",
-    ) as Component<FormSpinbuttonProps>;
+    const el = canvasElement.querySelector("form-spinbutton") as HTMLElement &
+      FormSpinbuttonProps;
     const input = el.querySelector("input.value");
 
     el.value = 7;

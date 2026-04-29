@@ -1,85 +1,65 @@
-import {
-  type Component,
-  createEffect,
-  defineComponent,
-  on,
-} from "@zeix/le-truc";
+import { defineComponent } from "@zeix/le-truc";
 
 export type ModuleDialogProps = {
   open: boolean;
 };
 
-type ModuleDialogUI = {
-  openButton: HTMLButtonElement;
-  dialog: HTMLDialogElement;
-  closeButton: HTMLButtonElement;
-};
-
 declare global {
   interface HTMLElementTagNameMap {
-    "module-dialog": Component<ModuleDialogProps>;
+    "module-dialog": HTMLElement & ModuleDialogProps;
   }
 }
 
 const SCROLL_LOCK_CLASS = "scroll-lock";
 
-export default defineComponent<ModuleDialogProps, ModuleDialogUI>(
+export default defineComponent<ModuleDialogProps>(
   "module-dialog",
-  {
-    open: false,
-  },
-  ({ first }) => ({
-    openButton: first(
+  ({ expose, first, on, watch }) => {
+    const openButton = first(
       'button[aria-haspopup="dialog"]',
       "Add a button to open the dialog.",
-    ),
-    dialog: first("dialog", "Add a native dialog element."),
-    closeButton: first(
+    );
+    const dialog = first("dialog", "Add a native dialog element.");
+    const closeButton = first(
       "dialog button.close",
       "Add a close button in the dialog.",
-    ),
-  }),
-  ({ host, dialog, closeButton }) => {
+    );
     let scrollTop = 0;
     let activeElement: HTMLElement | null = null;
 
-    return {
-      host: () =>
-        createEffect(() => {
-          if (host.open) {
-            scrollTop = document.documentElement.scrollTop;
-            activeElement = document.activeElement as HTMLElement | null;
-            dialog.showModal();
-            document.body.classList.add(SCROLL_LOCK_CLASS);
-            document.body.style.setProperty("top", `-${scrollTop}px`);
-            closeButton.focus();
-          } else {
-            document.body.classList.remove(SCROLL_LOCK_CLASS);
-            window.scrollTo({
-              top: scrollTop,
-              left: 0,
-              behavior: "instant",
-            });
-            document.body.style.removeProperty("top");
-            dialog.close();
-            if (activeElement) activeElement.focus();
-          }
-          return () => {
-            document.body.classList.remove(SCROLL_LOCK_CLASS);
-            document.body.style.removeProperty("top");
-            dialog.close();
-          };
-        }),
-      openButton: on("click", () => ({ open: true })),
-      closeButton: on("click", () => ({ open: false })),
-      dialog: [
-        on("click", ({ target }) => {
-          if (target === dialog) host.open = false;
-        }),
-        on("keydown", ({ key }) => {
-          if (key === "Escape") host.open = false;
-        }),
-      ],
-    };
+    expose({ open: false });
+
+    return [
+      on(openButton, "click", () => ({ open: true })),
+      on(closeButton, "click", () => ({ open: false })),
+      on(dialog, "click", ({ target }) => target === dialog && { open: false }),
+      on(dialog, "keydown", ({ key }) => key === "Escape" && { open: false }),
+
+      watch("open", (open) => {
+        if (open) {
+          scrollTop = document.documentElement.scrollTop;
+          activeElement = document.activeElement as HTMLElement | null;
+          dialog.showModal();
+          document.body.classList.add(SCROLL_LOCK_CLASS);
+          document.body.style.setProperty("top", `-${scrollTop}px`);
+          closeButton.focus();
+        } else {
+          document.body.classList.remove(SCROLL_LOCK_CLASS);
+          window.scrollTo({
+            top: scrollTop,
+            left: 0,
+            behavior: "instant",
+          });
+          document.body.style.removeProperty("top");
+          dialog.close();
+          if (activeElement) activeElement.focus();
+        }
+        return () => {
+          document.body.classList.remove(SCROLL_LOCK_CLASS);
+          document.body.style.removeProperty("top");
+          dialog.close();
+        };
+      }),
+    ];
   },
 );

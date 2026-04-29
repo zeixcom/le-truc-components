@@ -3,7 +3,6 @@ import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./module-tabgroup.ts";
 import "./module-tabgroup.css";
-import type { Component } from "@zeix/le-truc";
 import type { ModuleTabgroupProps } from "./module-tabgroup.ts";
 
 const meta: Meta = {
@@ -16,9 +15,33 @@ export const Default: Story = {
   render: () => html`
     <module-tabgroup>
       <div role="tablist">
-        <button type="button" role="tab" aria-controls="panel1" aria-selected="true" tabindex="0">Tab 1</button>
-        <button type="button" role="tab" aria-controls="panel2" aria-selected="false" tabindex="-1">Tab 2</button>
-        <button type="button" role="tab" aria-controls="panel3" aria-selected="false" tabindex="-1">Tab 3</button>
+        <button
+          type="button"
+          role="tab"
+          aria-controls="panel1"
+          aria-selected="true"
+          tabindex="0"
+        >
+          Tab 1
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-controls="panel2"
+          aria-selected="false"
+          tabindex="-1"
+        >
+          Tab 2
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-controls="panel3"
+          aria-selected="false"
+          tabindex="-1"
+        >
+          Tab 3
+        </button>
       </div>
       <div role="tabpanel" id="panel1">Tab 1 content</div>
       <div role="tabpanel" id="panel2" hidden>Tab 2 content</div>
@@ -27,9 +50,8 @@ export const Default: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-tabgroup");
-    const el = canvasElement.querySelector(
-      "module-tabgroup",
-    ) as Component<ModuleTabgroupProps>;
+    const el = canvasElement.querySelector("module-tabgroup") as HTMLElement &
+      ModuleTabgroupProps;
 
     await expect(el.selected).toBe("panel1");
   },
@@ -39,9 +61,33 @@ export const TabNavigation: Story = {
   render: () => html`
     <module-tabgroup>
       <div role="tablist">
-        <button type="button" role="tab" aria-controls="nav-panel1" aria-selected="true" tabindex="0">Settings</button>
-        <button type="button" role="tab" aria-controls="nav-panel2" aria-selected="false" tabindex="-1">Profile</button>
-        <button type="button" role="tab" aria-controls="nav-panel3" aria-selected="false" tabindex="-1">Security</button>
+        <button
+          type="button"
+          role="tab"
+          aria-controls="nav-panel1"
+          aria-selected="true"
+          tabindex="0"
+        >
+          Settings
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-controls="nav-panel2"
+          aria-selected="false"
+          tabindex="-1"
+        >
+          Profile
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-controls="nav-panel3"
+          aria-selected="false"
+          tabindex="-1"
+        >
+          Security
+        </button>
       </div>
       <div role="tabpanel" id="nav-panel1">
         <h3>Settings</h3>
@@ -60,9 +106,8 @@ export const TabNavigation: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-tabgroup");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "module-tabgroup",
-    ) as Component<ModuleTabgroupProps>;
+    const el = canvasElement.querySelector("module-tabgroup") as HTMLElement &
+      ModuleTabgroupProps;
 
     await expect(el.selected).toBe("nav-panel1");
 
@@ -78,9 +123,33 @@ export const SecondTabInitial: Story = {
   render: () => html`
     <module-tabgroup>
       <div role="tablist">
-        <button type="button" role="tab" aria-controls="init-panel1" aria-selected="false" tabindex="-1">Home</button>
-        <button type="button" role="tab" aria-controls="init-panel2" aria-selected="true" tabindex="0">About</button>
-        <button type="button" role="tab" aria-controls="init-panel3" aria-selected="false" tabindex="-1">Contact</button>
+        <button
+          type="button"
+          role="tab"
+          aria-controls="init-panel1"
+          aria-selected="false"
+          tabindex="-1"
+        >
+          Home
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-controls="init-panel2"
+          aria-selected="true"
+          tabindex="0"
+        >
+          About
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-controls="init-panel3"
+          aria-selected="false"
+          tabindex="-1"
+        >
+          Contact
+        </button>
       </div>
       <div role="tabpanel" id="init-panel1" hidden>Home content</div>
       <div role="tabpanel" id="init-panel2">About content</div>
@@ -89,9 +158,8 @@ export const SecondTabInitial: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-tabgroup");
-    const el = canvasElement.querySelector(
-      "module-tabgroup",
-    ) as Component<ModuleTabgroupProps>;
+    const el = canvasElement.querySelector("module-tabgroup") as HTMLElement &
+      ModuleTabgroupProps;
 
     await expect(el.selected).toBe("init-panel2");
   },
@@ -101,9 +169,33 @@ export const KeyboardNavigation: Story = {
   render: () => html`
     <module-tabgroup>
       <div role="tablist">
-        <button type="button" role="tab" aria-controls="key-panel1" aria-selected="true" tabindex="0">First</button>
-        <button type="button" role="tab" aria-controls="key-panel2" aria-selected="false" tabindex="-1">Second</button>
-        <button type="button" role="tab" aria-controls="key-panel3" aria-selected="false" tabindex="-1">Third</button>
+        <button
+          type="button"
+          role="tab"
+          aria-controls="key-panel1"
+          aria-selected="true"
+          tabindex="0"
+        >
+          First
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-controls="key-panel2"
+          aria-selected="false"
+          tabindex="-1"
+        >
+          Second
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-controls="key-panel3"
+          aria-selected="false"
+          tabindex="-1"
+        >
+          Third
+        </button>
       </div>
       <div role="tabpanel" id="key-panel1">First panel content</div>
       <div role="tabpanel" id="key-panel2" hidden>Second panel content</div>
@@ -113,9 +205,8 @@ export const KeyboardNavigation: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-tabgroup");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "module-tabgroup",
-    ) as Component<ModuleTabgroupProps>;
+    const el = canvasElement.querySelector("module-tabgroup") as HTMLElement &
+      ModuleTabgroupProps;
     const firstTab = canvas.getByRole("tab", { name: "First" });
 
     await expect(el.selected).toBe("key-panel1");

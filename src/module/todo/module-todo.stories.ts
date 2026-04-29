@@ -8,21 +8,23 @@ import "../../basic/button/basic-button.css";
 import "../../basic/pluralize/basic-pluralize.ts";
 import "../../form/checkbox/form-checkbox.ts";
 import "../../form/checkbox/form-checkbox.css";
+import "../../form/inplace-edit/form-inplace-edit.ts";
+import "../../form/inplace-edit/form-inplace-edit.css";
 import "../../form/radiogroup/form-radiogroup.ts";
 import "../../form/radiogroup/form-radiogroup.css";
 import "../../form/textbox/form-textbox.ts";
 import "../../form/textbox/form-textbox.css";
-import "../../module/list/module-list.ts";
-import "../../module/list/module-list.css";
 
 const todoTemplate = html`
-  <module-todo>
+  <module-todo filter="all">
     <form action="#">
       <form-textbox clearable>
         <label for="add-todo">What needs to be done?</label>
         <div class="input">
           <input id="add-todo" type="text" value="" />
-          <button type="button" class="clear" aria-label="Clear input" hidden>✕</button>
+          <button type="button" class="clear" aria-label="Clear input" hidden>
+            ✕
+          </button>
         </div>
       </form-textbox>
       <basic-button class="submit">
@@ -31,24 +33,36 @@ const todoTemplate = html`
         </button>
       </basic-button>
     </form>
-    <module-list filter="all">
-      <ol data-container></ol>
-      <template>
-        <li>
-          <form-checkbox class="todo">
-            <label>
-              <input type="checkbox" class="visually-hidden" />
-              <span class="label"><slot></slot></span>
-            </label>
-          </form-checkbox>
-          <basic-button class="delete">
-            <button type="button" class="tertiary destructive small" aria-label="Delete">
-              <span class="label">✕</span>
-            </button>
-          </basic-button>
-        </li>
-      </template>
-    </module-list>
+    <span role="status" class="visually-hidden"></span>
+    <ol data-container></ol>
+    <template>
+      <li>
+        <button
+          type="button"
+          class="reorder"
+          aria-label="Drag to reorder"
+          aria-pressed="false"
+        >
+          ≡
+        </button>
+        <form-checkbox class="todo">
+          <input type="checkbox" class="visually-hidden" />
+          <form-inplace-edit>
+            <label class="label text"><slot></slot></label>
+            <button type="button" aria-label="Edit">✎</button>
+          </form-inplace-edit>
+        </form-checkbox>
+        <basic-button class="remove">
+          <button
+            type="button"
+            class="tertiary destructive small"
+            aria-label="Remove"
+          >
+            <span class="label">✕</span>
+          </button>
+        </basic-button>
+      </li>
+    </template>
     <footer>
       <basic-pluralize>
         <p class="none">Well done, all done!</p>
@@ -63,15 +77,31 @@ const todoTemplate = html`
         <fieldset>
           <legend class="visually-hidden">Filter</legend>
           <label class="selected">
-            <input type="radio" class="visually-hidden" name="filter" value="all" checked />
+            <input
+              type="radio"
+              class="visually-hidden"
+              name="filter"
+              value="all"
+              checked
+            />
             <span>All</span>
           </label>
           <label>
-            <input type="radio" class="visually-hidden" name="filter" value="active" />
+            <input
+              type="radio"
+              class="visually-hidden"
+              name="filter"
+              value="active"
+            />
             <span>Active</span>
           </label>
           <label>
-            <input type="radio" class="visually-hidden" name="filter" value="completed" />
+            <input
+              type="radio"
+              class="visually-hidden"
+              name="filter"
+              value="completed"
+            />
             <span>Completed</span>
           </label>
         </fieldset>

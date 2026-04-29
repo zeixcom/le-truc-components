@@ -1,9 +1,5 @@
-import {
-  asNumber,
-  type Component,
-  defineComponent,
-  setText,
-} from "@zeix/le-truc";
+import { asNumber, bindText, defineComponent } from "@zeix/le-truc";
+import { getLocale } from "../../_common/getLocale";
 
 export type BasicNumberProps = {
   value: number;
@@ -11,7 +7,7 @@ export type BasicNumberProps = {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "basic-number": Component<BasicNumberProps>;
+    "basic-number": HTMLElement & BasicNumberProps;
   }
 }
 
@@ -19,8 +15,6 @@ type Logger = {
   onWarn: (message: string) => void;
   onError: (message: string) => void;
 };
-
-const FALLBACK_LOCALE = "en";
 
 function getNumberFormatter(
   locale: string,
@@ -115,15 +109,14 @@ function getNumberFormatter(
 
 export default defineComponent<BasicNumberProps>(
   "basic-number",
-  { value: asNumber() },
-  undefined,
-  ({ host }) => {
+  ({ expose, host, watch }) => {
     const formatter = getNumberFormatter(
-      host.closest("[lang]")?.getAttribute("lang") || FALLBACK_LOCALE,
+      getLocale(host),
       host.getAttribute("options"),
     );
-    return {
-      host: setText(() => formatter.format(host.value)),
-    };
+
+    expose({ value: asNumber() });
+
+    return [watch(() => formatter.format(host.value), bindText(host, true))];
   },
 );

@@ -3,7 +3,6 @@ import { html, nothing } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./form-radiogroup.ts";
 import "./form-radiogroup.css";
-import type { Component } from "@zeix/le-truc";
 import type { FormRadiogroupProps } from "./form-radiogroup.ts";
 
 type FormRadiogroupArgs = {
@@ -16,15 +15,33 @@ const render = ({ value, variant }: FormRadiogroupArgs) => html`
     <fieldset>
       <legend>Theme</legend>
       <label class=${value === "light" ? "selected" : nothing}>
-        <input type="radio" class="visually-hidden" name="theme" value="light" ?checked=${value === "light"} />
+        <input
+          type="radio"
+          class="visually-hidden"
+          name="theme"
+          value="light"
+          ?checked=${value === "light"}
+        />
         <span>Light</span>
       </label>
       <label class=${value === "dark" ? "selected" : nothing}>
-        <input type="radio" class="visually-hidden" name="theme" value="dark" ?checked=${value === "dark"} />
+        <input
+          type="radio"
+          class="visually-hidden"
+          name="theme"
+          value="dark"
+          ?checked=${value === "dark"}
+        />
         <span>Dark</span>
       </label>
       <label class=${value === "system" ? "selected" : nothing}>
-        <input type="radio" class="visually-hidden" name="theme" value="system" ?checked=${value === "system"} />
+        <input
+          type="radio"
+          class="visually-hidden"
+          name="theme"
+          value="system"
+          ?checked=${value === "system"}
+        />
         <span>System</span>
       </label>
     </fieldset>
@@ -85,15 +102,31 @@ export const AllVariants: Story = {
       <fieldset>
         <legend>Theme</legend>
         <label>
-          <input type="radio" class="visually-hidden" name="theme2" value="light" />
+          <input
+            type="radio"
+            class="visually-hidden"
+            name="theme2"
+            value="light"
+          />
           <span>Light</span>
         </label>
         <label class="selected">
-          <input type="radio" class="visually-hidden" name="theme2" value="dark" checked />
+          <input
+            type="radio"
+            class="visually-hidden"
+            name="theme2"
+            value="dark"
+            checked
+          />
           <span>Dark</span>
         </label>
         <label>
-          <input type="radio" class="visually-hidden" name="theme2" value="system" />
+          <input
+            type="radio"
+            class="visually-hidden"
+            name="theme2"
+            value="system"
+          />
           <span>System</span>
         </label>
       </fieldset>
@@ -103,15 +136,31 @@ export const AllVariants: Story = {
       <fieldset>
         <legend class="visually-hidden">Filter</legend>
         <label class="selected">
-          <input type="radio" class="visually-hidden" name="filter2" value="all" checked />
+          <input
+            type="radio"
+            class="visually-hidden"
+            name="filter2"
+            value="all"
+            checked
+          />
           <span>All</span>
         </label>
         <label>
-          <input type="radio" class="visually-hidden" name="filter2" value="active" />
+          <input
+            type="radio"
+            class="visually-hidden"
+            name="filter2"
+            value="active"
+          />
           <span>Active</span>
         </label>
         <label>
-          <input type="radio" class="visually-hidden" name="filter2" value="done" />
+          <input
+            type="radio"
+            class="visually-hidden"
+            name="filter2"
+            value="done"
+          />
           <span>Done</span>
         </label>
       </fieldset>
@@ -124,9 +173,8 @@ export const DynamicUpdates: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-radiogroup");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "form-radiogroup",
-    ) as Component<FormRadiogroupProps>;
+    const el = canvasElement.querySelector("form-radiogroup") as HTMLElement &
+      FormRadiogroupProps;
 
     await expect(el.value).toBe("light");
 
@@ -142,9 +190,8 @@ export const PropertyChanges: Story = {
   args: { value: "light", variant: "split-button" },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-radiogroup");
-    const el = canvasElement.querySelector(
-      "form-radiogroup",
-    ) as Component<FormRadiogroupProps>;
+    const el = canvasElement.querySelector("form-radiogroup") as HTMLElement &
+      FormRadiogroupProps;
     const labels = el.querySelectorAll("label");
 
     await expect(el.value).toBe("light");

@@ -1,93 +1,88 @@
 import {
   asString,
-  type Component,
   createTask,
-  dangerouslySetInnerHTML,
+  dangerouslyBindInnerHTML,
   defineComponent,
-  setText,
-  show,
-  toggleClass,
 } from "@zeix/le-truc";
 import {
   fetchWithCache,
   isRecursiveURL,
   isValidURL,
-} from "../../_common/fetch";
+} from "../../_common/fetchWithCache";
 
 export type ModuleLazyloadProps = {
   src: string;
 };
 
-type ModuleLazyloadUI = Record<
-  "callout" | "loading" | "error" | "content",
-  HTMLElement
->;
-
 declare global {
   interface HTMLElementTagNameMap {
-    "module-lazyload": Component<ModuleLazyloadProps>;
+    "module-lazyload": HTMLElement & ModuleLazyloadProps;
   }
 }
 
-export default defineComponent<ModuleLazyloadProps, ModuleLazyloadUI>(
+export default defineComponent<ModuleLazyloadProps>(
   "module-lazyload",
-  {
-    src: asString(),
-  },
-  ({ first }) => ({
-    callout: first(
+  ({ expose, first, host, watch }) => {
+    const callout = first(
       "card-callout",
       "Needed to display loading state and error messages.",
-    ),
-    loading: first(".loading", "Needed to display loading state."),
-    error: first(".error", "Needed to display error messages."),
-    content: first(".content", "Needed to display content."),
-  }),
-  (ui) => {
-    const { host } = ui;
-    const result = createTask<{
-      ok: boolean;
-      value: string;
-      error: string;
-      pending: boolean;
-    }>(
-      async (_prev, abort) => {
-        const url = host.src;
-        const error = !url
-          ? "No URL provided"
-          : !isValidURL(url)
-            ? "Invalid URL"
-            : isRecursiveURL(url, host)
-              ? "Recursive URL detected"
-              : "";
-        if (error) return { ok: false, value: "", error, pending: false };
-
-        try {
-          const { content } = await fetchWithCache(url, abort);
-          return { ok: true, value: content, error: "", pending: false };
-        } catch (error) {
-          return {
-            ok: false,
-            value: "",
-            error: `Failed to fetch content for "${url}": ${String(error)}`,
-            pending: false,
-          };
-        }
-      },
-      { value: { ok: false, value: "", error: "", pending: true } },
     );
-    const hasError = () => !!result.get().error;
+    const loading = first(".loading", "Needed to display loading state.");
+    const errorEl = first(".error", "Needed to display error messages.");
+    const contentEl = first(".content", "Needed to display content.");
 
-    return {
-      callout: [show(() => !result.get().ok), toggleClass("danger", hasError)],
-      loading: show(() => !!result.get().pending),
-      error: [show(hasError), setText(() => result.get().error ?? "")],
-      content: [
-        show(() => result.get().ok),
-        dangerouslySetInnerHTML(() => result.get().value ?? "", {
-          allowScripts: host.hasAttribute("allow-scripts"),
-        }),
-      ],
-    };
+    const content = createTask<string>(async (_prev, abort) => {
+      const url = host.src;
+      if (!url) throw new Error("No URL provided");
+      if (!isValidURL(url)) throw new Error("Invalid URL");
+      if (isRecursiveURL(url, host)) throw new Error("Recursive URL detected");
+      try {
+        const { content: fetched } = await fetchWithCache(url, abort);
+        return fetched;
+      } catch (e) {
+        throw new Error(`Failed to fetch content for "${url}": ${String(e)}`);
+      }
+    });
+
+    const { ok: setHTML } = dangerouslyBindInnerHTML(contentEl, {
+      allowScripts: host.hasAttribute("allow-scripts"),
+    });
+
+    expose({ src: asString() });
+
+    return [
+      watch(content, {
+        ok: (content) => {
+          callout.hidden = true;
+          loading.hidden = true;
+          contentEl.hidden = false;
+          setHTML(content);
+        },
+        nil: () => {
+          callout.hidden = false;
+          loading.hidden = false;
+          contentEl.hidden = true;
+        },
+        stale: () => {
+          contentEl.style.setProperty("opacity", "var(--opacity-dimmed)");
+          return () => {
+            contentEl.style.removeProperty("opacity");
+          };
+        },
+        err: (error) => {
+          callout.hidden = false;
+          callout.classList.add("danger");
+          loading.hidden = true;
+          errorEl.hidden = false;
+          errorEl.textContent = error.message;
+          contentEl.hidden = true;
+          return () => {
+            callout.classList.remove("danger");
+            errorEl.hidden = true;
+            errorEl.textContent = "";
+          };
+        },
+      }),
+    ];
   },
 );

@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./basic-hello.ts";
-import type { Component } from "@zeix/le-truc";
 import type { BasicHelloProps } from "./basic-hello.ts";
 
 type BasicHelloArgs = {
@@ -44,9 +43,8 @@ export const DynamicUpdates: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-hello");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "basic-hello",
-    ) as Component<BasicHelloProps>;
+    const el = canvasElement.querySelector("basic-hello") as HTMLElement &
+      BasicHelloProps;
     const input = canvas.getByRole("textbox");
     const output = el.querySelector("output");
 
@@ -67,9 +65,8 @@ export const FallbackOnClear: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-hello");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "basic-hello",
-    ) as Component<BasicHelloProps>;
+    const el = canvasElement.querySelector("basic-hello") as HTMLElement &
+      BasicHelloProps;
     const input = canvas.getByRole("textbox");
     const output = el.querySelector("output");
 
@@ -85,9 +82,8 @@ export const InitialDOMValue: Story = {
   args: { name: "Alice" },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-hello");
-    const el = canvasElement.querySelector(
-      "basic-hello",
-    ) as Component<BasicHelloProps>;
+    const el = canvasElement.querySelector("basic-hello") as HTMLElement &
+      BasicHelloProps;
     const output = el.querySelector("output");
 
     await expect(output).toHaveTextContent("Alice");
@@ -99,9 +95,8 @@ export const PropertyChanges: Story = {
   args: { name: "World" },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-hello");
-    const el = canvasElement.querySelector(
-      "basic-hello",
-    ) as Component<BasicHelloProps>;
+    const el = canvasElement.querySelector("basic-hello") as HTMLElement &
+      BasicHelloProps;
     const output = el.querySelector("output");
 
     el.name = "Charlie";

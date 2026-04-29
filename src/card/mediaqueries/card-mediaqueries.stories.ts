@@ -3,7 +3,6 @@ import { html } from "lit";
 import { expect, within } from "storybook/test";
 import "../../context/media/context-media.ts";
 import "./card-mediaqueries.ts";
-import type { Component } from "@zeix/le-truc";
 import type { CardMediaqueriesProps } from "./card-mediaqueries.ts";
 
 type CardMediaqueriesArgs = {
@@ -45,9 +44,8 @@ export const WithoutContext: Story = {
   args: { heading: "Without Context" },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("card-mediaqueries");
-    const el = canvasElement.querySelector(
-      "card-mediaqueries",
-    ) as Component<CardMediaqueriesProps>;
+    const el = canvasElement.querySelector("card-mediaqueries") as HTMLElement &
+      CardMediaqueriesProps;
 
     await expect(el.querySelector(".motion")).toHaveTextContent("unknown");
     await expect(el.querySelector(".theme")).toHaveTextContent("unknown");
@@ -59,17 +57,14 @@ export const WithoutContext: Story = {
 // ⚠️ Custom render: wraps the card inside a context-media provider to test that values are populated
 export const WithContext: Story = {
   render: () => html`
-    <context-media>
-      ${cardTemplate("With Context")}
-    </context-media>
+    <context-media> ${cardTemplate("With Context")} </context-media>
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("context-media");
     await customElements.whenDefined("card-mediaqueries");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "card-mediaqueries",
-    ) as Component<CardMediaqueriesProps>;
+    const el = canvasElement.querySelector("card-mediaqueries") as HTMLElement &
+      CardMediaqueriesProps;
 
     const motion = el.querySelector(".motion");
     const theme = el.querySelector(".theme");
@@ -92,9 +87,7 @@ export const WithContext: Story = {
 // ⚠️ Custom render: renders two cards simultaneously — one inside context-media, one outside — to compare outputs
 export const SideBySide: Story = {
   render: () => html`
-    <context-media>
-      ${cardTemplate("With Context")}
-    </context-media>
+    <context-media> ${cardTemplate("With Context")} </context-media>
     ${cardTemplate("Without Context (fallback)")}
   `,
 };

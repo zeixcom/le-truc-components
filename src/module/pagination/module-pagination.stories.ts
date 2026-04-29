@@ -3,7 +3,6 @@ import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./module-pagination.ts";
 import "./module-pagination.css";
-import type { Component } from "@zeix/le-truc";
 import type { ModulePaginationProps } from "./module-pagination.ts";
 
 type ModulePaginationArgs = {
@@ -22,8 +21,22 @@ const render = ({ value, max }: ModulePaginationArgs) => html`
       <span class="max">${max}</span>
     </div>
     <div class="buttons">
-      <button type="button" class="prev" ?disabled=${value <= 1} aria-label="Previous page">❮</button>
-      <button type="button" class="next" ?disabled=${value >= max} aria-label="Next page">❯</button>
+      <button
+        type="button"
+        class="prev"
+        ?disabled=${value <= 1}
+        aria-label="Previous page"
+      >
+        ❮
+      </button>
+      <button
+        type="button"
+        class="next"
+        ?disabled=${value >= max}
+        aria-label="Next page"
+      >
+        ❯
+      </button>
     </div>
   </module-pagination>
 `;
@@ -63,9 +76,8 @@ export const Navigation: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-pagination");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "module-pagination",
-    ) as Component<ModulePaginationProps>;
+    const el = canvasElement.querySelector("module-pagination") as HTMLElement &
+      ModulePaginationProps;
     const next = canvas.getByRole("button", { name: "Next page" });
     const prev = canvas.getByRole("button", { name: "Previous page" });
 
@@ -90,9 +102,8 @@ export const ClampedAtBounds: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-pagination");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "module-pagination",
-    ) as Component<ModulePaginationProps>;
+    const el = canvasElement.querySelector("module-pagination") as HTMLElement &
+      ModulePaginationProps;
     const next = canvas.getByRole("button", { name: "Next page" });
 
     await expect(el.value).toBe(3);
@@ -105,9 +116,8 @@ export const PropertyChanges: Story = {
   args: { value: 1, max: 10 },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-pagination");
-    const el = canvasElement.querySelector(
-      "module-pagination",
-    ) as Component<ModulePaginationProps>;
+    const el = canvasElement.querySelector("module-pagination") as HTMLElement &
+      ModulePaginationProps;
 
     await expect(el.value).toBe(1);
     await expect(el.max).toBe(10);

@@ -1,133 +1,104 @@
 import {
-  asInteger,
-  type Component,
-  createEffect,
+  bindProperty,
+  bindVisible,
   defineComponent,
-  type Memo,
-  on,
-  setProperty,
-  show,
+  each,
 } from "@zeix/le-truc";
 
 export type ModuleCarouselProps = {
   index: number;
 };
 
-type ModuleCarouselUI = {
-  dots: Memo<HTMLButtonElement[]>;
-  slides: Memo<HTMLElement[]>;
-  buttons: Memo<HTMLElement[]>;
-  prev: HTMLButtonElement;
-  next: HTMLButtonElement;
-};
-
 declare global {
   interface HTMLElementTagNameMap {
-    "module-carousel": Component<ModuleCarouselProps>;
+    "module-carousel": HTMLElement & ModuleCarouselProps;
   }
 }
 
 const clamp = (index: number, total: number) =>
   Math.max(0, Math.min(index, total - 1));
 
-export default defineComponent<ModuleCarouselProps, ModuleCarouselUI>(
+export default defineComponent<ModuleCarouselProps>(
   "module-carousel",
-  {
-    index: asInteger((ui) =>
-      Math.max(
-        ui.slides.get().findIndex((slide) => slide.ariaCurrent === "true"),
+  ({ all, expose, first, host, on, watch }) => {
+    const dots = all('button[role="tab"]');
+    const slides = all('[role="tabpanel"]');
+    const buttons = all("nav button");
+    const prev = first("button.prev", "Add a previous button");
+    const next = first("button.next", "Add a next button");
+
+    let isNavigating = false;
+    let lastScrolled = -1;
+
+    expose({
+      index: Math.max(
+        slides.get().findIndex((slide) => slide.ariaCurrent === "true"),
         0,
       ),
-    ),
-  },
-  ({ all, first }) => ({
-    dots: all('button[role="tab"]'),
-    slides: all('[role="tabpanel"]'),
-    buttons: all("nav button"),
-    prev: first("button.prev", "Add a previous button"),
-    next: first("button.next", "Add a next button"),
-  }),
-  ({ host, slides, prev, next, dots }) => {
-    let isNavigating = false;
-    let lastScrolled = host.index;
+    });
 
-    return {
-      host: [
-        // Set up IntersectionObserver to detect scroll-based navigation
-        () => {
-          const observer = new IntersectionObserver(
-            (entries) => {
-              for (const entry of entries) {
-                if (entry.intersectionRatio > 0.5) {
-                  const slideIndex = slides
-                    .get()
-                    .indexOf(entry.target as HTMLElement);
-                  if (isNavigating) {
-                    if (slideIndex === host.index) isNavigating = false;
-                  } else if (slideIndex !== host.index && slideIndex >= 0) {
-                    lastScrolled = slideIndex;
-                    host.index = slideIndex;
-                  }
-                  break;
+    return [
+      // Set up IntersectionObserver to detect scroll-based navigation
+      () => {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.intersectionRatio > 0.5) {
+                const slideIndex = slides
+                  .get()
+                  .indexOf(entry.target as HTMLElement);
+                if (isNavigating) {
+                  if (slideIndex === host.index) isNavigating = false;
+                } else if (slideIndex !== host.index && slideIndex >= 0) {
+                  lastScrolled = slideIndex;
+                  host.index = slideIndex;
                 }
+                break;
               }
-            },
-            { root: host, threshold: 0.5 },
-          );
-          for (const slide of slides.get()) observer.observe(slide);
-          return () => observer.disconnect();
-        },
-        // Scroll to slide when index changes (skip if IO already scrolled there)
-        () =>
-          createEffect(() => {
-            const idx = host.index;
-            if (lastScrolled !== idx) {
-              lastScrolled = idx;
-              isNavigating = true;
-              slides.get()[idx]?.scrollIntoView({
-                behavior: "smooth",
-                block: "nearest",
-              });
             }
-          }),
-      ],
+          },
+          { root: host, threshold: 0.5 },
+        );
+        for (const slide of slides.get()) observer.observe(slide);
+        return () => observer.disconnect();
+      },
 
-      // Prev button: hide on first slide; move focus to next when hidden
-      prev: [
-        show(() => host.index !== 0),
-        on("click", () => {
-          const newIndex = clamp(host.index - 1, slides.get().length);
-          host.index = newIndex;
-          if (newIndex === 0) next.focus();
-        }),
-      ],
+      // Scroll to slide when index changes (skip if IO already scrolled there)
+      watch("index", (idx) => {
+        if (lastScrolled < 0) {
+          lastScrolled = idx;
+          return;
+        }
+        if (lastScrolled !== idx) {
+          lastScrolled = idx;
+          isNavigating = true;
+          slides
+            .get()
+            [idx]?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+      }),
 
-      // Next button: hide on last slide; move focus to prev when hidden
-      next: [
-        show(() => host.index !== slides.get().length - 1),
-        on("click", () => {
-          const newIndex = clamp(host.index + 1, slides.get().length);
-          host.index = newIndex;
-          if (newIndex === slides.get().length - 1) prev.focus();
-        }),
-      ],
+      // Prev button: move focus to next when hidden
+      on(prev, "click", () => {
+        const newIndex = clamp(host.index - 1, slides.get().length);
+        host.index = newIndex;
+        if (newIndex === 0) next.focus();
+      }),
+
+      // Next button: move focus to prev when hidden
+      on(next, "click", () => {
+        const newIndex = clamp(host.index + 1, slides.get().length);
+        host.index = newIndex;
+        if (newIndex === slides.get().length - 1) prev.focus();
+      }),
 
       // Dot navigation
-      dots: [
-        on("click", ({ target }) => {
-          if (target instanceof HTMLElement)
-            host.index = parseInt(target.dataset.index || "0", 10);
-        }),
-        setProperty("ariaSelected", (target) =>
-          String(target.dataset.index === String(host.index)),
-        ),
-        setProperty("tabIndex", (target) =>
-          target.dataset.index === String(host.index) ? 0 : -1,
-        ),
-      ],
+      on(dots, "click", (_e, target) => {
+        host.index = Number.parseInt(target.dataset.index || "0", 10);
+      }),
 
       // Keyboard navigation for all nav buttons (prev, next, dots)
-      buttons: on("keyup", (e) => {
+      on(buttons, "keyup", (e) => {
         const { key } = e;
         if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(key)) return;
         e.preventDefault();
@@ -152,10 +123,28 @@ export default defineComponent<ModuleCarouselProps, ModuleCarouselUI>(
         }
       }),
 
-      // Active slide indicator
-      slides: setProperty("ariaCurrent", (target) =>
-        String(target.id === slides.get()[host.index]?.id),
+      // Effects for slides
+      each(slides, (slide) =>
+        watch(
+          () => String(slide.id === slides.get()[host.index]?.id),
+          bindProperty(slide, "ariaCurrent"),
+        ),
       ),
-    };
+
+      // Effects for dot navigation
+      each(dots, (dot) =>
+        watch(
+          () => dot.dataset.index === String(host.index),
+          (selected) => {
+            dot.ariaSelected = String(selected);
+            dot.tabIndex = selected ? 0 : -1;
+          },
+        ),
+      ),
+
+      // Effects for prev/next navigation
+      watch(() => host.index > 0, bindVisible(prev)),
+      watch(() => host.index < slides.get().length - 1, bindVisible(next)),
+    ];
   },
 );

@@ -1,13 +1,8 @@
 import {
-  asInteger,
-  type Component,
+  bindProperty,
+  bindVisible,
   createMemo,
   defineComponent,
-  type Memo,
-  on,
-  read,
-  setProperty,
-  show,
 } from "@zeix/le-truc";
 
 export type FormSpinbuttonProps = {
@@ -15,97 +10,85 @@ export type FormSpinbuttonProps = {
   max: number;
 };
 
-type FormSpinbuttonUI = {
-  controls: Memo<(HTMLButtonElement | HTMLInputElement)[]>;
-  increment: HTMLButtonElement;
-  decrement: HTMLButtonElement;
-  input: HTMLInputElement;
-  zero?: HTMLElement | undefined;
-  other?: HTMLElement | undefined;
-};
-
 declare global {
   interface HTMLElementTagNameMap {
-    "form-spinbutton": Component<FormSpinbuttonProps>;
+    "form-spinbutton": HTMLElement & FormSpinbuttonProps;
   }
 }
 
-export default defineComponent<FormSpinbuttonProps, FormSpinbuttonUI>(
+export default defineComponent<FormSpinbuttonProps>(
   "form-spinbutton",
-  {
-    value: read((ui) => ui.input.value, asInteger()),
-    max: read((ui) => ui.input.max, asInteger(10)),
-  },
-  ({ all, first }) => ({
-    controls: all("button, input:not([disabled])"),
-    increment: first(
+  ({ all, expose, first, host, on, watch }) => {
+    const controls = all("button, input:not([disabled])");
+    const increment = first(
       "button.increment",
       "Add a native button to increment the value",
-    ),
-    decrement: first(
+    );
+    const decrement = first(
       "button.decrement",
       "Add a native button to decrement the value",
-    ),
-    input: first("input.value", "Add a native input to display the value"),
-    zero: first(".zero"),
-    other: first(".other"),
-  }),
-  ({ host, increment, zero }) => {
+    );
+    const input = first(
+      "input.value",
+      "Add a native input to display the value",
+    );
+    const zero = first(".zero");
+    const other = first(".other");
+
     const nonZero = createMemo(() => host.value !== 0);
     const incrementLabel = increment.ariaLabel || "Increment";
-    const ariaLabel = createMemo(() =>
-      nonZero.get() || !zero ? incrementLabel : zero.textContent,
-    );
 
-    return {
-      controls: [
-        on("change", (e) => {
-          const target = e.currentTarget as HTMLInputElement;
-          if (!(target instanceof HTMLInputElement)) return;
+    expose({
+      value: Number.parseInt(input.value) || 0,
+      max: Number.parseInt(input.max) || 10,
+    });
 
-          const next = Number(target.value);
-          if (!Number.isInteger(next)) {
-            target.value = String(host.value);
-            target.checkValidity();
-            return;
-          }
-          const clamped = Math.min(host.max, Math.max(0, next));
-          if (next !== clamped) {
-            target.value = String(clamped);
-            target.checkValidity();
-          }
-          host.value = clamped;
+    return [
+      on(controls, "change", (_e, target) => {
+        if (!(target instanceof HTMLInputElement)) return;
+
+        const next = Number(target.value);
+        if (!Number.isInteger(next)) {
+          target.value = String(host.value);
+          target.checkValidity();
+          return;
+        }
+        const clamped = Math.min(host.max, Math.max(0, next));
+        if (next !== clamped) {
+          target.value = String(clamped);
+          target.checkValidity();
+        }
+        host.value = clamped;
+      }),
+      on(controls, "click", (_e, el) => {
+        if (el.classList.contains("decrement"))
+          host.value = Math.max(0, host.value - 1);
+        else if (el.classList.contains("increment"))
+          host.value = Math.min(host.max, host.value + 1);
+      }),
+      on(controls, "keydown", (e) => {
+        const { key } = e as KeyboardEvent;
+        if (["ArrowUp", "ArrowDown", "-", "+"].includes(key)) {
+          e.stopPropagation();
+          e.preventDefault();
+          const delta = key === "ArrowDown" || key === "-" ? -1 : 1;
+          host.value = Math.min(host.max, Math.max(0, host.value + delta));
+        }
+      }),
+
+      watch(nonZero, (nz) => {
+        input.hidden = !nz;
+        decrement.hidden = !nz;
+      }),
+      zero &&
+        watch(nonZero, (nz) => {
+          zero.hidden = nz;
+          increment.ariaLabel = nz ? incrementLabel : zero.textContent;
         }),
-        on("click", (e) => {
-          const el = e.currentTarget as Element;
-          if (el.classList.contains("decrement")) {
-            host.value = Math.max(0, host.value - 1);
-          } else if (el.classList.contains("increment")) {
-            host.value = Math.min(host.max, host.value + 1);
-          }
-        }),
-        on("keydown", (e) => {
-          const { key } = e as KeyboardEvent;
-          if (["ArrowUp", "ArrowDown", "-", "+"].includes(key)) {
-            e.stopPropagation();
-            e.preventDefault();
-            const delta = key === "ArrowDown" || key === "-" ? -1 : 1;
-            host.value = Math.min(host.max, Math.max(0, host.value + delta));
-          }
-        }),
-      ],
-      input: [
-        show(nonZero),
-        setProperty("value", () => String(host.value)),
-        setProperty("max", () => String(host.max)),
-      ],
-      decrement: show(nonZero),
-      increment: [
-        setProperty("disabled", () => host.value >= host.max),
-        setProperty("ariaLabel", ariaLabel),
-      ],
-      zero: show(() => !nonZero.get()),
-      other: show(nonZero),
-    };
+      other && watch(nonZero, bindVisible(other)),
+      watch(() => String(host.value), bindProperty(input, "value")),
+      watch(() => String(host.max), bindProperty(input, "max")),
+      watch(() => host.value >= host.max, bindProperty(increment, "disabled")),
+    ];
   },
 );

@@ -7,7 +7,6 @@ import "../../form/spinbutton/form-spinbutton.ts";
 import "../../form/spinbutton/form-spinbutton.css";
 import "./module-catalog.ts";
 import "./module-catalog.css";
-import type { Component } from "@zeix/le-truc";
 import type { BasicButtonProps } from "../../basic/button/basic-button.ts";
 
 const meta: Meta = {
@@ -20,8 +19,20 @@ const spinbuttonItem = (name: string, label: string, max: number) => html`
   <li>
     <p>${label}</p>
     <form-spinbutton>
-      <button type="button" class="decrement" aria-label="Decrement" hidden>−</button>
-      <input type="number" class="value" name=${name} value="0" min="0" max=${max} readonly disabled hidden />
+      <button type="button" class="decrement" aria-label="Decrement" hidden>
+        −
+      </button>
+      <input
+        type="number"
+        class="value"
+        name=${name}
+        value="0"
+        min="0"
+        max=${max}
+        readonly
+        disabled
+        hidden
+      />
       <button type="button" class="increment" aria-label="Increment">
         <span class="zero">Add to Cart</span>
         <span class="other" hidden>+</span>
@@ -53,9 +64,8 @@ export const Default: Story = {
     await customElements.whenDefined("module-catalog");
     await customElements.whenDefined("form-spinbutton");
     const canvas = within(canvasElement);
-    const button = canvasElement.querySelector(
-      "basic-button",
-    ) as Component<BasicButtonProps>;
+    const button = canvasElement.querySelector("basic-button") as HTMLElement &
+      BasicButtonProps;
 
     // Cart button starts disabled (total = 0)
     await expect(button.disabled).toBe(true);

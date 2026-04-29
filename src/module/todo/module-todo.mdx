@@ -39,37 +39,31 @@ None. This component orchestrates child component properties through effects.
     </tr>
     <tr>
       <td><code>first('form-textbox')</code></td>
-      <td><code>Component&lt;FormTextboxProps&gt;</code></td>
+      <td><code>HTMLElement &amp; FormTextboxProps</code></td>
       <td><strong>required</strong></td>
       <td>Text input for the new todo; cleared after each add; its <code>length</code> drives the submit button's <code>disabled</code> state</td>
     </tr>
     <tr>
       <td><code>first('basic-button.submit')</code></td>
-      <td><code>Component&lt;BasicButtonProps&gt;</code></td>
+      <td><code>HTMLElement &amp; BasicButtonProps</code></td>
       <td><strong>required</strong></td>
       <td>Submit button; disabled when textbox is empty via <code>pass()</code></td>
     </tr>
     <tr>
-      <td><code>first('module-list')</code></td>
-      <td><code>Component&lt;ModuleListProps&gt;</code></td>
-      <td><strong>required</strong></td>
-      <td>List of todo items; receives the current filter value as a <code>filter</code> attribute</td>
-    </tr>
-    <tr>
       <td><code>first('basic-pluralize')</code></td>
-      <td><code>Component&lt;BasicPluralizeProps&gt;</code></td>
+      <td><code>HTMLElement &amp; BasicPluralizeProps</code></td>
       <td><strong>required</strong></td>
       <td>Displays the count of active (incomplete) items via <code>pass(&#123; count &#125;)</code></td>
     </tr>
     <tr>
       <td><code>first('form-radiogroup')</code></td>
-      <td><code>Component&lt;FormRadiogroupProps&gt;</code></td>
+      <td><code>HTMLElement &amp; FormRadiogroupProps</code></td>
       <td><strong>required</strong></td>
       <td>Filter control (All / Active / Completed); its <code>value</code> is passed as the <code>filter</code> attribute to the list</td>
     </tr>
     <tr>
       <td><code>first('basic-button.clear-completed')</code></td>
-      <td><code>Component&lt;BasicButtonProps&gt;</code></td>
+      <td><code>HTMLElement &amp; BasicButtonProps</code></td>
       <td><strong>required</strong></td>
       <td>Removes all completed items on click; <code>disabled</code> when there are none; shows completed count as <code>badge</code></td>
     </tr>

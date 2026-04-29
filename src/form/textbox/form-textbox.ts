@@ -1,105 +1,98 @@
 import {
-  type Component,
-  type ComponentUI,
-  createEventsSensor,
+  bindProperty,
+  bindText,
+  bindVisible,
+  createMemo,
+  createState,
   defineComponent,
-  on,
-  read,
-  setAttribute,
-  setProperty,
-  setText,
+  defineMethod,
 } from "@zeix/le-truc";
-import { clearEffects, clearMethod } from "../../_common/clear";
 
 export type FormTextboxProps = {
   value: string;
   readonly length: number;
   error: string;
   description: string;
-  readonly clear: () => void;
-};
-
-type FormTextboxUI = {
-  textbox: HTMLInputElement | HTMLTextAreaElement;
-  clear?: HTMLButtonElement | undefined;
-  error?: HTMLElement | undefined;
-  description?: HTMLElement | undefined;
+  clear: () => void;
 };
 
 declare global {
   interface HTMLElementTagNameMap {
-    "form-textbox": Component<FormTextboxProps>;
+    "form-textbox": HTMLElement & FormTextboxProps;
   }
 }
 
-export default defineComponent<FormTextboxProps, FormTextboxUI>(
+export default defineComponent<FormTextboxProps>(
   "form-textbox",
-  {
-    value: read((ui) => ui.textbox.value, ""),
-    length: createEventsSensor(
-      read((ui) => ui.textbox.value.length, 0),
-      "textbox",
-      {
-        input: ({ target }) => target.value.length,
-      },
-    ),
-    error: "",
-    description: ({
-      host,
-      description,
-      textbox,
-    }: ComponentUI<FormTextboxProps, FormTextboxUI>) => {
-      if (description) {
-        if (textbox.maxLength > 0 && description.dataset.remaining) {
-          return () =>
-            description.dataset.remaining?.replace(
-              // biome-ignore lint/suspicious/noTemplateCurlyInString: template literal look-alike
-              "${n}",
-              String(textbox.maxLength - host.length),
-            );
-        }
-        return description.textContent?.trim() ?? "";
-      } else {
-        return "";
-      }
-    },
-    clear: clearMethod,
-  },
-  ({ first }) => ({
-    textbox: first(
+  ({ expose, first, host, on, watch }) => {
+    const textbox = first(
       "input, textarea",
       "Add a native input or textarea as descendant element.",
-    ),
-    clear: first("button.clear"),
-    error: first(".error"),
-    description: first(".description"),
-  }),
-  (ui) => {
-    const { host, textbox, error, description } = ui;
-    const errorId = error?.id;
-    const descriptionId = description?.id;
+    );
+    const clearBtn = first("button.clear");
+    const errorEl = first(".error");
+    const descriptionEl = first(".description");
 
-    return {
-      textbox: [
-        on("change", () => {
-          textbox.checkValidity();
-          return {
-            value: textbox.value,
-            error: textbox.validationMessage,
-          };
-        }),
-        setProperty("value"),
-        setProperty("ariaInvalid", () => String(!!host.error)),
-        setAttribute("aria-errormessage", () =>
-          host.error && errorId ? errorId : null,
-        ),
-        setAttribute("aria-describedby", () =>
-          description && descriptionId ? descriptionId : null,
-        ),
-      ],
-      clear: clearEffects(ui),
-      error: setText("error"),
-      description: setText("description"),
-    };
+    const errorId = errorEl?.id;
+    const descriptionId = descriptionEl?.id;
+    if (descriptionId) textbox.setAttribute("aria-describedby", descriptionId);
+
+    // Reactive description: tracks remaining character count if template is present
+    const dataRemaining = descriptionEl?.dataset.remaining;
+    const descriptionMemo =
+      dataRemaining && textbox.maxLength > 0
+        ? createMemo(() =>
+            dataRemaining.replace(
+              // biome-ignore lint/suspicious/noTemplateCurlyInString: template literal lookalike
+              "${n}",
+              String(textbox.maxLength - host.length),
+            ),
+          )
+        : null;
+
+    const length = createState(textbox.value.length);
+
+    expose({
+      value: textbox.value,
+      length: length.get,
+      error: "",
+      description: descriptionMemo ?? descriptionEl?.textContent?.trim() ?? "",
+      clear: defineMethod(() => {
+        host.value = "";
+        textbox.value = "";
+        textbox.setCustomValidity("");
+        textbox.checkValidity();
+        textbox.dispatchEvent(new Event("input", { bubbles: true }));
+        textbox.dispatchEvent(new Event("change", { bubbles: true }));
+        textbox.focus();
+      }),
+    });
+
+    return [
+      on(textbox, "change", () => {
+        textbox.checkValidity();
+        return {
+          value: textbox.value,
+          error: textbox.validationMessage,
+        };
+      }),
+      on(textbox, "input", () => {
+        length.set(textbox.value.length);
+      }),
+      on(clearBtn, "click", () => {
+        host.clear();
+      }),
+
+      watch("value", bindProperty(textbox, "value")),
+      watch("error", (error) => {
+        textbox.ariaInvalid = String(!!error);
+        if (error && errorId)
+          textbox.setAttribute("aria-errormessage", errorId);
+        else textbox.removeAttribute("aria-errormessage");
+      }),
+      errorEl && watch("error", bindText(errorEl, true)),
+      descriptionEl && watch("description", bindText(descriptionEl, true)),
+      clearBtn && watch(length, bindVisible(clearBtn)),
+    ];
   },
 );

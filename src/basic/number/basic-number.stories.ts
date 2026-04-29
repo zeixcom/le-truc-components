@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import { html, nothing } from "lit";
 import { expect } from "storybook/test";
 import "./basic-number.ts";
-import type { Component } from "@zeix/le-truc";
 import type { BasicNumberProps } from "./basic-number.ts";
 
 type BasicNumberArgs = {
@@ -56,36 +55,44 @@ export const Default: Story = {
 // ⚠️ Custom render: shows two instances side-by-side with locale labels, each with a different lang
 export const Currency: Story = {
   render: () => html`
-    <p>German (Switzerland):<br />
-    <basic-number
-      lang="de-CH"
-      value="25678.9"
-      options='{"style":"currency","currency":"CHF"}'
-    ></basic-number></p>
-    <p>French (Switzerland):<br />
-    <basic-number
-      lang="fr-CH"
-      value="25678.9"
-      options='{"style":"currency","currency":"CHF"}'
-    ></basic-number></p>
+    <p>
+      German (Switzerland):<br />
+      <basic-number
+        lang="de-CH"
+        value="25678.9"
+        options='{"style":"currency","currency":"CHF"}'
+      ></basic-number>
+    </p>
+    <p>
+      French (Switzerland):<br />
+      <basic-number
+        lang="fr-CH"
+        value="25678.9"
+        options='{"style":"currency","currency":"CHF"}'
+      ></basic-number>
+    </p>
   `,
 };
 
 // ⚠️ Custom render: shows two instances side-by-side with locale labels, each with a different lang
 export const Unit: Story = {
   render: () => html`
-    <p>Arabic speed (km/h):<br />
-    <basic-number
-      lang="ar-EG"
-      value="25678.9"
-      options='{"style":"unit","unit":"kilometer-per-hour","unitDisplay":"long"}'
-    ></basic-number></p>
-    <p>Chinese time (seconds):<br />
-    <basic-number
-      lang="zh-Hans-CN-u-nu-hanidec"
-      value="25678.9"
-      options='{"style":"unit","unit":"second","unitDisplay":"long"}'
-    ></basic-number></p>
+    <p>
+      Arabic speed (km/h):<br />
+      <basic-number
+        lang="ar-EG"
+        value="25678.9"
+        options='{"style":"unit","unit":"kilometer-per-hour","unitDisplay":"long"}'
+      ></basic-number>
+    </p>
+    <p>
+      Chinese time (seconds):<br />
+      <basic-number
+        lang="zh-Hans-CN-u-nu-hanidec"
+        value="25678.9"
+        options='{"style":"unit","unit":"second","unitDisplay":"long"}'
+      ></basic-number>
+    </p>
   `,
 };
 
@@ -93,18 +100,19 @@ export const Unit: Story = {
 export const LocaleInheritance: Story = {
   render: () => html`
     <div lang="de-DE">
-      <p>Euro currency, inherited German (Germany) locale:<br />
-      <basic-number
-        value="1234.5"
-        options='{"style":"currency","currency":"EUR"}'
-      ></basic-number></p>
+      <p>
+        Euro currency, inherited German (Germany) locale:<br />
+        <basic-number
+          value="1234.5"
+          options='{"style":"currency","currency":"EUR"}'
+        ></basic-number>
+      </p>
     </div>
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-number");
-    const el = canvasElement.querySelector(
-      "basic-number",
-    ) as Component<BasicNumberProps>;
+    const el = canvasElement.querySelector("basic-number") as HTMLElement &
+      BasicNumberProps;
     await expect(el).toHaveTextContent("1.234,50\u00a0€");
   },
 };
@@ -112,14 +120,14 @@ export const LocaleInheritance: Story = {
 export const DecimalFormatting: Story = {
   args: {
     value: 1234.56789,
-    options: '{"style":"decimal","minimumFractionDigits":2,"maximumFractionDigits":3}',
+    options:
+      '{"style":"decimal","minimumFractionDigits":2,"maximumFractionDigits":3}',
     lang: "",
   },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-number");
-    const el = canvasElement.querySelector(
-      "basic-number",
-    ) as Component<BasicNumberProps>;
+    const el = canvasElement.querySelector("basic-number") as HTMLElement &
+      BasicNumberProps;
     await expect(el).toHaveTextContent("1,234.568");
   },
 };
@@ -128,9 +136,8 @@ export const PropertyChanges: Story = {
   args: { value: 0, options: "", lang: "" },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-number");
-    const el = canvasElement.querySelector(
-      "basic-number",
-    ) as Component<BasicNumberProps>;
+    const el = canvasElement.querySelector("basic-number") as HTMLElement &
+      BasicNumberProps;
 
     await expect(el).toHaveTextContent("0");
 

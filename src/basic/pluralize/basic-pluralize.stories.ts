@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import { html, nothing } from "lit";
 import { expect } from "storybook/test";
 import "./basic-pluralize.ts";
-import type { Component } from "@zeix/le-truc";
 import type { BasicPluralizeProps } from "./basic-pluralize.ts";
 
 type BasicPluralizeArgs = {
@@ -75,9 +74,8 @@ export const PeopleCount: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-pluralize");
-    const el = canvasElement.querySelector(
-      "basic-pluralize",
-    ) as Component<BasicPluralizeProps>;
+    const el = canvasElement.querySelector("basic-pluralize") as HTMLElement &
+      BasicPluralizeProps;
 
     await expect(el.querySelector(".none")).not.toBeVisible();
     await expect(el.querySelector(".some")).toBeVisible();
@@ -103,15 +101,16 @@ export const Ordinal: Story = {
     <basic-pluralize count="1" ordinal>
       <p class="none">None</p>
       <p class="some">
-        <span class="count"></span><span class="one">st</span><span class="two">nd</span><span class="few">rd</span><span class="other">th</span>
+        <span class="count"></span><span class="one">st</span
+        ><span class="two">nd</span><span class="few">rd</span
+        ><span class="other">th</span>
       </p>
     </basic-pluralize>
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-pluralize");
-    const el = canvasElement.querySelector(
-      "basic-pluralize",
-    ) as Component<BasicPluralizeProps>;
+    const el = canvasElement.querySelector("basic-pluralize") as HTMLElement &
+      BasicPluralizeProps;
 
     await expect(el.querySelector(".count")).toHaveTextContent("1");
     await expect(el.querySelector(".one")).toBeVisible(); // 1st
@@ -150,9 +149,8 @@ export const Welsh: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-pluralize");
-    const el = canvasElement.querySelector(
-      "basic-pluralize",
-    ) as Component<BasicPluralizeProps>;
+    const el = canvasElement.querySelector("basic-pluralize") as HTMLElement &
+      BasicPluralizeProps;
 
     // count=0 → .none shown, .some hidden
     await expect(el.querySelector(".none")).toBeVisible();
@@ -182,9 +180,8 @@ export const NegativeClampedToZero: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-pluralize");
-    const el = canvasElement.querySelector(
-      "basic-pluralize",
-    ) as Component<BasicPluralizeProps>;
+    const el = canvasElement.querySelector("basic-pluralize") as HTMLElement &
+      BasicPluralizeProps;
 
     await expect(el.count).toBe(0);
     await expect(el.querySelector(".none")).toBeVisible();

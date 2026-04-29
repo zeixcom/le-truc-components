@@ -8,7 +8,6 @@ import "../../module/scrollarea/module-scrollarea.ts";
 import "../../module/scrollarea/module-scrollarea.css";
 import "./form-combobox.ts";
 import "./form-combobox.css";
-import type { Component } from "@zeix/le-truc";
 import type { FormComboboxProps } from "./form-combobox.ts";
 
 type FormComboboxArgs = {
@@ -33,16 +32,30 @@ const render = ({ error, description }: FormComboboxArgs) => html`
       <form-listbox id="color-popup">
         <input type="hidden" name="color-listbox" />
         <div role="listbox" aria-labelledby="color-label">
-          <button type="button" role="option" tabindex="-1" value="red">Red</button>
-          <button type="button" role="option" tabindex="-1" value="green">Green</button>
-          <button type="button" role="option" tabindex="-1" value="blue">Blue</button>
-          <button type="button" role="option" tabindex="-1" value="yellow">Yellow</button>
-          <button type="button" role="option" tabindex="-1" value="purple">Purple</button>
+          <button type="button" role="option" tabindex="-1" value="red">
+            Red
+          </button>
+          <button type="button" role="option" tabindex="-1" value="green">
+            Green
+          </button>
+          <button type="button" role="option" tabindex="-1" value="blue">
+            Blue
+          </button>
+          <button type="button" role="option" tabindex="-1" value="yellow">
+            Yellow
+          </button>
+          <button type="button" role="option" tabindex="-1" value="purple">
+            Purple
+          </button>
         </div>
       </form-listbox>
     </div>
-    <p class="error" role="alert" aria-live="assertive" id="color-error">${error}</p>
-    <p class="description" aria-live="polite" id="color-description">${description}</p>
+    <p class="error" role="alert" aria-live="assertive" id="color-error">
+      ${error}
+    </p>
+    <p class="description" aria-live="polite" id="color-description">
+      ${description}
+    </p>
   </form-combobox>
 `;
 
@@ -95,22 +108,31 @@ export const WithClear: Story = {
         <form-listbox id="fruit-popup">
           <input type="hidden" name="fruit-listbox" />
           <div role="listbox" aria-labelledby="fruit-label">
-            <button type="button" role="option" tabindex="-1" value="apple">Apple</button>
-            <button type="button" role="option" tabindex="-1" value="banana">Banana</button>
-            <button type="button" role="option" tabindex="-1" value="cherry">Cherry</button>
-            <button type="button" role="option" tabindex="-1" value="mango">Mango</button>
+            <button type="button" role="option" tabindex="-1" value="apple">
+              Apple
+            </button>
+            <button type="button" role="option" tabindex="-1" value="banana">
+              Banana
+            </button>
+            <button type="button" role="option" tabindex="-1" value="cherry">
+              Cherry
+            </button>
+            <button type="button" role="option" tabindex="-1" value="mango">
+              Mango
+            </button>
           </div>
         </form-listbox>
-        <button type="button" class="clear" aria-label="Clear input" hidden>✕</button>
+        <button type="button" class="clear" aria-label="Clear input" hidden>
+          ✕
+        </button>
       </div>
     </form-combobox>
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-combobox");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "form-combobox",
-    ) as Component<FormComboboxProps>;
+    const el = canvasElement.querySelector("form-combobox") as HTMLElement &
+      FormComboboxProps;
     const input = canvas.getByRole("combobox");
 
     await expect(el.value).toBe("");
@@ -144,9 +166,15 @@ export const WithValidation: Story = {
         <form-listbox id="lang-popup">
           <input type="hidden" name="language-listbox" />
           <div role="listbox" aria-labelledby="lang-label">
-            <button type="button" role="option" tabindex="-1" value="en">English</button>
-            <button type="button" role="option" tabindex="-1" value="fr">French</button>
-            <button type="button" role="option" tabindex="-1" value="de">German</button>
+            <button type="button" role="option" tabindex="-1" value="en">
+              English
+            </button>
+            <button type="button" role="option" tabindex="-1" value="fr">
+              French
+            </button>
+            <button type="button" role="option" tabindex="-1" value="de">
+              German
+            </button>
           </div>
         </form-listbox>
       </div>
@@ -155,9 +183,8 @@ export const WithValidation: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-combobox");
-    const el = canvasElement.querySelector(
-      "form-combobox",
-    ) as Component<FormComboboxProps>;
+    const el = canvasElement.querySelector("form-combobox") as HTMLElement &
+      FormComboboxProps;
 
     el.error = "Please select a valid language.";
     await expect(el.querySelector(".error")).toHaveTextContent(
