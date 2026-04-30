@@ -113,7 +113,7 @@ const coloreditorTemplate = html`
     <form-colorgraph>
       <div class="graph">
         <canvas width="400" height="400"></canvas>
-        <button class="knob">
+        <button type="button" class="knob">
           <span class="visually-hidden">Drag</span>
         </button>
         <ol role="presentation">
@@ -131,6 +131,9 @@ const coloreditorTemplate = html`
         class="slider"
         role="slider"
         tabindex="0"
+        aria-valuenow="0"
+        aria-valuemin="0"
+        aria-valuemax="0.4"
         aria-controls="hue"
         aria-labelledby="hue-label"
       >
@@ -167,18 +170,10 @@ const coloreditorTemplate = html`
           <input id="chroma" name="chroma" type="number" />
         </div>
         <div class="buttons">
-          <button
-            type="button"
-            class="decrement"
-            aria-label="Decrement chroma"
-          >
+          <button type="button" class="decrement" aria-label="Decrement chroma">
             −
           </button>
-          <button
-            type="button"
-            class="increment"
-            aria-label="Increment chroma"
-          >
+          <button type="button" class="increment" aria-label="Increment chroma">
             +
           </button>
         </div>

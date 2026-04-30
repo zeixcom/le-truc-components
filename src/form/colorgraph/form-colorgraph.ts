@@ -1,4 +1,5 @@
 import {
+  batch,
   bindStyle,
   bindText,
   createMemo,
@@ -152,9 +153,11 @@ export default defineComponent<FormColorgraphProps>(
       return newColor;
     };
     const commit = (color: Oklch) => {
-      host.color = color;
-      for (const key of ["l", "c", "h"])
-        errors[key as keyof typeof errors].set("");
+      batch(() => {
+        host.color = color;
+        for (const key of ["l", "c", "h"])
+          errors[key as keyof typeof errors].set("");
+      });
     };
     const getValue = (axis: FormColorgraphAxis) =>
       axis === "l" ? host.lightness : axis === "c" ? host.chroma : host.hue;
@@ -263,6 +266,7 @@ export default defineComponent<FormColorgraphProps>(
       on(graphEl, "pointerdown", (event) => {
         const { top, left } = canvas.getBoundingClientRect();
         const size = canvasSize.get();
+        knob.ariaPressed = "true";
         graphEl.setPointerCapture(event.pointerId);
         const handleMove = (e: PointerEvent) => {
           const last = (e.getCoalescedEvents?.() || []).pop() || e;
@@ -271,12 +275,13 @@ export default defineComponent<FormColorgraphProps>(
         const handleUp = () => {
           graphEl.removeEventListener("pointermove", handleMove);
           graphEl.removeEventListener("pointerup", handleUp);
+          knob.ariaPressed = "false";
           moveKnob.cancel();
         };
         graphEl.addEventListener("pointermove", handleMove, { passive: true });
         graphEl.addEventListener("pointerup", handleUp);
       }),
-      watch(() => canvasSize.get() + "px", bindStyle(graphEl, "--canvas-size")),
+      watch(() => `${canvasSize.get()}px`, bindStyle(graphEl, "--canvas-size")),
 
       // Graph canvas: redraw on hue or size change
       watch(
@@ -352,6 +357,7 @@ export default defineComponent<FormColorgraphProps>(
       on(sliderEl, "pointerdown", (event) => {
         const left = track.getBoundingClientRect().left;
         const width = trackWidth.get();
+        thumb.ariaPressed = "true";
         sliderEl.setPointerCapture(event.pointerId);
         const handleMove = (e: PointerEvent) => {
           const last = (e.getCoalescedEvents?.() || []).pop() || e;
@@ -360,18 +366,19 @@ export default defineComponent<FormColorgraphProps>(
         const handleUp = () => {
           sliderEl.removeEventListener("pointermove", handleMove);
           sliderEl.removeEventListener("pointerup", handleUp);
+          thumb.ariaPressed = "false";
           moveThumb.cancel();
         };
         sliderEl.addEventListener("pointermove", handleMove, { passive: true });
         sliderEl.addEventListener("pointerup", handleUp);
       }),
       watch(
-        () => trackWidth.get() + "px",
+        () => `${trackWidth.get()}px`,
         bindStyle(sliderEl, "--track-width"),
       ),
       watch("hue", (hue) => {
         sliderEl.setAttribute("aria-valuenow", String(hue));
-        sliderEl.setAttribute("aria-valuetext", formatNumber("h", hue) + "°");
+        sliderEl.setAttribute("aria-valuetext", `${formatNumber("h", hue)}°`);
       }),
 
       // Track canvas: redraw on color or track width change

@@ -13,7 +13,7 @@ const render = ({ color }: FormColorgraphArgs) => html`
   <form-colorgraph color=${color}>
     <div class="graph">
       <canvas width="400" height="400"></canvas>
-      <button class="knob">
+      <button type="button" class="knob">
         <span class="visually-hidden">Drag</span>
       </button>
       <ol role="presentation">
@@ -31,6 +31,9 @@ const render = ({ color }: FormColorgraphArgs) => html`
       class="slider"
       role="slider"
       tabindex="0"
+      aria-valuenow="0"
+      aria-valuemin="0"
+      aria-valuemax="0.4"
       aria-controls="hue"
       aria-labelledby="hue-label"
     >
@@ -136,9 +139,8 @@ export const PropertyChanges: Story = {
   },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-colorgraph");
-    const el = canvasElement.querySelector(
-      "form-colorgraph",
-    ) as HTMLElement & FormColorgraphProps;
+    const el = canvasElement.querySelector("form-colorgraph") as HTMLElement &
+      FormColorgraphProps;
 
     await expect(el.lightness).toBeCloseTo(0.48, 1);
     await expect(el.chroma).toBeCloseTo(0.23, 1);
