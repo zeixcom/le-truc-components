@@ -5,7 +5,7 @@ import * as FormTextboxStories from './form-textbox.stories';
 
 ### Form Textbox
 
-A general-purpose text field wrapper for `input` or `textarea` elements. Demonstrates `createEventsSensor()` for the read-only `length` property, a conditional Reader initializer for `description` that produces either a static string or a computed function (remaining characters) depending on DOM attributes, the MethodProducer pattern for `clear`, and `setAttribute()` for dynamic ARIA linkage. Designed to be composable — `form-combobox` and `module-todo` both embed it and drive it via `pass()`.
+A general-purpose text field wrapper for `input` or `textarea` elements. Demonstrates `createState` with an `on('input', ...)` handler for the read-only `length` property, a conditional `createMemo()` initializer for `description` that computes remaining characters when `data-remaining` is present, the `defineMethod()` pattern for `clear`, and dynamic ARIA linkage via `setAttribute()`. Designed to be composable — `form-combobox` and `module-todo` both embed it and drive it via `pass()`.
 
 #### Tag Name
 
@@ -41,7 +41,7 @@ A general-purpose text field wrapper for `input` or `textarea` elements. Demonst
       <td><code>length</code></td>
       <td><code>number</code> (readonly)</td>
       <td><code>0</code></td>
-      <td>Length of current textbox value; updated via <code>createEventsSensor()</code> on <code>input</code> events</td>
+      <td>Length of current textbox value; read-only — backed by <code>createState</code> updated in an <code>on(textbox, 'input', ...)</code> handler</td>
     </tr>
     <tr>
       <td><code>error</code></td>
@@ -73,23 +73,6 @@ A general-purpose text field wrapper for `input` or `textarea` elements. Demonst
       <td><code>clear</code></td>
       <td><code>() =&gt; void</code></td>
       <td>Clears the textbox and emits <code>input</code>/<code>change</code> events</td>
-    </tr>
-  </tbody>
-</table>
-
-#### Attributes
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>clearable</code></td>
-      <td>Signals that a <code>button.clear</code> descendant is present; the button is shown/hidden automatically based on <code>length</code></td>
     </tr>
   </tbody>
 </table>

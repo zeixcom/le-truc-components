@@ -1,0 +1,20 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as CardBlogpostStories from './card-blogpost.stories';
+
+<Meta of={CardBlogpostStories} />
+
+### Card Blogpost
+
+A CSS-only component that displays a blogpost teaser card. Composes a heading with a link, a `<card-blogmeta>` for author and date, and a short description paragraph. All styling is applied through CSS — no JavaScript component definition.
+
+#### Tag Name
+
+`card-blogpost`
+
+#### Preview
+
+<Canvas of={CardBlogpostStories.Default} />
+
+#### All Variants
+
+<Canvas of={CardBlogpostStories.AllVariants} />

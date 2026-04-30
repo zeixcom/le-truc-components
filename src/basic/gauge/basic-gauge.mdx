@@ -1,0 +1,102 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as BasicGaugeStories from './basic-gauge.stories';
+
+<Meta of={BasicGaugeStories} />
+
+### Basic Gauge
+
+A visual level indicator that reads its initial value from a `<meter>` element, then drives a conic-gradient dial by setting `--basic-gauge-degree` and `--basic-gauge-color` on the host. Demonstrates `asJSON()` to parse a thresholds array from an attribute at connect time, `watch()` with custom handlers to keep the meter in sync and derive the active threshold label and color, and `pass()` to forward `value` to a child `<basic-number>` component.
+
+#### Tag Name
+
+`basic-gauge`
+
+#### Preview
+
+<Canvas of={BasicGaugeStories.Default} />
+
+#### Controls
+
+<Controls of={BasicGaugeStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>value</code></td>
+      <td><code>number</code> (float)</td>
+      <td><code>0</code></td>
+      <td>Current gauge value; initialized from the descendant <code>&lt;meter&gt;</code> element's <code>value</code> property at connect time; can be updated programmatically via <code>host.value</code></td>
+    </tr>
+  </tbody>
+</table>
+
+#### Attributes
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>thresholds</code></td>
+      <td>JSON array of threshold objects parsed once at connect time; not reactive after connect</td>
+    </tr>
+  </tbody>
+</table>
+
+`BasicGaugeThreshold[]` is an array sorted from highest to lowest `min`. Each entry has `min` (number), `label` (string), and `color` (CSS color string). The first entry whose `min` is ≤ `host.value` determines the active label and color.
+
+Example:
+```json
+[
+  {"min": 0.8, "label": "Good job!", "color": "var(--color-success)"},
+  {"min": 0.5, "label": "Decent", "color": "var(--color-warning)"},
+  {"min": 0, "label": "Try again!", "color": "var(--color-error)"}
+]
+```
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('meter')</code></td>
+      <td><code>HTMLMeterElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Native meter element; its <code>value</code> property seeds <code>host.value</code> at connect time and is kept in sync by a <code>watch()</code> handler</td>
+    </tr>
+    <tr>
+      <td><code>first('basic-number')</code></td>
+      <td><code>HTMLElement &amp; BasicNumberProps</code></td>
+      <td><strong>required</strong></td>
+      <td><code>&lt;basic-number&gt;</code> child component that displays the formatted value; receives <code>host.value</code> via <code>pass()</code> — configure display via the <code>options</code> attribute on <code>&lt;basic-number&gt;</code></td>
+    </tr>
+    <tr>
+      <td><code>first('.label')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Displays the active threshold label text</td>
+    </tr>
+  </tbody>
+</table>

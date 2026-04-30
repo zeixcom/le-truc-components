@@ -195,7 +195,7 @@ export default defineComponent<FormListboxProps>(
         host.setAttribute("value", value);
         input.value = value;
       }),
-      host.src && [
+      host.src &&
         watch(content, {
           nil: () => {
             if (callout) callout.hidden = false;
@@ -236,7 +236,6 @@ export default defineComponent<FormListboxProps>(
             };
           },
         }),
-      ],
 
       // Per-option reactive effects
       each(options, (option) => {

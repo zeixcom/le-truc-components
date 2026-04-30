@@ -5,7 +5,7 @@ import * as ModuleTodoStories from './module-todo.stories';
 
 ### Module Todo
 
-A full-featured to-do list orchestrator. Uses `createElementsMemo` to derive reactive `active` and `completed` item counts from live DOM queries. Demonstrates `pass()` to push `disabled` and `badge` into child components, `setAttribute('filter')` on `module-list` to drive CSS-based filtering, and event delegation on the form submit. Relies on `module-list`, `form-textbox`, `basic-button`, `basic-pluralize`, and `form-radiogroup` as descendant components.
+A full-featured to-do list orchestrator. Uses `createList` with `createStore` for reactive item data and `createMemo` to derive active and completed counts. Demonstrates `pass()` to push `disabled`, `badge`, `count`, and per-item `checked`/`value` signals into child components, `bindAttribute(host, 'filter')` to drive CSS-based filtering, drag-and-drop reordering via pointer events, and keyboard reordering via a live region.
 
 #### Tag Name
 
@@ -66,6 +66,42 @@ None. This component orchestrates child component properties through effects.
       <td><code>HTMLElement &amp; BasicButtonProps</code></td>
       <td><strong>required</strong></td>
       <td>Removes all completed items on click; <code>disabled</code> when there are none; shows completed count as <code>badge</code></td>
+    </tr>
+    <tr>
+      <td><code>first('[data-container]')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Container element for todo item children; items are inserted, reordered, and removed here</td>
+    </tr>
+    <tr>
+      <td><code>first('template')</code></td>
+      <td><code>HTMLTemplateElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Template cloned to create each new todo item DOM element</td>
+    </tr>
+    <tr>
+      <td><code>first('[role="status"]')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>ARIA live region; announces drag/keyboard reorder position changes to assistive technology</td>
+    </tr>
+    <tr>
+      <td><code>all('button.reorder')</code></td>
+      <td><code>Memo&lt;HTMLButtonElement[]&gt;</code></td>
+      <td><strong>required</strong></td>
+      <td>Drag handle and keyboard reorder buttons; disabled via <code>each()</code> + <code>pass()</code> when only one item remains</td>
+    </tr>
+    <tr>
+      <td><code>all('form-checkbox')</code></td>
+      <td><code>Memo&lt;HTMLElement[]&gt;</code></td>
+      <td><strong>required</strong></td>
+      <td>Per-item checkbox components; each receives its item's <code>completed</code> state signal directly via <code>pass()</code></td>
+    </tr>
+    <tr>
+      <td><code>all('form-inplace-edit')</code></td>
+      <td><code>Memo&lt;HTMLElement[]&gt;</code></td>
+      <td><strong>required</strong></td>
+      <td>Per-item inline editors; each receives its item's <code>label</code> state signal directly via <code>pass()</code></td>
     </tr>
   </tbody>
 </table>

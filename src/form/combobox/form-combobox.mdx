@@ -5,7 +5,7 @@ import * as FormComboboxStories from './form-combobox.stories';
 
 ### Form Combobox
 
-An advanced form component that coordinates a text input with a popup `form-listbox`. Demonstrates `createEventsSensor()` for the read-only `length` property, `createState()` and `createMemo()` for private reactive state inside the setup function, `pass()` to push the filter value into the child listbox reactively, multiple effects per UI element, and `setAttribute()` for dynamic ARIA attributes. The `clear` method property shows the MethodProducer pattern.
+An advanced form component that coordinates a text input with a popup `form-listbox`. Demonstrates `createState` with an `on('input', ...)` handler for the read-only `length` property, `createState()` and `createMemo()` for private reactive state, `pass()` to push the filter value into the child listbox reactively, and dynamic ARIA linkage via `setAttribute()`. The `clear` method property shows the `defineMethod()` pattern.
 
 #### Tag Name
 
@@ -41,7 +41,7 @@ An advanced form component that coordinates a text input with a popup `form-list
       <td><code>length</code></td>
       <td><code>number</code> (readonly)</td>
       <td><code>0</code></td>
-      <td>Length of current input value; updated via <code>createEventsSensor()</code></td>
+      <td>Length of current input value; read-only — backed by <code>createState</code> updated in an <code>on(textbox, 'input', ...)</code> handler</td>
     </tr>
     <tr>
       <td><code>error</code></td>

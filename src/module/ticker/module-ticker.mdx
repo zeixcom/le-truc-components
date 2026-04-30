@@ -1,0 +1,105 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ModuleTickerStories from './module-ticker.stories';
+
+<Meta of={ModuleTickerStories} />
+
+### Module Ticker
+
+A high-throughput live data table demonstrating virtualization with `IntersectionObserver` and fine-grained reactivity with `createList`. Each row's price, change, and volume are independent `State<TickerItem>` signals — only materialized rows have active `watch()` effects, so updating off-screen rows is cheap. `each(rows, ...)` wires and tears down per-row effects automatically as rows materialize and virtualize.
+
+#### Tag Name
+
+`module-ticker`
+
+#### Preview
+
+<Canvas of={ModuleTickerStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>running</code></td>
+      <td><code>boolean</code></td>
+      <td><code>true</code></td>
+      <td>Whether the ticker simulation is running; toggled by the pause/resume button</td>
+    </tr>
+    <tr>
+      <td><code>fraction</code></td>
+      <td><code>number</code> (float)</td>
+      <td><code>0.1</code></td>
+      <td>Fraction of rows updated per tick interval (0–1); higher values increase CPU usage</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Attributes
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>fraction</code></td>
+      <td>Initial update fraction as a float; default <code>0.1</code></td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('basic-button.toggle')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Pause/Resume toggle button; receives a dynamic <code>label</code> via <code>pass()</code></td>
+    </tr>
+    <tr>
+      <td><code>first('basic-button.add-rows')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Adds a new block of 100 rows to the table on click</td>
+    </tr>
+    <tr>
+      <td><code>first('template')</code></td>
+      <td><code>HTMLTemplateElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Row template cloned when materializing a block; must contain a <code>&lt;tr&gt;</code> with <code>.price</code>, <code>.change</code>, and <code>.volume</code> cells</td>
+    </tr>
+    <tr>
+      <td><code>host.querySelector('table')</code></td>
+      <td><code>HTMLTableElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Table element; new <code>&lt;tbody&gt;</code> blocks are appended here when rows are added</td>
+    </tr>
+    <tr>
+      <td><code>all('tr[data-symbol]')</code></td>
+      <td><code>Memo&lt;HTMLTableRowElement[]&gt;</code></td>
+      <td><strong>required</strong></td>
+      <td>Materialized data rows tracked via <code>MutationObserver</code>; <code>each()</code> wires per-row price/change/volume effects</td>
+    </tr>
+  </tbody>
+</table>

@@ -1,0 +1,95 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as CardColorscaleStories from './card-colorscale.stories';
+
+<Meta of={CardColorscaleStories} />
+
+### Card Colorscale
+
+A color scale display card that renders a named color and its full lighten/darken scale as CSS custom properties on the host. Demonstrates `asOklch()` as a custom parser, `watch()` with a custom handler to compute and set multiple `--color-*` CSS properties, and `bindText()` for the label.
+
+#### Tag Name
+
+`card-colorscale`
+
+#### Preview
+
+<Canvas of={CardColorscaleStories.Default} />
+
+#### Controls
+
+<Controls of={CardColorscaleStories.Default} />
+
+#### All Variants
+
+<Canvas of={CardColorscaleStories.AllVariants} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>name</code></td>
+      <td><code>string</code></td>
+      <td>Text content of <code>.label strong</code></td>
+      <td>Display name of the color</td>
+    </tr>
+    <tr>
+      <td><code>color</code></td>
+      <td><code>Oklch</code></td>
+      <td>Parsed from <code>color</code> attribute</td>
+      <td>Base color in Oklch color space; drives all <code>--color-*</code> CSS custom properties on the host</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Attributes
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>color</code></td>
+      <td>Oklch color string (e.g. <code>oklch(0.7 0.15 250)</code>); parsed at connect time via <code>asOklch()</code></td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('.label strong')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Displays the color name; bound to <code>name</code> via <code>bindText()</code></td>
+    </tr>
+    <tr>
+      <td><code>first('.label small')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Displays the hex value of the base color; updated in the <code>color</code> watch handler</td>
+    </tr>
+  </tbody>
+</table>

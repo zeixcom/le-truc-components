@@ -1,0 +1,139 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as ModuleColoreditorStories from './module-coloreditor.stories';
+
+<Meta of={ModuleColoreditorStories} />
+
+### Module Color Editor
+
+An orchestrator component that wires together a `<form-textbox>` for the color name, a `<form-colorgraph>` color picker, a `<card-colorscale>` preview, and a series of `<module-colorinfo>` panels for base and derived shades. Demonstrates `pass()` to share signals across multiple child components, derived readonly props via `MemoCallback`, and `on(host, 'change', ...)` to capture name edits from a bubbled input event.
+
+#### Tag Name
+
+`module-coloreditor`
+
+#### Preview
+
+<Canvas of={ModuleColoreditorStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>color</code></td>
+      <td><code>Oklch</code></td>
+      <td>Parsed from <code>color</code> attribute</td>
+      <td>Currently selected color in Oklch color space</td>
+    </tr>
+    <tr>
+      <td><code>name</code></td>
+      <td><code>string</code></td>
+      <td><code>'Blue'</code></td>
+      <td>Display name of the color; updated via a bubbled <code>change</code> event from the name input</td>
+    </tr>
+    <tr>
+      <td><code>nearest</code></td>
+      <td><code>string</code> (readonly)</td>
+      <td><code>''</code></td>
+      <td>Nearest named CSS color to the current <code>color</code>; derived via CIEDE2000 difference</td>
+    </tr>
+    <tr>
+      <td><code>lightness</code></td>
+      <td><code>number</code> (readonly)</td>
+      <td><code>0</code></td>
+      <td>Derived from <code>color.l</code></td>
+    </tr>
+    <tr>
+      <td><code>chroma</code></td>
+      <td><code>number</code> (readonly)</td>
+      <td><code>0</code></td>
+      <td>Derived from <code>color.c</code></td>
+    </tr>
+    <tr>
+      <td><code>hue</code></td>
+      <td><code>number</code> (readonly)</td>
+      <td><code>0</code></td>
+      <td>Derived from <code>color.h</code></td>
+    </tr>
+  </tbody>
+</table>
+
+#### Attributes
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>color</code></td>
+      <td>Oklch color string parsed at connect time via <code>asOklch()</code></td>
+    </tr>
+    <tr>
+      <td><code>name</code></td>
+      <td>Initial color name string; default <code>'Blue'</code></td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('form-textbox')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Name input; receives <code>value</code> (the color name) and a <code>description</code> showing the nearest CSS color via <code>pass()</code></td>
+    </tr>
+    <tr>
+      <td><code>first('form-colorgraph')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Color picker graph; receives <code>color</code> via <code>pass()</code></td>
+    </tr>
+    <tr>
+      <td><code>first('card-colorscale')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Color scale preview card; receives <code>color</code> and <code>name</code> via <code>pass()</code></td>
+    </tr>
+    <tr>
+      <td><code>first('module-colorinfo.base')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Color info panel for the base (500) shade; receives <code>color</code> and a formatted <code>name</code> via <code>pass()</code></td>
+    </tr>
+    <tr>
+      <td><code>first('module-colorinfo.lighten20')</code> … <code>first('module-colorinfo.lighten80')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Color info panels for the four lighter shades (100–400); receive derived colors and names via <code>pass()</code></td>
+    </tr>
+    <tr>
+      <td><code>first('module-colorinfo.darken20')</code> … <code>first('module-colorinfo.darken80')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Color info panels for the four darker shades (600–900); receive derived colors and names via <code>pass()</code></td>
+    </tr>
+  </tbody>
+</table>

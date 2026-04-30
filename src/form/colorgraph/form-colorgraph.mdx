@@ -1,0 +1,193 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as FormColorgraphStories from './form-colorgraph.stories';
+
+<Meta of={FormColorgraphStories} />
+
+### Form Colorgraph
+
+An interactive Oklch color picker with a 2D lightness/chroma graph canvas and a hue slider canvas. Demonstrates `createState`/`createMemo` for internal reactive state, `each()` for per-element effects on dynamic input, error, decrement, and increment button collections, `defineMethod()` for the `stepDown`/`stepUp` API, pointer event handling with `throttle`, `ResizeObserver` for canvas sizing, and direct canvas rendering via the 2D context API.
+
+#### Tag Name
+
+`form-colorgraph`
+
+#### Preview
+
+<Canvas of={FormColorgraphStories.Default} />
+
+#### Controls
+
+<Controls of={FormColorgraphStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>color</code></td>
+      <td><code>Oklch</code></td>
+      <td>Parsed from <code>color</code> attribute</td>
+      <td>Current color in Oklch color space; the primary writable prop</td>
+    </tr>
+    <tr>
+      <td><code>lightness</code></td>
+      <td><code>number</code> (readonly)</td>
+      <td><code>0</code></td>
+      <td>Derived from <code>color.l</code>; cannot be set externally</td>
+    </tr>
+    <tr>
+      <td><code>chroma</code></td>
+      <td><code>number</code> (readonly)</td>
+      <td><code>0</code></td>
+      <td>Derived from <code>color.c</code>; cannot be set externally</td>
+    </tr>
+    <tr>
+      <td><code>hue</code></td>
+      <td><code>number</code> (readonly)</td>
+      <td><code>0</code></td>
+      <td>Derived from <code>color.h</code>; cannot be set externally</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Attributes
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>color</code></td>
+      <td>Oklch color string parsed at connect time via <code>asOklch()</code></td>
+    </tr>
+  </tbody>
+</table>
+
+#### Methods
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Signature</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>stepDown</code></td>
+      <td><code>(axis: 'l' | 'c' | 'h', bigStep?: boolean) =&gt; void</code></td>
+      <td>Decrements the given axis by one step (or a large step when <code>bigStep</code> is <code>true</code>)</td>
+    </tr>
+    <tr>
+      <td><code>stepUp</code></td>
+      <td><code>(axis: 'l' | 'c' | 'h', bigStep?: boolean) =&gt; void</code></td>
+      <td>Increments the given axis by one step (or a large step when <code>bigStep</code> is <code>true</code>)</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('input[name="lightness"]')</code></td>
+      <td><code>HTMLInputElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Numeric input for the lightness axis</td>
+    </tr>
+    <tr>
+      <td><code>first('input[name="chroma"]')</code></td>
+      <td><code>HTMLInputElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Numeric input for the chroma axis</td>
+    </tr>
+    <tr>
+      <td><code>first('input[name="hue"]')</code></td>
+      <td><code>HTMLInputElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Numeric input for the hue axis</td>
+    </tr>
+    <tr>
+      <td><code>first('.graph')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Container for the 2D color graph; receives pointer events and hosts the <code>ResizeObserver</code></td>
+    </tr>
+    <tr>
+      <td><code>first('.graph canvas')</code></td>
+      <td><code>HTMLCanvasElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Canvas for the lightness/chroma gamut visualization; redrawn when hue or canvas size changes</td>
+    </tr>
+    <tr>
+      <td><code>first('.slider')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Hue slider container with <code>role="slider"</code>; receives pointer events for hue dragging</td>
+    </tr>
+    <tr>
+      <td><code>first('.slider canvas')</code></td>
+      <td><code>HTMLCanvasElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Canvas for the hue gradient track; redrawn when color or track width changes</td>
+    </tr>
+    <tr>
+      <td><code>first('.knob')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Drag handle positioned in the graph at the current lightness/chroma coordinates</td>
+    </tr>
+    <tr>
+      <td><code>first('.thumb')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Drag handle positioned on the hue slider track at the current hue value</td>
+    </tr>
+    <tr>
+      <td><code>all('input')</code></td>
+      <td><code>Memo&lt;HTMLInputElement[]&gt;</code></td>
+      <td><strong>required</strong></td>
+      <td>All axis inputs; per-element effects wire value sync, validation, and ARIA error state</td>
+    </tr>
+    <tr>
+      <td><code>all('.error')</code></td>
+      <td><code>Memo&lt;HTMLElement[]&gt;</code></td>
+      <td>optional</td>
+      <td>Per-axis error message elements; each receives its axis's error text via <code>bindText()</code></td>
+    </tr>
+    <tr>
+      <td><code>all('button.decrement')</code></td>
+      <td><code>Memo&lt;HTMLButtonElement[]&gt;</code></td>
+      <td>optional</td>
+      <td>Decrement buttons; disabled when the axis value is already at its minimum</td>
+    </tr>
+    <tr>
+      <td><code>all('button.increment')</code></td>
+      <td><code>Memo&lt;HTMLButtonElement[]&gt;</code></td>
+      <td>optional</td>
+      <td>Increment buttons; disabled when the axis value is already at its maximum</td>
+    </tr>
+  </tbody>
+</table>

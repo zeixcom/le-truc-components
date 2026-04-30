@@ -33,7 +33,11 @@ export default defineComponent<ModuleDialogProps>(
       on(openButton, "click", () => ({ open: true })),
       on(closeButton, "click", () => ({ open: false })),
       on(dialog, "click", ({ target }) => target === dialog && { open: false }),
-      on(dialog, "keydown", ({ key }) => key === "Escape" && { open: false }),
+      on(dialog, "keydown", (event) => {
+        if (event.key !== "Escape") return;
+        event.preventDefault();
+        return { open: false };
+      }),
 
       watch("open", (open) => {
         if (open) {

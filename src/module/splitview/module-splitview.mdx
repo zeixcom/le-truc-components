@@ -1,0 +1,83 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ModuleSplitviewStories from './module-splitview.stories';
+
+<Meta of={ModuleSplitviewStories} />
+
+### Module Splitview
+
+A resizable split-pane component controlled by dragging a divider button or using keyboard arrow keys. Demonstrates `asNumber()` for a float attribute, pointer capture for drag handling, and a `watch('split', ...)` custom handler that sets `--split` as a CSS custom property and updates `aria-valuenow` on the divider. Orientation (horizontal or vertical) is determined once from the `orientation` attribute at connect time.
+
+#### Tag Name
+
+`module-splitview`
+
+#### Preview
+
+<Canvas of={ModuleSplitviewStories.Default} />
+
+#### Controls
+
+<Controls of={ModuleSplitviewStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>split</code></td>
+      <td><code>number</code> (float)</td>
+      <td><code>0.5</code></td>
+      <td>Split ratio between 0.1 and 0.9; drives the <code>--split</code> CSS custom property and <code>aria-valuenow</code></td>
+    </tr>
+  </tbody>
+</table>
+
+#### Attributes
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>split</code></td>
+      <td>Initial split ratio as a float; default <code>0.5</code></td>
+    </tr>
+    <tr>
+      <td><code>orientation</code></td>
+      <td>One of <code>"horizontal"</code> (default) or <code>"vertical"</code>; read once at connect time to determine drag axis</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('button.divider')</code></td>
+      <td><code>HTMLButtonElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Drag handle and keyboard resize control with <code>role="separator"</code>; receives <code>aria-valuenow</code> and pointer/keyboard events</td>
+    </tr>
+  </tbody>
+</table>

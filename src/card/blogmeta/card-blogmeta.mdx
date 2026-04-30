@@ -1,0 +1,53 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as CardBlogmetaStories from './card-blogmeta.stories';
+
+<Meta of={CardBlogmetaStories} />
+
+### Card Blogmeta
+
+A static date-formatting component that runs once at connect time. Reads `dateTime` from descendant `<time>` elements and replaces their text content with locale-aware long-form dates using `Intl.DateTimeFormat`. If the modification date is invalid, the surrounding `<span.modified>` is removed entirely. No reactive props — all work is imperative and completes before the first paint.
+
+#### Tag Name
+
+`card-blogmeta`
+
+#### Preview
+
+<Canvas of={CardBlogmetaStories.Default} />
+
+#### All Variants
+
+<Canvas of={CardBlogmetaStories.WithModifiedDate} />
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('time.published')</code></td>
+      <td><code>HTMLTimeElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Publication date element; its <code>dateTime</code> attribute is formatted and set as <code>textContent</code></td>
+    </tr>
+    <tr>
+      <td><code>first('span.modified')</code></td>
+      <td><code>HTMLSpanElement</code></td>
+      <td>optional</td>
+      <td>Wrapper around the modification date; removed when the <code>dateTime</code> is invalid</td>
+    </tr>
+    <tr>
+      <td><code>first('.modified time')</code></td>
+      <td><code>HTMLTimeElement</code></td>
+      <td>optional</td>
+      <td>Modification date element; its <code>dateTime</code> attribute is formatted and set as <code>textContent</code></td>
+    </tr>
+  </tbody>
+</table>

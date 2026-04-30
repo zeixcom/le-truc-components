@@ -1,0 +1,163 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ModuleColorinfoStories from './module-colorinfo.stories';
+
+<Meta of={ModuleColorinfoStories} />
+
+### Module Color Info
+
+A color information panel that displays a color's name, swatch, and format conversions (CSS Oklch, HEX, RGB, HSL). Demonstrates multiple derived readonly props via `MemoCallback`, `bindStyle()` for the swatch CSS custom properties, `pass()` to drive a collection of `<basic-number>` children via `all()`, and `bindText()` for the format string elements.
+
+#### Tag Name
+
+`module-colorinfo`
+
+#### Preview
+
+<Canvas of={ModuleColorinfoStories.Default} />
+
+#### Controls
+
+<Controls of={ModuleColorinfoStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>name</code></td>
+      <td><code>string</code></td>
+      <td>Text content of <code>.label strong</code></td>
+      <td>Display name of the color shade</td>
+    </tr>
+    <tr>
+      <td><code>color</code></td>
+      <td><code>Oklch</code></td>
+      <td>Parsed from <code>color</code> attribute</td>
+      <td>Color in Oklch color space; drives all derived props and the swatch</td>
+    </tr>
+    <tr>
+      <td><code>css</code></td>
+      <td><code>string</code> (readonly)</td>
+      <td><code>''</code></td>
+      <td>CSS <code>oklch()</code> string for <code>color</code>; set as <code>--color-swatch</code> on the host</td>
+    </tr>
+    <tr>
+      <td><code>hex</code></td>
+      <td><code>string</code> (readonly)</td>
+      <td><code>''</code></td>
+      <td>Hex string for <code>color</code>; set as <code>--color-fallback</code> on the host</td>
+    </tr>
+    <tr>
+      <td><code>rgb</code></td>
+      <td><code>string</code> (readonly)</td>
+      <td><code>''</code></td>
+      <td>CSS <code>rgb()</code> string for <code>color</code></td>
+    </tr>
+    <tr>
+      <td><code>hsl</code></td>
+      <td><code>string</code> (readonly)</td>
+      <td><code>''</code></td>
+      <td>CSS <code>hsl()</code> string for <code>color</code></td>
+    </tr>
+    <tr>
+      <td><code>lightness</code></td>
+      <td><code>number</code> (readonly)</td>
+      <td><code>0</code></td>
+      <td>Derived from <code>color.l</code></td>
+    </tr>
+    <tr>
+      <td><code>chroma</code></td>
+      <td><code>number</code> (readonly)</td>
+      <td><code>0</code></td>
+      <td>Derived from <code>color.c</code></td>
+    </tr>
+    <tr>
+      <td><code>hue</code></td>
+      <td><code>number</code> (readonly)</td>
+      <td><code>0</code></td>
+      <td>Derived from <code>color.h</code></td>
+    </tr>
+  </tbody>
+</table>
+
+#### Attributes
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>color</code></td>
+      <td>Oklch color string parsed at connect time via <code>asOklch()</code></td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('.label strong')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Displays the color name; bound to <code>name</code> via <code>bindText()</code></td>
+    </tr>
+    <tr>
+      <td><code>first('.hex')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Displays the hex string; bound to <code>hex</code> via <code>bindText()</code></td>
+    </tr>
+    <tr>
+      <td><code>first('.rgb')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Displays the RGB string; bound to <code>rgb</code> via <code>bindText()</code></td>
+    </tr>
+    <tr>
+      <td><code>first('.hsl')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Displays the HSL string; bound to <code>hsl</code> via <code>bindText()</code></td>
+    </tr>
+    <tr>
+      <td><code>all('basic-number.lightness')</code></td>
+      <td><code>Memo&lt;HTMLElement[]&gt;</code></td>
+      <td>optional</td>
+      <td><code>&lt;basic-number&gt;</code> elements displaying the lightness value; receive <code>lightness</code> via <code>pass()</code></td>
+    </tr>
+    <tr>
+      <td><code>all('basic-number.chroma')</code></td>
+      <td><code>Memo&lt;HTMLElement[]&gt;</code></td>
+      <td>optional</td>
+      <td><code>&lt;basic-number&gt;</code> elements displaying the chroma value; receive <code>chroma</code> via <code>pass()</code></td>
+    </tr>
+    <tr>
+      <td><code>all('basic-number.hue')</code></td>
+      <td><code>Memo&lt;HTMLElement[]&gt;</code></td>
+      <td>optional</td>
+      <td><code>&lt;basic-number&gt;</code> elements displaying the hue value; receive <code>hue</code> via <code>pass()</code></td>
+    </tr>
+  </tbody>
+</table>

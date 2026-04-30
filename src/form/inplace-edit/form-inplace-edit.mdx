@@ -1,0 +1,91 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as FormInplaceEditStories from './form-inplace-edit.stories';
+
+<Meta of={FormInplaceEditStories} />
+
+### Form Inplace Edit
+
+An inline text editor that toggles between a read-only label and an editable `<form-textbox>`. Demonstrates `asBoolean()` for the `editing` attribute, dynamic DOM construction inside a `watch()` handler (creating and inserting a `<form-textbox>` on enter, removing it on exit), and focus management. The edit button, double-click on the label, Enter, and Escape all control the editing state.
+
+#### Tag Name
+
+`form-inplace-edit`
+
+#### Preview
+
+<Canvas of={FormInplaceEditStories.Default} />
+
+#### Controls
+
+<Controls of={FormInplaceEditStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>editing</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Whether the component is in edit mode; toggled by the edit button, double-click, Enter, and Escape</td>
+    </tr>
+    <tr>
+      <td><code>value</code></td>
+      <td><code>string</code></td>
+      <td>Text content of <code>.text</code></td>
+      <td>Current text value; updated when editing is confirmed</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Attributes
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>editing</code></td>
+      <td>Boolean attribute; presence sets <code>editing</code> to <code>true</code> at connect time</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('.text')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Read-only label; displays <code>value</code> via <code>bindText()</code>; double-click sets <code>editing = true</code></td>
+    </tr>
+    <tr>
+      <td><code>first('button')</code></td>
+      <td><code>HTMLButtonElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Toggle button; shows ✎ in view mode and ✓ in edit mode; confirms the edit on click when editing</td>
+    </tr>
+  </tbody>
+</table>
