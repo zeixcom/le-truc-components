@@ -112,49 +112,22 @@ export const WithInitialItems: Story = {
 };
 
 export const RemoveItem: Story = {
-  render: () => html`
-    <module-list>
-      <form action="#">
-        <form-textbox clearable>
-          <label for="remove-item-input">New item</label>
-          <div class="input">
-            <input type="text" id="remove-item-input" name="new-item" autocomplete="off" />
-            <button type="button" class="clear" aria-label="Clear input" hidden>✕</button>
-          </div>
-        </form-textbox>
-        <basic-button class="submit">
-          <button type="submit" class="constructive" disabled>
-            <span class="label">Add</span>
-          </button>
-        </basic-button>
-      </form>
-      <ul data-container>
-        <li data-key="item0">
-          <span>Existing item 1</span>
-          <basic-button class="remove">
-            <button type="button" class="tertiary destructive small">Remove</button>
-          </basic-button>
-        </li>
-        <li data-key="item1">
-          <span>Existing item 2</span>
-          <basic-button class="remove">
-            <button type="button" class="tertiary destructive small">Remove</button>
-          </basic-button>
-        </li>
-      </ul>
-      <template>
-        <li>
-          <span><slot></slot></span>
-          <basic-button class="remove">
-            <button type="button" class="tertiary destructive small">Remove</button>
-          </basic-button>
-        </li>
-      </template>
-    </module-list>
-  `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-list");
+    const canvas = within(canvasElement);
+    const input = canvas.getByLabelText("New item");
+    const addButton = canvas.getByRole("button", { name: "Add" });
     const container = canvasElement.querySelector("[data-container]");
+
+    // Seed two items through the component's own API (form submit), not by
+    // pre-rendering <li data-key>. reconcile() only keeps children whose keys
+    // exist in the reactive list — which starts empty — so server-rendered
+    // children are removed on mount. Seeding via the API is the only way to
+    // populate the list (mirrors the AddItem story).
+    await userEvent.type(input, "Buy groceries");
+    await userEvent.click(addButton);
+    await userEvent.type(input, "Walk the dog");
+    await userEvent.click(addButton);
     await expect(container?.children.length).toBe(2);
 
     const removeButtons = canvasElement.querySelectorAll<HTMLButtonElement>(

@@ -83,6 +83,9 @@ export const WithClear: Story = {
     await expect(el.length).toBe(0);
 
     await userEvent.type(input, "hello");
+    // `value` commits on `change` (native parity — `input` only updates
+    // `length`), so blur the field to fire `change` before asserting value.
+    await userEvent.tab();
     await expect(el.value).toBe("hello");
     await expect(el.length).toBe(5);
 

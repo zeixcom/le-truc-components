@@ -83,13 +83,17 @@ export const IncrementDecrement: Story = {
     const el = canvasElement.querySelector(
       "form-spinbutton",
     ) as HTMLElement & FormAssociatedElement & FormSpinbuttonProps;
-    const increment = canvas.getByLabelText("Increment");
 
     await expect(el.value).toBe(0);
 
-    await userEvent.click(increment);
+    // At value 0 the increment button reads "Add to Cart" (its `.zero` label),
+    // not "Increment" — the spinbutton re-labels it while the value is zero.
+    const addToCart = canvas.getByLabelText("Add to Cart");
+    await userEvent.click(addToCart);
     await expect(el.value).toBe(1);
 
+    // Once value > 0 the label reverts to "Increment" and Decrement appears.
+    const increment = canvas.getByLabelText("Increment");
     await userEvent.click(increment);
     await userEvent.click(increment);
     await expect(el.value).toBe(3);

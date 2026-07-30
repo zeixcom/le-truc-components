@@ -10,20 +10,21 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@zeix/le-truc": "^2.3.0"
+    "@zeix/le-truc": "^2.3.1"
   },
   "devDependencies": {
-    "typescript": "^7.0.2",
-    "vite": "^8.1.5",
-    "storybook": "^10.5.5",
-    "@storybook/web-components-vite": "^10.5.5",
     "@chromatic-com/storybook": "^5.2.1",
-    "@storybook/addon-vitest": "^10.5.5",
     "@storybook/addon-a11y": "^10.5.5",
     "@storybook/addon-docs": "^10.5.5",
-    "vitest": "^4.1.10",
-    "playwright": "^1.62.0",
+    "@storybook/addon-vitest": "^10.5.5",
+    "@storybook/web-components-vite": "^10.5.5",
+    "@types/node": "^26.1.2",
     "@vitest/browser-playwright": "^4.1.10",
-    "@vitest/coverage-v8": "^4.1.10"
+    "@vitest/coverage-v8": "^4.1.10",
+    "playwright": "^1.62.0",
+    "storybook": "^10.5.5",
+    "typescript": "^7.0.2",
+    "vite": "^8.1.5",
+    "vitest": "^4.1.10"
   }
 }

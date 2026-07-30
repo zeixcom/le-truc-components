@@ -59,9 +59,13 @@ export const Default: Story = {
     // Cart button starts disabled (total = 0)
     await expect(button.disabled).toBe(true);
 
+    // At value 0 each spinbutton's increment button reads "Add to Cart" (its
+    // `.zero` label), not "Increment" — the spinbutton re-labels it while the
+    // value is zero. There is one per product.
+    const addToCartButtons = canvas.getAllByLabelText("Add to Cart");
+
     // Add product 1
-    const increments = canvas.getAllByLabelText("Increment");
-    const product1 = increments[0];
+    const product1 = addToCartButtons[0];
     if (product1) {
       await userEvent.click(product1);
 
@@ -70,7 +74,7 @@ export const Default: Story = {
     }
 
     // Add two more items from product 2
-    const product2 = increments[1];
+    const product2 = addToCartButtons[1];
     if (product2) {
       await userEvent.click(product2);
       await userEvent.click(product2);

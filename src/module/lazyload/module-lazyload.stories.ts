@@ -80,7 +80,13 @@ export const NoSrc: Story = {
 };
 
 export const InvalidURL: Story = {
-  args: { src: "not-a-valid-url", "allow-scripts": false },
+  // A cross-origin URL (here a different port) is rejected by `isValidURL`,
+  // so `createTask` throws and the `err` branch shows the error. Note: a
+  // same-origin relative path like "not-a-valid-url" is actually a *valid*
+  // relative URL, and the Vite dev server answers unknown same-origin paths
+  // with a 200 SPA fallback — so the task resolved `ok` and `.error` never
+  // appeared. A cross-origin URL is rejected before any fetch, deterministically.
+  args: { src: "http://localhost:9/nonexistent", "allow-scripts": false },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-lazyload");
     const el = canvasElement.querySelector(
@@ -88,7 +94,7 @@ export const InvalidURL: Story = {
     ) as HTMLElement & ModuleLazyloadProps;
     const errorEl = canvasElement.querySelector(".error");
 
-    await expect(el.src).toBe("not-a-valid-url");
+    await expect(el.src).toBe("http://localhost:9/nonexistent");
     await waitFor(() => expect(errorEl).toBeVisible());
   },
 };

@@ -146,15 +146,23 @@ export default defineComponent<FormListboxProps>(
       (option) => option.ariaSelected === "true",
     );
 
+    const visibleOptions = createElementsMemo(
+      listbox,
+      'button[role="option"]:not([hidden])',
+    );
     expose({
       value: first('button[role="option"][aria-selected="true"]')?.value ?? "",
-      options: createElementsMemo(
-        listbox,
-        'button[role="option"]:not([hidden])',
-      ),
+      options: visibleOptions,
       filter: "",
       src: asString(),
     });
+    // An exposed `createElementsMemo` is lazy by design (ADR 0006): its
+    // MutationObserver only activates once the memo has a reactive reader.
+    // expose() installs it as a plain getter with no sink, so reading
+    // `host.options` externally would otherwise return a stale snapshot. Touch
+    // it inside a watch here so the observer starts and `options` stays live
+    // for external readers (and for the focus-management reads below).
+    watch(visibleOptions, () => {});
 
     on(filterEl, "input", (_e, el) => ({ filter: el.value ?? "" }));
 

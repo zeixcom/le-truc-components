@@ -2,84 +2,11 @@
 
 ## Highest priority
 
-### Investigate `pass()` failing when parent and nested Le Truc child mount together (Storybook/Vitest)
-
-12 of 99 story-based tests fail with `InvalidPassPropertyError` in exactly these
-files: `form/combobox`, `module/catalog`, `module/listnav`, `module/list`,
-`module/todo`. All five call `pass(childEl, {...})` on a Le Truc child obtained
-via `first()`/`all()`, where the child is a **direct descendant in the same
-markup** the parent itself is rendered with (e.g. `<module-catalog><basic-button>...`).
-
-Root cause (confirmed): `pass()` runs synchronously during the parent's own
-`connectedCallback`. When both the parent's and child's custom element classes
-are already registered (true once everything is bundled — Storybook/Vitest
-import every component module up front), inserting the whole nested subtree in
-one operation queues upgrade reactions in tree order and processes them
-synchronously, parent first. So the parent's `pass()` call runs and reads the
-child's exposed properties *before* the child's own `connectedCallback` (and
-its `expose()`) has run — `'prop' in child` is still `false`.
-
-`FactoryContext`'s `resolveDependencies` mechanism (in `first()`/`all()`) only
-defers setup via `queueMicrotask` when a queried tag *isn't yet registered*
-(`isNotYetDefinedComponent`) at query time. It does not detect "class
-registered, but this specific instance hasn't upgraded yet," so it never
-kicks in here.
-
-Confirmed this is not a porting mistake: the component `.ts` logic matches
-upstream 1:1, and upstream's own Playwright tests for the identical
-compositions (`test/pass/test-pass.spec.ts`, `module/catalog`, etc.) pass
-because they navigate to a real static HTML page where the markup exists
-*before* any script runs — a different precondition than Storybook's
-programmatic `render()`.
-
-Tried and ruled out: `customElements.upgrade(host)` at the top of the
-parent's factory — confirmed via testing that it does **not** help, because
-the child element is already the correct (upgraded) class; what's missing is
-that its queued `connectedCallback` reaction (which runs `expose()`) simply
-hasn't fired yet. There's no public API to force a queued reaction to run
-early.
-
-**Needs investigation, roughly in this order:**
-1. Check whether Le Truc itself could detect "instance not yet connected" (not
-   just "class not yet defined") in `first()`/`all()` and add it to
-   `resolveDependencies`'s microtask-deferred set — this would fix it at the
-   root, for every consumer, not just Storybook.
-2. If that isn't feasible upstream, evaluate a Storybook-side workaround (e.g.
-   a decorator that defers `play()`/assertions past the reaction queue drain —
-   though note the exception currently throws during initial *render*, before
-   `play()` even starts, so this may require deferring the render/mount step
-   itself, not just `play()`).
-3. **Worst case fallback**, as discussed: replace the affected `pass()` calls
-   with `watch(reactive, value => { child.prop = value })`. This works
-   because `watch()`'s effect still runs synchronously too, but writing a
-   plain property assignment doesn't require the child to have upgraded its
-   `Slot`-backed accessor yet — the write becomes an ordinary instance
-   property that the child's `expose()` will pick up as its *initial* value
-   once its own `connectedCallback` finally runs (same mechanism that makes
-   attribute/property pre-sets work before upgrade). Understand: this loses
-   `pass()`'s "replace the child's `Slot` signal directly" optimization (zero
-   intermediate effect / signal restoration on parent disconnect) — every
-   subsequent parent-side signal update would go through a manual effect
-   instead of the child's own reactivity swap. Only fall back to this if (1)
-   and (2) are dead ends.
-
-Affected files once a fix direction is chosen: `src/form/combobox/form-combobox.ts`,
-`src/module/catalog/module-catalog.ts`, `src/module/listnav/module-listnav.ts`,
-`src/module/list/module-list.ts`, `src/module/todo/module-todo.ts`, and their
-`.stories.ts` play functions.
+_None open._
 
 ---
 
 ## Follow-ups
-
-### Analyze and fix the 12 failing story/play-function tests
-
-Once the `pass()` timing issue above is resolved, re-run `npx vitest run` and
-confirm all 5 affected story files (`form-combobox`, `module-catalog`,
-`module-listnav`, `module-list`, `module-todo`) pass their play functions
-without the `InvalidPassPropertyError` workaround. Re-verify assertions still
-match intended behavior (some may have been written/left assuming the
-current failure).
 
 ### Rewrite `module-todo` to match upstream's current implementation
 
@@ -132,6 +59,101 @@ project's local `7.0.2`). Action items:
 
 ## Done
 
+### Fixed: the 8 failing story/play-function tests
+
+`npx vitest run` is now **98 passed | 1 skipped (99), 0 failed**, down from
+8 failed / 91 passed. None of the 8 was a Le Truc library bug — verified
+against the library source/design docs and by runtime-probing the ambiguous
+ones. They were consumer-side (test/play-function corrections, one component
+fix, two environment cases). All 8 were pre-existing: their component logic
+and assertions are byte-identical at the pre-2.3 commit.
+
+**A. Play function queried the wrong label/value (test-only):**
+- `form-textbox` With Clear — added `userEvent.tab()` before asserting
+  `el.value`; `value` commits on `change` (native parity), `input` only
+  updates `length`.
+- `form-spinbutton` Increment Decrement — query "Add to Cart" for the first
+  click (value 0 re-labels the increment button), then "Increment"/"Decrement"
+  once value > 0.
+- `module-catalog` Default — query "Add to Cart" instead of "Increment"
+  (same spinbutton-at-zero re-labeling).
+
+**B. Stale exposed `createElementsMemo` (component fix):**
+- `form-listbox` With Filter and With Src — the exposed `options` memo was
+  installed by `expose()` as a plain getter with no reactive sink, so its lazy
+  `MutationObserver` never activated (ADR 0006) and stayed stale. Extracted
+  the memo to a const and added a `watch(visibleOptions, () => {})` so the
+  observer starts and `options` is genuinely live. This is documented
+  intentional library behavior, not a library bug. (`form-listbox.ts`.)
+
+**C. Test premise invalid under the test environment:**
+- `module-lazyload` Invalid URL — `"not-a-valid-url"` is a valid *relative*
+  URL and the Vite dev server answers unknown same-origin paths with a 200
+  SPA fallback, so `createTask` resolved `ok` and `.error` never showed.
+  Switched `src` to a cross-origin URL (`http://localhost:9/nonexistent`),
+  which `isValidURL` rejects → the `err` branch fires deterministically.
+  Not a `createTask`/`watch` bug. (`module-lazyload.stories.ts`.)
+- `basic-number` Locale Inheritance — `Intl.NumberFormat("de-DE", …)` falls
+  back to `en-US` because the headless Chromium bundled with
+  `@vitest/browser-playwright` ships partial ICU data. Component logic and the
+  expected string (`1.234,50\u00a0€`) are verified correct. Added `tags:
+  ["skip"]` to the story and wired `tags: { skip: ["skip"] }` into the
+  `storybookTest()` plugin in `vitest.config.ts`, so the story is **skipped in
+  the Vitest run only** but stays live (and playable) in Storybook. In a
+  full-ICU browser it passes. (`basic-number.stories.ts`, `vitest.config.ts`.)
+
+**D. Test misunderstood the component contract (story rewrite):**
+- `module-list` Remove Item — `reconcile()` correctly discards pre-rendered
+  `<li data-key>` whose keys aren't in the (empty) reactive `list`. Rewrote
+  the story to seed two items via the form API (type + Add twice), mirroring
+  the passing `AddItem` story, then remove one. (`module-list.stories.ts`.)
+
+Verified: `npx vitest run` → 98 passed | 1 skipped, 0 failed; `tsc --noEmit`
+clean; no regressions.
+
+### Fixed: `pass()` failing when parent and nested Le Truc child mount together
+
+`pass()` could throw `InvalidPassPropertyError` when a parent and its Le Truc
+child were mounted together from a **detached subtree** — exactly what
+framework-driven rendering does (lit-html/Storybook `render()`, or any code
+that builds the tree off-DOM then appends it). Upstream's own static-HTML
+Playwright pages never hit it because the markup lives in the document before
+script runs.
+
+**Root cause (verified via standalone Playwright repros):** `pass()` returns an
+auto-registered `EffectDescriptor`; the throwing `swapSlots` runs later inside
+`resolveDependencies(runSetup)`. When a whole nested parent+child subtree is
+connected in one operation, the browser queues each element's
+`connectedCallback` in tree order — the **parent's fires first**. The child is
+already `:defined` (class registered), so `first()`/`all()` did *not* add it
+to the dependency set, `resolveDependencies` took the **synchronous** callback
+path, and `swapSlots` read `'prop' in child` while it was still `false` (the
+child's own `connectedCallback` → `expose()`/Slot setup hadn't run yet).
+Reproduced deterministically: detached-build-then-append (createElement,
+explicit `upgrade()`, detached innerHTML, DocumentFragment) all threw; direct
+`innerHTML` into the live document (upstream's path) did not.
+
+**Fix (upstream, shipped in `@zeix/le-truc` 2.3.1):** `makeElementQueries` now
+tracks whether `first()`/`all()` matched any `:defined` custom-element
+descendant, and if so defers setup by one microtask so the child's queued
+`connectedCallback` drains first. Behavior-preserving for the existing
+registry-not-defined case; the only observable change is a one-microtask
+deferral when a `:defined` custom-element child is present.
+
+- Upstream: `src/helpers/dom.ts` fix + regression tests in `src/tests/dom.test.ts`,
+  PR https://github.com/zeixcom/le-truc/pull/87, released as 2.3.1.
+- Consumer: bumped `@zeix/le-truc` `^2.3.0` → `^2.3.1`.
+- Verified: `npx vitest run` shows `InvalidPassPropertyError` **0 times**;
+  8 failed / 91 passed (unchanged from baseline — the bug was latent here and
+  is now closed at the root with zero regressions).
+
+Note: this TODO's earlier draft claimed "12 of 99 tests fail with
+`InvalidPassPropertyError`." That did **not** reproduce on this branch (0
+occurrences). The 5 then-named files (`form-combobox`, `module-catalog`,
+`module-listnav`, `module-list`, `module-todo`) pass their `pass()` calls; the
+8 tests that actually fail are unrelated and tracked in the top-priority item
+above.
+
 ### Fixed: Storybook Controls crash from Le Truc overwriting Lit's ChildPart markers
 
 `bindText(el)` (default, non-preserving) clears *all* child nodes before
@@ -146,8 +168,8 @@ a ChildPart whose markers are gone and throws.
 Fixed by switching those call sites to `bindText(el, true)`
 (`preserveComments: true`), which behaves identically when no comments are
 present, so it's safe everywhere it was applied. Confirmed via
-`npx tsc --noEmit`/`npx vitest run` — no regressions (same 87/99 pass count
-as before, unrelated to the `pass()` issue above).
+`npx tsc --noEmit`/`npx vitest run` — no regressions (same pass count as
+before this change; unrelated to the `pass()` issue).
 
 Fixed in: `src/basic/button/basic-button.ts` (`label`, `badge`),
 `src/basic/hello/basic-hello.ts` (`output`),
