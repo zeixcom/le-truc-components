@@ -1,0 +1,70 @@
+import { Meta, Canvas } from "@storybook/addon-docs/blocks";
+import * as FormInplaceEditStories from "./form-inplace-edit.stories";
+
+<Meta of={FormInplaceEditStories} />
+
+### Form Inplace Edit
+
+A self-contained inline label editor. Wraps a `<span>` (label display) and an edit button; on double-click or edit-button click it switches the span to a `<form-textbox>`, letting the user type a new value.
+
+#### Tag Name
+
+`form-inplace-edit`
+
+#### Preview
+
+<Canvas of={FormInplaceEditStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>editing</code></td>
+      <td><code>boolean</code></td>
+      <td>Attribute <code>editing</code></td>
+      <td>Whether edit mode is currently activated</td>
+    </tr>
+    <tr>
+      <td><code>value</code></td>
+      <td><code>string</code></td>
+      <td>Text content of <code>.text</code></td>
+      <td>Current label value; reactive — set via <code>pass()</code> to keep display in sync with external data</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('.text')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Label display element; hidden during editing</td>
+    </tr>
+    <tr>
+      <td><code>first('button')</code></td>
+      <td><code>HTMLButtonElement</code></td>
+      <td>optional</td>
+      <td>Toggle button: ✎ (view mode) / ✓ (edit mode)</td>
+    </tr>
+  </tbody>
+</table>

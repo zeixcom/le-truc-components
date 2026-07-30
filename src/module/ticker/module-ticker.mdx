@@ -1,0 +1,82 @@
+import { Meta, Canvas } from "@storybook/addon-docs/blocks";
+import * as ModuleTickerStories from "./module-ticker.stories";
+
+<Meta of={ModuleTickerStories} />
+
+### Module Ticker
+
+A live market data table that updates at 10 ms intervals, demonstrating Le Truc's fine-grained reactivity at frame-rate scale and virtualized row blocks.
+
+#### Tag Name
+
+`module-ticker`
+
+#### Preview
+
+<Canvas of={ModuleTickerStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>running</code></td>
+      <td><code>boolean</code></td>
+      <td><code>true</code></td>
+      <td>Whether the live feed is active; toggled via the Pause/Resume button</td>
+    </tr>
+    <tr>
+      <td><code>fraction</code></td>
+      <td><code>number</code></td>
+      <td><code>0.1</code></td>
+      <td>Fraction of symbols updated per 10 ms tick (0–1); set via <code>fraction</code> attribute</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>basic-button.toggle</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Button that toggles <code>running</code>; text is set to "Pause" or "Resume" reactively</td>
+    </tr>
+    <tr>
+      <td><code>basic-button.add-rows</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Button that appends a block of new rows</td>
+    </tr>
+    <tr>
+      <td><code>template</code></td>
+      <td><code>HTMLTemplateElement</code></td>
+      <td>optional</td>
+      <td>Row template used for materializing virtualized blocks and adding new rows</td>
+    </tr>
+    <tr>
+      <td><code>tr[data-symbol]</code></td>
+      <td><code>HTMLTableRowElement</code></td>
+      <td>required</td>
+      <td>One row per ticker symbol; must contain <code>.price</code>, <code>.change</code>, and <code>.volume</code> cells</td>
+    </tr>
+  </tbody>
+</table>

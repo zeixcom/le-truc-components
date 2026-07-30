@@ -1,0 +1,85 @@
+import { Meta, Canvas } from "@storybook/addon-docs/blocks";
+import * as ModuleSplitviewStories from "./module-splitview.stories";
+
+<Meta of={ModuleSplitviewStories} />
+
+### Module Splitview
+
+A two-panel resizable container with a drag handle between the panels, supporting both horizontal and vertical orientations.
+
+#### Tag Name
+
+`module-splitview`
+
+#### Preview
+
+<Canvas of={ModuleSplitviewStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>split</code></td>
+      <td><code>number</code></td>
+      <td><code>0.5</code></td>
+      <td>Proportional position of the divider (0.1–0.9)</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Attributes
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>split</code></td>
+      <td>Initial divider position as a decimal fraction (e.g. <code>0.3</code> for 30/70); default <code>0.5</code></td>
+    </tr>
+    <tr>
+      <td><code>orientation</code></td>
+      <td>Layout axis. Use <code>vertical</code> for top/bottom split; defaults to horizontal</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('button.divider')</code></td>
+      <td><code>HTMLButtonElement</code></td>
+      <td><strong>required</strong></td>
+      <td>The resize handle; carries <code>role="separator"</code> and <code>aria-valuenow/min/max</code></td>
+    </tr>
+    <tr>
+      <td><code>.panel</code> (×2)</td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>The two resizable content areas; sized by the CSS grid via <code>--split</code></td>
+    </tr>
+  </tbody>
+</table>
