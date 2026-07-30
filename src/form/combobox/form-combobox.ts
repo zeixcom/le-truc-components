@@ -123,7 +123,11 @@ export default defineComponent<FormComboboxProps>(
     // :user-invalid + host.validationMessage for external consumers.
     const errorEl = first("form-combobox > .error");
     if (errorEl) watch(error, bindText(errorEl));
-    if (descriptionEl) watch("description", bindText(descriptionEl));
+    // preserveComments: the Storybook story interpolates this element's
+    // content via a lit-html expression; the default (non-preserving) write
+    // would eject Lit's ChildPart marker comments and break re-renders
+    // driven by Controls.
+    if (descriptionEl) watch("description", bindText(descriptionEl, true));
 
     watch(isExpanded, (expanded) => {
       listbox.hidden = !expanded;

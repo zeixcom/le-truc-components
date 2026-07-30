@@ -39,7 +39,11 @@ export default defineComponent<FormCheckboxProps>(
     watch("checked", bindProperty(checkbox, "checked"));
     watch("disabled", bindProperty(checkbox, "disabled"));
 
-    if (label) watch("label", bindText(label));
+    // preserveComments: the Storybook story interpolates this element's
+    // content via a lit-html expression; the default (non-preserving) write
+    // would eject Lit's ChildPart marker comments and break re-renders
+    // driven by Controls.
+    if (label) watch("label", bindText(label, true));
   },
   [formAssociatedCheckbox()],
 );

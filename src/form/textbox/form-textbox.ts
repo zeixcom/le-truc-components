@@ -95,7 +95,11 @@ export default defineComponent<FormTextboxProps>(
     if (descriptionEl) {
       const descriptionId = descriptionEl?.id;
       if (descriptionId) textbox.setAttribute("aria-describedby", descriptionId);
-      watch("description", bindText(descriptionEl));
+      // preserveComments: the Storybook story interpolates this element's
+      // content via a lit-html expression; the default (non-preserving)
+      // write would eject Lit's ChildPart marker comments and break
+      // re-renders driven by Controls.
+      watch("description", bindText(descriptionEl, true));
     }
 
     const errorEl = first(".error");

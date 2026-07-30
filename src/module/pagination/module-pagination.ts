@@ -79,8 +79,12 @@ export default defineComponent<ModulePaginationProps>(
     });
     watch(() => host.value >= host.max, bindProperty(next, "disabled"));
     const valueEl = first(".value");
-    if (valueEl) watch("value", bindText(valueEl));
+    // preserveComments: Storybook's story interpolates this element's
+    // content via a lit-html expression; the default (non-preserving) write
+    // would eject Lit's ChildPart marker comments and break re-renders
+    // driven by Controls.
+    if (valueEl) watch("value", bindText(valueEl, true));
     const maxEl = first(".max");
-    if (maxEl) watch("max", bindText(maxEl));
+    if (maxEl) watch("max", bindText(maxEl, true));
   },
 );

@@ -26,7 +26,11 @@ export default defineComponent<BasicButtonProps>(
     });
 
     watch("disabled", bindProperty(button, "disabled"));
-    if (label) watch("label", bindText(label));
-    if (badge) watch("badge", bindText(badge));
+    // preserveComments: the Storybook story interpolates these elements'
+    // content via lit-html expressions; the default (non-preserving) write
+    // would eject Lit's ChildPart marker comments and break re-renders
+    // driven by Controls.
+    if (label) watch("label", bindText(label, true));
+    if (badge) watch("badge", bindText(badge, true));
   },
 );
