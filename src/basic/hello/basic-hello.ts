@@ -1,40 +1,25 @@
-import {
-  asString,
-  type Component,
-  defineComponent,
-  on,
-  setText,
-} from "@zeix/le-truc";
+import { bindText, defineComponent } from "@zeix/le-truc";
 
 export type BasicHelloProps = {
-  name: string;
-};
-
-type BasicHelloUI = {
-  input: HTMLInputElement;
-  output: HTMLOutputElement;
+  subject: string;
 };
 
 declare global {
   interface HTMLElementTagNameMap {
-    "basic-hello": Component<BasicHelloProps>;
+    "basic-hello": HTMLElement & BasicHelloProps;
   }
 }
 
-export default defineComponent<BasicHelloProps, BasicHelloUI>(
+export default defineComponent<BasicHelloProps>(
   "basic-hello",
-  {
-    name: asString((ui) => ui.output.textContent),
-  },
-  ({ first }) => ({
-    input: first("input", "Needed to enter the name."),
-    output: first("output", "Needed to display the name."),
-  }),
-  ({ host, input }) => {
-    const fallback = host.name;
-    return {
-      input: on("input", () => ({ name: input.value || fallback })),
-      output: setText("name"),
-    };
+  ({ expose, first, on, watch }) => {
+    const output = first("output", "Needed to display the subject.");
+    const fallback = output.textContent || "";
+
+    expose({ subject: fallback });
+
+    const input = first("input", "Needed to enter the subject.");
+    on(input, "input", () => ({ subject: input.value || fallback }));
+    watch("subject", bindText(output));
   },
 );

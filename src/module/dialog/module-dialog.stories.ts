@@ -7,7 +7,6 @@ import "../../basic/button/basic-button.ts";
 import "../../basic/button/basic-button.css";
 import "../../module/scrollarea/module-scrollarea.ts";
 import "../../module/scrollarea/module-scrollarea.css";
-import type { Component } from "@zeix/le-truc";
 import type { ModuleDialogProps } from "./module-dialog.ts";
 
 type ModuleDialogArgs = {
@@ -67,7 +66,7 @@ export const OpenClose: Story = {
     const canvas = within(canvasElement);
     const el = canvasElement.querySelector(
       "module-dialog",
-    ) as Component<ModuleDialogProps>;
+    ) as HTMLElement & ModuleDialogProps;
 
     await expect(el.open).toBe(false);
 
@@ -87,7 +86,7 @@ export const PropertyChanges: Story = {
     await customElements.whenDefined("module-dialog");
     const el = canvasElement.querySelector(
       "module-dialog",
-    ) as Component<ModuleDialogProps>;
+    ) as HTMLElement & ModuleDialogProps;
 
     await expect(el.open).toBe(false);
 

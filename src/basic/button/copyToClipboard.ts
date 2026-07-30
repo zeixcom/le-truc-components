@@ -1,9 +1,4 @@
-import {
-  type Component,
-  type ComponentProps,
-  type Effect,
-  on,
-} from "@zeix/le-truc";
+import type { EffectDescriptor } from "@zeix/le-truc";
 
 import type { BasicButtonProps } from "./basic-button";
 
@@ -12,13 +7,13 @@ type CopyStatus = "success" | "error";
 const COPY_SUCCESS = "success";
 const COPY_ERROR = "error";
 
-export const copyToClipboard =
-  (
-    container: HTMLElement,
-    messages: { [COPY_ERROR]?: string; [COPY_SUCCESS]?: string },
-  ): Effect<ComponentProps, Component<BasicButtonProps>> =>
-  (_, button) =>
-    on("click", async () => {
+export const copyToClipboard = (
+  container: HTMLElement,
+  button: HTMLElement & BasicButtonProps,
+  messages: { [COPY_ERROR]?: string; [COPY_SUCCESS]?: string },
+): EffectDescriptor =>
+  () => {
+    const onClick = async () => {
       const label = button.label;
       let status: CopyStatus = COPY_SUCCESS;
       try {
@@ -45,4 +40,7 @@ export const copyToClipboard =
         },
         status === COPY_SUCCESS ? 1000 : 3000,
       );
-    })(_, button);
+    };
+    button.addEventListener("click", onClick);
+    return () => button.removeEventListener("click", onClick);
+  };

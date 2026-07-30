@@ -5,7 +5,7 @@ import * as ModuleLazyloadStories from './module-lazyload.stories';
 
 ### Module Lazyload
 
-Fetches and injects remote HTML content into the page. Uses `createTask` to manage async fetch state (pending, success, error) reactively. Demonstrates `dangerouslySetInnerHTML()` for injecting fetched HTML, `show()` to switch between loading/error/content states, and `toggleClass('danger')` on the callout. The `allow-scripts` attribute opts in to executing inline scripts in loaded content.
+Fetches and injects remote HTML content into the page. Uses `createTask` to manage async fetch state reactively, with `watch(content, { ok, nil, stale, err })` branching on the task's `SingleMatchHandlers` to switch between loading/error/content states — each branch imperatively toggles `hidden` and returns a cleanup function where needed. Demonstrates `dangerouslyBindInnerHTML()` for injecting fetched HTML and `schedule()` to defer a smooth scroll-to-heading after a non-initial load. The `allow-scripts` attribute opts in to executing inline scripts in loaded content.
 
 #### Tag Name
 

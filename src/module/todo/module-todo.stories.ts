@@ -12,11 +12,9 @@ import "../../form/radiogroup/form-radiogroup.ts";
 import "../../form/radiogroup/form-radiogroup.css";
 import "../../form/textbox/form-textbox.ts";
 import "../../form/textbox/form-textbox.css";
-import "../../module/list/module-list.ts";
-import "../../module/list/module-list.css";
 
 const todoTemplate = html`
-  <module-todo>
+  <module-todo filter="all">
     <form action="#">
       <form-textbox clearable>
         <label for="add-todo">What needs to be done?</label>
@@ -31,24 +29,22 @@ const todoTemplate = html`
         </button>
       </basic-button>
     </form>
-    <module-list filter="all">
-      <ol data-container></ol>
-      <template>
-        <li>
-          <form-checkbox class="todo">
-            <label>
-              <input type="checkbox" class="visually-hidden" />
-              <span class="label"><slot></slot></span>
-            </label>
-          </form-checkbox>
-          <basic-button class="delete">
-            <button type="button" class="tertiary destructive small" aria-label="Delete">
-              <span class="label">✕</span>
-            </button>
-          </basic-button>
-        </li>
-      </template>
-    </module-list>
+    <ol data-container></ol>
+    <template>
+      <li>
+        <form-checkbox class="todo">
+          <label>
+            <input type="checkbox" class="visually-hidden" />
+            <span class="label"><slot></slot></span>
+          </label>
+        </form-checkbox>
+        <basic-button class="delete">
+          <button type="button" class="tertiary destructive small" aria-label="Delete">
+            <span class="label">✕</span>
+          </button>
+        </basic-button>
+      </li>
+    </template>
     <footer>
       <basic-pluralize>
         <p class="none">Well done, all done!</p>

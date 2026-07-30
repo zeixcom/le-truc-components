@@ -28,3 +28,4 @@ storybook-static
 
 # Claude
 .claude/settings.local.json
+.tsbuildinfo

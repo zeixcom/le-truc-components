@@ -1,36 +1,30 @@
 import {
   asString,
-  type Component,
-  createEffect,
+  bindVisible,
   createElementsMemo,
   createMemo,
   createTask,
-  dangerouslySetInnerHTML,
   defineComponent,
-  type Memo,
-  on,
-  read,
-  setAttribute,
-  setProperty,
-  setText,
-  show,
-  toggleClass,
+  each,
+  escapeHTML,
+  type FormAssociatedElement,
+  formAssociated,
+  schedule,
 } from "@zeix/le-truc";
-import { escapeHTML } from "../../_common/escape";
 import {
   fetchWithCache,
   isRecursiveURL,
   isValidURL,
-} from "../../_common/fetch";
-import { manageFocus } from "../../_common/focus";
+} from "../../_common/fetchWithCache";
 import { highlightMatch } from "../../_common/highlight";
+import { html } from "../../_common/html";
 
 /**
  * Form-aware Listbox Component
  *
  * A filterable listbox that loads options from remote JSON sources and integrates
  * seamlessly with HTML forms. Includes keyboard navigation, accessibility features,
- * and automatic form value synchronization via a built-in hidden input element.
+ * and form value synchronization via ElementInternals.
  */
 
 export type FormListboxOption = {
@@ -47,69 +41,60 @@ export type FormListboxGroups = Record<
 >;
 
 export type FormListboxProps = {
+  /** Currently selected option value. */
   value: string;
+  /** Live list of visible (non-hidden) option buttons in the listbox. */
   options: HTMLButtonElement[];
+  /** Filter string used to narrow displayed options. */
   filter: string;
+  /** URL to fetch options from as JSON. Read from the `src` attribute at connect time. */
   src: string;
-};
-
-type FormListboxUI = {
-  input: HTMLInputElement;
-  listbox: HTMLElement;
-  options: Memo<HTMLButtonElement[]>;
-  filter?: HTMLInputElement | undefined;
-  clear?: HTMLButtonElement | undefined;
-  callout?: HTMLElement | undefined;
-  loading?: HTMLElement | undefined;
-  error?: HTMLElement | undefined;
 };
 
 declare global {
   interface HTMLElementTagNameMap {
-    "form-listbox": Component<FormListboxProps>;
+    "form-listbox": FormAssociatedElement & FormListboxProps;
   }
 }
 
-export default defineComponent<FormListboxProps, FormListboxUI>(
+/* === Constants === */
+
+const ENTER_KEY = "Enter";
+const DECREMENT_KEYS = ["ArrowUp"];
+const INCREMENT_KEYS = ["ArrowDown"];
+const FIRST_KEY = "Home";
+const LAST_KEY = "End";
+const HANDLED_KEYS = [...DECREMENT_KEYS, ...INCREMENT_KEYS, FIRST_KEY, LAST_KEY];
+
+/**
+ * A filterable listbox that loads options from a remote JSON source and integrates with HTML forms.
+ * Use it for searchable, single-select option lists — provides ARIA listbox semantics,
+ * keyboard navigation (Arrow, Home, End), accessibility, and form participation via ElementInternals.
+ *
+ * @demo {https://zeixcom.github.io/le-truc/examples.html#form-listbox} Interactive preview and usage examples
+ **/
+export default defineComponent<FormListboxProps>(
   "form-listbox",
-  {
-    value: read(
-      ({ listbox }: FormListboxUI) =>
-        listbox.querySelector<HTMLButtonElement>(
-          'button[role="option"][aria-selected="true"]',
-        )?.value,
-      "",
-    ),
-    options: ({ listbox }: FormListboxUI) =>
-      createElementsMemo(listbox, 'button[role="option"]:not([hidden])'),
-    filter: "",
-    src: asString(),
-  },
-  ({ first, all }) => ({
-    input: first('input[type="hidden"]', "Needed to store the selected value."),
-    filter: first("input.filter"),
-    clear: first("button.clear"),
-    callout: first("card-callout"),
-    loading: first(".loading"),
-    error: first(".error"),
-    listbox: first('[role="listbox"]', "Needed to display list of options."),
-    options: all('button[role="option"]'),
-  }),
-  (ui) => {
-    const { host, input } = ui;
+  ({ all, expose, first, host, on, watch }) => {
+    const filterEl = first("input.filter");
+    const listbox = first(
+      '[role="listbox"]',
+      "Needed to display list of options.",
+    );
+    const options = all('button[role="option"]');
 
     const renderOptions = (items: FormListboxOption[]) =>
       items
         .map(
-          (item) => `
-					<button
-  					type="button"
-  					role="option"
-  					tabindex="-1"
-  					value="${escapeHTML(item.value)}"
-					>
-						${escapeHTML(item.label)}
-					</button>`,
+          (item) =>
+            html`<button
+							type="button"
+							role="option"
+							tabindex="-1"
+							value="${escapeHTML(item.value)}"
+						>
+							${escapeHTML(item.label)}
+						</button>`,
         )
         .join("");
 
@@ -118,123 +103,164 @@ export default defineComponent<FormListboxProps, FormListboxUI>(
       let markup = "";
       for (const [key, value] of Object.entries(items)) {
         const groupId = `${id}-${escapeHTML(key)}`;
-        markup += `
-				<div role="group" aria-labelledby="${groupId}">
-					<div role="presentation" id="${groupId}">${escapeHTML(value.label)}</div>
+        markup += html`<div role="group" aria-labelledby="${groupId}">
+					<div role="presentation" id="${groupId}">
+						${escapeHTML(value.label)}
+					</div>
 					${renderOptions(value.items)}
 				</div>`;
       }
       return markup;
     };
 
-    const content = createTask<{
-      ok: boolean;
-      value: string;
-      error: string;
-      pending: boolean;
-    }>(
-      async (_prev, abort) => {
-        const url = host.src;
-        const error = !url
-          ? "No URL provided"
-          : !isValidURL(url)
-            ? "Invalid URL"
-            : isRecursiveURL(url, host)
-              ? "Recursive URL detected"
-              : "";
-        if (error) return { ok: false, value: "", error, pending: false };
-
-        try {
-          const { content } = await fetchWithCache(url, abort, (response) =>
-            response.json(),
-          );
-          return {
-            ok: true,
-            value: Array.isArray(content)
-              ? renderOptions(content)
-              : renderGroups(content),
-            error: "",
-            pending: false,
-          };
-        } catch (err) {
-          return { ok: false, value: "", error: String(err), pending: false };
-        }
-      },
-      { value: { ok: false, value: "", error: "", pending: true } },
-    );
-
-    const maybeRender = () =>
-      host.src
-        ? [
-            show(() => content.get().ok),
-            dangerouslySetInnerHTML(() => content.get().value),
-          ]
-        : [];
+    const content = createTask<string>(async (_prev, abort) => {
+      const url = host.src;
+      if (!url) throw new Error("No URL provided");
+      if (!isValidURL(url)) throw new Error("Invalid URL");
+      if (isRecursiveURL(url, host)) throw new Error("Recursive URL detected");
+      try {
+        const { content: fetched } = await fetchWithCache(
+          url,
+          abort,
+          (response) => response.json(),
+        );
+        return Array.isArray(fetched)
+          ? renderOptions(fetched)
+          : renderGroups(fetched);
+      } catch (e) {
+        throw new Error(`Failed to fetch content for "${url}": ${String(e)}`);
+      }
+    });
 
     const lowerFilter = createMemo(() => host.filter.toLowerCase());
 
-    const hasError = () => (host.src ? !!content.get().error : false);
-
-    return {
-      host: setAttribute("value"),
-      input: setProperty("value"),
-      filter: on("input", () => {
-        host.filter = ui.filter?.value ?? "";
-      }),
-      clear: [
-        show(() => !!lowerFilter.get()),
-        on("click", () => {
-          host.filter = "";
-        }),
-      ],
-      callout: [
-        show(() => (host.src ? !content.get().ok : false)),
-        toggleClass("danger", hasError),
-      ],
-      loading: show(() => (host.src ? content.get().pending : false)),
-      error: [
-        show(hasError),
-        setText(() => (host.src ? content.get().error : "")),
-      ],
-      listbox: [
-        ...manageFocus(
-          () =>
-            Array.from(
-              ui.listbox.querySelectorAll<HTMLButtonElement>(
-                'button[role="option"]:not([hidden])',
-              ),
-            ),
-          (options) =>
-            options.findIndex((option) => option.ariaSelected === "true"),
+    // Roving tabindex focus management for listbox
+    const getVisibleOptions = () =>
+      Array.from(
+        listbox.querySelectorAll<HTMLButtonElement>(
+          'button[role="option"]:not([hidden])',
         ),
-        on("click", ({ target }) => {
-          const option = (target as HTMLElement).closest(
-            '[role="option"]',
-          ) as HTMLButtonElement;
-          if (option && option.value !== host.value) {
-            host.value = option.value;
-            input.dispatchEvent(new Event("change", { bubbles: true }));
+      );
+
+    let focusIndex = getVisibleOptions().findIndex(
+      (option) => option.ariaSelected === "true",
+    );
+
+    expose({
+      value: first('button[role="option"][aria-selected="true"]')?.value ?? "",
+      options: createElementsMemo(
+        listbox,
+        'button[role="option"]:not([hidden])',
+      ),
+      filter: "",
+      src: asString(),
+    });
+
+    on(filterEl, "input", (_e, el) => ({ filter: el.value ?? "" }));
+
+    const clearBtn = first("button.clear");
+    on(clearBtn, "click", () => ({ filter: "" }));
+
+    // Focus management on listbox
+    on(listbox, "click", ({ target }) => {
+      const option = (target as HTMLElement).closest(
+        '[role="option"]',
+      ) as HTMLButtonElement;
+      if (option && option.value !== host.value) {
+        host.value = option.value;
+        // Native-parity commit event — dispatches from the host so
+        // composing components (form-combobox) can listen without
+        // reaching into the listbox's DOM.
+        host.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+    });
+    on(listbox, "keydown", (e) => {
+      const { key } = e as KeyboardEvent;
+      if (!HANDLED_KEYS.includes(key)) return;
+
+      const elements = getVisibleOptions();
+      e.preventDefault();
+      e.stopPropagation();
+      if (key === FIRST_KEY) focusIndex = 0;
+      else if (key === LAST_KEY) focusIndex = elements.length - 1;
+      else
+        focusIndex =
+          (focusIndex +
+            (INCREMENT_KEYS.includes(key) ? 1 : -1) +
+            elements.length) %
+          elements.length;
+      elements[focusIndex]?.focus();
+    });
+    on(listbox, "keyup", ({ key }) => {
+      if (key !== ENTER_KEY) return;
+      getVisibleOptions()[focusIndex]?.click();
+    });
+
+    // Form value sync: managed (value → setFormValue via ElementInternals)
+    // Form reset: managed (value attribute is the default)
+    // Disabled, state restore: managed
+    if (host.src) {
+      const callout = first("card-callout");
+      const loading = first(".loading");
+      const errorEl = first(".error");
+      watch(content, {
+        nil: () => {
+          if (callout) callout.hidden = false;
+          if (loading) {
+            loading.hidden = false;
+            return () => {
+              loading.hidden = false;
+            };
           }
-        }),
-        ...maybeRender(),
-      ],
-      options: [
-        (_host, target) => {
-          const textContent = target.textContent;
-          const lowerText = textContent?.trim().toLowerCase();
-          return createEffect(() => {
-            const filterText = lowerFilter.get();
-            target.hidden = !lowerText.includes(filterText);
-            target.innerHTML = highlightMatch(textContent, filterText);
-          });
         },
-        (_host, target) =>
-          createEffect(() => {
-            const isSelected = host.value === target.value;
-            target.tabIndex = isSelected ? 0 : -1;
-            target.ariaSelected = String(isSelected);
-          }),
-      ],
-    };
+        ok: (fetchedHtml) => {
+          if (callout) callout.hidden = true;
+          if (loading) loading.hidden = true;
+          if (errorEl) errorEl.hidden = true;
+          listbox.hidden = false;
+          schedule(listbox, () => {
+            listbox.innerHTML = fetchedHtml;
+          });
+          return () => {
+            listbox.hidden = true;
+          };
+        },
+        err: (error) => {
+          if (callout) {
+            callout.hidden = false;
+            callout.classList.add("danger");
+          }
+          if (errorEl) {
+            errorEl.hidden = false;
+            errorEl.textContent = error.message;
+          }
+          return () => {
+            if (callout) callout.classList.remove("danger");
+            if (errorEl) {
+              errorEl.hidden = true;
+              errorEl.textContent = "";
+            }
+          };
+        },
+      });
+    }
+
+    // Per-option reactive effects
+    each(options, (option) => {
+      const textContent = option.textContent;
+      const lowerText = textContent?.trim().toLowerCase();
+      watch(lowerFilter, (filterText) => {
+        option.hidden = !lowerText?.includes(filterText);
+        option.innerHTML = highlightMatch(textContent ?? "", filterText);
+      });
+      watch("value", () => {
+        const isSelected = host.value === option.value;
+        option.tabIndex = isSelected ? 0 : -1;
+        option.ariaSelected = String(isSelected);
+      });
+    });
+
+    if (clearBtn) watch(lowerFilter, bindVisible(clearBtn));
   },
+  [formAssociated()],
 );

@@ -5,7 +5,7 @@ import * as ModulePaginationStories from './module-pagination.stories';
 
 ### Module Pagination
 
-A pagination control with previous/next buttons and a number input. Both `value` and `max` are read from the DOM input element via `read()` with `asInteger()`. Demonstrates `setAttribute` to reflect `value` and `max` onto the host element, `setProperty` to drive the input and button `disabled` states reactively, and keyboard shortcuts (Arrow keys, `+`/`-`) via `on('keyup')` on the host. The component hides itself when `max` is 1 or less via `show()`.
+A pagination control with previous/next buttons and a number input. Both `value` and `max` are read from the DOM input element and parsed with `asClampedInteger()`. Demonstrates `watch('value', ...)`/`watch('max', ...)` custom handlers to reflect the attributes and drive the input and button `disabled` states reactively, `bindProperty()` for the derived `next` button state, and keyboard shortcuts (Arrow keys, `+`/`-`) via `on('keyup')` on the host. The component hides itself when `max` is 1 or less by setting `host.hidden`.
 
 #### Tag Name
 

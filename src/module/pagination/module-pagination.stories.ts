@@ -3,7 +3,6 @@ import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./module-pagination.ts";
 import "./module-pagination.css";
-import type { Component } from "@zeix/le-truc";
 import type { ModulePaginationProps } from "./module-pagination.ts";
 
 type ModulePaginationArgs = {
@@ -65,7 +64,7 @@ export const Navigation: Story = {
     const canvas = within(canvasElement);
     const el = canvasElement.querySelector(
       "module-pagination",
-    ) as Component<ModulePaginationProps>;
+    ) as HTMLElement & ModulePaginationProps;
     const next = canvas.getByRole("button", { name: "Next page" });
     const prev = canvas.getByRole("button", { name: "Previous page" });
 
@@ -92,7 +91,7 @@ export const ClampedAtBounds: Story = {
     const canvas = within(canvasElement);
     const el = canvasElement.querySelector(
       "module-pagination",
-    ) as Component<ModulePaginationProps>;
+    ) as HTMLElement & ModulePaginationProps;
     const next = canvas.getByRole("button", { name: "Next page" });
 
     await expect(el.value).toBe(3);
@@ -107,7 +106,7 @@ export const PropertyChanges: Story = {
     await customElements.whenDefined("module-pagination");
     const el = canvasElement.querySelector(
       "module-pagination",
-    ) as Component<ModulePaginationProps>;
+    ) as HTMLElement & ModulePaginationProps;
 
     await expect(el.value).toBe(1);
     await expect(el.max).toBe(10);

@@ -3,7 +3,7 @@ import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./form-spinbutton.ts";
 import "./form-spinbutton.css";
-import type { Component } from "@zeix/le-truc";
+import type { FormAssociatedElement } from "@zeix/le-truc";
 import type { FormSpinbuttonProps } from "./form-spinbutton.ts";
 
 type FormSpinbuttonArgs = {
@@ -68,7 +68,7 @@ export const WithInitialValue: Story = {
     await customElements.whenDefined("form-spinbutton");
     const el = canvasElement.querySelector(
       "form-spinbutton",
-    ) as Component<FormSpinbuttonProps>;
+    ) as HTMLElement & FormAssociatedElement & FormSpinbuttonProps;
 
     await expect(el.value).toBe(3);
     await expect(el.max).toBe(15);
@@ -82,7 +82,7 @@ export const IncrementDecrement: Story = {
     const canvas = within(canvasElement);
     const el = canvasElement.querySelector(
       "form-spinbutton",
-    ) as Component<FormSpinbuttonProps>;
+    ) as HTMLElement & FormAssociatedElement & FormSpinbuttonProps;
     const increment = canvas.getByLabelText("Increment");
 
     await expect(el.value).toBe(0);
@@ -107,7 +107,7 @@ export const ClampedAtMax: Story = {
     const canvas = within(canvasElement);
     const el = canvasElement.querySelector(
       "form-spinbutton",
-    ) as Component<FormSpinbuttonProps>;
+    ) as HTMLElement & FormAssociatedElement & FormSpinbuttonProps;
     const increment = canvas.getByLabelText("Increment");
 
     await expect(el.value).toBe(4);
@@ -124,7 +124,7 @@ export const PropertyChanges: Story = {
     await customElements.whenDefined("form-spinbutton");
     const el = canvasElement.querySelector(
       "form-spinbutton",
-    ) as Component<FormSpinbuttonProps>;
+    ) as HTMLElement & FormAssociatedElement & FormSpinbuttonProps;
     const input = el.querySelector("input.value");
 
     el.value = 7;

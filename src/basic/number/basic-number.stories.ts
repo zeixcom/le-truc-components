@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import { html, nothing } from "lit";
 import { expect } from "storybook/test";
 import "./basic-number.ts";
-import type { Component } from "@zeix/le-truc";
 import type { BasicNumberProps } from "./basic-number.ts";
 
 type BasicNumberArgs = {
@@ -104,7 +103,7 @@ export const LocaleInheritance: Story = {
     await customElements.whenDefined("basic-number");
     const el = canvasElement.querySelector(
       "basic-number",
-    ) as Component<BasicNumberProps>;
+    ) as HTMLElement & BasicNumberProps;
     await expect(el).toHaveTextContent("1.234,50\u00a0€");
   },
 };
@@ -119,7 +118,7 @@ export const DecimalFormatting: Story = {
     await customElements.whenDefined("basic-number");
     const el = canvasElement.querySelector(
       "basic-number",
-    ) as Component<BasicNumberProps>;
+    ) as HTMLElement & BasicNumberProps;
     await expect(el).toHaveTextContent("1,234.568");
   },
 };
@@ -130,7 +129,7 @@ export const PropertyChanges: Story = {
     await customElements.whenDefined("basic-number");
     const el = canvasElement.querySelector(
       "basic-number",
-    ) as Component<BasicNumberProps>;
+    ) as HTMLElement & BasicNumberProps;
 
     await expect(el).toHaveTextContent("0");
 

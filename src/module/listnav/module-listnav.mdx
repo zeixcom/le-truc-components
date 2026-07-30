@@ -5,7 +5,7 @@ import * as ModuleListnavStories from './module-listnav.stories';
 
 ### Module Listnav
 
-A navigation coordinator that syncs `form-listbox` selection with `module-lazyload` and the browser's location hash. Uses `pass()` to reactively push `listbox.value` as the `src` of the lazyload. Uses `createEffect` to write `location.hash` when the selection changes, and a `hashchange` listener to update the listbox when the user navigates with the browser back/forward buttons.
+A navigation coordinator that syncs `form-listbox` selection with `module-lazyload` and the browser's location hash. Uses `pass()` to reactively push `listbox.value` as the `src` of the lazyload. The hash-sync logic — a `createEffect` that writes `location.hash` when the selection changes, plus a `hashchange` listener for browser back/forward navigation — has no signal dependency of its own, so it's registered via `watch(() => true, …)`: the setup runs once on connect, and its returned cleanup tears both down on disconnect.
 
 #### Tag Name
 
@@ -33,13 +33,13 @@ None. This component coordinates child component properties through effects.
   <tbody>
     <tr>
       <td><code>first('form-listbox')</code></td>
-      <td><code>Component&lt;FormListboxProps&gt;</code></td>
+      <td><code>HTMLElement &amp; FormListboxProps</code></td>
       <td><strong>required</strong></td>
       <td>Listbox whose <code>value</code> is the URL of the page to load; selection is synced with the location hash</td>
     </tr>
     <tr>
       <td><code>first('module-lazyload')</code></td>
-      <td><code>Component&lt;ModuleLazyloadProps&gt;</code></td>
+      <td><code>HTMLElement &amp; ModuleLazyloadProps</code></td>
       <td><strong>required</strong></td>
       <td>Receives the selected <code>value</code> as its <code>src</code> via <code>pass()</code></td>
     </tr>

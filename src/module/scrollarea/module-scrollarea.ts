@@ -1,19 +1,11 @@
-import {
-  batch,
-  type Component,
-  type ComponentProps,
-  createState,
-  defineComponent,
-  on,
-  toggleClass,
-} from "@zeix/le-truc";
+import { batch, bindState, createState, defineComponent } from "@zeix/le-truc";
 
 const MIN_INTERSECTION_RATIO = 0;
 const MAX_INTERSECTION_RATIO = 0.99; // ignore rounding errors of fraction pixels
 
 declare global {
   interface HTMLElementTagNameMap {
-    "module-scrollarea": Component<ComponentProps>;
+    "module-scrollarea": HTMLElement;
   }
 }
 
@@ -47,11 +39,9 @@ const observeOverflow =
 
 export default defineComponent(
   "module-scrollarea",
-  undefined,
-  undefined,
-  ({ host }) => {
+  ({ host, internals, on, watch }) => {
     const child = host.firstElementChild;
-    if (!child) return {};
+    if (!child) return;
 
     const overflowStart = createState(false);
     const overflowEnd = createState(false);
@@ -72,11 +62,16 @@ export default defineComponent(
             );
           };
 
-    return {
-      host: [
-        toggleClass("overflow", hasOverflow),
-        toggleClass("overflow-start", overflowStart),
-        toggleClass("overflow-end", overflowEnd),
+    on(host, "scroll", () => {
+      if (hasOverflow()) batch(scrollCallback);
+    });
+
+    watch(hasOverflow, bindState(internals, "overflow"));
+    watch(overflowStart, bindState(internals, "overflow-start"));
+    watch(overflowEnd, bindState(internals, "overflow-end"));
+    watch(
+      () => true,
+      () =>
         observeOverflow(
           child,
           () => {
@@ -86,11 +81,7 @@ export default defineComponent(
             overflowStart.set(false);
             overflowEnd.set(false);
           },
-        ),
-        on("scroll", () => {
-          if (hasOverflow()) batch(scrollCallback);
-        }),
-      ],
-    };
+        )(host),
+    );
   },
 );

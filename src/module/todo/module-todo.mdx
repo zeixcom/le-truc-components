@@ -5,7 +5,7 @@ import * as ModuleTodoStories from './module-todo.stories';
 
 ### Module Todo
 
-A full-featured to-do list orchestrator. Uses `createElementsMemo` to derive reactive `active` and `completed` item counts from live DOM queries. Demonstrates `pass()` to push `disabled` and `badge` into child components, `setAttribute('filter')` on `module-list` to drive CSS-based filtering, and event delegation on the form submit. Relies on `module-list`, `form-textbox`, `basic-button`, `basic-pluralize`, and `form-radiogroup` as descendant components.
+A full-featured to-do list orchestrator. Uses `createList()` with per-item `createStore()` signals and `reconcile()` to sync a keyed list of todo items to the `<ol data-container>`/`<template>` pair, and `createMemo()` to derive reactive `activeCount`/`completedCount` from the list. Demonstrates `pass()` with `{ get, set }` descriptors to mediate each rendered `form-checkbox`'s `checked` prop to its matching item's `Store`, `pass()` with thunks to push `disabled`/`badge`/`count` into child components, `bindAttribute('filter')` on the host to drive CSS-based filtering, and event delegation on the host for item removal. Relies on `form-textbox`, `basic-button`, `form-checkbox`, `basic-pluralize`, and `form-radiogroup` as descendant components.
 
 #### Tag Name
 
@@ -15,9 +15,26 @@ A full-featured to-do list orchestrator. Uses `createElementsMemo` to derive rea
 
 <Canvas of={ModuleTodoStories.Default} />
 
+#### Attributes
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>filter</code></td>
+      <td>Reflected onto the host from the <code>form-radiogroup</code>'s current value (<code>"all"</code>, <code>"active"</code>, or <code>"completed"</code>); CSS uses it to hide non-matching items</td>
+    </tr>
+  </tbody>
+</table>
+
 #### Reactive Properties
 
-None. This component orchestrates child component properties through effects.
+None. This component orchestrates child component properties through effects; its internal list state is not exposed on `host`.
 
 #### Descendant Elements
 
@@ -32,6 +49,18 @@ None. This component orchestrates child component properties through effects.
   </thead>
   <tbody>
     <tr>
+      <td><code>first('[data-container]')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Container whose children are reconciled to the internal todo list</td>
+    </tr>
+    <tr>
+      <td><code>first('template')</code></td>
+      <td><code>HTMLTemplateElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Template cloned for each entering todo item</td>
+    </tr>
+    <tr>
       <td><code>first('form')</code></td>
       <td><code>HTMLFormElement</code></td>
       <td><strong>required</strong></td>
@@ -39,37 +68,37 @@ None. This component orchestrates child component properties through effects.
     </tr>
     <tr>
       <td><code>first('form-textbox')</code></td>
-      <td><code>Component&lt;FormTextboxProps&gt;</code></td>
+      <td><code>HTMLElement &amp; FormTextboxProps</code></td>
       <td><strong>required</strong></td>
       <td>Text input for the new todo; cleared after each add; its <code>length</code> drives the submit button's <code>disabled</code> state</td>
     </tr>
     <tr>
       <td><code>first('basic-button.submit')</code></td>
-      <td><code>Component&lt;BasicButtonProps&gt;</code></td>
+      <td><code>HTMLElement &amp; BasicButtonProps</code></td>
       <td><strong>required</strong></td>
       <td>Submit button; disabled when textbox is empty via <code>pass()</code></td>
     </tr>
     <tr>
-      <td><code>first('module-list')</code></td>
-      <td><code>Component&lt;ModuleListProps&gt;</code></td>
+      <td><code>all('form-checkbox')</code></td>
+      <td><code>Memo&lt;(HTMLElement &amp; FormCheckboxProps)[]&gt;</code></td>
       <td><strong>required</strong></td>
-      <td>List of todo items; receives the current filter value as a <code>filter</code> attribute</td>
+      <td>Per-item checkbox; its <code>checked</code> prop is mediated to the matching item's <code>Store</code> via <code>pass()</code></td>
     </tr>
     <tr>
       <td><code>first('basic-pluralize')</code></td>
-      <td><code>Component&lt;BasicPluralizeProps&gt;</code></td>
+      <td><code>HTMLElement &amp; BasicPluralizeProps</code></td>
       <td><strong>required</strong></td>
       <td>Displays the count of active (incomplete) items via <code>pass(&#123; count &#125;)</code></td>
     </tr>
     <tr>
       <td><code>first('form-radiogroup')</code></td>
-      <td><code>Component&lt;FormRadiogroupProps&gt;</code></td>
+      <td><code>HTMLElement &amp; FormRadiogroupProps</code></td>
       <td><strong>required</strong></td>
-      <td>Filter control (All / Active / Completed); its <code>value</code> is passed as the <code>filter</code> attribute to the list</td>
+      <td>Filter control (All / Active / Completed); its <code>value</code> is reflected as the <code>filter</code> attribute on the host</td>
     </tr>
     <tr>
       <td><code>first('basic-button.clear-completed')</code></td>
-      <td><code>Component&lt;BasicButtonProps&gt;</code></td>
+      <td><code>HTMLElement &amp; BasicButtonProps</code></td>
       <td><strong>required</strong></td>
       <td>Removes all completed items on click; <code>disabled</code> when there are none; shows completed count as <code>badge</code></td>
     </tr>

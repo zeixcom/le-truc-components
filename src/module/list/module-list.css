@@ -3,7 +3,7 @@ module-list {
 	flex-direction: column;
 	gap: var(--space-l);
 
-	& form {
+	> form {
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
@@ -11,25 +11,26 @@ module-list {
 		justify-content: space-between;
 	}
 
-	ol,
-	ul {
+	& ul {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-m);
 		list-style: none;
-		padding: 0;
 		margin: 0;
-		gap: 0;
+		padding: 0;
 
 		&:empty {
 			display: none;
 		}
-	}
 
-	& li {
-		display: flex;
-		align-items: center;
-		gap: var(--space-m);
-		padding: var(--space-s) 0;
-		border-bottom: 1px solid var(--color-border-soft);
-		justify-content: space-between;
+		& li {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: var(--space-m);
+			margin: 0;
+			padding: 0;
+		}
 	}
 }
 

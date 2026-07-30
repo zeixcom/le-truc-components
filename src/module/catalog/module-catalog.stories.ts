@@ -7,7 +7,6 @@ import "../../form/spinbutton/form-spinbutton.ts";
 import "../../form/spinbutton/form-spinbutton.css";
 import "./module-catalog.ts";
 import "./module-catalog.css";
-import type { Component } from "@zeix/le-truc";
 import type { BasicButtonProps } from "../../basic/button/basic-button.ts";
 
 const meta: Meta = {
@@ -55,7 +54,7 @@ export const Default: Story = {
     const canvas = within(canvasElement);
     const button = canvasElement.querySelector(
       "basic-button",
-    ) as Component<BasicButtonProps>;
+    ) as HTMLElement & BasicButtonProps;
 
     // Cart button starts disabled (total = 0)
     await expect(button.disabled).toBe(true);

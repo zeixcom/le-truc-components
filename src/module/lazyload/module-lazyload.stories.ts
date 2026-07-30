@@ -3,7 +3,6 @@ import { html, nothing } from "lit";
 import { expect, waitFor } from "storybook/test";
 import "./module-lazyload.ts";
 import "../../card/callout/card-callout.css";
-import type { Component } from "@zeix/le-truc";
 import type { ModuleLazyloadProps } from "./module-lazyload.ts";
 
 type ModuleLazyloadArgs = {
@@ -60,7 +59,7 @@ export const WithContent: Story = {
     await customElements.whenDefined("module-lazyload");
     const el = canvasElement.querySelector(
       "module-lazyload",
-    ) as Component<ModuleLazyloadProps>;
+    ) as HTMLElement & ModuleLazyloadProps;
     const content = canvasElement.querySelector(".content");
 
     await waitFor(() => expect(content).toBeVisible());
@@ -74,7 +73,7 @@ export const NoSrc: Story = {
     await customElements.whenDefined("module-lazyload");
     const el = canvasElement.querySelector(
       "module-lazyload",
-    ) as Component<ModuleLazyloadProps>;
+    ) as HTMLElement & ModuleLazyloadProps;
 
     await expect(el.src).toBe("");
   },
@@ -86,7 +85,7 @@ export const InvalidURL: Story = {
     await customElements.whenDefined("module-lazyload");
     const el = canvasElement.querySelector(
       "module-lazyload",
-    ) as Component<ModuleLazyloadProps>;
+    ) as HTMLElement & ModuleLazyloadProps;
     const errorEl = canvasElement.querySelector(".error");
 
     await expect(el.src).toBe("not-a-valid-url");
@@ -100,7 +99,7 @@ export const PropertyChanges: Story = {
     await customElements.whenDefined("module-lazyload");
     const el = canvasElement.querySelector(
       "module-lazyload",
-    ) as Component<ModuleLazyloadProps>;
+    ) as HTMLElement & ModuleLazyloadProps;
 
     await expect(el.src).toBe("");
 

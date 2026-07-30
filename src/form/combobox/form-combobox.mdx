@@ -5,7 +5,7 @@ import * as FormComboboxStories from './form-combobox.stories';
 
 ### Form Combobox
 
-An advanced form component that coordinates a text input with a popup `form-listbox`. Demonstrates `createEventsSensor()` for the read-only `length` property, `createState()` and `createMemo()` for private reactive state inside the setup function, `pass()` to push the filter value into the child listbox reactively, multiple effects per UI element, and `setAttribute()` for dynamic ARIA attributes. The `clear` method property shows the MethodProducer pattern.
+An advanced form component that coordinates a text input with a popup `form-listbox`. Demonstrates a private `createState()` signal (`length`) updated via `on(textbox, 'input', ...)` and exposed read-only as `length.get`, `createState()`/`createMemo()` for private reactive popup-visibility state (`showPopup`/`isExpanded`), `pass(listbox, { filter: () => host.value })` to push the filter value into the child listbox reactively, `on(listbox, 'change', ...)` to receive the listbox's native-parity commit event instead of reaching into its DOM, and the shared `relayValidity()` helper for validation. `defineMethod()` provides the `clear` method. Form participation and validity are via ElementInternals (`formAssociated()`) — external consumers read `host.validity`/`host.validationMessage` like on a native input; there is no separate `error` reactive property, and no manual `aria-invalid`/`aria-errormessage` on the textbox.
 
 #### Tag Name
 
@@ -42,12 +42,6 @@ An advanced form component that coordinates a text input with a popup `form-list
       <td><code>number</code> (readonly)</td>
       <td><code>0</code></td>
       <td>Length of current input value; updated via <code>createEventsSensor()</code></td>
-    </tr>
-    <tr>
-      <td><code>error</code></td>
-      <td><code>string</code></td>
-      <td><code>''</code></td>
-      <td>Validation error text shown in <code>.error</code></td>
     </tr>
     <tr>
       <td><code>description</code></td>
@@ -97,9 +91,9 @@ An advanced form component that coordinates a text input with a popup `form-list
     </tr>
     <tr>
       <td><code>first('form-listbox')</code></td>
-      <td><code>Component&lt;FormListboxProps&gt;</code></td>
+      <td><code>HTMLElement &amp; FormListboxProps</code></td>
       <td><strong>required</strong></td>
-      <td>Popup listbox; receives filter value via <code>pass()</code> and is shown/hidden based on <code>isExpanded</code></td>
+      <td>Popup listbox; receives filter value via <code>pass()</code>, shown/hidden based on <code>isExpanded</code>, and its <code>change</code> event commits the selected value</td>
     </tr>
     <tr>
       <td><code>first('button.clear')</code></td>
@@ -111,7 +105,7 @@ An advanced form component that coordinates a text input with a popup `form-list
       <td><code>first('form-combobox &gt; .error')</code></td>
       <td><code>HTMLElement</code></td>
       <td>optional</td>
-      <td>Validation message target linked by <code>aria-errormessage</code></td>
+      <td>Inline validation message target; text mirrors the native input's <code>validationMessage</code> via <code>relayValidity()</code></td>
     </tr>
     <tr>
       <td><code>first('.description')</code></td>

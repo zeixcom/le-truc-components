@@ -5,7 +5,7 @@ import * as ModuleScrollareaStories from './module-scrollarea.stories';
 
 ### Module Scrollarea
 
-Detects and reflects scroll overflow state as CSS classes. Uses `IntersectionObserver` to detect when the first child element overflows its container, and an `on('scroll')` handler to track scroll position. Demonstrates `createState` for `overflowStart` and `overflowEnd` booleans, `toggleClass` to reactively add/remove overflow classes, and cleanup via returned functions. The `orientation` attribute switches between vertical and horizontal overflow detection.
+Detects and reflects scroll overflow state as custom `:state()` pseudo-classes. Uses `IntersectionObserver` to detect when the first child element overflows its container, and an `on('scroll')` handler to track scroll position. Demonstrates `createState` for `overflowStart` and `overflowEnd` booleans, `bindState()` on the component's `internals` to reactively toggle overflow states, and a hand-authored `IntersectionObserver` descriptor registered via `watch(() => true, ...)` with cleanup on disconnect. The `orientation` attribute switches between vertical and horizontal overflow detection.
 
 #### Tag Name
 
@@ -36,12 +36,12 @@ Detects and reflects scroll overflow state as CSS classes. Uses `IntersectionObs
   </tbody>
 </table>
 
-#### CSS Classes (applied to host)
+#### Custom States (applied to host, match with `:state()`)
 
 <table>
   <thead>
     <tr>
-      <th>Class</th>
+      <th>State</th>
       <th>Description</th>
     </tr>
   </thead>

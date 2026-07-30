@@ -3,7 +3,6 @@ import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./module-carousel.ts";
 import "./module-carousel.css";
-import type { Component } from "@zeix/le-truc";
 import type { ModuleCarouselProps } from "./module-carousel.ts";
 
 type ModuleCarouselArgs = {
@@ -107,7 +106,7 @@ export const Navigation: Story = {
     const canvas = within(canvasElement);
     const el = canvasElement.querySelector(
       "module-carousel",
-    ) as Component<ModuleCarouselProps>;
+    ) as HTMLElement & ModuleCarouselProps;
 
     await expect(el.index).toBe(0);
     // prev hidden on first slide
@@ -131,7 +130,7 @@ export const DotNavigation: Story = {
     const canvas = within(canvasElement);
     const el = canvasElement.querySelector(
       "module-carousel",
-    ) as Component<ModuleCarouselProps>;
+    ) as HTMLElement & ModuleCarouselProps;
 
     await userEvent.click(canvas.getByLabelText("Slide 3"));
     await expect(el.index).toBe(2);
@@ -147,7 +146,7 @@ export const PropertyChanges: Story = {
     await customElements.whenDefined("module-carousel");
     const el = canvasElement.querySelector(
       "module-carousel",
-    ) as Component<ModuleCarouselProps>;
+    ) as HTMLElement & ModuleCarouselProps;
     const slides = el.querySelectorAll<HTMLElement>('[role="tabpanel"]');
 
     el.index = 1;

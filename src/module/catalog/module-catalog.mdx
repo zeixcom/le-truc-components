@@ -33,13 +33,13 @@ None. This component coordinates child component properties through effects.
   <tbody>
     <tr>
       <td><code>first('basic-button')</code></td>
-      <td><code>Component&lt;BasicButtonProps&gt;</code></td>
+      <td><code>HTMLElement &amp; BasicButtonProps</code></td>
       <td><strong>required</strong></td>
       <td>Shopping cart button receiving <code>disabled</code> and <code>badge</code> via <code>pass()</code></td>
     </tr>
     <tr>
       <td><code>all('form-spinbutton')</code></td>
-      <td><code>Memo&lt;Component&lt;FormSpinbuttonProps&gt;[]&gt;</code></td>
+      <td><code>Memo&lt;(HTMLElement &amp; FormSpinbuttonProps)[]&gt;</code></td>
       <td><strong>required</strong></td>
       <td>Spinbuttons whose <code>value</code> properties are summed to compute the cart total</td>
     </tr>

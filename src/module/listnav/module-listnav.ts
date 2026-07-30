@@ -1,18 +1,6 @@
-import {
-  batch,
-  type Component,
-  type ComponentProps,
-  createEffect,
-  defineComponent,
-  pass,
-} from "@zeix/le-truc";
+import { batch, createEffect, defineComponent } from "@zeix/le-truc";
 import type { FormListboxProps } from "../../form/listbox/form-listbox";
 import type { ModuleLazyloadProps } from "../lazyload/module-lazyload";
-
-type ModuleListnavUI = {
-  listbox: Component<FormListboxProps>;
-  lazyload: Component<ModuleLazyloadProps>;
-};
 
 /**
  * Extract the base path (first path segment) from an option value.
@@ -76,66 +64,70 @@ const valueToHash = (value: string, listbox: HTMLElement): string => {
   return hash;
 };
 
-export default defineComponent<ComponentProps, ModuleListnavUI>(
-  "module-listnav",
-  {},
-  ({ first }) => ({
-    listbox: first("form-listbox", "Required to select a partial to load"),
-    lazyload: first("module-lazyload", "Required to load a partial into"),
-  }),
-  ({ listbox }) => {
-    const hasOption = (value: string): boolean =>
-      !!listbox.querySelector(
-        `button[role="option"][value="${CSS.escape(value)}"]`,
-      );
+export default defineComponent("module-listnav", ({ first, pass, watch }) => {
+  const listbox = first(
+    "form-listbox",
+    "Required to select a partial to load",
+  ) as HTMLElement & FormListboxProps;
+  const lazyload = first(
+    "module-lazyload",
+    "Required to load a partial into",
+  ) as HTMLElement & ModuleLazyloadProps;
 
-    // Set initial selection from hash
-    if (location.hash) {
-      const value = hashToValue(location.hash, listbox);
-      if (value && hasOption(value)) listbox.value = value;
+  const hasOption = (value: string): boolean =>
+    !!listbox.querySelector(
+      `button[role="option"][value="${CSS.escape(value)}"]`,
+    );
+
+  // Set initial selection from hash
+  if (location.hash) {
+    const value = hashToValue(location.hash, listbox);
+    if (value && hasOption(value)) listbox.value = value;
+  }
+
+  // Track whether we're updating the hash ourselves to avoid loops
+  let updatingHash = false;
+
+  // Update selection when hash changes (browser back/forward)
+  const onHashChange = () => {
+    if (updatingHash) return;
+
+    const value = hashToValue(location.hash, listbox);
+    if (value && value !== listbox.value && hasOption(value)) {
+      batch(() => {
+        listbox.filter = "";
+        listbox.value = value;
+      });
     }
+  };
 
-    // Track whether we're updating the hash ourselves to avoid loops
-    let updatingHash = false;
+  pass(lazyload, { src: () => listbox.value });
 
-    // Update selection when hash changes (browser back/forward)
-    const onHashChange = () => {
-      if (updatingHash) return;
+  // Sync location.hash ↔ listbox selection — no signal dependency, so
+  // watch(() => true, …) runs the setup once on connect and its returned
+  // cleanup tears both listeners down on disconnect.
+  watch(
+    () => true,
+    () => {
+      // Update hash when selection changes
+      const cleanup = createEffect(() => {
+        const value = listbox.value;
+        if (!value) return;
 
-      const value = hashToValue(location.hash, listbox);
-      if (value && value !== listbox.value && hasOption(value)) {
-        batch(() => {
-          listbox.filter = "";
-          listbox.value = value;
-        });
-      }
-    };
+        const hash = valueToHash(value, listbox);
+        if (hash && location.hash !== `#${hash}`) {
+          updatingHash = true;
+          history.replaceState(null, "", `#${hash}`);
+          updatingHash = false;
+        }
+      });
 
-    return {
-      lazyload: pass({ src: () => listbox.value }),
+      window.addEventListener("hashchange", onHashChange);
 
-      // Sync location.hash ↔ listbox selection
-      host: () => {
-        // Update hash when selection changes
-        const cleanup = createEffect(() => {
-          const value = listbox.value;
-          if (!value) return;
-
-          const hash = valueToHash(value, listbox);
-          if (hash && location.hash !== `#${hash}`) {
-            updatingHash = true;
-            history.replaceState(null, "", `#${hash}`);
-            updatingHash = false;
-          }
-        });
-
-        window.addEventListener("hashchange", onHashChange);
-
-        return () => {
-          cleanup();
-          window.removeEventListener("hashchange", onHashChange);
-        };
-      },
-    };
-  },
-);
+      return () => {
+        cleanup();
+        window.removeEventListener("hashchange", onHashChange);
+      };
+    },
+  );
+});

@@ -5,7 +5,7 @@ import * as ModuleCodeblockStories from './module-codeblock.stories';
 
 ### Module Codeblock
 
-A progressively enhanced code block that can collapse, expand, and copy its content. Demonstrates `asBoolean()` for a boolean attribute-backed property, `toggleAttribute()` to reflect `collapsed` back to the host element for CSS styling, and `on('click')` with simple imperative property updates. The `copy` effect is a custom reusable function (`copyToClipboard`) that returns an `Effect` — showing how to extract and share effect logic across components.
+A progressively enhanced code block that can collapse, expand, and copy its content. Demonstrates `asBoolean()` for a boolean attribute-backed property, `bindAttribute()` to reflect `collapsed` back to the host element for CSS styling, and `on('click')` with simple imperative property updates. The `copy` behavior is a custom reusable function (`copyToClipboard`) that returns a hand-authored `EffectDescriptor`, registered via `watch(() => true, descriptor)` — showing how to extract and share effect logic across components.
 
 #### Tag Name
 
@@ -66,7 +66,7 @@ A progressively enhanced code block that can collapse, expand, and copy its cont
     </tr>
     <tr>
       <td><code>first('basic-button.copy')</code></td>
-      <td><code>Component&lt;BasicButtonProps&gt;</code></td>
+      <td><code>HTMLElement &amp; BasicButtonProps</code></td>
       <td>optional</td>
       <td>Copy-to-clipboard trigger; reads <code>copy-success</code> and <code>copy-error</code> attributes for feedback messages</td>
     </tr>

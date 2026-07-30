@@ -12,18 +12,12 @@ module-todo {
 		justify-content: space-between;
 	}
 
-	> module-list {
-		&[filter='completed'] li:not(:has([checked])) {
-			display: none;
-		}
+	&[filter='completed'] ol li:not(:has([checked])) {
+		display: none;
+	}
 
-		&[filter='active'] li:has([checked]) {
-			display: none;
-		}
-
-		& li {
-			border-bottom: 0;
-		}
+	&[filter='active'] ol li:has([checked]) {
+		display: none;
 	}
 
 	& ol {

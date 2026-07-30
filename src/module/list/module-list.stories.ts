@@ -8,22 +8,9 @@ import "../../basic/button/basic-button.css";
 import "../../form/textbox/form-textbox.ts";
 import "../../form/textbox/form-textbox.css";
 
-type ModuleListArgs = {
-  max: number;
-};
-
-const render = ({ max }: ModuleListArgs) => html`
-  <module-list max=${max}>
-    <ul data-container></ul>
-    <template>
-      <li>
-        <span><slot></slot></span>
-        <basic-button class="delete">
-          <button type="button" class="tertiary destructive small">Remove</button>
-        </basic-button>
-      </li>
-    </template>
-    <form>
+const render = () => html`
+  <module-list>
+    <form action="#">
       <form-textbox clearable>
         <label for="new-item-input">New item</label>
         <div class="input">
@@ -31,37 +18,34 @@ const render = ({ max }: ModuleListArgs) => html`
           <button type="button" class="clear" aria-label="Clear input" hidden>✕</button>
         </div>
       </form-textbox>
-      <basic-button class="add">
-        <button type="submit" class="constructive">Add</button>
+      <basic-button class="submit">
+        <button type="submit" class="constructive" disabled>
+          <span class="label">Add</span>
+        </button>
       </basic-button>
     </form>
+    <ul data-container></ul>
+    <template>
+      <li>
+        <span><slot></slot></span>
+        <basic-button class="remove">
+          <button type="button" class="tertiary destructive small">Remove</button>
+        </basic-button>
+      </li>
+    </template>
   </module-list>
 `;
 
-const meta: Meta<ModuleListArgs> = {
+const meta: Meta = {
   title: "Module/List",
   render,
-  argTypes: {
-    max: {
-      control: "number",
-      table: {
-        defaultValue: { summary: "1000" },
-        category: "Attributes",
-      },
-    },
-  },
 };
 export default meta;
-type Story = StoryObj<ModuleListArgs>;
+type Story = StoryObj;
 
-export const Default: Story = {
-  args: {
-    max: 1000,
-  },
-};
+export const Default: Story = {};
 
 export const AddItem: Story = {
-  args: { max: 1000 },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-list");
     const canvas = within(canvasElement);
@@ -83,33 +67,11 @@ export const AddItem: Story = {
   },
 };
 
-// ⚠️ Custom render: pre-populates the container with existing items to test that the component recognises them
+// ⚠️ Custom render: pre-populates the container with existing items to test that the component recognises server-rendered children
 export const WithInitialItems: Story = {
   render: () => html`
     <module-list>
-      <ul data-container>
-        <li data-key="0">
-          <span>Existing item 1</span>
-          <basic-button class="delete">
-            <button type="button" class="tertiary destructive small">Remove</button>
-          </basic-button>
-        </li>
-        <li data-key="1">
-          <span>Existing item 2</span>
-          <basic-button class="delete">
-            <button type="button" class="tertiary destructive small">Remove</button>
-          </basic-button>
-        </li>
-      </ul>
-      <template>
-        <li>
-          <span><slot></slot></span>
-          <basic-button class="delete">
-            <button type="button" class="tertiary destructive small">Remove</button>
-          </basic-button>
-        </li>
-      </template>
-      <form>
+      <form action="#">
         <form-textbox clearable>
           <label for="initial-item-input">New item</label>
           <div class="input">
@@ -117,34 +79,22 @@ export const WithInitialItems: Story = {
             <button type="button" class="clear" aria-label="Clear input" hidden>✕</button>
           </div>
         </form-textbox>
-        <basic-button class="add">
-          <button type="submit" class="constructive">Add</button>
+        <basic-button class="submit">
+          <button type="submit" class="constructive" disabled>
+            <span class="label">Add</span>
+          </button>
         </basic-button>
       </form>
-    </module-list>
-  `,
-};
-
-// ⚠️ Custom render: pre-populates the container at the max limit to verify the add button starts disabled
-export const WithMax: Story = {
-  render: () => html`
-    <module-list max="3">
       <ul data-container>
-        <li data-key="0">
-          <span>Item 1</span>
-          <basic-button class="delete">
+        <li data-key="item0">
+          <span>Existing item 1</span>
+          <basic-button class="remove">
             <button type="button" class="tertiary destructive small">Remove</button>
           </basic-button>
         </li>
-        <li data-key="1">
-          <span>Item 2</span>
-          <basic-button class="delete">
-            <button type="button" class="tertiary destructive small">Remove</button>
-          </basic-button>
-        </li>
-        <li data-key="2">
-          <span>Item 3</span>
-          <basic-button class="delete">
+        <li data-key="item1">
+          <span>Existing item 2</span>
+          <basic-button class="remove">
             <button type="button" class="tertiary destructive small">Remove</button>
           </basic-button>
         </li>
@@ -152,30 +102,65 @@ export const WithMax: Story = {
       <template>
         <li>
           <span><slot></slot></span>
-          <basic-button class="delete">
+          <basic-button class="remove">
             <button type="button" class="tertiary destructive small">Remove</button>
           </basic-button>
         </li>
       </template>
-      <form>
+    </module-list>
+  `,
+};
+
+export const RemoveItem: Story = {
+  render: () => html`
+    <module-list>
+      <form action="#">
         <form-textbox clearable>
-          <label for="max-item-input">New item</label>
+          <label for="remove-item-input">New item</label>
           <div class="input">
-            <input type="text" id="max-item-input" name="new-item" autocomplete="off" />
+            <input type="text" id="remove-item-input" name="new-item" autocomplete="off" />
             <button type="button" class="clear" aria-label="Clear input" hidden>✕</button>
           </div>
         </form-textbox>
-        <basic-button class="add">
-          <button type="submit" class="constructive">Add</button>
+        <basic-button class="submit">
+          <button type="submit" class="constructive" disabled>
+            <span class="label">Add</span>
+          </button>
         </basic-button>
       </form>
+      <ul data-container>
+        <li data-key="item0">
+          <span>Existing item 1</span>
+          <basic-button class="remove">
+            <button type="button" class="tertiary destructive small">Remove</button>
+          </basic-button>
+        </li>
+        <li data-key="item1">
+          <span>Existing item 2</span>
+          <basic-button class="remove">
+            <button type="button" class="tertiary destructive small">Remove</button>
+          </basic-button>
+        </li>
+      </ul>
+      <template>
+        <li>
+          <span><slot></slot></span>
+          <basic-button class="remove">
+            <button type="button" class="tertiary destructive small">Remove</button>
+          </basic-button>
+        </li>
+      </template>
     </module-list>
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-list");
-    const canvas = within(canvasElement);
-    const addButton = canvas.getByRole("button", { name: "Add" });
+    const container = canvasElement.querySelector("[data-container]");
+    await expect(container?.children.length).toBe(2);
 
-    await expect(addButton).toBeDisabled();
+    const removeButtons = canvasElement.querySelectorAll<HTMLButtonElement>(
+      "basic-button.remove button",
+    );
+    await userEvent.click(removeButtons[0]!);
+    await expect(container?.children.length).toBe(1);
   },
 };

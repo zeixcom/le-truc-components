@@ -1,100 +1,74 @@
 import {
-  asInteger,
-  asMethod,
-  type Component,
+  createList,
   defineComponent,
-  MissingElementError,
-  on,
-  pass,
+  type List,
+  reconcile,
 } from "@zeix/le-truc";
 import type { BasicButtonProps } from "../../basic/button/basic-button";
 import type { FormTextboxProps } from "../../form/textbox/form-textbox";
 
-export type ModuleListProps = {
-  add: (process?: (item: HTMLElement) => void) => void;
-  delete: (key: string) => void;
-};
-
-type ModuleListUI = {
-  container: HTMLElement;
-  template: HTMLTemplateElement;
-  form?: HTMLFormElement | undefined;
-  textbox?: Component<FormTextboxProps> | undefined;
-  add?: Component<BasicButtonProps> | undefined;
-};
-
 declare global {
   interface HTMLElementTagNameMap {
-    "module-list": Component<ModuleListProps>;
+    "module-list": HTMLElement;
   }
 }
 
-const MAX_ITEMS = 1000;
+/**
+ * A dynamic list component demonstrating the `createList()` keyed reconciliation API.
+ * Items are added via a form submission and removed via delegated click handling,
+ * with stable keys across reorders.
+ */
+export default defineComponent("module-list", ({ first, host, on, pass }) => {
+  // Keyed reactive list of plain string items. The 'item' prefix feeds the
+  // auto-incrementing key generator (item0, item1, ...); keys are stable
+  // across reorders, which is what lets removal target the right item.
+  const list: List<string> = createList<string>([], { keyConfig: "item" });
 
-export default defineComponent<ModuleListProps, ModuleListUI>(
-  "module-list",
-  {
-    add: asMethod(({ host, container, template }) => {
-      let key = 0;
-      host.add = (process?: (item: HTMLElement) => void) => {
-        const item = (template.content.cloneNode(true) as DocumentFragment)
-          .firstElementChild;
-        if (item && item instanceof HTMLElement) {
-          item.dataset.key = String(key++);
-          if (process) process(item);
-          container.append(item);
-        } else {
-          throw new MissingElementError(
-            host,
-            "*",
-            "Template does not contain an item element.",
-          );
-        }
-      };
-    }),
-    delete: asMethod(({ host, container }) => {
-      host.delete = (key: string) => {
-        const item = container.querySelector(`[data-key="${key}"]`);
-        if (item) item.remove();
-      };
-    }),
-  },
-  ({ first }) => ({
-    container: first("[data-container]", "Add a container element for items."),
-    template: first("template", "Add a template element for items."),
-    form: first("form"),
-    textbox: first("form-textbox"),
-    add: first("basic-button.add"),
-  }),
-  (ui) => {
-    const { host, container, textbox } = ui;
-    const max = asInteger(MAX_ITEMS)(ui, host.getAttribute("max"));
+  const container = first(
+    "[data-container]",
+    "Add a container element for items.",
+  );
+  const template = first("template", "Add a template element for items.");
+  // Sync the container's children to the list: clones the template for
+  // entering keys, removes leavers, moves survivors. bindItem fills the
+  // cloned content — server-adopted items have no <slot> left, so the
+  // fill is naturally idempotent.
+  reconcile(container, template, list, (element, item) => {
+    element
+      .querySelector("slot")
+      ?.replaceWith(document.createTextNode(item.get()));
+  });
 
-    return {
-      form: on("submit", (e) => {
-        e.preventDefault();
-        const content = textbox?.value;
-        if (content) {
-          host.add((item) => {
-            item.querySelector("slot")?.replaceWith(content);
-          });
-          textbox.clear();
-        }
-      }),
-      add: pass({
-        disabled: () =>
-          (textbox && !textbox.length) || container.children.length >= max,
-      }),
-      host: on("click", (e) => {
-        const { target } = e;
-        if (
-          target instanceof HTMLElement &&
-          target.closest("basic-button.delete")
-        ) {
-          e.stopPropagation();
-          target.closest("[data-key]")?.remove();
-        }
-      }),
-    };
-  },
-);
+  const form = first("form", "Add a form element to enter a new list item.");
+  const textbox = first(
+    "form-textbox",
+    "Add <form-textbox> component to enter a new list item.",
+  ) as HTMLElement & FormTextboxProps;
+  // Add on submit, then clear the input by calling the child's method.
+  on(form, "submit", (e) => {
+    e.preventDefault();
+    const value = textbox.value.trim();
+    if (!value) return;
+    list.add(value);
+    textbox.clear();
+  });
+
+  // Event delegation: one handler removes any item whose Remove button
+  // was clicked, scaling to any number of items.
+  on(host, "click", (e) => {
+    const target = e.target as HTMLElement;
+    if (!target.closest("basic-button.remove")) return;
+    const item = target.closest("[data-key]");
+    if (!(item instanceof HTMLElement)) return;
+    e.stopPropagation();
+    const key = item.dataset.key;
+    if (key) list.remove(key);
+  });
+
+  const submit = first(
+    "basic-button.submit",
+    "Add <basic-button.submit> component to submit the form.",
+  ) as HTMLElement & BasicButtonProps;
+  // Disable the submit button while the textbox is empty.
+  pass(submit, { disabled: () => !textbox.length });
+});

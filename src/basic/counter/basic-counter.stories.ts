@@ -3,7 +3,6 @@ import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./basic-counter.ts";
 import "./basic-counter.css";
-import type { Component } from "@zeix/le-truc";
 import type { BasicCounterProps } from "./basic-counter.ts";
 
 type BasicCounterArgs = {
@@ -45,7 +44,7 @@ export const DynamicUpdates: Story = {
     const canvas = within(canvasElement);
     const el = canvasElement.querySelector(
       "basic-counter",
-    ) as Component<BasicCounterProps>;
+    ) as HTMLElement & BasicCounterProps;
     const button = canvas.getByRole("button");
     const span = el.querySelector("span");
 
@@ -67,7 +66,7 @@ export const InitialDOMValue: Story = {
     const canvas = within(canvasElement);
     const el = canvasElement.querySelector(
       "basic-counter",
-    ) as Component<BasicCounterProps>;
+    ) as HTMLElement & BasicCounterProps;
     const span = el.querySelector("span");
 
     await expect(span).toHaveTextContent("100");
@@ -85,7 +84,7 @@ export const NegativeInitialValue: Story = {
     const canvas = within(canvasElement);
     const el = canvasElement.querySelector(
       "basic-counter",
-    ) as Component<BasicCounterProps>;
+    ) as HTMLElement & BasicCounterProps;
     const span = el.querySelector("span");
 
     await expect(span).toHaveTextContent("-5");
@@ -104,7 +103,7 @@ export const PropertyChanges: Story = {
     await customElements.whenDefined("basic-counter");
     const el = canvasElement.querySelector(
       "basic-counter",
-    ) as Component<BasicCounterProps>;
+    ) as HTMLElement & BasicCounterProps;
     const span = el.querySelector("span");
 
     el.count = 10;

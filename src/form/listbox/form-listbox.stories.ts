@@ -6,7 +6,7 @@ import "../../module/scrollarea/module-scrollarea.ts";
 import "../../module/scrollarea/module-scrollarea.css";
 import "./form-listbox.ts";
 import "./form-listbox.css";
-import type { Component } from "@zeix/le-truc";
+import type { FormAssociatedElement } from "@zeix/le-truc";
 import type { FormListboxProps } from "./form-listbox.ts";
 
 type FormListboxArgs = {
@@ -17,8 +17,7 @@ type FormListboxArgs = {
 
 const render = ({ value }: FormListboxArgs) => html`
   <form>
-    <form-listbox id="colors" value=${value || nothing}>
-      <input type="hidden" name="color" />
+    <form-listbox id="colors" name="color">
       <div role="listbox" aria-label="Colors">
         <button type="button" role="option" tabindex="-1" value="red" aria-selected=${value === "red" ? "true" : nothing}>Red</button>
         <button type="button" role="option" tabindex="-1" value="green" aria-selected=${value === "green" ? "true" : nothing}>Green</button>
@@ -73,8 +72,7 @@ export const Default: Story = {
 export const WithFilter: Story = {
   render: () => html`
     <form>
-      <form-listbox id="fruits">
-        <input type="hidden" name="fruit" />
+      <form-listbox id="fruits" name="fruit">
         <label for="fruits-filter" class="visually-hidden">Filter fruits</label>
         <div class="input">
           <input type="text" id="fruits-filter" class="filter" placeholder="Filter fruits" />
@@ -96,7 +94,7 @@ export const WithFilter: Story = {
     const canvas = within(canvasElement);
     const el = canvasElement.querySelector(
       "form-listbox",
-    ) as Component<FormListboxProps>;
+    ) as HTMLElement & FormAssociatedElement & FormListboxProps;
     const filterInput = canvas.getByPlaceholderText("Filter fruits");
 
     await expect(el.options.length).toBe(6);
@@ -115,8 +113,7 @@ export const WithFilter: Story = {
 export const WithGroups: Story = {
   render: () => html`
     <form>
-      <form-listbox id="grouped-fruits">
-        <input type="hidden" name="fruit" />
+      <form-listbox id="grouped-fruits" name="fruit">
         <div role="listbox" aria-label="Fruits by category">
           <div role="group" aria-labelledby="group-citrus">
             <div role="presentation" id="group-citrus">Citrus</div>
@@ -138,7 +135,7 @@ export const WithGroups: Story = {
     const canvas = within(canvasElement);
     const el = canvasElement.querySelector(
       "form-listbox",
-    ) as Component<FormListboxProps>;
+    ) as HTMLElement & FormAssociatedElement & FormListboxProps;
 
     await expect(el.value).toBe("");
 
@@ -154,8 +151,7 @@ export const WithSrc: Story = {
   },
   render: ({ src }) => html`
     <form>
-      <form-listbox id="remote-options" src=${src || nothing}>
-        <input type="hidden" name="option" />
+      <form-listbox id="remote-options" name="option" src=${src || nothing}>
         <card-callout>
           <p class="loading" role="status">Loading...</p>
           <p class="error" role="alert" aria-live="assertive" hidden></p>
@@ -168,7 +164,7 @@ export const WithSrc: Story = {
     await customElements.whenDefined("form-listbox");
     const el = canvasElement.querySelector(
       "form-listbox",
-    ) as Component<FormListboxProps>;
+    ) as HTMLElement & FormAssociatedElement & FormListboxProps;
 
     await waitFor(() => expect(el.options.length).toBeGreaterThan(0));
     await expect(el.value).toBe("");
@@ -185,8 +181,7 @@ export const WithSrc: Story = {
 export const Selection: Story = {
   render: () => html`
     <form>
-      <form-listbox id="langs">
-        <input type="hidden" name="language" />
+      <form-listbox id="langs" name="language">
         <div role="listbox" aria-label="Languages">
           <button type="button" role="option" tabindex="-1" value="en">
             English
@@ -211,7 +206,7 @@ export const Selection: Story = {
     await customElements.whenDefined("form-listbox");
     const el = canvasElement.querySelector(
       "form-listbox",
-    ) as Component<FormListboxProps>;
+    ) as HTMLElement & FormAssociatedElement & FormListboxProps;
 
     await expect(el.value).toBe("fr");
 

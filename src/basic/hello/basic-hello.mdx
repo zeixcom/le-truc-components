@@ -5,7 +5,7 @@ import * as BasicHelloStories from './basic-hello.stories';
 
 ### Basic Hello
 
-The Hello World example from the Quick Start guide. Shows the minimal Le Truc pattern: `asString()` with a reader fallback that reads the initial value from the `output` element, `on('input')` to update `host.name` as the user types, and `setText()` to keep the greeting in sync. Also demonstrates how the setup function can reference a queried UI element (`input`) directly alongside `host`.
+The Hello World example from the Quick Start guide. Shows the minimal Le Truc pattern: reading the initial value directly from the `output` element's text content as a static fallback, `on('input')` to update `host.subject` as the user types, and `bindText()` to keep the greeting in sync.
 
 #### Tag Name
 
@@ -35,13 +35,13 @@ The Hello World example from the Quick Start guide. Shows the minimal Le Truc pa
       <td><code>first('input')</code></td>
       <td><code>HTMLInputElement</code></td>
       <td><strong>required</strong></td>
-      <td>Text field to enter the name; updates <code>host.name</code> on each <code>input</code> event, falling back to the initial value when empty</td>
+      <td>Text field to enter the name; updates <code>host.subject</code> on each <code>input</code> event, falling back to the initial value when empty</td>
     </tr>
     <tr>
       <td><code>first('output')</code></td>
       <td><code>HTMLOutputElement</code></td>
       <td><strong>required</strong></td>
-      <td>Displays the current name; its initial text content seeds the <code>name</code> property</td>
+      <td>Displays the current name; its initial text content seeds the <code>subject</code> property</td>
     </tr>
   </tbody>
 </table>

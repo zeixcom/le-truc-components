@@ -5,7 +5,7 @@ import * as ModuleTabgroupStories from './module-tabgroup.stories';
 
 ### Module Tabgroup
 
-An accessible tab group with keyboard navigation. Uses `createEventsSensor` to derive `selected` from both click events and keyboard events (ArrowLeft/Right/Up/Down, Home, End) on the tab buttons. The initial selection is read from the DOM via `read()`. Demonstrates `setProperty('ariaSelected')` and `setProperty('tabIndex')` applied to `all('button[role="tab"]')`, and `show()` applied to `all('[role="tabpanel"]')`.
+An accessible tab group with keyboard navigation. Uses a private `createState` (read from the DOM at connect time) updated from both `on('click')` and `on('keyup')` (ArrowLeft/Right/Up/Down, Home, End) handlers on `all('button[role="tab"]')`, exposing it read-only via `expose({ selected: selectedState.get })` so consumers cannot set it directly. Demonstrates a `watch('selected', ...)` custom handler that imperatively updates `ariaSelected`/`tabIndex` on the tabs and `hidden` on `all('[role="tabpanel"]')`.
 
 #### Tag Name
 
