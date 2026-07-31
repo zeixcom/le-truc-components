@@ -138,6 +138,80 @@ export const DynamicUpdates: Story = {
   },
 };
 
+export const KeyboardNavigation: Story = {
+  args: { value: "light", variant: "radio-group" },
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("form-radiogroup");
+    const canvas = within(canvasElement);
+    const el = canvasElement.querySelector("form-radiogroup") as HTMLElement &
+      FormAssociatedElement &
+      FormRadiogroupProps;
+    const light = canvas.getByLabelText("Light") as HTMLInputElement;
+    const dark = canvas.getByLabelText("Dark") as HTMLInputElement;
+    const system = canvas.getByLabelText("System") as HTMLInputElement;
+
+    // tabIndex reflects the selected radio, independent of DOM focus.
+    await expect(light.tabIndex).toBe(0);
+    await expect(dark.tabIndex).toBe(-1);
+
+    light.focus();
+    await userEvent.keyboard("{ArrowRight}");
+    await expect(document.activeElement).toBe(dark);
+    // Moving focus alone (no click/Enter) does not change the value or tabIndex yet.
+    await expect(el.value).toBe("light");
+    await expect(light.tabIndex).toBe(0);
+    await expect(dark.tabIndex).toBe(-1);
+
+    await userEvent.keyboard("{ArrowDown}");
+    await expect(document.activeElement).toBe(system);
+
+    // Wraps around past the last option.
+    await userEvent.keyboard("{ArrowRight}");
+    await expect(document.activeElement).toBe(light);
+
+    await userEvent.keyboard("{ArrowLeft}");
+    await expect(document.activeElement).toBe(system);
+
+    await userEvent.keyboard("{ArrowUp}");
+    await expect(document.activeElement).toBe(dark);
+
+    await userEvent.keyboard("{Home}");
+    await expect(document.activeElement).toBe(light);
+
+    await userEvent.keyboard("{End}");
+    await expect(document.activeElement).toBe(system);
+
+    // Enter activates the focused (but not yet selected) radio.
+    await userEvent.keyboard("{Enter}");
+    await expect(el.value).toBe("system");
+    await expect(system.checked).toBe(true);
+
+    // Unrelated key: no change.
+    await userEvent.keyboard("a");
+    await expect(el.value).toBe("system");
+  },
+};
+
+export const ClickFocusTracking: Story = {
+  args: { value: "light", variant: "radio-group" },
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("form-radiogroup");
+    const canvas = within(canvasElement);
+    const el = canvasElement.querySelector("form-radiogroup") as HTMLElement &
+      FormAssociatedElement &
+      FormRadiogroupProps;
+    const dark = canvas.getByLabelText("Dark") as HTMLInputElement;
+
+    await userEvent.click(dark);
+    await expect(el.value).toBe("dark");
+
+    // Roving tabindex follows the click, so a subsequent Enter re-activates
+    // the same (already selected) radio without moving focus first.
+    await userEvent.keyboard("{Enter}");
+    await expect(el.value).toBe("dark");
+  },
+};
+
 export const PropertyChanges: Story = {
   args: { value: "light", variant: "split-button" },
   play: async ({ canvasElement }) => {

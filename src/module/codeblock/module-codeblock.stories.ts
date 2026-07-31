@@ -1,12 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, spyOn, userEvent, waitFor, within } from "storybook/test";
 import "../../basic/button/basic-button.ts";
 import "../../basic/button/basic-button.css";
 import "../../module/scrollarea/module-scrollarea.ts";
 import "../../module/scrollarea/module-scrollarea.css";
 import "./module-codeblock.ts";
 import "./module-codeblock.css";
+import type { BasicButtonProps } from "../../basic/button/basic-button.ts";
 import type { ModuleCodeblockProps } from "./module-codeblock.ts";
 
 type ModuleCodeblockArgs = {
@@ -94,5 +95,42 @@ export const PropertyChanges: Story = {
 
     el.collapsed = false;
     await expect(el).not.toHaveAttribute("collapsed");
+  },
+};
+
+export const CopyToClipboard: Story = {
+  args: { collapsed: false },
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("module-codeblock");
+    const copyButton = canvasElement.querySelector(
+      "basic-button.copy",
+    ) as HTMLElement & BasicButtonProps;
+    const button = copyButton.querySelector("button") as HTMLButtonElement;
+
+    const writeText = spyOn(navigator.clipboard, "writeText").mockResolvedValue(
+      undefined,
+    );
+
+    await userEvent.click(button);
+    await expect(writeText).toHaveBeenCalledWith(sampleCode);
+    await expect(copyButton.label).toBe("Copied!");
+    await expect(button).toBeDisabled();
+
+    await waitFor(() => expect(copyButton.label).toBe("Copy"), {
+      timeout: 2000,
+    });
+    await expect(button).not.toBeDisabled();
+
+    writeText.mockRejectedValueOnce(new Error("denied"));
+    await userEvent.click(button);
+    await expect(copyButton.label).toBe("Error!");
+    await expect(button).toBeDisabled();
+
+    await waitFor(() => expect(copyButton.label).toBe("Copy"), {
+      timeout: 4000,
+    });
+    await expect(button).not.toBeDisabled();
+
+    writeText.mockRestore();
   },
 };
