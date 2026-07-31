@@ -40,7 +40,7 @@ declare global {
  **/
 export default defineComponent<FormTextboxProps>(
   "form-textbox",
-  ({ expose, first, host, on, watch }) => {
+  ({ expose, first, host, internals, on, watch }) => {
     const textbox = first(
       "input, textarea",
       "Add a native input or textarea as descendant element.",
@@ -49,10 +49,12 @@ export default defineComponent<FormTextboxProps>(
 
     // Reactive description: tracks remaining character count if template is present
     const descriptionEl = first(".description");
+    const remainingTemplate = descriptionEl?.dataset.remaining;
     const descriptionMemo =
-      descriptionEl && textbox.maxLength > 0 && descriptionEl.dataset.remaining
+      descriptionEl && textbox.maxLength > 0 && remainingTemplate
         ? createMemo(() =>
-            descriptionEl.dataset.remaining!.replace(
+            remainingTemplate.replace(
+              // biome-ignore lint/suspicious/noTemplateCurlyInString: only look-alike
               "${n}",
               String(textbox.maxLength - host.length),
             ),
@@ -86,6 +88,7 @@ export default defineComponent<FormTextboxProps>(
 
     const clearBtn = first("button.clear");
     if (clearBtn) {
+      internals?.states.add("clearable");
       on(clearBtn, "click", () => {
         host.clear();
       });
@@ -94,7 +97,8 @@ export default defineComponent<FormTextboxProps>(
 
     if (descriptionEl) {
       const descriptionId = descriptionEl?.id;
-      if (descriptionId) textbox.setAttribute("aria-describedby", descriptionId);
+      if (descriptionId)
+        textbox.setAttribute("aria-describedby", descriptionId);
       // preserveComments: the Storybook story interpolates this element's
       // content via a lit-html expression; the default (non-preserving)
       // write would eject Lit's ChildPart marker comments and break

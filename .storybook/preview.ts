@@ -1,6 +1,8 @@
 import { setCustomElementsManifest } from "@storybook/web-components";
 import type { Preview } from "@storybook/web-components-vite";
 import customElements from "../custom-elements.json";
+// biome-ignore lint/suspicious/noTsIgnore: ignore TS error for side-effect CSS import
+// @ts-ignore: editors falling back to a classic TS language server misresolve this side-effect CSS import under noUncheckedSideEffectImports
 import "../src/_global.css";
 
 setCustomElementsManifest(customElements);

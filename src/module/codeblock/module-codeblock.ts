@@ -1,6 +1,6 @@
 import { asBoolean, bindAttribute, defineComponent } from "@zeix/le-truc";
-import { copyToClipboard } from "../../basic/button/copyToClipboard";
 import type { BasicButtonProps } from "../../basic/button/basic-button";
+import { copyToClipboard } from "../../basic/button/copyToClipboard";
 
 export type ModuleCodeblockProps = {
   collapsed: boolean;

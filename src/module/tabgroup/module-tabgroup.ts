@@ -20,6 +20,7 @@ const getSelected = (
 ) => {
   const currentIndex = tabs.findIndex(isCurrent);
   const newIndex = (currentIndex + offset + tabs.length) % tabs.length;
+  // biome-ignore lint/style/noNonNullAssertion: newIndex is always within bounds — all() requires at least 2 tabs, and modulo keeps the index in [0, tabs.length).
   return getAriaControls(tabs[newIndex]!);
 };
 
@@ -61,14 +62,17 @@ export default defineComponent<ModuleTabgroupProps>(
         const tabsList = tabs.get();
         const next =
           key === "Home"
-            ? getAriaControls(tabsList[0]!)
+            ? // biome-ignore lint/style/noNonNullAssertion: tabsList is always non-empty — all() requires at least 2 tabs.
+              getAriaControls(tabsList[0]!)
             : key === "End"
-              ? getAriaControls(tabsList[tabsList.length - 1]!)
+              ? // biome-ignore lint/style/noNonNullAssertion: tabsList is always non-empty — all() requires at least 2 tabs.
+                getAriaControls(tabsList[tabsList.length - 1]!)
               : getSelected(
                   tabsList,
                   (tab) => tab === target,
                   key === "ArrowLeft" || key === "ArrowUp" ? -1 : 1,
                 );
+        // biome-ignore lint/style/noNonNullAssertion: next was derived from tabsList itself, so a matching tab always exists.
         tabsList.filter((tab) => getAriaControls(tab) === next)[0]!.focus();
         selectedState.set(next);
       }

@@ -124,9 +124,9 @@ export const DynamicUpdates: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-radiogroup");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "form-radiogroup",
-    ) as HTMLElement & FormAssociatedElement & FormRadiogroupProps;
+    const el = canvasElement.querySelector("form-radiogroup") as HTMLElement &
+      FormAssociatedElement &
+      FormRadiogroupProps;
 
     await expect(el.value).toBe("light");
 
@@ -142,9 +142,9 @@ export const PropertyChanges: Story = {
   args: { value: "light", variant: "split-button" },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-radiogroup");
-    const el = canvasElement.querySelector(
-      "form-radiogroup",
-    ) as HTMLElement & FormAssociatedElement & FormRadiogroupProps;
+    const el = canvasElement.querySelector("form-radiogroup") as HTMLElement &
+      FormAssociatedElement &
+      FormRadiogroupProps;
     const labels = el.querySelectorAll("label");
 
     await expect(el.value).toBe("light");

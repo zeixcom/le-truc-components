@@ -11,7 +11,7 @@ import "../../form/textbox/form-textbox.css";
 const render = () => html`
   <module-list>
     <form action="#">
-      <form-textbox clearable>
+      <form-textbox>
         <label for="new-item-input">New item</label>
         <div class="input">
           <input type="text" id="new-item-input" name="new-item" autocomplete="off" />
@@ -72,7 +72,7 @@ export const WithInitialItems: Story = {
   render: () => html`
     <module-list>
       <form action="#">
-        <form-textbox clearable>
+        <form-textbox>
           <label for="initial-item-input">New item</label>
           <div class="input">
             <input type="text" id="initial-item-input" name="new-item" autocomplete="off" />
@@ -133,6 +133,7 @@ export const RemoveItem: Story = {
     const removeButtons = canvasElement.querySelectorAll<HTMLButtonElement>(
       "basic-button.remove button",
     );
+    // biome-ignore lint/style/noNonNullAssertion: asserted above that 2 items exist, so a remove button is present.
     await userEvent.click(removeButtons[0]!);
     await expect(container?.children.length).toBe(1);
   },

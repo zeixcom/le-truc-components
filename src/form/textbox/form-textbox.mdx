@@ -5,7 +5,7 @@ import * as FormTextboxStories from './form-textbox.stories';
 
 ### Form Textbox
 
-A general-purpose text field wrapper for `input` or `textarea` elements. Demonstrates a private `createState()` signal (`length`) updated via `on(textbox, 'input', ...)` and exposed read-only as `length.get`, a conditional `createMemo()` for `description` that produces either a static string or a computed remaining-characters string depending on DOM attributes, `defineMethod()` for the `clear` method, and the shared `relayValidity()` helper that mirrors the native input's `checkValidity()`/`validationMessage` into both the inline `.error` element and `host.setCustomValidity()`. Form participation and validity are via ElementInternals (`formAssociated()`) — external consumers read `host.validity`/`host.validationMessage` like on a native input; there is no separate `error` reactive property, and no manual `aria-invalid`/`aria-errormessage` — native `:invalid`/`:user-invalid` and ElementInternals validity replace them. Designed to be composable — `form-combobox` and `module-todo` both embed it and drive it via `pass()`.
+A general-purpose text field wrapper for `input` or `textarea` elements. Sets the `:state(clearable)` custom state when a `button.clear` descendant is present, so CSS can reserve space for it. Demonstrates a private `createState()` signal (`length`) updated via `on(textbox, 'input', ...)` and exposed read-only as `length.get`, a conditional `createMemo()` for `description` that produces either a static string or a computed remaining-characters string depending on DOM attributes, `defineMethod()` for the `clear` method, and the shared `relayValidity()` helper that mirrors the native input's `checkValidity()`/`validationMessage` into both the inline `.error` element and `host.setCustomValidity()`. Form participation and validity are via ElementInternals (`formAssociated()`) — external consumers read `host.validity`/`host.validationMessage` like on a native input; there is no separate `error` reactive property, and no manual `aria-invalid`/`aria-errormessage` — native `:invalid`/`:user-invalid` and ElementInternals validity replace them. Designed to be composable — `form-combobox` and `module-todo` both embed it and drive it via `pass()`.
 
 #### Tag Name
 
@@ -71,7 +71,7 @@ A general-purpose text field wrapper for `input` or `textarea` elements. Demonst
   </tbody>
 </table>
 
-#### Attributes
+#### Custom States
 
 <table>
   <thead>
@@ -82,8 +82,8 @@ A general-purpose text field wrapper for `input` or `textarea` elements. Demonst
   </thead>
   <tbody>
     <tr>
-      <td><code>clearable</code></td>
-      <td>Signals that a <code>button.clear</code> descendant is present; the button is shown/hidden automatically based on <code>length</code></td>
+      <td><code>:state(clearable)</code></td>
+      <td>Set when a <code>button.clear</code> descendant is present; derived from markup, not an author-set attribute, so it can't drift out of sync or be spoofed. The button itself is shown/hidden automatically based on <code>length</code></td>
     </tr>
   </tbody>
 </table>

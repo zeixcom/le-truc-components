@@ -21,6 +21,7 @@ const render = ({ value, max }: FormSpinbuttonArgs) => html`
       value=${value}
       min="0"
       max=${max}
+      aria-label="Quantity"
       readonly
       disabled
       ?hidden=${value === 0}
@@ -66,9 +67,9 @@ export const WithInitialValue: Story = {
   args: { value: 3, max: 15 },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-spinbutton");
-    const el = canvasElement.querySelector(
-      "form-spinbutton",
-    ) as HTMLElement & FormAssociatedElement & FormSpinbuttonProps;
+    const el = canvasElement.querySelector("form-spinbutton") as HTMLElement &
+      FormAssociatedElement &
+      FormSpinbuttonProps;
 
     await expect(el.value).toBe(3);
     await expect(el.max).toBe(15);
@@ -80,9 +81,9 @@ export const IncrementDecrement: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-spinbutton");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "form-spinbutton",
-    ) as HTMLElement & FormAssociatedElement & FormSpinbuttonProps;
+    const el = canvasElement.querySelector("form-spinbutton") as HTMLElement &
+      FormAssociatedElement &
+      FormSpinbuttonProps;
 
     await expect(el.value).toBe(0);
 
@@ -109,9 +110,9 @@ export const ClampedAtMax: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-spinbutton");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "form-spinbutton",
-    ) as HTMLElement & FormAssociatedElement & FormSpinbuttonProps;
+    const el = canvasElement.querySelector("form-spinbutton") as HTMLElement &
+      FormAssociatedElement &
+      FormSpinbuttonProps;
     const increment = canvas.getByLabelText("Increment");
 
     await expect(el.value).toBe(4);
@@ -126,9 +127,9 @@ export const PropertyChanges: Story = {
   args: { value: 0, max: 10 },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-spinbutton");
-    const el = canvasElement.querySelector(
-      "form-spinbutton",
-    ) as HTMLElement & FormAssociatedElement & FormSpinbuttonProps;
+    const el = canvasElement.querySelector("form-spinbutton") as HTMLElement &
+      FormAssociatedElement &
+      FormSpinbuttonProps;
     const input = el.querySelector("input.value");
 
     el.value = 7;

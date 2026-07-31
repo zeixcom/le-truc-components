@@ -12,7 +12,7 @@ type ModuleCarouselArgs = {
 const render = ({ index }: ModuleCarouselArgs) => html`
   <module-carousel>
     <h2 class="visually-hidden">Slides</h2>
-    <div class="slides">
+    <div class="slides" tabindex="0">
       <div
         id="slide-a"
         role="tabpanel"
@@ -104,9 +104,8 @@ export const Navigation: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-carousel");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "module-carousel",
-    ) as HTMLElement & ModuleCarouselProps;
+    const el = canvasElement.querySelector("module-carousel") as HTMLElement &
+      ModuleCarouselProps;
 
     await expect(el.index).toBe(0);
     // prev hidden on first slide
@@ -128,9 +127,8 @@ export const DotNavigation: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-carousel");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "module-carousel",
-    ) as HTMLElement & ModuleCarouselProps;
+    const el = canvasElement.querySelector("module-carousel") as HTMLElement &
+      ModuleCarouselProps;
 
     await userEvent.click(canvas.getByLabelText("Slide 3"));
     await expect(el.index).toBe(2);
@@ -144,9 +142,8 @@ export const PropertyChanges: Story = {
   args: { index: 0 },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-carousel");
-    const el = canvasElement.querySelector(
-      "module-carousel",
-    ) as HTMLElement & ModuleCarouselProps;
+    const el = canvasElement.querySelector("module-carousel") as HTMLElement &
+      ModuleCarouselProps;
     const slides = el.querySelectorAll<HTMLElement>('[role="tabpanel"]');
 
     el.index = 1;

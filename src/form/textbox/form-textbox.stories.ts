@@ -12,7 +12,7 @@ type FormTextboxArgs = {
 };
 
 const render = ({ description, clearable }: FormTextboxArgs) => html`
-  <form-textbox ?clearable=${clearable}>
+  <form-textbox>
     <label for="name-input">Name</label>
     <div class="input">
       <input type="text" id="name-input" name="name" autocomplete="name" required />
@@ -37,7 +37,7 @@ const meta: Meta<FormTextboxArgs> = {
     clearable: {
       control: "boolean",
       description:
-        "When present, a clear button is included (show/hide driven by <code>length</code>)",
+        "When enabled, a clear button is included (show/hide driven by <code>length</code>; sets the <code>:state(clearable)</code> custom state)",
       table: {
         defaultValue: { summary: "false" },
         category: "Attributes",
@@ -58,7 +58,7 @@ export const Default: Story = {
 // ⚠️ Custom render: uses a different field (search terms) with different name, placeholder, and no error/description
 export const WithClear: Story = {
   render: () => html`
-    <form-textbox clearable>
+    <form-textbox>
       <label for="search-input">Search terms</label>
       <div class="input">
         <input
@@ -75,9 +75,9 @@ export const WithClear: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-textbox");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "form-textbox",
-    ) as HTMLElement & FormAssociatedElement & FormTextboxProps;
+    const el = canvasElement.querySelector("form-textbox") as HTMLElement &
+      FormAssociatedElement &
+      FormTextboxProps;
     const input = canvas.getByRole("textbox");
 
     await expect(el.length).toBe(0);
@@ -120,9 +120,9 @@ export const WithTextarea: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-textbox");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "form-textbox",
-    ) as HTMLElement & FormAssociatedElement & FormTextboxProps;
+    const el = canvasElement.querySelector("form-textbox") as HTMLElement &
+      FormAssociatedElement &
+      FormTextboxProps;
     const textarea = canvas.getByRole("textbox");
     const description = el.querySelector(".description");
 
@@ -148,9 +148,9 @@ export const WithValidation: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-textbox");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "form-textbox",
-    ) as HTMLElement & FormAssociatedElement & FormTextboxProps;
+    const el = canvasElement.querySelector("form-textbox") as HTMLElement &
+      FormAssociatedElement &
+      FormTextboxProps;
     const input = canvas.getByRole("textbox");
     const errorEl = el.querySelector(".error");
 

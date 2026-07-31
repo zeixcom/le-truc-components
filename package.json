@@ -7,14 +7,16 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "analyze": "cem analyze",
+    "lint": "tsc --noEmit && biome check .",
     "storybook": "npm run analyze && storybook dev -p 6006",
     "build-storybook": "npm run analyze && storybook build"
   },
   "dependencies": {
-    "@zeix/le-truc": "^2.3.1",
+    "@zeix/le-truc": "^2.3.2",
     "culori": "^4.0.2"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.5.6",
     "@chromatic-com/storybook": "^5.2.1",
     "@custom-elements-manifest/analyzer": "^0.11.0",
     "@storybook/addon-a11y": "^10.5.5",

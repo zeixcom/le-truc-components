@@ -79,7 +79,9 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-colorinfo");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector("module-colorinfo") as any;
+    const el = canvasElement.querySelector(
+      "module-colorinfo",
+    ) as HTMLElement & { name: string };
     // hex is derived from the oklch(.48 .23 263) input and rendered into .hex.
     await expect(canvas.getByText(/^#[0-9a-f]{6}$/i)).toBeInTheDocument();
     await expect(el.name).toBe("Blue");

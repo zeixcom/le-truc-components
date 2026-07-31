@@ -1,5 +1,4 @@
 import "culori/css";
-import { clampChroma, formatCss, inGamut, type Oklch } from "culori/fn";
 import {
   asString,
   batch,
@@ -15,6 +14,7 @@ import {
   type State,
   throttle,
 } from "@zeix/le-truc";
+import { clampChroma, formatCss, inGamut, type Oklch } from "culori/fn";
 import { asOklch } from "../../_common/asOklch";
 import { getStepColor } from "../../_common/getStepColor";
 
@@ -219,15 +219,13 @@ export default defineComponent<FormColorgraphProps>(
         if (inP3Gamut(c)) commit(c);
       },
     );
-    const moveThumb = throttle(
-      (x: number, left: number, width: number) => {
-        const c = {
-          ...color.get(),
-          h: Math.min(Math.max((x - left) / width, 0), 1) * AXIS_MAX.h,
-        };
-        if (inP3Gamut(c)) commit(c);
-      },
-    );
+    const moveThumb = throttle((x: number, left: number, width: number) => {
+      const c = {
+        ...color.get(),
+        h: Math.min(Math.max((x - left) / width, 0), 1) * AXIS_MAX.h,
+      };
+      if (inP3Gamut(c)) commit(c);
+    });
 
     expose({
       value: asString("oklch(0.48 0.23 263)"),

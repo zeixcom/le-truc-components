@@ -56,9 +56,7 @@ export default defineComponent<ModuleSplitviewProps>(
     on(divider, "keydown", (event) => {
       const { key } = event;
       const decrement = isVertical ? key === "ArrowUp" : key === "ArrowLeft";
-      const increment = isVertical
-        ? key === "ArrowDown"
-        : key === "ArrowRight";
+      const increment = isVertical ? key === "ArrowDown" : key === "ArrowRight";
       if (decrement || increment || key === "Home" || key === "End") {
         event.preventDefault();
       }

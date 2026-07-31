@@ -47,6 +47,8 @@ export const Default: Story = {
     await customElements.whenDefined("card-colorscale");
     const canvas = within(canvasElement);
     // The hex label is computed for each swatch.
-    await expect(canvas.getAllByText(/^#[0-9a-f]{6}$/i).length).toBeGreaterThan(0);
+    await expect(canvas.getAllByText(/^#[0-9a-f]{6}$/i).length).toBeGreaterThan(
+      0,
+    );
   },
 };

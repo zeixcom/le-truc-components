@@ -97,9 +97,9 @@ export const WithClear: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-combobox");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "form-combobox",
-    ) as HTMLElement & FormAssociatedElement & FormComboboxProps;
+    const el = canvasElement.querySelector("form-combobox") as HTMLElement &
+      FormAssociatedElement &
+      FormComboboxProps;
     const input = canvas.getByRole("combobox");
 
     await expect(el.value).toBe("");
@@ -144,9 +144,9 @@ export const WithValidation: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-combobox");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "form-combobox",
-    ) as HTMLElement & FormAssociatedElement & FormComboboxProps;
+    const el = canvasElement.querySelector("form-combobox") as HTMLElement &
+      FormAssociatedElement &
+      FormComboboxProps;
     const input = canvas.getByRole("combobox");
     const errorEl = el.querySelector(".error");
 

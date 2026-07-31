@@ -16,9 +16,9 @@ import "../../form/textbox/form-textbox.ts";
 import "../../form/textbox/form-textbox.css";
 
 const todoTemplate = html`
-  <module-todo filter="all">
+  <module-todo>
     <form action="#">
-      <form-textbox clearable>
+      <form-textbox>
         <label for="add-todo">What needs to be done?</label>
         <div class="input">
           <input id="add-todo" type="text" value="" />
@@ -137,6 +137,8 @@ export const WithFilter: Story = {
     const canvas = within(canvasElement);
     const input = canvas.getByLabelText("What needs to be done?");
     const addButton = canvas.getByRole("button", { name: "Add Todo" });
+    // biome-ignore lint/style/noNonNullAssertion: rendered unconditionally by the story; if missing, the assertions below fail loudly.
+    const todo = canvasElement.querySelector("module-todo")!;
 
     await userEvent.type(input, "Active task");
     await userEvent.click(addButton);
@@ -151,8 +153,16 @@ export const WithFilter: Story = {
       await userEvent.click(checkboxes[1]);
 
       await userEvent.click(canvas.getByRole("radio", { name: "Active" }));
+      await expect(todo.matches(":state(filter-active)")).toBe(true);
+      await expect(todo.matches(":state(filter-completed)")).toBe(false);
+
       await userEvent.click(canvas.getByRole("radio", { name: "Completed" }));
+      await expect(todo.matches(":state(filter-completed)")).toBe(true);
+      await expect(todo.matches(":state(filter-active)")).toBe(false);
+
       await userEvent.click(canvas.getByRole("radio", { name: "All" }));
+      await expect(todo.matches(":state(filter-active)")).toBe(false);
+      await expect(todo.matches(":state(filter-completed)")).toBe(false);
     }
   },
 };
@@ -170,6 +180,7 @@ export const InlineEdit: Story = {
     const label = canvas.getByText("Bye groceries");
     await userEvent.dblClick(label);
 
+    // biome-ignore lint/style/noNonNullAssertion: the dblClick above always opens the inline edit input; if missing, the assertions below fail loudly.
     const editInput = canvasElement.querySelector<HTMLInputElement>(
       "form-inplace-edit input",
     )!;
@@ -202,7 +213,8 @@ export const KeyboardReorder: Story = {
     await expect(items[0]?.textContent).toContain("First");
 
     const firstReorderButton =
-      items[0]?.querySelector<HTMLButtonElement>("button.reorder")!;
+      // biome-ignore lint/style/noNonNullAssertion: asserted above that 3 items exist, and each item always renders a reorder button.
+      items[0]!.querySelector<HTMLButtonElement>("button.reorder")!;
     await userEvent.click(firstReorderButton);
     await userEvent.keyboard("{ArrowDown}");
 

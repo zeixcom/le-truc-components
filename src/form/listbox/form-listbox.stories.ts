@@ -92,9 +92,9 @@ export const WithFilter: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-listbox");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "form-listbox",
-    ) as HTMLElement & FormAssociatedElement & FormListboxProps;
+    const el = canvasElement.querySelector("form-listbox") as HTMLElement &
+      FormAssociatedElement &
+      FormListboxProps;
     const filterInput = canvas.getByPlaceholderText("Filter fruits");
 
     await expect(el.options.length).toBe(6);
@@ -133,9 +133,9 @@ export const WithGroups: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-listbox");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "form-listbox",
-    ) as HTMLElement & FormAssociatedElement & FormListboxProps;
+    const el = canvasElement.querySelector("form-listbox") as HTMLElement &
+      FormAssociatedElement &
+      FormListboxProps;
 
     await expect(el.value).toBe("");
 
@@ -162,9 +162,9 @@ export const WithSrc: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-listbox");
-    const el = canvasElement.querySelector(
-      "form-listbox",
-    ) as HTMLElement & FormAssociatedElement & FormListboxProps;
+    const el = canvasElement.querySelector("form-listbox") as HTMLElement &
+      FormAssociatedElement &
+      FormListboxProps;
 
     await waitFor(() => expect(el.options.length).toBeGreaterThan(0));
     await expect(el.value).toBe("");
@@ -204,9 +204,9 @@ export const Selection: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-listbox");
-    const el = canvasElement.querySelector(
-      "form-listbox",
-    ) as HTMLElement & FormAssociatedElement & FormListboxProps;
+    const el = canvasElement.querySelector("form-listbox") as HTMLElement &
+      FormAssociatedElement &
+      FormListboxProps;
 
     await expect(el.value).toBe("fr");
 

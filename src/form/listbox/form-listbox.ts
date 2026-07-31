@@ -64,7 +64,12 @@ const DECREMENT_KEYS = ["ArrowUp"];
 const INCREMENT_KEYS = ["ArrowDown"];
 const FIRST_KEY = "Home";
 const LAST_KEY = "End";
-const HANDLED_KEYS = [...DECREMENT_KEYS, ...INCREMENT_KEYS, FIRST_KEY, LAST_KEY];
+const HANDLED_KEYS = [
+  ...DECREMENT_KEYS,
+  ...INCREMENT_KEYS,
+  FIRST_KEY,
+  LAST_KEY,
+];
 
 /**
  * A filterable listbox that loads options from a remote JSON source and integrates with HTML forms.

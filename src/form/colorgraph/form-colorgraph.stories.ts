@@ -100,7 +100,9 @@ export const Default: Story = {
     const canvas = within(canvasElement);
     const el = canvasElement.querySelector("form-colorgraph") as any;
     // Initial value is parsed and reflected into the lightness input (0.48 → 48).
-    const lightnessInput = canvas.getByLabelText("Lightness") as HTMLInputElement;
+    const lightnessInput = canvas.getByLabelText(
+      "Lightness",
+    ) as HTMLInputElement;
     await expect(lightnessInput.value).toBe("48");
     await expect(el.hue).toBeCloseTo(263, 0);
   },

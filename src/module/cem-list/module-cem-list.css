@@ -1,32 +1,32 @@
 module-cem-list {
-	display: block;
+  display: block;
 
-	& form-textbox {
-		display: block;
-		margin: 0 0 var(--space-l);
-	}
+  & form-textbox {
+    display: block;
+    margin: 0 0 var(--space-l);
+  }
 
-	& card-collapsible summary {
-		flex-wrap: wrap;
+  & card-collapsible summary {
+    flex-wrap: wrap;
 
-		& .header {
-			display: flex;
-			align-items: baseline;
-			gap: var(--space-s);
-			flex: none;
-		}
-	}
+    & .header {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-s);
+      flex: none;
+    }
+  }
 
-	.demo-link a {
-		text-decoration: none;
+  .demo-link a {
+    text-decoration: none;
 
-		&:hover {
-			text-decoration: underline;
-		}
-	}
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 
-	& module-tabgroup {
-		display: block;
-		margin: var(--space-s) 0 0;
-	}
+  & module-tabgroup {
+    display: block;
+    margin: var(--space-s) 0 0;
+  }
 }

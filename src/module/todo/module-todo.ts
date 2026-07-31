@@ -1,6 +1,6 @@
 import {
-  bindAttribute,
   bindProperty,
+  bindState,
   bindText,
   createList,
   createMemo,
@@ -41,10 +41,12 @@ let idCounter = 0;
  * drag-and-drop reordering. Use it as a reference example of a complete Le Truc
  * application — keyboard accessible controls and ARIA labelling should be considered
  * when adapting it for production use.
+ * Exposes the active filter as custom states (`:state(filter-active)`, `:state(filter-completed)`)
+ * for CSS-based item visibility, so filter state cannot be spoofed by setting an attribute.
  */
 export default defineComponent(
   "module-todo",
-  ({ all, first, host, on, pass, watch }) => {
+  ({ all, first, host, internals, on, pass, watch }) => {
     const container = first(
       "[data-container]",
       "Add a container element for items.",
@@ -102,7 +104,8 @@ export default defineComponent(
       list.update((prev) => {
         const next = [...prev];
         const [moved] = next.splice(index, 1);
-        next.splice(newIdx, 0, moved!);
+        if (moved === undefined) return prev;
+        next.splice(newIdx, 0, moved);
         return next;
       });
       status.set(
@@ -353,7 +356,14 @@ export default defineComponent(
       "form-radiogroup",
       "Add <form-radiogroup> component to filter todo items.",
     ) as HTMLElement & FormRadiogroupProps;
-    watch(() => filter.value || "all", bindAttribute(host, "filter"));
+    watch(
+      () => (filter.value || "all") === "active",
+      bindState(internals, "filter-active"),
+    );
+    watch(
+      () => (filter.value || "all") === "completed",
+      bindState(internals, "filter-completed"),
+    );
 
     watch(status, bindText(liveRegion));
   },

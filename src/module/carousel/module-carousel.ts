@@ -1,4 +1,9 @@
-import { bindProperty, bindVisible, defineComponent, each } from "@zeix/le-truc";
+import {
+  bindProperty,
+  bindVisible,
+  defineComponent,
+  each,
+} from "@zeix/le-truc";
 
 export type ModuleCarouselProps = {
   index: number;
@@ -114,16 +119,11 @@ export default defineComponent<ModuleCarouselProps>(
       host.index = newIndex;
       if (newIndex === 0 && document.activeElement === prev) {
         next.focus();
-      } else if (
-        newIndex === length - 1 &&
-        document.activeElement === next
-      ) {
+      } else if (newIndex === length - 1 && document.activeElement === next) {
         prev.focus();
       } else if (document.activeElement) {
         const dotElements = dots.get();
-        if (
-          dotElements.includes(document.activeElement as HTMLButtonElement)
-        )
+        if (dotElements.includes(document.activeElement as HTMLButtonElement))
           dotElements[newIndex]?.focus();
       }
     });

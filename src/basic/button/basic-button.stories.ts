@@ -93,9 +93,8 @@ export const DynamicUpdates: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-button");
-    const el = canvasElement.querySelector(
-      "basic-button",
-    ) as HTMLElement & BasicButtonProps;
+    const el = canvasElement.querySelector("basic-button") as HTMLElement &
+      BasicButtonProps;
     const button = el.querySelector("button");
     const label = el.querySelector(".label");
     const badge = el.querySelector(".badge");
@@ -139,9 +138,8 @@ export const InitialDomState: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-button");
-    const el = canvasElement.querySelector(
-      "basic-button",
-    ) as HTMLElement & BasicButtonProps;
+    const el = canvasElement.querySelector("basic-button") as HTMLElement &
+      BasicButtonProps;
 
     await expect(el.querySelector("button")).toBeDisabled();
     await expect(el.querySelector(".label")).toHaveTextContent("Delete Item");
@@ -164,9 +162,8 @@ export const PropertyChanges: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-button");
-    const el = canvasElement.querySelector(
-      "basic-button",
-    ) as HTMLElement & BasicButtonProps;
+    const el = canvasElement.querySelector("basic-button") as HTMLElement &
+      BasicButtonProps;
     const button = el.querySelector("button");
     const label = el.querySelector(".label");
     const badge = el.querySelector(".badge");
@@ -192,9 +189,8 @@ export const MissingOptionalElements: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-button");
-    const el = canvasElement.querySelector(
-      "basic-button",
-    ) as HTMLElement & BasicButtonProps;
+    const el = canvasElement.querySelector("basic-button") as HTMLElement &
+      BasicButtonProps;
     const button = el.querySelector("button");
 
     await expect(button).not.toBeDisabled();
@@ -214,9 +210,8 @@ export const TextFallback: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-button");
-    const el = canvasElement.querySelector(
-      "basic-button",
-    ) as HTMLElement & BasicButtonProps;
+    const el = canvasElement.querySelector("basic-button") as HTMLElement &
+      BasicButtonProps;
     const button = el.querySelector("button");
 
     await expect(el.label).toBe("Button Text Only");
@@ -241,9 +236,8 @@ export const BooleanToggle: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-button");
-    const el = canvasElement.querySelector(
-      "basic-button",
-    ) as HTMLElement & BasicButtonProps;
+    const el = canvasElement.querySelector("basic-button") as HTMLElement &
+      BasicButtonProps;
     const button = el.querySelector("button");
 
     el.disabled = true;

@@ -1,3 +1,4 @@
+import { asString, defineComponent } from "@zeix/le-truc";
 import {
   colorsNamed,
   converter,
@@ -6,7 +7,6 @@ import {
   nearest,
   type Oklch,
 } from "culori/fn";
-import { asString, defineComponent } from "@zeix/le-truc";
 import { asOklch } from "../../_common/asOklch";
 import { getStepColor } from "../../_common/getStepColor";
 

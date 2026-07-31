@@ -1,11 +1,13 @@
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
-import { playwright } from '@vitest/browser-playwright';
-import { defineConfig } from 'vitest/config';
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
+import { playwright } from "@vitest/browser-playwright";
+import { defineConfig } from "vitest/config";
 
 const dirname =
-  typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
+  typeof __dirname !== "undefined"
+    ? __dirname
+    : path.dirname(fileURLToPath(import.meta.url));
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
@@ -23,17 +25,17 @@ export default defineConfig({
           // `basic-number` Locale Inheritance story needs full ICU data the
           // bundled Chromium lacks). Add `tags: ["skip"]` to such a story.
           storybookTest({
-            configDir: path.join(dirname, '.storybook'),
-            tags: { skip: ['skip'] },
+            configDir: path.join(dirname, ".storybook"),
+            tags: { skip: ["skip"] },
           }),
         ],
         test: {
-          name: 'storybook',
+          name: "storybook",
           browser: {
             enabled: true,
             headless: true,
             provider: playwright({}),
-            instances: [{ browser: 'chromium' }],
+            instances: [{ browser: "chromium" }],
           },
         },
       },

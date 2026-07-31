@@ -30,8 +30,7 @@ export default defineComponent<ModuleLazyloadProps>(
       const url = host.src;
       if (!url) throw new Error("No URL provided");
       if (!isValidURL(url)) throw new Error("Invalid URL");
-      if (isRecursiveURL(url, host))
-        throw new Error("Recursive URL detected");
+      if (isRecursiveURL(url, host)) throw new Error("Recursive URL detected");
       try {
         const { content: fetched } = await fetchWithCache(url, abort);
         return fetched;

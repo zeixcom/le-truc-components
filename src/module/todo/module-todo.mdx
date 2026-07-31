@@ -5,7 +5,7 @@ import * as ModuleTodoStories from './module-todo.stories';
 
 ### Module Todo
 
-A full-featured todo list that owns the data, manages the list DOM directly, and handles all interactions — adding, deleting, reordering (keyboard and drag), inline editing labels, and toggling completion. Uses `createList()` with per-item `createStore()` signals and `reconcile()` to sync a keyed list of todo items to the `<ol data-container>`/`<template>` pair, and `createMemo()` to derive reactive `activeCount`/`completedCount` from the list. Demonstrates `pass()` with `{ get, set }` descriptors to mediate each rendered `form-checkbox`'s `checked` prop and each `form-inplace-edit`'s `value` prop to the matching item's `Store`, `pass()` with thunks to push `disabled`/`badge`/`count` into child components, `bindAttribute('filter')` on the host to drive CSS-based filtering, `each()` to wire up per-item reorder buttons, and event delegation (`click`/`keydown`/`pointerdown`/`pointermove`/`pointerup`/`pointercancel`) on the host for removal, keyboard reordering, and pointer-based drag-and-drop. Use it as a reference example of a complete Le Truc application — keyboard accessible controls and ARIA labelling should be considered when adapting it for production use.
+A full-featured todo list that owns the data, manages the list DOM directly, and handles all interactions — adding, deleting, reordering (keyboard and drag), inline editing labels, and toggling completion. Uses `createList()` with per-item `createStore()` signals and `reconcile()` to sync a keyed list of todo items to the `<ol data-container>`/`<template>` pair, and `createMemo()` to derive reactive `activeCount`/`completedCount` from the list. Demonstrates `pass()` with `{ get, set }` descriptors to mediate each rendered `form-checkbox`'s `checked` prop and each `form-inplace-edit`'s `value` prop to the matching item's `Store`, `pass()` with thunks to push `disabled`/`badge`/`count` into child components, `bindState()` on the host's `internals` to expose the active filter as custom states for CSS-based filtering, `each()` to wire up per-item reorder buttons, and event delegation (`click`/`keydown`/`pointerdown`/`pointermove`/`pointerup`/`pointercancel`) on the host for removal, keyboard reordering, and pointer-based drag-and-drop. Use it as a reference example of a complete Le Truc application — keyboard accessible controls and ARIA labelling should be considered when adapting it for production use.
 
 #### Tag Name
 
@@ -15,7 +15,7 @@ A full-featured todo list that owns the data, manages the list DOM directly, and
 
 <Canvas of={ModuleTodoStories.Default} />
 
-#### Attributes
+#### Custom States
 
 <table>
   <thead>
@@ -26,15 +26,19 @@ A full-featured todo list that owns the data, manages the list DOM directly, and
   </thead>
   <tbody>
     <tr>
-      <td><code>filter</code></td>
-      <td>Reflected onto the host from the <code>form-radiogroup</code>'s current value (<code>"all"</code>, <code>"active"</code>, or <code>"completed"</code>); CSS uses it to hide non-matching items</td>
+      <td><code>:state(filter-active)</code></td>
+      <td>Set when the <code>form-radiogroup</code>'s current value is <code>"active"</code>; CSS uses it to hide completed items</td>
+    </tr>
+    <tr>
+      <td><code>:state(filter-completed)</code></td>
+      <td>Set when the <code>form-radiogroup</code>'s current value is <code>"completed"</code>; CSS uses it to hide active items</td>
     </tr>
   </tbody>
 </table>
 
 #### Reactive Properties
 
-None. This component orchestrates behavior by passing state and events between descendants; its internal list state is not exposed on `host`.
+None. This component orchestrates behavior by passing state and events between descendants, and sets custom states (matched in CSS via `:state()`) based on the active filter; its internal list state is not exposed on `host`.
 
 #### Descendant Elements
 

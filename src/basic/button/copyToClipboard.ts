@@ -7,11 +7,12 @@ type CopyStatus = "success" | "error";
 const COPY_SUCCESS = "success";
 const COPY_ERROR = "error";
 
-export const copyToClipboard = (
-  container: HTMLElement,
-  button: HTMLElement & BasicButtonProps,
-  messages: { [COPY_ERROR]?: string; [COPY_SUCCESS]?: string },
-): EffectDescriptor =>
+export const copyToClipboard =
+  (
+    container: HTMLElement,
+    button: HTMLElement & BasicButtonProps,
+    messages: { [COPY_ERROR]?: string; [COPY_SUCCESS]?: string },
+  ): EffectDescriptor =>
   () => {
     const onClick = async () => {
       const label = button.label;

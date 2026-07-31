@@ -179,6 +179,7 @@ export default defineComponent<ModuleTickerProps>(
         (set) => {
           // Only ever observes `section`, so entries always has exactly one entry.
           const io = new IntersectionObserver(
+            // biome-ignore lint/style/noNonNullAssertion: this observer only ever watches `section`, so entries always has exactly one entry.
             (entries) => set(entries[0]!.isIntersecting),
             { rootMargin: "400px" },
           );

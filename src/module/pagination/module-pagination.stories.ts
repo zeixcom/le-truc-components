@@ -62,9 +62,8 @@ export const Navigation: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-pagination");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "module-pagination",
-    ) as HTMLElement & ModulePaginationProps;
+    const el = canvasElement.querySelector("module-pagination") as HTMLElement &
+      ModulePaginationProps;
     const next = canvas.getByRole("button", { name: "Next page" });
     const prev = canvas.getByRole("button", { name: "Previous page" });
 
@@ -89,9 +88,8 @@ export const ClampedAtBounds: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-pagination");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "module-pagination",
-    ) as HTMLElement & ModulePaginationProps;
+    const el = canvasElement.querySelector("module-pagination") as HTMLElement &
+      ModulePaginationProps;
     const next = canvas.getByRole("button", { name: "Next page" });
 
     await expect(el.value).toBe(3);
@@ -104,9 +102,8 @@ export const PropertyChanges: Story = {
   args: { value: 1, max: 10 },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-pagination");
-    const el = canvasElement.querySelector(
-      "module-pagination",
-    ) as HTMLElement & ModulePaginationProps;
+    const el = canvasElement.querySelector("module-pagination") as HTMLElement &
+      ModulePaginationProps;
 
     await expect(el.value).toBe(1);
     await expect(el.max).toBe(10);

@@ -3451,7 +3451,7 @@
           "customElement": true,
           "tagName": "module-todo",
           "name": "ModuleTodo",
-          "description": "A full-featured todo list with add, remove, complete, filter, inline editing, and\ndrag-and-drop reordering. Use it as a reference example of a complete Le Truc\napplication — keyboard accessible controls and ARIA labelling should be considered\nwhen adapting it for production use.",
+          "description": "A full-featured todo list with add, remove, complete, filter, inline editing, and\ndrag-and-drop reordering. Use it as a reference example of a complete Le Truc\napplication — keyboard accessible controls and ARIA labelling should be considered\nwhen adapting it for production use.\nExposes the active filter as custom states (`:state(filter-active)`, `:state(filter-completed)`)\nfor CSS-based item visibility, so filter state cannot be spoofed by setting an attribute.",
           "demos": []
         }
       ],

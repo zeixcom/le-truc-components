@@ -74,9 +74,8 @@ export const PeopleCount: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-pluralize");
-    const el = canvasElement.querySelector(
-      "basic-pluralize",
-    ) as HTMLElement & BasicPluralizeProps;
+    const el = canvasElement.querySelector("basic-pluralize") as HTMLElement &
+      BasicPluralizeProps;
 
     await expect(el.querySelector(".none")).not.toBeVisible();
     await expect(el.querySelector(".some")).toBeVisible();
@@ -108,9 +107,8 @@ export const Ordinal: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-pluralize");
-    const el = canvasElement.querySelector(
-      "basic-pluralize",
-    ) as HTMLElement & BasicPluralizeProps;
+    const el = canvasElement.querySelector("basic-pluralize") as HTMLElement &
+      BasicPluralizeProps;
 
     await expect(el.querySelector(".count")).toHaveTextContent("1");
     await expect(el.querySelector(".one")).toBeVisible(); // 1st
@@ -149,9 +147,8 @@ export const Welsh: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-pluralize");
-    const el = canvasElement.querySelector(
-      "basic-pluralize",
-    ) as HTMLElement & BasicPluralizeProps;
+    const el = canvasElement.querySelector("basic-pluralize") as HTMLElement &
+      BasicPluralizeProps;
 
     // count=0 → .none shown, .some hidden
     await expect(el.querySelector(".none")).toBeVisible();
@@ -181,9 +178,8 @@ export const NegativeClampedToZero: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-pluralize");
-    const el = canvasElement.querySelector(
-      "basic-pluralize",
-    ) as HTMLElement & BasicPluralizeProps;
+    const el = canvasElement.querySelector("basic-pluralize") as HTMLElement &
+      BasicPluralizeProps;
 
     await expect(el.count).toBe(0);
     await expect(el.querySelector(".none")).toBeVisible();

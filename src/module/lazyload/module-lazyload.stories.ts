@@ -10,7 +10,10 @@ type ModuleLazyloadArgs = {
   "allow-scripts": boolean;
 };
 
-const render = ({ src, "allow-scripts": allowScripts }: ModuleLazyloadArgs) => html`
+const render = ({
+  src,
+  "allow-scripts": allowScripts,
+}: ModuleLazyloadArgs) => html`
   <module-lazyload src=${src || nothing} ?allow-scripts=${allowScripts}>
     <card-callout>
       <p class="loading" role="status">Loading...</p>
@@ -57,9 +60,8 @@ export const WithContent: Story = {
   },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-lazyload");
-    const el = canvasElement.querySelector(
-      "module-lazyload",
-    ) as HTMLElement & ModuleLazyloadProps;
+    const el = canvasElement.querySelector("module-lazyload") as HTMLElement &
+      ModuleLazyloadProps;
     const content = canvasElement.querySelector(".content");
 
     await waitFor(() => expect(content).toBeVisible());
@@ -71,9 +73,8 @@ export const NoSrc: Story = {
   args: { src: "", "allow-scripts": false },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-lazyload");
-    const el = canvasElement.querySelector(
-      "module-lazyload",
-    ) as HTMLElement & ModuleLazyloadProps;
+    const el = canvasElement.querySelector("module-lazyload") as HTMLElement &
+      ModuleLazyloadProps;
 
     await expect(el.src).toBe("");
   },
@@ -89,9 +90,8 @@ export const InvalidURL: Story = {
   args: { src: "http://localhost:9/nonexistent", "allow-scripts": false },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-lazyload");
-    const el = canvasElement.querySelector(
-      "module-lazyload",
-    ) as HTMLElement & ModuleLazyloadProps;
+    const el = canvasElement.querySelector("module-lazyload") as HTMLElement &
+      ModuleLazyloadProps;
     const errorEl = canvasElement.querySelector(".error");
 
     await expect(el.src).toBe("http://localhost:9/nonexistent");
@@ -103,9 +103,8 @@ export const PropertyChanges: Story = {
   args: { src: "", "allow-scripts": false },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-lazyload");
-    const el = canvasElement.querySelector(
-      "module-lazyload",
-    ) as HTMLElement & ModuleLazyloadProps;
+    const el = canvasElement.querySelector("module-lazyload") as HTMLElement &
+      ModuleLazyloadProps;
 
     await expect(el.src).toBe("");
 

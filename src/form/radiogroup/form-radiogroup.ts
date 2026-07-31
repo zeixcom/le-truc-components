@@ -24,7 +24,12 @@ const DECREMENT_KEYS = ["ArrowLeft", "ArrowUp"];
 const INCREMENT_KEYS = ["ArrowRight", "ArrowDown"];
 const FIRST_KEY = "Home";
 const LAST_KEY = "End";
-const HANDLED_KEYS = [...DECREMENT_KEYS, ...INCREMENT_KEYS, FIRST_KEY, LAST_KEY];
+const HANDLED_KEYS = [
+  ...DECREMENT_KEYS,
+  ...INCREMENT_KEYS,
+  FIRST_KEY,
+  LAST_KEY,
+];
 
 const getIndex = (radios: HTMLInputElement[]) =>
   radios.findIndex((radio) => radio.checked);

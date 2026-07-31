@@ -30,6 +30,7 @@ export const Default: Story = {
 
     // Click enters edit mode and focuses the generated input.
     await userEvent.click(editBtn);
+    // biome-ignore lint/style/noNonNullAssertion: clicking Edit always renders the input; if it's missing the assertions below fail loudly.
     const input = canvasElement.querySelector("input")!;
     await expect(input).toHaveValue("Edit me");
     await expect(document.activeElement).toBe(input);

@@ -3,14 +3,18 @@ import { html } from "lit";
 import { expect } from "storybook/test";
 import "./module-splitview.ts";
 import "./module-splitview.css";
+import "../scrollarea/module-scrollarea.ts";
+import "../scrollarea/module-scrollarea.css";
 
 const render = () => html`
   <!-- Horizontal split (default) -->
   <module-splitview id="horizontal-splitview">
-    <div class="panel">
-      <p>Left panel</p>
-      <p>Drag the handle or focus it and use arrow keys to resize.</p>
-    </div>
+    <module-scrollarea>
+      <div>
+        <p>Left panel</p>
+        <p>Drag the handle or focus it and use arrow keys to resize.</p>
+      </div>
+    </module-scrollarea>
     <button
       type="button"
       class="divider"
@@ -21,19 +25,23 @@ const render = () => html`
       aria-valuemin="10"
       aria-valuemax="90"
     ></button>
-    <div class="panel">
-      <p>Right panel</p>
-      <p>The proportions are kept when the container is resized.</p>
-    </div>
+    <module-scrollarea>
+      <div>
+        <p>Right panel</p>
+        <p>The proportions are kept when the container is resized.</p>
+      </div>
+    </module-scrollarea>
   </module-splitview>
 
   <hr />
 
   <!-- Pre-set split position via attribute -->
   <module-splitview id="preset-splitview" split="0.3">
-    <div class="panel">
-      <p>Narrow panel (30%)</p>
-    </div>
+    <module-scrollarea>
+      <div>
+        <p>Narrow panel (30%)</p>
+      </div>
+    </module-scrollarea>
     <button
       type="button"
       class="divider"
@@ -44,18 +52,22 @@ const render = () => html`
       aria-valuemin="10"
       aria-valuemax="90"
     ></button>
-    <div class="panel">
-      <p>Wide panel (70%)</p>
-    </div>
+    <module-scrollarea>
+      <div>
+        <p>Wide panel (70%)</p>
+      </div>
+    </module-scrollarea>
   </module-splitview>
 
   <hr />
 
   <!-- Vertical split -->
   <module-splitview id="vertical-splitview" orientation="vertical">
-    <div class="panel">
-      <p>Top panel</p>
-    </div>
+    <module-scrollarea>
+      <div>
+        <p>Top panel</p>
+      </div>
+    </module-scrollarea>
     <button
       type="button"
       class="divider"
@@ -66,9 +78,11 @@ const render = () => html`
       aria-valuemin="10"
       aria-valuemax="90"
     ></button>
-    <div class="panel">
-      <p>Bottom panel</p>
-    </div>
+    <module-scrollarea>
+      <div>
+        <p>Bottom panel</p>
+      </div>
+    </module-scrollarea>
   </module-splitview>
 `;
 
@@ -82,8 +96,11 @@ type Story = StoryObj;
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-splitview");
+    // biome-ignore lint/style/noNonNullAssertion: rendered unconditionally by the story; if missing, the assertions below fail loudly.
     const horizontal = canvasElement.querySelector("#horizontal-splitview")!;
-    const divider = horizontal.querySelector<HTMLButtonElement>("button.divider")!;
+    const divider =
+      // biome-ignore lint/style/noNonNullAssertion: rendered unconditionally by the story; if missing, the assertions below fail loudly.
+      horizontal.querySelector<HTMLButtonElement>("button.divider")!;
     // Initial ratio is 50% → aria-valuenow reflects it.
     await expect(divider.getAttribute("aria-valuenow")).toBe("50");
     divider.focus();

@@ -46,15 +46,15 @@ export const Default: Story = {
     await customElements.whenDefined("basic-gauge");
     const gauges = canvasElement.querySelectorAll("basic-gauge");
     // Threshold labels are derived from the value.
-    await expect(gauges[0]!.querySelector(".label")!.textContent).toBe(
+    await expect(gauges[0]?.querySelector(".label")?.textContent).toBe(
       "Good job!",
     );
-    await expect(gauges[2]!.querySelector(".label")!.textContent).toBe(
+    await expect(gauges[2]?.querySelector(".label")?.textContent).toBe(
       "Try again!",
     );
     // Setting the value property updates the label reactively.
-    (gauges[0]! as any).value = 0.1;
-    await expect(gauges[0]!.querySelector(".label")!.textContent).toBe(
+    (gauges[0] as any).value = 0.1;
+    await expect(gauges[0]?.querySelector(".label")?.textContent).toBe(
       "Try again!",
     );
   },

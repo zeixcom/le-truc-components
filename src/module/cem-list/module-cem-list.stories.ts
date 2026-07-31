@@ -13,7 +13,7 @@ import "../../form/textbox/form-textbox.css";
 // a filter <form-textbox> plus one <card-collapsible> per declaration.
 const render = () => html`
   <module-cem-list>
-    <form-textbox name="filter" clearable>
+    <form-textbox name="filter">
       <label for="module-cem-list-demo-filter-input">Filter</label>
       <div class="input">
         <input
@@ -79,13 +79,15 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-cem-list");
     const canvas = within(canvasElement);
-    const input = canvas.getByPlaceholderText("Filter by name, tag, or description");
+    const input = canvas.getByPlaceholderText(
+      "Filter by name, tag, or description",
+    );
     const cards = canvasElement.querySelectorAll("card-collapsible");
     await expect(cards.length).toBe(2);
 
     // Typing a term present only in the second card hides the first.
     await userEvent.type(input, "checkbox");
-    await expect(cards[0]!.hidden).toBe(true);
-    await expect(cards[1]!.hidden).toBe(false);
+    await expect(cards[0]?.hidden).toBe(true);
+    await expect(cards[1]?.hidden).toBe(false);
   },
 };

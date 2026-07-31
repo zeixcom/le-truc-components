@@ -109,9 +109,8 @@ export const LocaleInheritance: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-number");
-    const el = canvasElement.querySelector(
-      "basic-number",
-    ) as HTMLElement & BasicNumberProps;
+    const el = canvasElement.querySelector("basic-number") as HTMLElement &
+      BasicNumberProps;
     await expect(el).toHaveTextContent("1.234,50\u00a0€");
   },
 };
@@ -119,14 +118,14 @@ export const LocaleInheritance: Story = {
 export const DecimalFormatting: Story = {
   args: {
     value: 1234.56789,
-    options: '{"style":"decimal","minimumFractionDigits":2,"maximumFractionDigits":3}',
+    options:
+      '{"style":"decimal","minimumFractionDigits":2,"maximumFractionDigits":3}',
     lang: "",
   },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-number");
-    const el = canvasElement.querySelector(
-      "basic-number",
-    ) as HTMLElement & BasicNumberProps;
+    const el = canvasElement.querySelector("basic-number") as HTMLElement &
+      BasicNumberProps;
     await expect(el).toHaveTextContent("1,234.568");
   },
 };
@@ -135,9 +134,8 @@ export const PropertyChanges: Story = {
   args: { value: 0, options: "", lang: "" },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-number");
-    const el = canvasElement.querySelector(
-      "basic-number",
-    ) as HTMLElement & BasicNumberProps;
+    const el = canvasElement.querySelector("basic-number") as HTMLElement &
+      BasicNumberProps;
 
     await expect(el).toHaveTextContent("0");
 

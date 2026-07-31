@@ -48,9 +48,8 @@ export const DynamicUpdates: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-hello");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "basic-hello",
-    ) as HTMLElement & BasicHelloProps;
+    const el = canvasElement.querySelector("basic-hello") as HTMLElement &
+      BasicHelloProps;
     const input = canvas.getByRole("textbox");
     const output = el.querySelector("output");
 
@@ -71,9 +70,8 @@ export const FallbackOnClear: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-hello");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "basic-hello",
-    ) as HTMLElement & BasicHelloProps;
+    const el = canvasElement.querySelector("basic-hello") as HTMLElement &
+      BasicHelloProps;
     const input = canvas.getByRole("textbox");
     const output = el.querySelector("output");
 
@@ -89,9 +87,8 @@ export const InitialDOMValue: Story = {
   args: { subject: "Alice" },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-hello");
-    const el = canvasElement.querySelector(
-      "basic-hello",
-    ) as HTMLElement & BasicHelloProps;
+    const el = canvasElement.querySelector("basic-hello") as HTMLElement &
+      BasicHelloProps;
     const output = el.querySelector("output");
 
     await expect(output).toHaveTextContent("Alice");
@@ -103,9 +100,8 @@ export const PropertyChanges: Story = {
   args: { subject: "World" },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-hello");
-    const el = canvasElement.querySelector(
-      "basic-hello",
-    ) as HTMLElement & BasicHelloProps;
+    const el = canvasElement.querySelector("basic-hello") as HTMLElement &
+      BasicHelloProps;
     const output = el.querySelector("output");
 
     el.subject = "Charlie";

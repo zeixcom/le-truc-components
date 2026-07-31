@@ -60,9 +60,8 @@ export const Collapsed: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-codeblock");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "module-codeblock",
-    ) as HTMLElement & ModuleCodeblockProps;
+    const el = canvasElement.querySelector("module-codeblock") as HTMLElement &
+      ModuleCodeblockProps;
 
     await expect(el.collapsed).toBe(true);
     await expect(el).toHaveAttribute("collapsed");
@@ -85,9 +84,8 @@ export const PropertyChanges: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-codeblock");
-    const el = canvasElement.querySelector(
-      "module-codeblock",
-    ) as HTMLElement & ModuleCodeblockProps;
+    const el = canvasElement.querySelector("module-codeblock") as HTMLElement &
+      ModuleCodeblockProps;
 
     await expect(el.collapsed).toBe(false);
 
