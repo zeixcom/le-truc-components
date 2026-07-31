@@ -123,6 +123,65 @@ export const ClampedAtMax: Story = {
   },
 };
 
+export const KeyboardControl: Story = {
+  args: { value: 3, max: 5 },
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("form-spinbutton");
+    const canvas = within(canvasElement);
+    const el = canvasElement.querySelector("form-spinbutton") as HTMLElement &
+      FormAssociatedElement &
+      FormSpinbuttonProps;
+    const increment = canvas.getByLabelText("Increment");
+    const decrement = canvas.getByLabelText("Decrement");
+
+    increment.focus();
+    await userEvent.keyboard("{ArrowUp}");
+    await expect(el.value).toBe(4);
+
+    await userEvent.keyboard("+");
+    await expect(el.value).toBe(5);
+    await expect(increment).toBeDisabled();
+
+    // Already at max — further increment stays clamped.
+    await userEvent.keyboard("{ArrowUp}");
+    await expect(el.value).toBe(5);
+
+    decrement.focus();
+    await userEvent.keyboard("{ArrowDown}");
+    await expect(el.value).toBe(4);
+
+    await userEvent.keyboard("-");
+    await expect(el.value).toBe(3);
+
+    // Unrelated key: no change.
+    await userEvent.keyboard("a");
+    await expect(el.value).toBe(3);
+  },
+};
+
+export const Validity: Story = {
+  args: { value: 3, max: 5 },
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("form-spinbutton");
+    const el = canvasElement.querySelector("form-spinbutton") as HTMLElement &
+      FormAssociatedElement &
+      FormSpinbuttonProps;
+
+    await expect(el.validity.valid).toBe(true);
+
+    el.value = 8;
+    await expect(el.validity.rangeOverflow).toBe(true);
+    await expect(el.validationMessage).toBe("Value must be 5 or less");
+
+    el.value = -2;
+    await expect(el.validity.rangeUnderflow).toBe(true);
+    await expect(el.validationMessage).toBe("Value must be 0 or greater");
+
+    el.value = 3;
+    await expect(el.validity.valid).toBe(true);
+  },
+};
+
 export const PropertyChanges: Story = {
   args: { value: 0, max: 10 },
   play: async ({ canvasElement }) => {

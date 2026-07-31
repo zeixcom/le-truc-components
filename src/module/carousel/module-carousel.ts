@@ -116,14 +116,20 @@ export default defineComponent<ModuleCarouselProps>(
           : key === "End"
             ? length - 1
             : clamp(host.index + (key === "ArrowLeft" ? -1 : 1), length);
+      // Captured before the index write below, since setting host.index
+      // flushes reactive effects synchronously — including the prev/next
+      // bindVisible watchers, which hide (and thus blur) whichever button
+      // is currently focused. Reading activeElement after that write would
+      // always see it fall back to <body>.
+      const focusedElement = document.activeElement;
       host.index = newIndex;
-      if (newIndex === 0 && document.activeElement === prev) {
+      if (newIndex === 0 && focusedElement === prev) {
         next.focus();
-      } else if (newIndex === length - 1 && document.activeElement === next) {
+      } else if (newIndex === length - 1 && focusedElement === next) {
         prev.focus();
-      } else if (document.activeElement) {
+      } else if (focusedElement) {
         const dotElements = dots.get();
-        if (dotElements.includes(document.activeElement as HTMLButtonElement))
+        if (dotElements.includes(focusedElement as HTMLButtonElement))
           dotElements[newIndex]?.focus();
       }
     });

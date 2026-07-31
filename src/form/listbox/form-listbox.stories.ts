@@ -144,6 +144,61 @@ export const WithGroups: Story = {
   },
 };
 
+export const KeyboardNavigation: Story = {
+  render: () => html`
+    <form>
+      <form-listbox id="veggies" name="veggie">
+        <div role="listbox" aria-label="Vegetables">
+          <button type="button" role="option" tabindex="0" value="carrot" aria-selected="true">Carrot</button>
+          <button type="button" role="option" tabindex="-1" value="potato">Potato</button>
+          <button type="button" role="option" tabindex="-1" value="onion">Onion</button>
+        </div>
+      </form-listbox>
+    </form>
+  `,
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("form-listbox");
+    const canvas = within(canvasElement);
+    const el = canvasElement.querySelector("form-listbox") as HTMLElement &
+      FormAssociatedElement &
+      FormListboxProps;
+    const listbox = canvasElement.querySelector('[role="listbox"]') as HTMLElement;
+    const carrot = canvas.getByRole("option", { name: "Carrot" });
+    const potato = canvas.getByRole("option", { name: "Potato" });
+    const onion = canvas.getByRole("option", { name: "Onion" });
+
+    carrot.focus();
+    await userEvent.keyboard("{ArrowDown}");
+    await expect(document.activeElement).toBe(potato);
+    // Focus alone doesn't commit the selection.
+    await expect(el.value).toBe("carrot");
+
+    await userEvent.keyboard("{ArrowDown}");
+    await expect(document.activeElement).toBe(onion);
+
+    // Wraps past the last option.
+    await userEvent.keyboard("{ArrowDown}");
+    await expect(document.activeElement).toBe(carrot);
+
+    await userEvent.keyboard("{ArrowUp}");
+    await expect(document.activeElement).toBe(onion);
+
+    await userEvent.keyboard("{Home}");
+    await expect(document.activeElement).toBe(carrot);
+
+    await userEvent.keyboard("{End}");
+    await expect(document.activeElement).toBe(onion);
+
+    // Enter activates the focused option.
+    await userEvent.keyboard("{Enter}");
+    await expect(el.value).toBe("onion");
+
+    // Unrelated key on the listbox: no change.
+    listbox.dispatchEvent(new KeyboardEvent("keydown", { key: "a", bubbles: true }));
+    await expect(el.value).toBe("onion");
+  },
+};
+
 // ⚠️ Custom render: uses src attribute with a loading/error state card-callout and an empty listbox container
 export const WithSrc: Story = {
   args: {
