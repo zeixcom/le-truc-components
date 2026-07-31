@@ -8,6 +8,8 @@ import "../../basic/button/basic-button.css";
 import "../../basic/pluralize/basic-pluralize.ts";
 import "../../form/checkbox/form-checkbox.ts";
 import "../../form/checkbox/form-checkbox.css";
+import "../../form/inplace-edit/form-inplace-edit.ts";
+import "../../form/inplace-edit/form-inplace-edit.css";
 import "../../form/radiogroup/form-radiogroup.ts";
 import "../../form/radiogroup/form-radiogroup.css";
 import "../../form/textbox/form-textbox.ts";
@@ -29,17 +31,22 @@ const todoTemplate = html`
         </button>
       </basic-button>
     </form>
+    <span role="status" class="visually-hidden"></span>
     <ol data-container></ol>
     <template>
       <li>
+        <button type="button" class="reorder" aria-label="Drag to reorder" aria-pressed="false">
+          ≡
+        </button>
         <form-checkbox class="todo">
-          <label>
-            <input type="checkbox" class="visually-hidden" />
-            <span class="label"><slot></slot></span>
-          </label>
+          <input type="checkbox" class="visually-hidden" />
+          <form-inplace-edit>
+            <label class="label text"><slot></slot></label>
+            <button type="button" aria-label="Edit">✎</button>
+          </form-inplace-edit>
         </form-checkbox>
-        <basic-button class="delete">
-          <button type="button" class="tertiary destructive small" aria-label="Delete">
+        <basic-button class="remove">
+          <button type="button" class="tertiary destructive small" aria-label="Remove">
             <span class="label">✕</span>
           </button>
         </basic-button>
@@ -147,5 +154,60 @@ export const WithFilter: Story = {
       await userEvent.click(canvas.getByRole("radio", { name: "Completed" }));
       await userEvent.click(canvas.getByRole("radio", { name: "All" }));
     }
+  },
+};
+
+export const InlineEdit: Story = {
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("module-todo");
+    const canvas = within(canvasElement);
+    const input = canvas.getByLabelText("What needs to be done?");
+    const addButton = canvas.getByRole("button", { name: "Add Todo" });
+
+    await userEvent.type(input, "Bye groceries");
+    await userEvent.click(addButton);
+
+    const label = canvas.getByText("Bye groceries");
+    await userEvent.dblClick(label);
+
+    const editInput = canvasElement.querySelector<HTMLInputElement>(
+      "form-inplace-edit input",
+    )!;
+    await expect(editInput).toHaveValue("Bye groceries");
+
+    await userEvent.clear(editInput);
+    await userEvent.type(editInput, "Buy groceries{Enter}");
+
+    await expect(canvas.getByText("Buy groceries")).toBeInTheDocument();
+    await expect(
+      canvasElement.querySelector("form-inplace-edit input"),
+    ).not.toBeInTheDocument();
+  },
+};
+
+export const KeyboardReorder: Story = {
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("module-todo");
+    const canvas = within(canvasElement);
+    const input = canvas.getByLabelText("What needs to be done?");
+    const addButton = canvas.getByRole("button", { name: "Add Todo" });
+
+    for (const label of ["First", "Second", "Third"]) {
+      await userEvent.type(input, label);
+      await userEvent.click(addButton);
+    }
+
+    const items = canvasElement.querySelectorAll("[data-key]");
+    await expect(items.length).toBe(3);
+    await expect(items[0]?.textContent).toContain("First");
+
+    const firstReorderButton =
+      items[0]?.querySelector<HTMLButtonElement>("button.reorder")!;
+    await userEvent.click(firstReorderButton);
+    await userEvent.keyboard("{ArrowDown}");
+
+    const reordered = canvasElement.querySelectorAll("[data-key]");
+    await expect(reordered[0]?.textContent).toContain("Second");
+    await expect(reordered[1]?.textContent).toContain("First");
   },
 };
