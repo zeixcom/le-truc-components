@@ -1,4 +1,9 @@
-import { asNumber, bindText, defineComponent } from "@zeix/le-truc";
+import {
+  asNumber,
+  bindText,
+  defineComponent,
+  observedAttributes,
+} from "@zeix/le-truc";
 import { getLocale } from "../../_common/getLocale";
 import { getNumberFormatter } from "../../_common/getNumberFormatter";
 
@@ -21,6 +26,9 @@ export default defineComponent<BasicNumberProps>(
       getLocale(host),
       host.getAttribute("options"),
     );
-    watch(() => formatter.format(host.value), bindText(host));
+    watch(() => formatter.format(host.value), bindText(host, true));
   },
+  // Storybook uses React which updates attributes instead of properties
+  // Remove if you don't need that interoperability layer
+  [observedAttributes(["value"])],
 );

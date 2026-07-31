@@ -62,9 +62,14 @@ export const Default: Story = {
 
 // ⚠️ Custom render: uses person/people slot content instead of task/tasks
 export const PeopleCount: Story = {
-  render: () => html`
+  args: {
+    count: 1,
+    ordinal: false,
+    lang: "",
+  },
+  render: ({ count, ordinal, lang }: BasicPluralizeArgs) => html`
     <p>Number of people:</p>
-    <basic-pluralize count="1">
+    <basic-pluralize count=${count} ?ordinal=${ordinal} lang=${lang || nothing}>
       <p class="none">Nobody</p>
       <p class="some">
         <span class="count"></span>
@@ -96,9 +101,14 @@ export const PeopleCount: Story = {
 
 // ⚠️ Custom render: uses ordinal suffix slots (st/nd/rd/th) instead of task/tasks
 export const Ordinal: Story = {
-  render: () => html`
+  args: {
+    count: 1,
+    ordinal: true,
+    lang: "",
+  },
+  render: ({ count, ordinal, lang }: BasicPluralizeArgs) => html`
     <p>Item selected:</p>
-    <basic-pluralize count="1" ordinal>
+    <basic-pluralize count=${count} ?ordinal=${ordinal} lang=${lang || nothing}>
       <p class="none">None</p>
       <p class="some">
         <span class="count"></span><span class="one">st</span><span class="two">nd</span><span class="few">rd</span><span class="other">th</span>
@@ -128,10 +138,15 @@ export const Ordinal: Story = {
 
 // ⚠️ Custom render: wrapped in div[lang="cy"] to test Welsh plural categories (zero/one/two/few/many/other)
 export const Welsh: Story = {
-  render: () => html`
-    <div lang="cy">
+  args: {
+    count: 0,
+    ordinal: false,
+    lang: "cy",
+  },
+  render: ({ count, ordinal, lang }: BasicPluralizeArgs) => html`
+    <div lang=${lang || nothing}>
       <p>Number of dogs in Welsh:</p>
-      <basic-pluralize count="0">
+      <basic-pluralize count=${count} ?ordinal=${ordinal}>
         <p class="none">Dim anifeiliaid!</p>
         <p class="some">
           <span class="count"></span>
@@ -170,8 +185,13 @@ export const Welsh: Story = {
 
 // ⚠️ Custom render: uses simpler "items" slot content to test that negative count is clamped to zero
 export const NegativeClampedToZero: Story = {
-  render: () => html`
-    <basic-pluralize count="-5">
+  args: {
+    count: -5,
+    ordinal: false,
+    lang: "",
+  },
+  render: ({ count, ordinal, lang }: BasicPluralizeArgs) => html`
+    <basic-pluralize count=${count} ?ordinal=${ordinal} lang=${lang || nothing}>
       <p class="none">Zero (negative clamped)</p>
       <p class="some"><span class="count"></span> items</p>
     </basic-pluralize>

@@ -1,4 +1,4 @@
-import { Meta, Canvas } from "@storybook/addon-docs/blocks";
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
 import * as BasicGaugeStories from "./basic-gauge.stories";
 
 <Meta of={BasicGaugeStories} />
@@ -15,34 +15,13 @@ A visual gauge meter that parses the `thresholds` attribute which configures the
 
 <Canvas of={BasicGaugeStories.Default} />
 
-#### Reactive Properties
+#### Controls
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>value</code></td>
-      <td><code>number</code> (float)</td>
-      <td><code>0</code></td>
-      <td>Current gauge value; read from the <code>value</code> attribute (falling back to <code>&lt;meter value="…"&gt;</code>) at connect time, and re-parsed on later <code>value</code> attribute mutations via <code>observedAttributes()</code></td>
-    </tr>
-    <tr>
-      <td><code>thresholds</code></td>
-      <td><code>BasicGaugeThreshold[]</code></td>
-      <td><code>[]</code></td>
-      <td>Threshold ranges used to derive the active label and color; see below for format</td>
-    </tr>
-  </tbody>
-</table>
+<Controls of={BasicGaugeStories.Default} />
 
-`BasicGaugeThreshold[]` is an array of objects sorted from highest to lowest `min`. Each entry has `min` (number), `label` (string), and `color` (CSS color string). The first entry whose `min` is ≤ `host.value` determines the active label and color. Example: `[{"min":80,"label":"Good job!","color":"var(--color-green-70)"},{"min":50,"label":"Decent","color":"var(--color-orange-70)"},{"min":0,"label":"Try again!","color":"var(--color-pink-70)"}]`
+`thresholds` is a JSON array of objects sorted from highest to lowest `min`. Each entry has `min` (number), `label` (string), and `color` (CSS color string). The first entry whose `min` is ≤ `host.value` determines the active label and color. Example: `[{"min":0.8,"label":"Good job!","color":"var(--color-green-70)"},{"min":0.5,"label":"Decent","color":"var(--color-orange-70)"},{"min":0,"label":"Try again!","color":"var(--color-pink-70)"}]`
+
+See the `Decent` and `TryAgain` stories for variants with the same thresholds applied to different values.
 
 #### Descendant Elements
 
