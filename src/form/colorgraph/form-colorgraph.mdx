@@ -1,0 +1,170 @@
+import { Meta, Canvas } from "@storybook/addon-docs/blocks";
+import * as FormColorgraphStories from "./form-colorgraph.stories";
+
+<Meta of={FormColorgraphStories} />
+
+### Form Colorgraph
+
+An interactive OKLCH color picker combining a 2D lightness/chroma graph, a hue slider, and numeric inputs.
+
+#### Tag Name
+
+`form-colorgraph`
+
+#### Preview
+
+<Canvas of={FormColorgraphStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>value</code></td>
+      <td><code>string</code></td>
+      <td><code>asString('oklch(0.48 0.23 263)')</code> — parsed from <code>value</code> attribute</td>
+      <td>The selected color as a CSS string (e.g. <code>oklch(0.48 0.23 263)</code>). Form value.</td>
+    </tr>
+    <tr>
+      <td><code>lightness</code></td>
+      <td><code>number</code> (readonly)</td>
+      <td>Derived from internal Oklch memo</td>
+      <td>Lightness component (0–1)</td>
+    </tr>
+    <tr>
+      <td><code>chroma</code></td>
+      <td><code>number</code> (readonly)</td>
+      <td>Derived from internal Oklch memo</td>
+      <td>Chroma component (0–0.4)</td>
+    </tr>
+    <tr>
+      <td><code>hue</code></td>
+      <td><code>number</code> (readonly)</td>
+      <td>Derived from internal Oklch memo</td>
+      <td>Hue angle in degrees (0–360)</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Methods
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>stepDown</code></td>
+      <td><code>(axis: 'l' | 'c' | 'h', bigStep?: boolean) =&gt; void</code></td>
+      <td>Decrements the given axis by one step (or a large step when <code>bigStep</code> is <code>true</code> or Shift is held)</td>
+    </tr>
+    <tr>
+      <td><code>stepUp</code></td>
+      <td><code>(axis: 'l' | 'c' | 'h', bigStep?: boolean) =&gt; void</code></td>
+      <td>Increments the given axis by one step (or a large step when <code>bigStep</code> is <code>true</code> or Shift is held)</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Keyboard Interaction
+
+Arrow keys navigate the focused axis. When the graph area is focused: `ArrowUp`/`ArrowDown` adjust lightness, `ArrowLeft`/`ArrowRight` adjust chroma. On the hue slider: `ArrowLeft`/`ArrowRight` adjust hue. `+`/`-` adjust hue from anywhere. Hold Shift for large steps.
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('.graph')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Container for the lightness/chroma canvas; observed by <code>ResizeObserver</code></td>
+    </tr>
+    <tr>
+      <td><code>first('.graph canvas')</code></td>
+      <td><code>HTMLCanvasElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Renders the 2D lightness/chroma color gamut; redrawn on hue or size change</td>
+    </tr>
+    <tr>
+      <td><code>first('.slider')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Hue slider container; acts as ARIA <code>role="slider"</code></td>
+    </tr>
+    <tr>
+      <td><code>first('.slider canvas')</code></td>
+      <td><code>HTMLCanvasElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Renders the hue track gradient</td>
+    </tr>
+    <tr>
+      <td><code>first('.knob')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Draggable knob controlling lightness and chroma</td>
+    </tr>
+    <tr>
+      <td><code>first('.thumb')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Draggable thumb controlling hue</td>
+    </tr>
+    <tr>
+      <td><code>first('#lightness')</code></td>
+      <td><code>HTMLInputElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Numeric input for lightness (0–100); no <code>name</code> attribute needed (the host carries it)</td>
+    </tr>
+    <tr>
+      <td><code>first('#chroma')</code></td>
+      <td><code>HTMLInputElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Numeric input for chroma (0–0.4); no <code>name</code> attribute needed (the host carries it)</td>
+    </tr>
+    <tr>
+      <td><code>first('#hue')</code></td>
+      <td><code>HTMLInputElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Numeric input for hue angle (0–360); no <code>name</code> attribute needed (the host carries it)</td>
+    </tr>
+    <tr>
+      <td><code>all('button.decrement')</code></td>
+      <td><code>HTMLButtonElement[]</code></td>
+      <td>optional</td>
+      <td>Decrement buttons; nearest <code>.lightness</code>/<code>.chroma</code>/<code>.hue</code> ancestor determines axis</td>
+    </tr>
+    <tr>
+      <td><code>all('button.increment')</code></td>
+      <td><code>HTMLButtonElement[]</code></td>
+      <td>optional</td>
+      <td>Increment buttons; nearest axis ancestor determines axis</td>
+    </tr>
+    <tr>
+      <td><code>all('.error')</code></td>
+      <td><code>HTMLElement[]</code></td>
+      <td>optional</td>
+      <td>Validation error targets; nearest axis ancestor determines which error state they display</td>
+    </tr>
+  </tbody>
+</table>

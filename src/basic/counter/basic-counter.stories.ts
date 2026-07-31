@@ -3,7 +3,6 @@ import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./basic-counter.ts";
 import "./basic-counter.css";
-import type { Component } from "@zeix/le-truc";
 import type { BasicCounterProps } from "./basic-counter.ts";
 
 type BasicCounterArgs = {
@@ -43,9 +42,8 @@ export const DynamicUpdates: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-counter");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "basic-counter",
-    ) as Component<BasicCounterProps>;
+    const el = canvasElement.querySelector("basic-counter") as HTMLElement &
+      BasicCounterProps;
     const button = canvas.getByRole("button");
     const span = el.querySelector("span");
 
@@ -65,9 +63,8 @@ export const InitialDOMValue: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-counter");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "basic-counter",
-    ) as Component<BasicCounterProps>;
+    const el = canvasElement.querySelector("basic-counter") as HTMLElement &
+      BasicCounterProps;
     const span = el.querySelector("span");
 
     await expect(span).toHaveTextContent("100");
@@ -83,9 +80,8 @@ export const NegativeInitialValue: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-counter");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "basic-counter",
-    ) as Component<BasicCounterProps>;
+    const el = canvasElement.querySelector("basic-counter") as HTMLElement &
+      BasicCounterProps;
     const span = el.querySelector("span");
 
     await expect(span).toHaveTextContent("-5");
@@ -102,9 +98,8 @@ export const PropertyChanges: Story = {
   args: { count: 0 },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-counter");
-    const el = canvasElement.querySelector(
-      "basic-counter",
-    ) as Component<BasicCounterProps>;
+    const el = canvasElement.querySelector("basic-counter") as HTMLElement &
+      BasicCounterProps;
     const span = el.querySelector("span");
 
     el.count = 10;

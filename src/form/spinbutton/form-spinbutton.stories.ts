@@ -3,7 +3,7 @@ import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./form-spinbutton.ts";
 import "./form-spinbutton.css";
-import type { Component } from "@zeix/le-truc";
+import type { FormAssociatedElement } from "@zeix/le-truc";
 import type { FormSpinbuttonProps } from "./form-spinbutton.ts";
 
 type FormSpinbuttonArgs = {
@@ -21,6 +21,7 @@ const render = ({ value, max }: FormSpinbuttonArgs) => html`
       value=${value}
       min="0"
       max=${max}
+      aria-label="Quantity"
       readonly
       disabled
       ?hidden=${value === 0}
@@ -66,9 +67,9 @@ export const WithInitialValue: Story = {
   args: { value: 3, max: 15 },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-spinbutton");
-    const el = canvasElement.querySelector(
-      "form-spinbutton",
-    ) as Component<FormSpinbuttonProps>;
+    const el = canvasElement.querySelector("form-spinbutton") as HTMLElement &
+      FormAssociatedElement &
+      FormSpinbuttonProps;
 
     await expect(el.value).toBe(3);
     await expect(el.max).toBe(15);
@@ -80,16 +81,20 @@ export const IncrementDecrement: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-spinbutton");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "form-spinbutton",
-    ) as Component<FormSpinbuttonProps>;
-    const increment = canvas.getByLabelText("Increment");
+    const el = canvasElement.querySelector("form-spinbutton") as HTMLElement &
+      FormAssociatedElement &
+      FormSpinbuttonProps;
 
     await expect(el.value).toBe(0);
 
-    await userEvent.click(increment);
+    // At value 0 the increment button reads "Add to Cart" (its `.zero` label),
+    // not "Increment" — the spinbutton re-labels it while the value is zero.
+    const addToCart = canvas.getByLabelText("Add to Cart");
+    await userEvent.click(addToCart);
     await expect(el.value).toBe(1);
 
+    // Once value > 0 the label reverts to "Increment" and Decrement appears.
+    const increment = canvas.getByLabelText("Increment");
     await userEvent.click(increment);
     await userEvent.click(increment);
     await expect(el.value).toBe(3);
@@ -105,9 +110,9 @@ export const ClampedAtMax: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-spinbutton");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "form-spinbutton",
-    ) as Component<FormSpinbuttonProps>;
+    const el = canvasElement.querySelector("form-spinbutton") as HTMLElement &
+      FormAssociatedElement &
+      FormSpinbuttonProps;
     const increment = canvas.getByLabelText("Increment");
 
     await expect(el.value).toBe(4);
@@ -122,9 +127,9 @@ export const PropertyChanges: Story = {
   args: { value: 0, max: 10 },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-spinbutton");
-    const el = canvasElement.querySelector(
-      "form-spinbutton",
-    ) as Component<FormSpinbuttonProps>;
+    const el = canvasElement.querySelector("form-spinbutton") as HTMLElement &
+      FormAssociatedElement &
+      FormSpinbuttonProps;
     const input = el.querySelector("input.value");
 
     el.value = 7;

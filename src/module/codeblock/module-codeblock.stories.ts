@@ -7,7 +7,6 @@ import "../../module/scrollarea/module-scrollarea.ts";
 import "../../module/scrollarea/module-scrollarea.css";
 import "./module-codeblock.ts";
 import "./module-codeblock.css";
-import type { Component } from "@zeix/le-truc";
 import type { ModuleCodeblockProps } from "./module-codeblock.ts";
 
 type ModuleCodeblockArgs = {
@@ -61,9 +60,8 @@ export const Collapsed: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-codeblock");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "module-codeblock",
-    ) as Component<ModuleCodeblockProps>;
+    const el = canvasElement.querySelector("module-codeblock") as HTMLElement &
+      ModuleCodeblockProps;
 
     await expect(el.collapsed).toBe(true);
     await expect(el).toHaveAttribute("collapsed");
@@ -86,9 +84,8 @@ export const PropertyChanges: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-codeblock");
-    const el = canvasElement.querySelector(
-      "module-codeblock",
-    ) as Component<ModuleCodeblockProps>;
+    const el = canvasElement.querySelector("module-codeblock") as HTMLElement &
+      ModuleCodeblockProps;
 
     await expect(el.collapsed).toBe(false);
 

@@ -1,79 +1,79 @@
 card-callout {
-	display: block;
-	position: relative;
-	padding: var(--space-s) var(--space-s) var(--space-s) var(--space-xl);
-	margin: 0 0 var(--space-l);
-	font-size: var(--font-size-m);
-	line-height: var(--line-height-l);
-	background: var(--color-blue-20);
-	border-left: var(--space-xxs) solid var(--color-blue-50);
-	border-radius: var(--space-s);
+  display: block;
+  position: relative;
+  padding: var(--space-s) var(--space-s) var(--space-s) var(--space-xl);
+  margin: 0 0 var(--space-l);
+  font-size: var(--font-size-m);
+  line-height: var(--line-height-l);
+  background: var(--color-blue-20);
+  border-left: var(--space-xxs) solid var(--color-blue-50);
+  border-radius: var(--space-s);
 
-	&::before {
-		position: absolute;
-		content: "ℹ️";
-		left: var(--space-s);
-	}
+  &::before {
+    position: absolute;
+    content: "ℹ️";
+    left: var(--space-s);
+  }
 
-	> *:last-child {
-		margin-bottom: 0;
-	}
+  > *:last-child {
+    margin-bottom: 0;
+  }
 
-	&.tip {
-		background: var(--color-green-20);
-		border-color: var(--color-green-50);
+  &.tip {
+    background: var(--color-green-20);
+    border-color: var(--color-green-50);
 
-		&::before {
-			content: "💡";
-		}
-	}
+    &::before {
+      content: "💡";
+    }
+  }
 
-	&.note {
-		background: var(--color-neutral-20);
-		border-color: var(--color-neutral-50);
+  &.note {
+    background: var(--color-neutral-20);
+    border-color: var(--color-neutral-50);
 
-		&::before {
-			content: "💬";
-		}
-	}
+    &::before {
+      content: "💬";
+    }
+  }
 
-	&.caution {
-		background: var(--color-orange-20);
-		border-color: var(--color-orange-50);
+  &.caution {
+    background: var(--color-orange-20);
+    border-color: var(--color-orange-50);
 
-		&::before {
-			content: "⚠️";
-		}
-	}
+    &::before {
+      content: "⚠️";
+    }
+  }
 
-	&.danger {
-		background: var(--color-pink-20);
-		border-color: var(--color-pink-50);
+  &.danger {
+    background: var(--color-pink-20);
+    border-color: var(--color-pink-50);
 
-		&::before {
-			content: "🚨";
-		}
-	}
+    &::before {
+      content: "🚨";
+    }
+  }
 }
 
 @media (prefers-color-scheme: dark) {
-	card-callout {
-		background: var(--color-blue-80);
+  card-callout {
+    background: var(--color-blue-80);
 
-		&.tip {
-			background: var(--color-green-80);
-		}
+    &.tip {
+      background: var(--color-green-80);
+    }
 
-		&.note {
-			background: var(--color-neutral-80);
-		}
+    &.note {
+      background: var(--color-neutral-80);
+    }
 
-		&.caution {
-			background: var(--color-orange-80);
-		}
+    &.caution {
+      background: var(--color-orange-80);
+    }
 
-		&.danger {
-			background: var(--color-pink-80);
-		}
-	}
+    &.danger {
+      background: var(--color-pink-80);
+    }
+  }
 }

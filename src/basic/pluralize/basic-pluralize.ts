@@ -1,72 +1,60 @@
-import { type Component, defineComponent, setText, show } from "@zeix/le-truc";
-import { asClampedInteger } from "../../_common/asClampedInteger";
+import {
+  asClampedInteger,
+  bindText,
+  bindVisible,
+  defineComponent,
+} from "@zeix/le-truc";
+import { getLocale } from "../../_common/getLocale";
 
 export type BasicPluralizeProps = {
   count: number;
 };
 
-type BasicPluralizeUI = Partial<
-  Record<
-    | "count"
-    | "none"
-    | "some"
-    | "zero"
-    | "one"
-    | "two"
-    | "few"
-    | "many"
-    | "other",
-    HTMLElement | undefined
-  >
->;
-
 declare global {
   interface HTMLElementTagNameMap {
-    "basic-pluralize": Component<BasicPluralizeProps>;
+    "basic-pluralize": HTMLElement & BasicPluralizeProps;
   }
 }
 
-const FALLBACK_LOCALE = "en";
-
-export default defineComponent<BasicPluralizeProps, BasicPluralizeUI>(
+export default defineComponent<BasicPluralizeProps>(
   "basic-pluralize",
-  {
-    count: asClampedInteger(),
-  },
-  ({ first }) => ({
-    count: first(".count"),
-    none: first(".none"),
-    some: first(".some"),
-    zero: first(".zero"),
-    one: first(".one"),
-    two: first(".two"),
-    few: first(".few"),
-    many: first(".many"),
-    other: first(".other"),
-  }),
-  ({ host }) => {
+  ({ expose, first, host, watch }) => {
+    const count = first(".count");
+    const none = first(".none");
+    const some = first(".some");
+
     const pluralizer = new Intl.PluralRules(
-      host.closest("[lang]")?.getAttribute("lang") || FALLBACK_LOCALE,
+      getLocale(host),
       host.hasAttribute("ordinal") ? { type: "ordinal" } : undefined,
     );
 
-    // Basic effects
-    const effects: {
-      count: ReturnType<typeof setText>;
-      none: ReturnType<typeof show>;
-      some: ReturnType<typeof show>;
-    } & Partial<Record<Intl.LDMLPluralRule, ReturnType<typeof show>>> = {
-      count: setText(() => String(host.count)),
-      none: show(() => host.count === 0),
-      some: show(() => host.count > 0),
+    expose({
+      count: asClampedInteger(),
+    });
+
+    const categoryElements: Partial<
+      Record<Intl.LDMLPluralRule, HTMLElement | undefined>
+    > = {
+      zero: first(".zero"),
+      one: first(".one"),
+      two: first(".two"),
+      few: first(".few"),
+      many: first(".many"),
+      other: first(".other"),
     };
 
-    // Subset of plural categories for applicable pluralizer: ['zero', 'one', 'two', 'few', 'many', 'other']
+    if (count) watch("count", bindText(count));
+    if (none) watch(() => host.count === 0, bindVisible(none));
+    if (some) watch(() => host.count !== 0, bindVisible(some));
+
     const categories = pluralizer.resolvedOptions().pluralCategories;
-    for (const category of categories)
-      effects[category] = show(
-        () => pluralizer.select(host.count) === category,
-      );
-    return effects;
+    for (const category of categories) {
+      const el = categoryElements[category];
+      if (el)
+        watch(
+          () => pluralizer.select(host.count) === category,
+          bindVisible(el),
+        );
+    }
   },
 );

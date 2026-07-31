@@ -10,10 +10,10 @@ form-checkbox {
   & label {
     font-size: var(--font-size-s);
     border-radius: var(--space-xs);
+  }
 
-    &:has(:focus-visible) {
-      box-shadow: 0 0 var(--space-xxs) 2px var(--color-selection);
-    }
+  &:has(input:focus-visible) label {
+    box-shadow: 0 0 var(--space-xxs) 2px var(--color-selection);
   }
 
   &.checkbox label {
@@ -27,7 +27,7 @@ form-checkbox {
       display: inline-block;
       box-sizing: border-box;
       /* biome-ignore lint/suspicious/noIrregularWhitespace: fix-to ensure same line-height */
-      content: " ";
+      content: " ";
       text-align: center;
       width: var(--space-l);
       height: var(--space-l);
@@ -46,7 +46,7 @@ form-checkbox {
     }
   }
 
-  &.checkbox[checked] label {
+  &.checkbox:has(input:checked) label {
     &::before {
       color: var(--color-text-inverted);
       background-color: var(--color-selection-selected);
@@ -75,7 +75,7 @@ form-checkbox {
       display: inline-block;
       box-sizing: border-box;
       /* biome-ignore lint/suspicious/noIrregularWhitespace: fix-to ensure same line-height */
-      content: " ";
+      content: " ";
       text-align: center;
       width: var(--space-l);
       height: var(--space-l);
@@ -94,7 +94,7 @@ form-checkbox {
     }
   }
 
-  &.todo[checked] label {
+  &.todo:has(input:checked) label {
     & span {
       text-decoration: line-through var(--color-success);
     }
@@ -130,7 +130,7 @@ form-checkbox {
       flex-shrink: 0;
       box-sizing: border-box;
       /* biome-ignore lint/suspicious/noIrregularWhitespace: fix-to ensure same line-height */
-      content: " ";
+      content: " ";
       width: calc(var(--space-l) * 2);
       height: var(--space-l);
       line-height: 1.5;
@@ -161,7 +161,7 @@ form-checkbox {
     }
   }
 
-  &.toggle[checked] label {
+  &.toggle:has(input:checked) label {
     &::before {
       background-color: var(--color-selection-selected);
       border-color: var(--color-selection-active);

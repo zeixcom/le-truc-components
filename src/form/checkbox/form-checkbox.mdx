@@ -5,7 +5,7 @@ import * as FormCheckboxStories from './form-checkbox.stories';
 
 ### Form Checkbox
 
-A wrapper for a native checkbox that shows `read()` as the `checked` state's initial value to read the current DOM state, `asString()` with a reader fallback for the label, and `toggleAttribute()` applied to `host` to reflect `checked` as an attribute for CSS styling.
+A wrapper for a native checkbox that demonstrates `asBoolean()` to read the initial `checked` state from the host's own attribute at connect time, a DOM-derived fallback for the `label` property, and `formAssociatedCheckbox()` for form participation via `ElementInternals`. The checked visual state is driven live off the native input via `:has(input:checked)` in CSS — the `checked` attribute itself is only the reset default (`<form>.reset()` restores it), not a live reflection of current state.
 
 #### Tag Name
 

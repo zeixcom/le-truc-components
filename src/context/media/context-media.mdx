@@ -5,7 +5,7 @@ import * as ContextMediaStories from './context-media.stories';
 
 ### Context Media
 
-A context provider that exposes live media query state to descendant components via the W3C Context Protocol. Demonstrates using initializer functions that return a `createState()` signal — rather than a static value or parser — to wire `MediaQueryList` change events into reactive properties, reading `host` attributes inside a property initializer to configure breakpoints before any effects run, and using `provideContexts()` as the sole effect to broadcast all four properties as typed `Context` tokens that consumers can request with `requestContext()`.
+A context provider that exposes live media query state to descendant components via the W3C Context Protocol. Demonstrates using `createSensor()` inside `expose()` — rather than a static value or parser — to wire `MediaQueryList` change events into reactive properties, reading `host` attributes before `expose()` to configure breakpoints, and calling `provideContexts()` to broadcast all four properties as typed `Context` tokens (created with `createContext()`) that consumers can request with `requestContext()`.
 
 #### Tag Name
 
@@ -28,25 +28,25 @@ A context provider that exposes live media query state to descendant components 
   </thead>
   <tbody>
     <tr>
-      <td><code>media-motion</code></td>
+      <td><code>motion</code></td>
       <td><code>"no-preference" | "reduce"</code></td>
       <td><code>"no-preference"</code></td>
       <td><code>prefers-reduced-motion</code> media query</td>
     </tr>
     <tr>
-      <td><code>media-theme</code></td>
+      <td><code>theme</code></td>
       <td><code>"light" | "dark"</code></td>
       <td><code>"light"</code></td>
       <td><code>prefers-color-scheme</code> media query</td>
     </tr>
     <tr>
-      <td><code>media-viewport</code></td>
+      <td><code>viewport</code></td>
       <td><code>"xs" | "sm" | "md" | "lg" | "xl"</code></td>
       <td><code>"xs"</code></td>
       <td>Current breakpoint derived from <code>min-width</code> media queries</td>
     </tr>
     <tr>
-      <td><code>media-orientation</code></td>
+      <td><code>orientation</code></td>
       <td><code>"portrait" | "landscape"</code></td>
       <td><code>"portrait"</code></td>
       <td><code>orientation</code> media query</td>

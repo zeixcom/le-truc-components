@@ -1,9 +1,4 @@
-import {
-  type Component,
-  defineComponent,
-  requestContext,
-  setText,
-} from "@zeix/le-truc";
+import { bindText, defineComponent } from "@zeix/le-truc";
 import {
   MEDIA_MOTION,
   MEDIA_ORIENTATION,
@@ -11,38 +6,31 @@ import {
   MEDIA_VIEWPORT,
 } from "../../context/media/context-media";
 
-type CardMediaqueriesPropKeys = "motion" | "theme" | "viewport" | "orientation";
-
-export type CardMediaqueriesProps = Record<CardMediaqueriesPropKeys, string>;
-
-type CardMediaqueriesUI = Partial<
-  Record<CardMediaqueriesPropKeys, HTMLElement | undefined>
->;
-
-declare global {
-  interface HTMLElementTagNameMap {
-    "card-mediaqueries": Component<CardMediaqueriesProps>;
-  }
-}
-
-export default defineComponent<CardMediaqueriesProps, CardMediaqueriesUI>(
+export default defineComponent(
   "card-mediaqueries",
-  {
-    motion: requestContext(MEDIA_MOTION, "unknown"),
-    theme: requestContext(MEDIA_THEME, "unknown"),
-    viewport: requestContext(MEDIA_VIEWPORT, "unknown"),
-    orientation: requestContext(MEDIA_ORIENTATION, "unknown"),
+  ({ first, requestContext, watch }) => {
+    const motionEl = first(".motion");
+    if (motionEl) {
+      const motion = requestContext(MEDIA_MOTION, "unknown");
+      watch(motion, bindText(motionEl));
+    }
+
+    const themeEl = first(".theme");
+    if (themeEl) {
+      const theme = requestContext(MEDIA_THEME, "unknown");
+      watch(theme, bindText(themeEl));
+    }
+
+    const viewportEl = first(".viewport");
+    if (viewportEl) {
+      const viewport = requestContext(MEDIA_VIEWPORT, "unknown");
+      watch(viewport, bindText(viewportEl));
+    }
+
+    const orientationEl = first(".orientation");
+    if (orientationEl) {
+      const orientation = requestContext(MEDIA_ORIENTATION, "unknown");
+      watch(orientation, bindText(orientationEl));
+    }
   },
-  ({ first }) => ({
-    motion: first(".motion"),
-    theme: first(".theme"),
-    viewport: first(".viewport"),
-    orientation: first(".orientation"),
-  }),
-  () => ({
-    motion: setText("motion"),
-    theme: setText("theme"),
-    viewport: setText("viewport"),
-    orientation: setText("orientation"),
-  }),
 );

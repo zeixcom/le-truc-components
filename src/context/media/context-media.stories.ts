@@ -3,8 +3,6 @@ import { html, nothing } from "lit";
 import { expect, within } from "storybook/test";
 import "./context-media.ts";
 import "../../card/mediaqueries/card-mediaqueries.ts";
-import type { Component } from "@zeix/le-truc";
-import type { CardMediaqueriesProps } from "../../card/mediaqueries/card-mediaqueries.ts";
 
 type ContextMediaArgs = {
   sm: string;
@@ -75,18 +73,18 @@ export const Default: Story = {
     await customElements.whenDefined("context-media");
     await customElements.whenDefined("card-mediaqueries");
     const canvas = within(canvasElement);
-    const card = canvasElement.querySelector(
-      "card-mediaqueries",
-    ) as Component<CardMediaqueriesProps>;
+    const card = canvasElement.querySelector("card-mediaqueries");
 
-    await expect(card.querySelector(".motion")).not.toHaveTextContent(
+    await expect(card?.querySelector(".motion")).not.toHaveTextContent(
       "unknown",
     );
-    await expect(card.querySelector(".theme")).not.toHaveTextContent("unknown");
-    await expect(card.querySelector(".viewport")).not.toHaveTextContent(
+    await expect(card?.querySelector(".theme")).not.toHaveTextContent(
       "unknown",
     );
-    await expect(card.querySelector(".orientation")).not.toHaveTextContent(
+    await expect(card?.querySelector(".viewport")).not.toHaveTextContent(
+      "unknown",
+    );
+    await expect(card?.querySelector(".orientation")).not.toHaveTextContent(
       "unknown",
     );
 

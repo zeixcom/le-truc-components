@@ -8,60 +8,44 @@ import "../../basic/button/basic-button.css";
 import "../../form/textbox/form-textbox.ts";
 import "../../form/textbox/form-textbox.css";
 
-type ModuleListArgs = {
-  max: number;
-};
-
-const render = ({ max }: ModuleListArgs) => html`
-  <module-list max=${max}>
-    <ul data-container></ul>
-    <template>
-      <li>
-        <span><slot></slot></span>
-        <basic-button class="delete">
-          <button type="button" class="tertiary destructive small">Remove</button>
-        </basic-button>
-      </li>
-    </template>
-    <form>
-      <form-textbox clearable>
+const render = () => html`
+  <module-list>
+    <form action="#">
+      <form-textbox>
         <label for="new-item-input">New item</label>
         <div class="input">
           <input type="text" id="new-item-input" name="new-item" autocomplete="off" />
           <button type="button" class="clear" aria-label="Clear input" hidden>✕</button>
         </div>
       </form-textbox>
-      <basic-button class="add">
-        <button type="submit" class="constructive">Add</button>
+      <basic-button class="submit">
+        <button type="submit" class="constructive" disabled>
+          <span class="label">Add</span>
+        </button>
       </basic-button>
     </form>
+    <ul data-container></ul>
+    <template>
+      <li>
+        <span><slot></slot></span>
+        <basic-button class="remove">
+          <button type="button" class="tertiary destructive small">Remove</button>
+        </basic-button>
+      </li>
+    </template>
   </module-list>
 `;
 
-const meta: Meta<ModuleListArgs> = {
+const meta: Meta = {
   title: "Module/List",
   render,
-  argTypes: {
-    max: {
-      control: "number",
-      table: {
-        defaultValue: { summary: "1000" },
-        category: "Attributes",
-      },
-    },
-  },
 };
 export default meta;
-type Story = StoryObj<ModuleListArgs>;
+type Story = StoryObj;
 
-export const Default: Story = {
-  args: {
-    max: 1000,
-  },
-};
+export const Default: Story = {};
 
 export const AddItem: Story = {
-  args: { max: 1000 },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-list");
     const canvas = within(canvasElement);
@@ -83,68 +67,34 @@ export const AddItem: Story = {
   },
 };
 
-// ⚠️ Custom render: pre-populates the container with existing items to test that the component recognises them
+// ⚠️ Custom render: pre-populates the container with existing items to test that the component recognises server-rendered children
 export const WithInitialItems: Story = {
   render: () => html`
     <module-list>
-      <ul data-container>
-        <li data-key="0">
-          <span>Existing item 1</span>
-          <basic-button class="delete">
-            <button type="button" class="tertiary destructive small">Remove</button>
-          </basic-button>
-        </li>
-        <li data-key="1">
-          <span>Existing item 2</span>
-          <basic-button class="delete">
-            <button type="button" class="tertiary destructive small">Remove</button>
-          </basic-button>
-        </li>
-      </ul>
-      <template>
-        <li>
-          <span><slot></slot></span>
-          <basic-button class="delete">
-            <button type="button" class="tertiary destructive small">Remove</button>
-          </basic-button>
-        </li>
-      </template>
-      <form>
-        <form-textbox clearable>
+      <form action="#">
+        <form-textbox>
           <label for="initial-item-input">New item</label>
           <div class="input">
             <input type="text" id="initial-item-input" name="new-item" autocomplete="off" />
             <button type="button" class="clear" aria-label="Clear input" hidden>✕</button>
           </div>
         </form-textbox>
-        <basic-button class="add">
-          <button type="submit" class="constructive">Add</button>
+        <basic-button class="submit">
+          <button type="submit" class="constructive" disabled>
+            <span class="label">Add</span>
+          </button>
         </basic-button>
       </form>
-    </module-list>
-  `,
-};
-
-// ⚠️ Custom render: pre-populates the container at the max limit to verify the add button starts disabled
-export const WithMax: Story = {
-  render: () => html`
-    <module-list max="3">
       <ul data-container>
-        <li data-key="0">
-          <span>Item 1</span>
-          <basic-button class="delete">
+        <li data-key="item0">
+          <span>Existing item 1</span>
+          <basic-button class="remove">
             <button type="button" class="tertiary destructive small">Remove</button>
           </basic-button>
         </li>
-        <li data-key="1">
-          <span>Item 2</span>
-          <basic-button class="delete">
-            <button type="button" class="tertiary destructive small">Remove</button>
-          </basic-button>
-        </li>
-        <li data-key="2">
-          <span>Item 3</span>
-          <basic-button class="delete">
+        <li data-key="item1">
+          <span>Existing item 2</span>
+          <basic-button class="remove">
             <button type="button" class="tertiary destructive small">Remove</button>
           </basic-button>
         </li>
@@ -152,30 +102,39 @@ export const WithMax: Story = {
       <template>
         <li>
           <span><slot></slot></span>
-          <basic-button class="delete">
+          <basic-button class="remove">
             <button type="button" class="tertiary destructive small">Remove</button>
           </basic-button>
         </li>
       </template>
-      <form>
-        <form-textbox clearable>
-          <label for="max-item-input">New item</label>
-          <div class="input">
-            <input type="text" id="max-item-input" name="new-item" autocomplete="off" />
-            <button type="button" class="clear" aria-label="Clear input" hidden>✕</button>
-          </div>
-        </form-textbox>
-        <basic-button class="add">
-          <button type="submit" class="constructive">Add</button>
-        </basic-button>
-      </form>
     </module-list>
   `,
+};
+
+export const RemoveItem: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-list");
     const canvas = within(canvasElement);
+    const input = canvas.getByLabelText("New item");
     const addButton = canvas.getByRole("button", { name: "Add" });
+    const container = canvasElement.querySelector("[data-container]");
 
-    await expect(addButton).toBeDisabled();
+    // Seed two items through the component's own API (form submit), not by
+    // pre-rendering <li data-key>. reconcile() only keeps children whose keys
+    // exist in the reactive list — which starts empty — so server-rendered
+    // children are removed on mount. Seeding via the API is the only way to
+    // populate the list (mirrors the AddItem story).
+    await userEvent.type(input, "Buy groceries");
+    await userEvent.click(addButton);
+    await userEvent.type(input, "Walk the dog");
+    await userEvent.click(addButton);
+    await expect(container?.children.length).toBe(2);
+
+    const removeButtons = canvasElement.querySelectorAll<HTMLButtonElement>(
+      "basic-button.remove button",
+    );
+    // biome-ignore lint/style/noNonNullAssertion: asserted above that 2 items exist, so a remove button is present.
+    await userEvent.click(removeButtons[0]!);
+    await expect(container?.children.length).toBe(1);
   },
 };

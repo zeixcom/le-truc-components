@@ -3,7 +3,7 @@ import { html, nothing } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./form-radiogroup.ts";
 import "./form-radiogroup.css";
-import type { Component } from "@zeix/le-truc";
+import type { FormAssociatedElement } from "@zeix/le-truc";
 import type { FormRadiogroupProps } from "./form-radiogroup.ts";
 
 type FormRadiogroupArgs = {
@@ -124,9 +124,9 @@ export const DynamicUpdates: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-radiogroup");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "form-radiogroup",
-    ) as Component<FormRadiogroupProps>;
+    const el = canvasElement.querySelector("form-radiogroup") as HTMLElement &
+      FormAssociatedElement &
+      FormRadiogroupProps;
 
     await expect(el.value).toBe("light");
 
@@ -142,9 +142,9 @@ export const PropertyChanges: Story = {
   args: { value: "light", variant: "split-button" },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-radiogroup");
-    const el = canvasElement.querySelector(
-      "form-radiogroup",
-    ) as Component<FormRadiogroupProps>;
+    const el = canvasElement.querySelector("form-radiogroup") as HTMLElement &
+      FormAssociatedElement &
+      FormRadiogroupProps;
     const labels = el.querySelectorAll("label");
 
     await expect(el.value).toBe("light");

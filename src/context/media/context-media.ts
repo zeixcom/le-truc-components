@@ -1,10 +1,4 @@
-import {
-  type Component,
-  type Context,
-  createState,
-  defineComponent,
-  provideContexts,
-} from "@zeix/le-truc";
+import { createContext, createSensor, defineComponent } from "@zeix/le-truc";
 
 export type ContextMediaMotion = "no-preference" | "reduce";
 export type ContextMediaTheme = "light" | "dark";
@@ -12,116 +6,129 @@ export type ContextMediaViewport = "xs" | "sm" | "md" | "lg" | "xl";
 export type ContextMediaOrientation = "portrait" | "landscape";
 
 export type ContextMediaProps = {
-  readonly "media-motion": ContextMediaMotion;
-  readonly "media-theme": ContextMediaTheme;
-  readonly "media-viewport": ContextMediaViewport;
-  readonly "media-orientation": ContextMediaOrientation;
+  readonly motion: ContextMediaMotion;
+  readonly theme: ContextMediaTheme;
+  readonly viewport: ContextMediaViewport;
+  readonly orientation: ContextMediaOrientation;
 };
 
 declare global {
   interface HTMLElementTagNameMap {
-    "context-media": Component<ContextMediaProps>;
+    "context-media": HTMLElement & ContextMediaProps;
   }
 }
 
 /* === Exported Contexts === */
 
-export const MEDIA_MOTION = "media-motion" as Context<
-  "media-motion",
-  () => ContextMediaMotion
->;
-export const MEDIA_THEME = "media-theme" as Context<
-  "media-theme",
-  () => ContextMediaTheme
->;
-export const MEDIA_VIEWPORT = "media-viewport" as Context<
-  "media-viewport",
-  () => ContextMediaViewport
->;
-export const MEDIA_ORIENTATION = "media-orientation" as Context<
-  "media-orientation",
-  () => ContextMediaOrientation
->;
+export const MEDIA_MOTION = createContext<() => ContextMediaMotion>("motion");
+export const MEDIA_THEME = createContext<() => ContextMediaTheme>("theme");
+export const MEDIA_VIEWPORT =
+  createContext<() => ContextMediaViewport>("viewport");
+export const MEDIA_ORIENTATION =
+  createContext<() => ContextMediaOrientation>("orientation");
 
 /* === Component === */
 
 export default defineComponent<ContextMediaProps>(
   "context-media",
-  {
-    // Context for motion preference; true for no-preference, false for reduce
-    [MEDIA_MOTION]: () => {
-      const mql = matchMedia("(prefers-reduced-motion: reduce)");
-      const motion = createState(mql.matches ? "reduce" : "no-preference");
-      mql.addEventListener("change", (e) => {
-        motion.set(e.matches ? "reduce" : "no-preference");
-      });
-      return motion;
-    },
+  ({ expose, host, provideContexts }) => {
+    const getBreakpoint = (attr: string, fallback: string) => {
+      const value = host.getAttribute(attr);
+      const trimmed = value?.trim();
+      if (!trimmed) return fallback;
+      const unit = trimmed.match(/em$/) ? "em" : "px";
+      const v = parseFloat(trimmed);
+      return Number.isFinite(v) ? v + unit : fallback;
+    };
 
-    // Context for preferred color scheme
-    [MEDIA_THEME]: () => {
-      const mql = matchMedia("(prefers-color-scheme: dark)");
-      const theme = createState(mql.matches ? "dark" : "light");
-      mql.addEventListener("change", (e) => {
-        theme.set(e.matches ? "dark" : "light");
-      });
-      return theme;
-    },
+    expose({
+      // Context for motion preference
+      motion: createSensor<ContextMediaMotion>(
+        (set) => {
+          const mql = matchMedia("(prefers-reduced-motion: reduce)");
+          const listener = (e: MediaQueryListEvent) => {
+            set(e.matches ? "reduce" : "no-preference");
+          };
+          mql.addEventListener("change", listener);
+          return () => mql.removeEventListener("change", listener);
+        },
+        {
+          value: matchMedia("(prefers-reduced-motion: reduce)").matches
+            ? "reduce"
+            : "no-preference",
+        },
+      ),
 
-    // Context for screen viewport size
-    [MEDIA_VIEWPORT]: (ui: { host: HTMLElement }) => {
-      const getBreakpoint = (attr: string, fallback: string) => {
-        const value = ui.host.getAttribute(attr);
-        const trimmed = value?.trim();
-        if (!trimmed) return fallback;
-        const unit = trimmed.match(/em$/) ? "em" : "px";
-        const v = parseFloat(trimmed);
-        return Number.isFinite(v) ? v + unit : fallback;
-      };
-      const mqlSM = matchMedia(`(min-width: ${getBreakpoint("sm", "32em")})`);
-      const mqlMD = matchMedia(`(min-width: ${getBreakpoint("md", "48em")})`);
-      const mqlLG = matchMedia(`(min-width: ${getBreakpoint("lg", "72em")})`);
-      const mqlXL = matchMedia(`(min-width: ${getBreakpoint("xl", "104em")})`);
-      const getViewport = () => {
-        if (mqlXL.matches) return "xl";
-        if (mqlLG.matches) return "lg";
-        if (mqlMD.matches) return "md";
-        if (mqlSM.matches) return "sm";
-        return "xs";
-      };
-      const viewport = createState(getViewport());
-      mqlSM.addEventListener("change", () => {
-        viewport.set(getViewport());
-      });
-      mqlMD.addEventListener("change", () => {
-        viewport.set(getViewport());
-      });
-      mqlLG.addEventListener("change", () => {
-        viewport.set(getViewport());
-      });
-      mqlXL.addEventListener("change", () => {
-        viewport.set(getViewport());
-      });
-      return viewport;
-    },
+      // Context for preferred color scheme
+      theme: createSensor<ContextMediaTheme>(
+        (set) => {
+          const mql = matchMedia("(prefers-color-scheme: dark)");
+          const listener = (e: MediaQueryListEvent) => {
+            set(e.matches ? "dark" : "light");
+          };
+          mql.addEventListener("change", listener);
+          return () => mql.removeEventListener("change", listener);
+        },
+        {
+          value: matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light",
+        },
+      ),
 
-    // Context for screen orientation
-    [MEDIA_ORIENTATION]: () => {
-      const mql = matchMedia("(orientation: landscape)");
-      const orientation = createState(mql.matches ? "landscape" : "portrait");
-      mql.addEventListener("change", (e) => {
-        orientation.set(e.matches ? "landscape" : "portrait");
-      });
-      return orientation;
-    },
+      // Context for screen viewport size
+      viewport: (() => {
+        const breakpoints: [ContextMediaViewport, string][] = [
+          ["sm", getBreakpoint("sm", "32em")],
+          ["md", getBreakpoint("md", "48em")],
+          ["lg", getBreakpoint("lg", "72em")],
+          ["xl", getBreakpoint("xl", "104em")],
+        ];
+        const mqls = new Map<ContextMediaViewport, MediaQueryList>(
+          breakpoints.map(([name, size]) => [
+            name,
+            matchMedia(`(min-width: ${size})`),
+          ]),
+        );
+        const getViewport = (): ContextMediaViewport => {
+          let viewport: ContextMediaViewport = "xs";
+          for (const [name, mql] of mqls) if (mql.matches) viewport = name;
+          return viewport;
+        };
+        return createSensor<ContextMediaViewport>(
+          (set) => {
+            const listener = () => {
+              set(getViewport());
+            };
+            for (const mql of mqls.values())
+              mql.addEventListener("change", listener);
+            return () => {
+              for (const mql of mqls.values())
+                mql.removeEventListener("change", listener);
+            };
+          },
+          { value: getViewport() },
+        );
+      })(),
+
+      // Context for screen orientation
+      orientation: createSensor<ContextMediaOrientation>(
+        (set) => {
+          const mql = matchMedia("(orientation: landscape)");
+          const listener = (e: MediaQueryListEvent) => {
+            set(e.matches ? "landscape" : "portrait");
+          };
+          mql.addEventListener("change", listener);
+          return () => mql.removeEventListener("change", listener);
+        },
+        {
+          value: matchMedia("(orientation: landscape)").matches
+            ? "landscape"
+            : "portrait",
+        },
+      ),
+    });
+
+    provideContexts(["motion", "theme", "viewport", "orientation"]);
   },
-  undefined,
-  () => ({
-    host: provideContexts([
-      MEDIA_MOTION,
-      MEDIA_THEME,
-      MEDIA_VIEWPORT,
-      MEDIA_ORIENTATION,
-    ]),
-  }),
 );

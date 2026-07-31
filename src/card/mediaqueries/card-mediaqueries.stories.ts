@@ -3,8 +3,6 @@ import { html } from "lit";
 import { expect, within } from "storybook/test";
 import "../../context/media/context-media.ts";
 import "./card-mediaqueries.ts";
-import type { Component } from "@zeix/le-truc";
-import type { CardMediaqueriesProps } from "./card-mediaqueries.ts";
 
 type CardMediaqueriesArgs = {
   heading: string;
@@ -45,14 +43,14 @@ export const WithoutContext: Story = {
   args: { heading: "Without Context" },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("card-mediaqueries");
-    const el = canvasElement.querySelector(
-      "card-mediaqueries",
-    ) as Component<CardMediaqueriesProps>;
+    const el = canvasElement.querySelector("card-mediaqueries");
 
-    await expect(el.querySelector(".motion")).toHaveTextContent("unknown");
-    await expect(el.querySelector(".theme")).toHaveTextContent("unknown");
-    await expect(el.querySelector(".viewport")).toHaveTextContent("unknown");
-    await expect(el.querySelector(".orientation")).toHaveTextContent("unknown");
+    await expect(el?.querySelector(".motion")).toHaveTextContent("unknown");
+    await expect(el?.querySelector(".theme")).toHaveTextContent("unknown");
+    await expect(el?.querySelector(".viewport")).toHaveTextContent("unknown");
+    await expect(el?.querySelector(".orientation")).toHaveTextContent(
+      "unknown",
+    );
   },
 };
 
@@ -67,14 +65,12 @@ export const WithContext: Story = {
     await customElements.whenDefined("context-media");
     await customElements.whenDefined("card-mediaqueries");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "card-mediaqueries",
-    ) as Component<CardMediaqueriesProps>;
+    const el = canvasElement.querySelector("card-mediaqueries");
 
-    const motion = el.querySelector(".motion");
-    const theme = el.querySelector(".theme");
-    const viewport = el.querySelector(".viewport");
-    const orientation = el.querySelector(".orientation");
+    const motion = el?.querySelector(".motion");
+    const theme = el?.querySelector(".theme");
+    const viewport = el?.querySelector(".viewport");
+    const orientation = el?.querySelector(".orientation");
 
     // Context values are live browser readings — just verify they are valid enum values
     await expect(motion).not.toHaveTextContent("unknown");

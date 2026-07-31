@@ -5,7 +5,7 @@ import * as ModuleListStories from './module-list.stories';
 
 ### Module List
 
-A dynamic list with add and delete functionality. Exposes `add(process?)` and `delete(key)` as reactive methods via `asMethod()`. The `add` method clones the `<template>`, assigns a `data-key`, optionally processes the item, and appends it to the container. Delete buttons are handled via event delegation on the host. A `max` attribute limits the number of items; the add button is disabled at the limit.
+A dynamic list component that owns its data with a reactive `createList()` and keeps the DOM in sync via `reconcile()` — the keyed-list-reconciliation complement to `each()`. Items are added by calling `list.add(value)` on form submission and removed via delegated click handling on a `basic-button.remove` inside each item; `reconcile()` clones the `<template>`'s root element for each entering key (stamping it with `data-key`), removes elements for keys that left, and reuses/moves survivors. The `bindItem` callback passed to `reconcile()` fills the cloned content — it also runs once for server-rendered items adopted by their `data-key` on first run, so it's written to be idempotent (replacing the `<slot>` rather than assuming it's always present).
 
 #### Tag Name
 
@@ -15,50 +15,9 @@ A dynamic list with add and delete functionality. Exposes `add(process?)` and `d
 
 <Canvas of={ModuleListStories.Default} />
 
-#### Reactive Properties (Methods)
+#### Reactive Properties
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Signature</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>add</code></td>
-      <td><code>(process?: (item: HTMLElement) =&gt; void) =&gt; void</code></td>
-      <td>Clones the template and appends a new item; optional <code>process</code> callback customises the item before insertion</td>
-    </tr>
-    <tr>
-      <td><code>delete</code></td>
-      <td><code>(key: string) =&gt; void</code></td>
-      <td>Removes the item with the matching <code>data-key</code> from the container</td>
-    </tr>
-  </tbody>
-</table>
-
-#### Attributes
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>max</code></td>
-      <td><code>integer</code></td>
-      <td><code>1000</code></td>
-      <td>Maximum number of items allowed; the add button is disabled when the limit is reached</td>
-    </tr>
-  </tbody>
-</table>
+None. This component owns its list data internally via `createList()` and coordinates descendant components through effects.
 
 #### Descendant Elements
 
@@ -76,37 +35,37 @@ A dynamic list with add and delete functionality. Exposes `add(process?)` and `d
       <td><code>first('[data-container]')</code></td>
       <td><code>HTMLElement</code></td>
       <td><strong>required</strong></td>
-      <td>Container where cloned items are appended</td>
+      <td>Container element reconciled against the list's keys</td>
     </tr>
     <tr>
       <td><code>first('template')</code></td>
       <td><code>HTMLTemplateElement</code></td>
       <td><strong>required</strong></td>
-      <td>Template for each list item; must contain a single root element</td>
+      <td>Template for each list item; must contain a single root element, which receives a <code>data-key</code> attribute when cloned</td>
     </tr>
     <tr>
       <td><code>first('form')</code></td>
       <td><code>HTMLFormElement</code></td>
-      <td>optional</td>
-      <td>Submit handler calls <code>host.add()</code> with the textbox value</td>
+      <td><strong>required</strong></td>
+      <td>Submission entry point; calls <code>list.add()</code> with the textbox value and clears the textbox</td>
     </tr>
     <tr>
       <td><code>first('form-textbox')</code></td>
-      <td><code>Component&lt;FormTextboxProps&gt;</code></td>
-      <td>optional</td>
-      <td>Text input for the new item; cleared after successful add</td>
+      <td><code>HTMLElement &amp; FormTextboxProps</code></td>
+      <td><strong>required</strong></td>
+      <td>Text input for the new item; <code>clear()</code> is called after each add</td>
     </tr>
     <tr>
-      <td><code>first('basic-button.add')</code></td>
-      <td><code>Component&lt;BasicButtonProps&gt;</code></td>
-      <td>optional</td>
-      <td>Add button; disabled when textbox is empty or the max is reached</td>
+      <td><code>first('basic-button.submit')</code></td>
+      <td><code>HTMLElement &amp; BasicButtonProps</code></td>
+      <td><strong>required</strong></td>
+      <td>Submit button; disabled while the textbox is empty via <code>pass()</code></td>
     </tr>
     <tr>
-      <td><code>basic-button.delete</code> (inside items)</td>
-      <td><code>Component&lt;BasicButtonProps&gt;</code></td>
+      <td><code>basic-button.remove</code> (inside items)</td>
+      <td><code>HTMLElement &amp; BasicButtonProps</code></td>
       <td>optional</td>
-      <td>Delete button per item; handled via event delegation on the host</td>
+      <td>Remove button per item; handled via event delegation on the host, removing the item from the underlying list by its <code>data-key</code></td>
     </tr>
   </tbody>
 </table>

@@ -5,7 +5,7 @@ import * as FormListboxStories from './form-listbox.stories';
 
 ### Form Listbox
 
-A full-featured listbox with client-side filtering and optional remote option loading. Demonstrates `createElementsMemo()` used directly as a property initializer to create a reactive live collection of visible options, `createTask()` for async JSON fetching with abort support, `dangerouslySetInnerHTML()` to render fetched HTML, and inline `createEffect()` calls inside the `options` effects to update individual option state. The `options` reactive property is a `Memo<HTMLButtonElement[]>` that tracks only currently visible (non-hidden) options.
+A full-featured listbox with client-side filtering and optional remote option loading. Demonstrates `createElementsMemo()` used directly as a property initializer to create a reactive live collection of visible options, `createTask()` for async JSON fetching with abort support (via `nil`/`ok`/`err` handlers passed to `watch()`), `schedule()` to batch the fetched-HTML write into the listbox, and `each(options, ...)` for per-option reactive effects (filter matching/highlighting, selection state). Roving-tabindex keyboard navigation (Arrow/Home/End) is implemented inline via `on(listbox, 'keydown'/'keyup'/'click', ...)`. Form participation and value sync are via ElementInternals (`formAssociated()`) — set `name` directly on `<form-listbox>`; no hidden input descendant is needed. The `options` reactive property is a `Memo<HTMLButtonElement[]>` that tracks only currently visible (non-hidden) options.
 
 #### Tag Name
 
@@ -70,12 +70,6 @@ A full-featured listbox with client-side filtering and optional remote option lo
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td><code>first('input[type="hidden"]')</code></td>
-      <td><code>HTMLInputElement</code></td>
-      <td><strong>required</strong></td>
-      <td>Hidden form input synchronized with selected <code>value</code></td>
-    </tr>
     <tr>
       <td><code>first('[role="listbox"]')</code></td>
       <td><code>HTMLElement</code></td>

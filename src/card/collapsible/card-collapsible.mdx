@@ -1,0 +1,58 @@
+import { Meta, Canvas } from "@storybook/addon-docs/blocks";
+import * as CardCollapsibleStories from "./card-collapsible.stories";
+
+<Meta of={CardCollapsibleStories} />
+
+### Card Collapsible
+
+A content-agnostic collapsible card wrapping a native `<details>`/`<summary>` element.
+
+#### Tag Name
+
+`card-collapsible`
+
+#### Preview
+
+<Canvas of={CardCollapsibleStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>open</code></td>
+      <td><code>boolean</code></td>
+      <td>from descendant <code>&lt;details open&gt;</code></td>
+      <td>Whether the card is expanded</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('details')</code></td>
+      <td><code>HTMLDetailsElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Native disclosure element; put the header in <code>&lt;summary&gt;</code>, the body as sibling content</td>
+    </tr>
+  </tbody>
+</table>

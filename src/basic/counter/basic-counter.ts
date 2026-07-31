@@ -1,43 +1,31 @@
-import {
-  asInteger,
-  type Component,
-  defineComponent,
-  on,
-  read,
-  setText,
-} from "@zeix/le-truc";
+import { asInteger, bindText, defineComponent } from "@zeix/le-truc";
 
 export type BasicCounterProps = {
   count: number;
 };
 
-type BasicCounterUI = {
-  increment: HTMLButtonElement;
-  count: HTMLSpanElement;
-};
-
 declare global {
   interface HTMLElementTagNameMap {
-    "basic-counter": Component<BasicCounterProps>;
+    "basic-counter": HTMLElement & BasicCounterProps;
   }
 }
 
-export default defineComponent<BasicCounterProps, BasicCounterUI>(
+export default defineComponent<BasicCounterProps>(
   "basic-counter",
-  {
-    count: read((ui) => ui.count.textContent, asInteger()),
-  },
-  ({ first }) => ({
-    increment: first(
+  ({ expose, first, host, on, watch }) => {
+    const count = first("span", "Add a span to display the count.");
+
+    expose({ count: asInteger()(count.textContent) });
+
+    const button = first(
       "button",
       "Add a native button element to increment the count.",
-    ),
-    count: first("span", "Add a span to display the count."),
-  }),
-  ({ host }) => ({
-    increment: on("click", () => {
-      host.count++;
-    }),
-    count: setText("count"),
-  }),
+    );
+    on(button, "click", () => ({ count: host.count + 1 }));
+    // preserveComments: the Storybook story interpolates this element's
+    // content via a lit-html expression; the default (non-preserving) write
+    // would eject Lit's ChildPart marker comments and break re-renders
+    // driven by Controls.
+    watch("count", bindText(count, true));
+  },
 );

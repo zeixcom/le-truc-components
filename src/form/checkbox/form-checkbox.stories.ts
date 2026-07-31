@@ -3,7 +3,7 @@ import { html, nothing } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./form-checkbox.ts";
 import "./form-checkbox.css";
-import type { Component } from "@zeix/le-truc";
+import type { FormAssociatedElement } from "@zeix/le-truc";
 import type { FormCheckboxProps } from "./form-checkbox.ts";
 
 type FormCheckboxArgs = {
@@ -13,7 +13,7 @@ type FormCheckboxArgs = {
 };
 
 const render = ({ checked, label, variant }: FormCheckboxArgs) => html`
-  <form-checkbox class=${variant !== "none" ? variant : nothing}>
+  <form-checkbox class=${variant !== "none" ? variant : nothing} ?checked=${checked}>
     <label>
       <input
         type="checkbox"
@@ -66,7 +66,8 @@ const allVariants: FormCheckboxArgs[] = [
 ];
 
 export const AllVariants: Story = {
-  render: () => html`${allVariants.map((args, i) => html`${render(args)}${i < allVariants.length - 1 ? html`<br />` : nothing}`)}`,
+  render: () =>
+    html`${allVariants.map((args, i) => html`${render(args)}${i < allVariants.length - 1 ? html`<br />` : nothing}`)}`,
 };
 
 export const InitialChecked: Story = {
@@ -77,9 +78,9 @@ export const InitialChecked: Story = {
   },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-checkbox");
-    const el = canvasElement.querySelector(
-      "form-checkbox",
-    ) as Component<FormCheckboxProps>;
+    const el = canvasElement.querySelector("form-checkbox") as HTMLElement &
+      FormAssociatedElement &
+      FormCheckboxProps;
 
     await expect(el.checked).toBe(true);
     await expect(el).toHaveAttribute("checked");
@@ -95,16 +96,19 @@ export const DynamicUpdates: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-checkbox");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "form-checkbox",
-    ) as Component<FormCheckboxProps>;
+    const el = canvasElement.querySelector("form-checkbox") as HTMLElement &
+      FormAssociatedElement &
+      FormCheckboxProps;
 
     await expect(el.checked).toBe(false);
     await expect(el).not.toHaveAttribute("checked");
 
     await userEvent.click(canvas.getByRole("checkbox"));
     await expect(el.checked).toBe(true);
-    await expect(el).toHaveAttribute("checked");
+    // `checked` attribute is the reset default (defaultChecked semantics),
+    // not a live reflection — the checked visual state is driven by the
+    // native input via `:has(input:checked)` in CSS.
+    await expect(canvas.getByRole("checkbox")).toBeChecked();
 
     await userEvent.click(canvas.getByRole("checkbox"));
     await expect(el.checked).toBe(false);
@@ -119,9 +123,9 @@ export const PropertyChanges: Story = {
   },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-checkbox");
-    const el = canvasElement.querySelector(
-      "form-checkbox",
-    ) as Component<FormCheckboxProps>;
+    const el = canvasElement.querySelector("form-checkbox") as HTMLElement &
+      FormAssociatedElement &
+      FormCheckboxProps;
     const checkbox = el.querySelector("input");
     const labelEl = el.querySelector(".label");
 

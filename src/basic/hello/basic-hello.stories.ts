@@ -2,18 +2,22 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./basic-hello.ts";
-import type { Component } from "@zeix/le-truc";
 import type { BasicHelloProps } from "./basic-hello.ts";
 
 type BasicHelloArgs = {
-  name: string;
+  subject: string;
 };
 
-const render = ({ name }: BasicHelloArgs) => html`
+const render = ({ subject }: BasicHelloArgs) => html`
   <basic-hello>
-    <label for="hello-name">Your name</label><br />
-    <input id="hello-name" name="name" type="text" autocomplete="given-name" />
-    <p>Hello, <output for="hello-name">${name}</output>!</p>
+    <label for="hello-subject">Your name</label><br />
+    <input
+      id="hello-subject"
+      name="subject"
+      type="text"
+      autocomplete="given-name"
+    />
+    <p>Hello, <output for="hello-subject">${subject}</output>!</p>
   </basic-hello>
 `;
 
@@ -21,7 +25,7 @@ const meta: Meta<BasicHelloArgs> = {
   title: "Basic/Hello",
   render,
   argTypes: {
-    name: {
+    subject: {
       control: "text",
       table: {
         defaultValue: { summary: "''" },
@@ -35,18 +39,17 @@ type Story = StoryObj<BasicHelloArgs>;
 
 export const Default: Story = {
   args: {
-    name: "World",
+    subject: "World",
   },
 };
 
 export const DynamicUpdates: Story = {
-  args: { name: "World" },
+  args: { subject: "World" },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-hello");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "basic-hello",
-    ) as Component<BasicHelloProps>;
+    const el = canvasElement.querySelector("basic-hello") as HTMLElement &
+      BasicHelloProps;
     const input = canvas.getByRole("textbox");
     const output = el.querySelector("output");
 
@@ -63,13 +66,12 @@ export const DynamicUpdates: Story = {
 };
 
 export const FallbackOnClear: Story = {
-  args: { name: "World" },
+  args: { subject: "World" },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-hello");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "basic-hello",
-    ) as Component<BasicHelloProps>;
+    const el = canvasElement.querySelector("basic-hello") as HTMLElement &
+      BasicHelloProps;
     const input = canvas.getByRole("textbox");
     const output = el.querySelector("output");
 
@@ -82,32 +84,30 @@ export const FallbackOnClear: Story = {
 };
 
 export const InitialDOMValue: Story = {
-  args: { name: "Alice" },
+  args: { subject: "Alice" },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-hello");
-    const el = canvasElement.querySelector(
-      "basic-hello",
-    ) as Component<BasicHelloProps>;
+    const el = canvasElement.querySelector("basic-hello") as HTMLElement &
+      BasicHelloProps;
     const output = el.querySelector("output");
 
     await expect(output).toHaveTextContent("Alice");
-    await expect(el.name).toBe("Alice");
+    await expect(el.subject).toBe("Alice");
   },
 };
 
 export const PropertyChanges: Story = {
-  args: { name: "World" },
+  args: { subject: "World" },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-hello");
-    const el = canvasElement.querySelector(
-      "basic-hello",
-    ) as Component<BasicHelloProps>;
+    const el = canvasElement.querySelector("basic-hello") as HTMLElement &
+      BasicHelloProps;
     const output = el.querySelector("output");
 
-    el.name = "Charlie";
+    el.subject = "Charlie";
     await expect(output).toHaveTextContent("Charlie");
 
-    el.name = "Dana";
+    el.subject = "Dana";
     await expect(output).toHaveTextContent("Dana");
   },
 };

@@ -1,0 +1,3600 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/button/basic-button.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "basic-button",
+          "name": "BasicButton",
+          "description": "",
+          "members": [
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "badge",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "demos": []
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "BasicButton",
+            "module": "src/basic/button/basic-button.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "basic-button",
+          "declaration": {
+            "name": "BasicButton",
+            "module": "src/basic/button/basic-button.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/counter/basic-counter.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "basic-counter",
+          "name": "BasicCounter",
+          "description": "",
+          "members": [
+            {
+              "kind": "field",
+              "name": "count",
+              "type": {
+                "text": "number"
+              }
+            }
+          ],
+          "demos": []
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "BasicCounter",
+            "module": "src/basic/counter/basic-counter.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "basic-counter",
+          "declaration": {
+            "name": "BasicCounter",
+            "module": "src/basic/counter/basic-counter.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/gauge/basic-gauge.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "basic-gauge",
+          "name": "BasicGauge",
+          "description": "A gauge that displays a numeric value as a meter with color-coded thresholds.\nUse it for visualising a value within a known range — the needle rotates\nto reflect the current value and the color indicates which threshold applies.\nThe `value` must be a number within the range defined by the thresholds.\nThresholds should be ordered by `min` value for correct color assignment.\nThe `value` attribute is observed post-connect, so setting it at runtime\n(e.g. `gauge.setAttribute('value', '0.5')`) updates the gauge too, not just\nthe initial `value` property.",
+          "members": [
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "number"
+              },
+              "description": "Current gauge value in the range [0, meter.max]. Read from the `value`\nattribute at connect time (falling back to the inner `<meter>`'s value\nfor markup that only sets it there), and re-parsed on later `value`\nattribute mutations — e.g. from frameworks like React that set DOM\nattributes rather than properties."
+            }
+          ],
+          "attributes": [
+            {
+              "name": "value",
+              "fieldName": "value",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "name": "thresholds",
+              "type": {
+                "text": "BasicGaugeThreshold[]"
+              },
+              "description": "Color-coded thresholds as a JSON array, e.g. `[{\"min\":0,\"label\":\"Low\",\"color\":\"red\"}]`. Defaults to an empty array (no color/label applied) if omitted. Read once at connect time."
+            }
+          ],
+          "cssProperties": [
+            {
+              "name": "--basic-gauge-background",
+              "description": "Background color behind the ring. Defaults to `--color-background`."
+            },
+            {
+              "name": "--basic-gauge-label-color",
+              "description": "Text color of the qualification label. Defaults to `--color-text-soft`."
+            },
+            {
+              "name": "--basic-gauge-label-font-size",
+              "description": "Font size of the qualification label. Defaults to `--font-size-s`."
+            },
+            {
+              "name": "--basic-gauge-metric-color",
+              "description": "Text color of the numeric value. Defaults to `--color-text`."
+            },
+            {
+              "name": "--basic-gauge-metric-font-size",
+              "description": "Font size of the numeric value. Defaults to `--font-size-xl`."
+            },
+            {
+              "name": "--basic-gauge-ring-width",
+              "description": "Ring thickness. Accepts any CSS length; defaults to `--space-xs`."
+            },
+            {
+              "name": "--basic-gauge-size",
+              "description": "Overall gauge diameter. Accepts any CSS length; defaults to `8rem`."
+            },
+            {
+              "name": "--basic-gauge-track-color",
+              "description": "Background color of the unfilled ring track. Defaults to `--color-secondary`."
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#basic-gauge",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "BasicGauge",
+            "module": "src/basic/gauge/basic-gauge.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "basic-gauge",
+          "declaration": {
+            "name": "BasicGauge",
+            "module": "src/basic/gauge/basic-gauge.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/hello/basic-hello.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "basic-hello",
+          "name": "BasicHello",
+          "description": "",
+          "members": [
+            {
+              "kind": "field",
+              "name": "subject",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "demos": []
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "BasicHello",
+            "module": "src/basic/hello/basic-hello.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "basic-hello",
+          "declaration": {
+            "name": "BasicHello",
+            "module": "src/basic/hello/basic-hello.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/_common/getLocale.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "getLocale",
+          "return": {
+            "type": {
+              "text": "string"
+            }
+          },
+          "parameters": [
+            {
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "getLocale",
+          "declaration": {
+            "name": "getLocale",
+            "module": "src/_common/getLocale.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/_common/getNumberFormatter.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "getNumberFormatter",
+          "parameters": [
+            {
+              "name": "locale",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "rawOptions",
+              "type": {
+                "text": "string | null"
+              }
+            },
+            {
+              "name": "logger",
+              "default": "DEFAULT_LOGGER",
+              "type": {
+                "text": "NumberFormatterLogger"
+              }
+            }
+          ],
+          "description": "Builds an `Intl.NumberFormat` from a locale and a JSON-encoded\n`Intl.NumberFormatOptions` string (typically an element's `options`\nattribute). Validates `style: \"currency\"` and `style: \"unit\"` requirements,\ndrops options that don't apply to the resolved style, and swaps inverted\nmin/max digit pairs. Falls back to `new Intl.NumberFormat(locale)` for\nmissing/invalid input, logging via `logger`."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "getNumberFormatter",
+          "declaration": {
+            "name": "getNumberFormatter",
+            "module": "src/_common/getNumberFormatter.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/number/basic-number.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "basic-number",
+          "name": "BasicNumber",
+          "description": "",
+          "members": [
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "number"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "value",
+              "fieldName": "value",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            }
+          ],
+          "demos": []
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "BasicNumber",
+            "module": "src/basic/number/basic-number.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "basic-number",
+          "declaration": {
+            "name": "BasicNumber",
+            "module": "src/basic/number/basic-number.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/pluralize/basic-pluralize.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "basic-pluralize",
+          "name": "BasicPluralize",
+          "description": "",
+          "members": [
+            {
+              "kind": "field",
+              "name": "count",
+              "type": {
+                "text": "number"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "count",
+              "fieldName": "count",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            }
+          ],
+          "demos": []
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "BasicPluralize",
+            "module": "src/basic/pluralize/basic-pluralize.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "basic-pluralize",
+          "declaration": {
+            "name": "BasicPluralize",
+            "module": "src/basic/pluralize/basic-pluralize.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/card/blogmeta/card-blogmeta.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "card-blogmeta",
+          "name": "CardBlogmeta",
+          "description": "Formats and displays publication and modification dates from `<time>` element `datetime` attributes.\nUse it for blog post or article metadata — the displayed dates update when the\nunderlying `datetime` attributes change.\nThe `datetime` values must be valid date strings; missing attributes are skipped.\nThe host element should contain `<time class=\"published\">` and `<time class=\"modified\">` elements.",
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#card-blogmeta",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "CardBlogmeta",
+            "module": "src/card/blogmeta/card-blogmeta.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "card-blogmeta",
+          "declaration": {
+            "name": "CardBlogmeta",
+            "module": "src/card/blogmeta/card-blogmeta.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/card/collapsible/card-collapsible.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "card-collapsible",
+          "name": "CardCollapsible",
+          "description": "A collapsible card wrapping a native `<details>`/`<summary>` element.\nUse it for any content that should be expandable/collapsible — content-agnostic,\nthe header goes in `<summary>`, the body is the rest of `<details>`'s content.\nNative disclosure semantics provide keyboard toggling (Enter/Space on the summary)\nand find-in-page support for free; the `open` reactive property mirrors the\ndescendant `<details>` element's `open` state for programmatic read/control.",
+          "members": [
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the card is expanded. Reflects the descendant `<details>` element's `open` state."
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#card-collapsible",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "CardCollapsible",
+            "module": "src/card/collapsible/card-collapsible.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "card-collapsible",
+          "declaration": {
+            "name": "CardCollapsible",
+            "module": "src/card/collapsible/card-collapsible.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/_common/asOklch.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "asOklch",
+          "parameters": [
+            {
+              "name": "fallback",
+              "default": "{ mode: \"oklch\", l: 0.48, c: 0.23, h: 263 }",
+              "type": {
+                "text": "Oklch"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "asOklch",
+          "declaration": {
+            "name": "asOklch",
+            "module": "src/_common/asOklch.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/_common/getStepColor.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "getStepColor",
+          "return": {
+            "type": {
+              "text": "Oklch"
+            }
+          },
+          "parameters": [
+            {
+              "name": "base",
+              "type": {
+                "text": "Oklch"
+              }
+            },
+            {
+              "name": "step",
+              "type": {
+                "text": "number"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "getStepColor",
+          "declaration": {
+            "name": "getStepColor",
+            "module": "src/_common/getStepColor.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/card/colorscale/card-colorscale.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "card-colorscale",
+          "name": "CardColorscale",
+          "description": "A color scale card that displays a named Oklch color with a full set of lightness steps.\nUse it for previewing a color palette — provides lightness tints and shades\nfor when you need to evaluate contrast and accessibility of a base color.\nThe `color` attribute must be a valid Oklch color string.",
+          "members": [
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "Display name of the color (e.g. \"Blue\")."
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "Oklch"
+              },
+              "description": "Base color in Oklch format. Read from the `color` attribute at connect time."
+            }
+          ],
+          "cssProperties": [
+            {
+              "name": "--card-colorscale-max-size",
+              "description": "Maximum width/height of the card. Defaults to `18rem`."
+            },
+            {
+              "name": "--card-colorscale-padding",
+              "description": "Inner padding of the card. Defaults to `0.5em`."
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#card-colorscale",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "CardColorscale",
+            "module": "src/card/colorscale/card-colorscale.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "card-colorscale",
+          "declaration": {
+            "name": "CardColorscale",
+            "module": "src/card/colorscale/card-colorscale.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/context/media/context-media.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "MEDIA_MOTION"
+        },
+        {
+          "kind": "variable",
+          "name": "MEDIA_THEME"
+        },
+        {
+          "kind": "variable",
+          "name": "MEDIA_VIEWPORT"
+        },
+        {
+          "kind": "variable",
+          "name": "MEDIA_ORIENTATION"
+        },
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "context-media",
+          "name": "ContextMedia",
+          "description": "",
+          "members": [
+            {
+              "kind": "field",
+              "name": "motion",
+              "type": {
+                "text": "ContextMediaMotion"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "theme",
+              "type": {
+                "text": "ContextMediaTheme"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "viewport",
+              "type": {
+                "text": "ContextMediaViewport"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "orientation",
+              "type": {
+                "text": "ContextMediaOrientation"
+              }
+            }
+          ],
+          "demos": []
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MEDIA_MOTION",
+          "declaration": {
+            "name": "MEDIA_MOTION",
+            "module": "src/context/media/context-media.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "MEDIA_THEME",
+          "declaration": {
+            "name": "MEDIA_THEME",
+            "module": "src/context/media/context-media.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "MEDIA_VIEWPORT",
+          "declaration": {
+            "name": "MEDIA_VIEWPORT",
+            "module": "src/context/media/context-media.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "MEDIA_ORIENTATION",
+          "declaration": {
+            "name": "MEDIA_ORIENTATION",
+            "module": "src/context/media/context-media.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ContextMedia",
+            "module": "src/context/media/context-media.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "context-media",
+          "declaration": {
+            "name": "ContextMedia",
+            "module": "src/context/media/context-media.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/card/mediaqueries/card-mediaqueries.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "card-mediaqueries",
+          "name": "CardMediaqueries",
+          "description": "",
+          "demos": []
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "CardMediaqueries",
+            "module": "src/card/mediaqueries/card-mediaqueries.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "card-mediaqueries",
+          "declaration": {
+            "name": "CardMediaqueries",
+            "module": "src/card/mediaqueries/card-mediaqueries.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/form/checkbox/form-checkbox.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "form-checkbox",
+          "name": "FormCheckbox",
+          "description": "",
+          "members": [
+            {
+              "kind": "field",
+              "name": "checked",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the checkbox is checked. Read from the host's own `checked`\nattribute at connect time — set it on `<form-checkbox>`, not the\ninner native input — and restored to that default on `<form>.reset()`."
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Visible label text of the checkbox."
+            },
+            {
+              "kind": "field",
+              "name": "form",
+              "type": {
+                "text": "HTMLFormElement | null"
+              },
+              "description": "The form this element is associated with, or null."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "The form control's name, reflects the name attribute."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the form control is disabled, reflects the disabled attribute."
+            },
+            {
+              "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "NodeList"
+              },
+              "description": "The label elements associated with this form control."
+            },
+            {
+              "kind": "field",
+              "name": "validity",
+              "type": {
+                "text": "ValidityState"
+              },
+              "description": "The validity state of the form control."
+            },
+            {
+              "kind": "field",
+              "name": "validationMessage",
+              "type": {
+                "text": "string"
+              },
+              "description": "The validation message of the form control."
+            },
+            {
+              "kind": "field",
+              "name": "willValidate",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the form control will be validated."
+            },
+            {
+              "kind": "method",
+              "name": "checkValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Checks the validity of the form control."
+            },
+            {
+              "kind": "method",
+              "name": "reportValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Checks the validity of the form control and reports it to the user."
+            },
+            {
+              "kind": "method",
+              "name": "setCustomValidity",
+              "parameters": [
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Sets a custom validity message on the form control."
+            }
+          ],
+          "attributes": [
+            {
+              "name": "checked",
+              "fieldName": "checked",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "demos": []
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "FormCheckbox",
+            "module": "src/form/checkbox/form-checkbox.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "form-checkbox",
+          "declaration": {
+            "name": "FormCheckbox",
+            "module": "src/form/checkbox/form-checkbox.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/form/colorgraph/form-colorgraph.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "form-colorgraph",
+          "name": "FormColorgraph",
+          "description": "An interactive Oklch color editor with sliders for lightness, chroma, and hue.\nUse it for exploring color spaces — keyboard accessible via Arrow keys on each\nslider axis, with live preview of the resulting color and out-of-gamut warnings.\nOut-of-gamut colors should be handled with a fallback, as display coverage varies.\nChroma values must stay within the Oklch gamut; extreme values are clamped automatically.\nForm participation submits one serialized CSS color value via ElementInternals.",
+          "members": [
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "description": "Current color as a CSS string (e.g. `oklch(0.48 0.23 263)`). Form value."
+            },
+            {
+              "kind": "field",
+              "name": "lightness",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "chroma",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "hue",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "stepDown",
+              "parameters": [
+                {
+                  "name": "axis",
+                  "type": {
+                    "text": "FormColorgraphAxis"
+                  }
+                },
+                {
+                  "name": "bigStep",
+                  "type": {
+                    "text": "boolean | undefined"
+                  },
+                  "optional": true
+                }
+              ],
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "stepUp",
+              "parameters": [
+                {
+                  "name": "axis",
+                  "type": {
+                    "text": "FormColorgraphAxis"
+                  }
+                },
+                {
+                  "name": "bigStep",
+                  "type": {
+                    "text": "boolean | undefined"
+                  },
+                  "optional": true
+                }
+              ],
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              }
+            },
+            {
+              "kind": "field",
+              "name": "form",
+              "type": {
+                "text": "HTMLFormElement | null"
+              },
+              "description": "The form this element is associated with, or null."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "The form control's name, reflects the name attribute."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the form control is disabled, reflects the disabled attribute."
+            },
+            {
+              "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "NodeList"
+              },
+              "description": "The label elements associated with this form control."
+            },
+            {
+              "kind": "field",
+              "name": "validity",
+              "type": {
+                "text": "ValidityState"
+              },
+              "description": "The validity state of the form control."
+            },
+            {
+              "kind": "field",
+              "name": "validationMessage",
+              "type": {
+                "text": "string"
+              },
+              "description": "The validation message of the form control."
+            },
+            {
+              "kind": "field",
+              "name": "willValidate",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the form control will be validated."
+            },
+            {
+              "kind": "method",
+              "name": "checkValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Checks the validity of the form control."
+            },
+            {
+              "kind": "method",
+              "name": "reportValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Checks the validity of the form control and reports it to the user."
+            },
+            {
+              "kind": "method",
+              "name": "setCustomValidity",
+              "parameters": [
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Sets a custom validity message on the form control."
+            }
+          ],
+          "attributes": [
+            {
+              "name": "value",
+              "fieldName": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"oklch(0.48 0.23 263)\""
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#form-colorgraph",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "FormColorgraph",
+            "module": "src/form/colorgraph/form-colorgraph.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "form-colorgraph",
+          "declaration": {
+            "name": "FormColorgraph",
+            "module": "src/form/colorgraph/form-colorgraph.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/_common/relayValidity.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "relayValidity",
+          "return": {
+            "type": {
+              "text": "void"
+            }
+          },
+          "parameters": [
+            {
+              "name": "input",
+              "type": {
+                "text": "HTMLInputElement | HTMLTextAreaElement"
+              },
+              "description": "The inner native form control driving validity"
+            },
+            {
+              "name": "host",
+              "type": {
+                "text": "FormAssociatedElement"
+              },
+              "description": "The form-associated host element"
+            },
+            {
+              "name": "error",
+              "type": {
+                "text": "ErrorSink"
+              },
+              "description": "A write-handle (e.g. a `State<string>`) for the inline error"
+            }
+          ],
+          "description": "Relay an inner native form control's validity to the host and the inline\nerror display in one step.\n\n- Runs `checkValidity()` on the inner control so the browser recomputes its\n  `validationMessage` from native constraints (required, pattern, etc.).\n- Mirrors that message into the component-internal error signal, which the\n  inline `.error` element binds to.\n- Forwards it to `host.setCustomValidity()` so external consumers see native\n  parity (`host.validity`, `host.validationMessage`, `:user-invalid`)."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "relayValidity",
+          "declaration": {
+            "name": "relayValidity",
+            "module": "src/_common/relayValidity.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/_common/fetchWithCache.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "isRecursiveURL",
+          "return": {
+            "type": {
+              "text": "boolean"
+            }
+          },
+          "parameters": [
+            {
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "description": "URL to check"
+            },
+            {
+              "name": "host",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "description": "Host element"
+            },
+            {
+              "name": "attr",
+              "default": "\"src\"",
+              "type": {
+                "text": "string"
+              },
+              "description": "Attribute name"
+            }
+          ],
+          "description": "Check if an URL is recursive"
+        },
+        {
+          "kind": "function",
+          "name": "isValidURL",
+          "return": {
+            "type": {
+              "text": "boolean"
+            }
+          },
+          "parameters": [
+            {
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "description": "URL to check"
+            }
+          ],
+          "description": "Check if an URL is valid"
+        },
+        {
+          "kind": "function",
+          "name": "fetchWithCache",
+          "return": {
+            "type": {
+              "text": ""
+            }
+          },
+          "parameters": [
+            {
+              "name": "url",
+              "type": {
+                "text": "string"
+              },
+              "description": "URL to fetch"
+            },
+            {
+              "name": "signal",
+              "optional": true,
+              "type": {
+                "text": "AbortSignal"
+              },
+              "description": "AbortSignal for cancellation"
+            },
+            {
+              "name": "parseResponse",
+              "default": "(response: Response) =>\n    response.text() as Promise<T>",
+              "type": {
+                "text": "(response: Response) => Promise<T>"
+              },
+              "description": "Function to parse the response body (defaults to text)"
+            }
+          ],
+          "description": "Fetch with HTTP caching support"
+        },
+        {
+          "kind": "variable",
+          "name": "content",
+          "default": "await parseResponse(response)"
+        },
+        {
+          "kind": "function",
+          "name": "clearCache",
+          "return": {
+            "type": {
+              "text": "void"
+            }
+          },
+          "description": "Clear the entire cache"
+        },
+        {
+          "kind": "function",
+          "name": "removeCacheEntry",
+          "return": {
+            "type": {
+              "text": "boolean"
+            }
+          },
+          "parameters": [
+            {
+              "name": "url",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "description": "Remove a specific URL from cache"
+        },
+        {
+          "kind": "function",
+          "name": "getCacheSize",
+          "return": {
+            "type": {
+              "text": "number"
+            }
+          },
+          "description": "Get cache size"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "isRecursiveURL",
+          "declaration": {
+            "name": "isRecursiveURL",
+            "module": "src/_common/fetchWithCache.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "isValidURL",
+          "declaration": {
+            "name": "isValidURL",
+            "module": "src/_common/fetchWithCache.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "fetchWithCache",
+          "declaration": {
+            "name": "fetchWithCache",
+            "module": "src/_common/fetchWithCache.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "clearCache",
+          "declaration": {
+            "name": "clearCache",
+            "module": "src/_common/fetchWithCache.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "removeCacheEntry",
+          "declaration": {
+            "name": "removeCacheEntry",
+            "module": "src/_common/fetchWithCache.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "getCacheSize",
+          "declaration": {
+            "name": "getCacheSize",
+            "module": "src/_common/fetchWithCache.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/_common/highlight.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "highlightMatch",
+          "return": {
+            "type": {
+              "text": ""
+            }
+          },
+          "parameters": [
+            {
+              "name": "text",
+              "type": {
+                "text": "string"
+              },
+              "description": "The text to escape and optionally highlight"
+            },
+            {
+              "name": "highlightPattern",
+              "optional": true,
+              "type": {
+                "text": "string | RegExp"
+              },
+              "description": "Optional string or RegExp to highlight with <mark> tags"
+            }
+          ],
+          "description": "Safely creates HTML with highlighted matches"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "highlightMatch",
+          "declaration": {
+            "name": "highlightMatch",
+            "module": "src/_common/highlight.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/_common/html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "html",
+          "return": {
+            "type": {
+              "text": "string"
+            }
+          },
+          "parameters": [
+            {
+              "name": "strings",
+              "type": {
+                "text": "TemplateStringsArray"
+              }
+            },
+            {
+              "name": "values",
+              "type": {
+                "text": "any[]"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "html",
+          "declaration": {
+            "name": "html",
+            "module": "src/_common/html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/form/listbox/form-listbox.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "form-listbox",
+          "name": "FormListbox",
+          "description": "A filterable listbox that loads options from a remote JSON source and integrates with HTML forms.\nUse it for searchable, single-select option lists — provides ARIA listbox semantics,\nkeyboard navigation (Arrow, Home, End), accessibility, and form participation via ElementInternals.",
+          "members": [
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "description": "Currently selected option value."
+            },
+            {
+              "kind": "field",
+              "name": "options",
+              "type": {
+                "text": "HTMLButtonElement[]"
+              },
+              "description": "Live list of visible (non-hidden) option buttons in the listbox."
+            },
+            {
+              "kind": "field",
+              "name": "filter",
+              "type": {
+                "text": "string"
+              },
+              "description": "Filter string used to narrow displayed options."
+            },
+            {
+              "kind": "field",
+              "name": "src",
+              "type": {
+                "text": "string"
+              },
+              "description": "URL to fetch options from as JSON. Read from the `src` attribute at connect time."
+            },
+            {
+              "kind": "field",
+              "name": "form",
+              "type": {
+                "text": "HTMLFormElement | null"
+              },
+              "description": "The form this element is associated with, or null."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "The form control's name, reflects the name attribute."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the form control is disabled, reflects the disabled attribute."
+            },
+            {
+              "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "NodeList"
+              },
+              "description": "The label elements associated with this form control."
+            },
+            {
+              "kind": "field",
+              "name": "validity",
+              "type": {
+                "text": "ValidityState"
+              },
+              "description": "The validity state of the form control."
+            },
+            {
+              "kind": "field",
+              "name": "validationMessage",
+              "type": {
+                "text": "string"
+              },
+              "description": "The validation message of the form control."
+            },
+            {
+              "kind": "field",
+              "name": "willValidate",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the form control will be validated."
+            },
+            {
+              "kind": "method",
+              "name": "checkValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Checks the validity of the form control."
+            },
+            {
+              "kind": "method",
+              "name": "reportValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Checks the validity of the form control and reports it to the user."
+            },
+            {
+              "kind": "method",
+              "name": "setCustomValidity",
+              "parameters": [
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Sets a custom validity message on the form control."
+            }
+          ],
+          "attributes": [
+            {
+              "name": "src",
+              "fieldName": "src",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\""
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#form-listbox",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "FormListbox",
+            "module": "src/form/listbox/form-listbox.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "form-listbox",
+          "declaration": {
+            "name": "FormListbox",
+            "module": "src/form/listbox/form-listbox.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/form/combobox/form-combobox.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "form-combobox",
+          "name": "FormCombobox",
+          "description": "A combobox (searchable select) that combines a text input with a filterable listbox popup.\nUse it for searchable selection — provides ARIA roles for the combobox pattern,\nkeyboard interaction (type to filter, Escape to close, Enter to select), and focus management.\nForm participation and validity are via ElementInternals (`formAssociated()`).\nExternal consumers read `host.validationMessage` / `host.validity` like on a native input.",
+          "members": [
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "description": "Current text input value. Updated on each `input` event."
+            },
+            {
+              "kind": "field",
+              "name": "length",
+              "type": {
+                "text": "number"
+              },
+              "description": "Character length of the current value (read-only)."
+            },
+            {
+              "kind": "field",
+              "name": "description",
+              "type": {
+                "text": "string"
+              },
+              "description": "Helper text shown below the input."
+            },
+            {
+              "kind": "method",
+              "name": "clear",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Clears the input and dispatches `input` and `change` events."
+            },
+            {
+              "kind": "field",
+              "name": "form",
+              "type": {
+                "text": "HTMLFormElement | null"
+              },
+              "description": "The form this element is associated with, or null."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "The form control's name, reflects the name attribute."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the form control is disabled, reflects the disabled attribute."
+            },
+            {
+              "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "NodeList"
+              },
+              "description": "The label elements associated with this form control."
+            },
+            {
+              "kind": "field",
+              "name": "validity",
+              "type": {
+                "text": "ValidityState"
+              },
+              "description": "The validity state of the form control."
+            },
+            {
+              "kind": "field",
+              "name": "validationMessage",
+              "type": {
+                "text": "string"
+              },
+              "description": "The validation message of the form control."
+            },
+            {
+              "kind": "field",
+              "name": "willValidate",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the form control will be validated."
+            },
+            {
+              "kind": "method",
+              "name": "checkValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Checks the validity of the form control."
+            },
+            {
+              "kind": "method",
+              "name": "reportValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Checks the validity of the form control and reports it to the user."
+            },
+            {
+              "kind": "method",
+              "name": "setCustomValidity",
+              "parameters": [
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Sets a custom validity message on the form control."
+            }
+          ],
+          "attributes": [
+            {
+              "name": "name",
+              "fieldName": "name",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#form-combobox",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "FormCombobox",
+            "module": "src/form/combobox/form-combobox.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "form-combobox",
+          "declaration": {
+            "name": "FormCombobox",
+            "module": "src/form/combobox/form-combobox.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/form/inplace-edit/form-inplace-edit.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "form-inplace-edit",
+          "name": "FormInplaceEdit",
+          "description": "An inline text field that switches between display and edit mode on click or double-click.\nUse it for editable labels or inline content — provides ARIA-labelled toggle buttons,\nkeyboard interaction (Enter to confirm, Escape to cancel), and focus management. Form\nparticipation is via ElementInternals (`formAssociated()`) with the managed form-control\nconvention — value sync, reset, and disabled propagation to the edit button are library-managed.",
+          "members": [
+            {
+              "kind": "field",
+              "name": "editing",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the component is currently in edit mode. Read from the `editing` attribute at connect time."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "description": "The current text value. Initialized from the `.text` element's content."
+            },
+            {
+              "kind": "field",
+              "name": "form",
+              "type": {
+                "text": "HTMLFormElement | null"
+              },
+              "description": "The form this element is associated with, or null."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "The form control's name, reflects the name attribute."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the form control is disabled, reflects the disabled attribute."
+            },
+            {
+              "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "NodeList"
+              },
+              "description": "The label elements associated with this form control."
+            },
+            {
+              "kind": "field",
+              "name": "validity",
+              "type": {
+                "text": "ValidityState"
+              },
+              "description": "The validity state of the form control."
+            },
+            {
+              "kind": "field",
+              "name": "validationMessage",
+              "type": {
+                "text": "string"
+              },
+              "description": "The validation message of the form control."
+            },
+            {
+              "kind": "field",
+              "name": "willValidate",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the form control will be validated."
+            },
+            {
+              "kind": "method",
+              "name": "checkValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Checks the validity of the form control."
+            },
+            {
+              "kind": "method",
+              "name": "reportValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Checks the validity of the form control and reports it to the user."
+            },
+            {
+              "kind": "method",
+              "name": "setCustomValidity",
+              "parameters": [
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Sets a custom validity message on the form control."
+            }
+          ],
+          "attributes": [
+            {
+              "name": "editing",
+              "fieldName": "editing",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#form-inplace-edit",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "FormInplaceEdit",
+            "module": "src/form/inplace-edit/form-inplace-edit.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "form-inplace-edit",
+          "declaration": {
+            "name": "FormInplaceEdit",
+            "module": "src/form/inplace-edit/form-inplace-edit.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/form/radiogroup/form-radiogroup.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "form-radiogroup",
+          "name": "FormRadiogroup",
+          "description": "A radio group with roving tabindex keyboard navigation and reactive value tracking.\nUse it for single-choice selection — provides ARIA radiogroup semantics, Arrow/Home/End\nkey support, and focus management across the radio options. Form participation and\nvalidity are via ElementInternals (`formAssociated()`) — set `name` on the host, not\nthe individual radios, which are presentational only.",
+          "members": [
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "description": "Value of the currently selected radio button."
+            },
+            {
+              "kind": "field",
+              "name": "form",
+              "type": {
+                "text": "HTMLFormElement | null"
+              },
+              "description": "The form this element is associated with, or null."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "The form control's name, reflects the name attribute."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the form control is disabled, reflects the disabled attribute."
+            },
+            {
+              "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "NodeList"
+              },
+              "description": "The label elements associated with this form control."
+            },
+            {
+              "kind": "field",
+              "name": "validity",
+              "type": {
+                "text": "ValidityState"
+              },
+              "description": "The validity state of the form control."
+            },
+            {
+              "kind": "field",
+              "name": "validationMessage",
+              "type": {
+                "text": "string"
+              },
+              "description": "The validation message of the form control."
+            },
+            {
+              "kind": "field",
+              "name": "willValidate",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the form control will be validated."
+            },
+            {
+              "kind": "method",
+              "name": "checkValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Checks the validity of the form control."
+            },
+            {
+              "kind": "method",
+              "name": "reportValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Checks the validity of the form control and reports it to the user."
+            },
+            {
+              "kind": "method",
+              "name": "setCustomValidity",
+              "parameters": [
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Sets a custom validity message on the form control."
+            }
+          ],
+          "attributes": [
+            {
+              "name": "name",
+              "fieldName": "name",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#form-radiogroup",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "FormRadiogroup",
+            "module": "src/form/radiogroup/form-radiogroup.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "form-radiogroup",
+          "declaration": {
+            "name": "FormRadiogroup",
+            "module": "src/form/radiogroup/form-radiogroup.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/form/spinbutton/form-spinbutton.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "form-spinbutton",
+          "name": "FormSpinbutton",
+          "description": "A numeric spinbutton with increment/decrement buttons and keyboard support.\nUse it for numeric input within a bounded range — provides ARIA spinbutton\nsemantics and Arrow key support for incrementing and decrementing the value.\nForm participation and range validation are via ElementInternals (`formAssociated()`,\n`setFormValue`, `setValidity`).",
+          "members": [
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "number"
+              },
+              "description": "Current numeric value. Clamped to [0, max]."
+            },
+            {
+              "kind": "field",
+              "name": "max",
+              "type": {
+                "text": "number"
+              },
+              "description": "Upper bound for the value."
+            },
+            {
+              "kind": "field",
+              "name": "form",
+              "type": {
+                "text": "HTMLFormElement | null"
+              },
+              "description": "The form this element is associated with, or null."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "The form control's name, reflects the name attribute."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the form control is disabled, reflects the disabled attribute."
+            },
+            {
+              "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "NodeList"
+              },
+              "description": "The label elements associated with this form control."
+            },
+            {
+              "kind": "field",
+              "name": "validity",
+              "type": {
+                "text": "ValidityState"
+              },
+              "description": "The validity state of the form control."
+            },
+            {
+              "kind": "field",
+              "name": "validationMessage",
+              "type": {
+                "text": "string"
+              },
+              "description": "The validation message of the form control."
+            },
+            {
+              "kind": "field",
+              "name": "willValidate",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the form control will be validated."
+            },
+            {
+              "kind": "method",
+              "name": "checkValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Checks the validity of the form control."
+            },
+            {
+              "kind": "method",
+              "name": "reportValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Checks the validity of the form control and reports it to the user."
+            },
+            {
+              "kind": "method",
+              "name": "setCustomValidity",
+              "parameters": [
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Sets a custom validity message on the form control."
+            }
+          ],
+          "attributes": [
+            {
+              "name": "name",
+              "fieldName": "name",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#form-spinbutton",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "FormSpinbutton",
+            "module": "src/form/spinbutton/form-spinbutton.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "form-spinbutton",
+          "declaration": {
+            "name": "FormSpinbutton",
+            "module": "src/form/spinbutton/form-spinbutton.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/form/textbox/form-textbox.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "form-textbox",
+          "name": "FormTextbox",
+          "description": "A single-line or multiline text input with validation, optional clear button, and helper text.\nUse it when you need a styled text field — the underlying native input provides\nkeyboard accessibility and standard ARIA textbox semantics. Form participation\nand validity are via ElementInternals (`formAssociated()`).\nExternal consumers read `host.validationMessage` / `host.validity` like on a\nnative input; inline error display binds to component-internal state.",
+          "members": [
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "description": "Current text value. Synced with the native input or textarea."
+            },
+            {
+              "kind": "field",
+              "name": "length",
+              "type": {
+                "text": "number"
+              },
+              "description": "Character length of the current value (read-only)."
+            },
+            {
+              "kind": "field",
+              "name": "description",
+              "type": {
+                "text": "string"
+              },
+              "description": "Helper text shown below the input. May include a remaining-characters template."
+            },
+            {
+              "kind": "method",
+              "name": "clear",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Clears the input value and dispatches `input` and `change` events."
+            },
+            {
+              "kind": "field",
+              "name": "form",
+              "type": {
+                "text": "HTMLFormElement | null"
+              },
+              "description": "The form this element is associated with, or null."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "The form control's name, reflects the name attribute."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the form control is disabled, reflects the disabled attribute."
+            },
+            {
+              "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "NodeList"
+              },
+              "description": "The label elements associated with this form control."
+            },
+            {
+              "kind": "field",
+              "name": "validity",
+              "type": {
+                "text": "ValidityState"
+              },
+              "description": "The validity state of the form control."
+            },
+            {
+              "kind": "field",
+              "name": "validationMessage",
+              "type": {
+                "text": "string"
+              },
+              "description": "The validation message of the form control."
+            },
+            {
+              "kind": "field",
+              "name": "willValidate",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the form control will be validated."
+            },
+            {
+              "kind": "method",
+              "name": "checkValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Checks the validity of the form control."
+            },
+            {
+              "kind": "method",
+              "name": "reportValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Checks the validity of the form control and reports it to the user."
+            },
+            {
+              "kind": "method",
+              "name": "setCustomValidity",
+              "parameters": [
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Sets a custom validity message on the form control."
+            }
+          ],
+          "attributes": [
+            {
+              "name": "name",
+              "fieldName": "name",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#form-textbox",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "FormTextbox",
+            "module": "src/form/textbox/form-textbox.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "form-textbox",
+          "declaration": {
+            "name": "FormTextbox",
+            "module": "src/form/textbox/form-textbox.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/calctable/module-calctable.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "module-calctable",
+          "name": "ModuleCalctable",
+          "description": "An editable calculation table — description, amount, and price/unit columns\ncompute a per-row price, plus running totals in the footer. Rows are synced\nvia `reconcile()`; server-rendered `<tr data-key>` rows are adopted into the\ninitial list so they aren't stripped on first run. A trailing entry row\n(marked `data-unreconciled`, exempt from reconciliation) creates a new row\nonce its description, amount, and price/unit are all filled; setting an\nexisting row's amount to 0 removes it. Currency formatting is parsed the\nsame way as `<basic-number>`.",
+          "attributes": [
+            {
+              "name": "lang",
+              "type": {
+                "text": "string"
+              },
+              "description": "BCP 47 locale tag (e.g. `de-CH`). Falls back to the nearest ancestor's `lang` attribute, or `en` if none is set. Read once at connect time."
+            },
+            {
+              "name": "options",
+              "type": {
+                "text": "Intl.NumberFormatOptions"
+              },
+              "default": "{}",
+              "description": "`Intl.NumberFormat` options as a JSON object, e.g. `{\"style\":\"currency\",\"currency\":\"EUR\"}`. Read once at connect time."
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#module-calctable",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ModuleCalctable",
+            "module": "src/module/calctable/module-calctable.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "module-calctable",
+          "declaration": {
+            "name": "ModuleCalctable",
+            "module": "src/module/calctable/module-calctable.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/carousel/module-carousel.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "module-carousel",
+          "name": "ModuleCarousel",
+          "description": "",
+          "members": [
+            {
+              "kind": "field",
+              "name": "index",
+              "type": {
+                "text": "number"
+              }
+            }
+          ],
+          "demos": []
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ModuleCarousel",
+            "module": "src/module/carousel/module-carousel.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "module-carousel",
+          "declaration": {
+            "name": "ModuleCarousel",
+            "module": "src/module/carousel/module-carousel.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/catalog/module-catalog.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "module-catalog",
+          "name": "ModuleCatalog",
+          "description": "",
+          "demos": []
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ModuleCatalog",
+            "module": "src/module/catalog/module-catalog.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "module-catalog",
+          "declaration": {
+            "name": "ModuleCatalog",
+            "module": "src/module/catalog/module-catalog.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/cem-list/module-cem-list.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "module-cem-list",
+          "name": "ModuleCemList",
+          "description": "A catalog of custom-element declarations, rendered server-side from a\ncustom-elements-manifest by the `{% cem-list %}` Markdoc tag — the client\nreceives fully-formed `card-collapsible` markup and only needs to register\nthe tag name; `card-collapsible` and `module-tabgroup` provide all the\ninteractive behavior. A `<form-textbox>` descendant filters the cards by\nmatching its value against each card's full text content (name, tag name,\ndescription, and members) — a client-side layer over pre-rendered markup,\nno re-fetching or re-rendering involved.",
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#module-cem-list",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ModuleCemList",
+            "module": "src/module/cem-list/module-cem-list.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "module-cem-list",
+          "declaration": {
+            "name": "ModuleCemList",
+            "module": "src/module/cem-list/module-cem-list.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/button/copyToClipboard.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "copyToClipboard",
+          "return": {
+            "type": {
+              "text": "EffectDescriptor"
+            }
+          },
+          "parameters": [
+            {
+              "name": "container",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "name": "button",
+              "type": {
+                "text": "HTMLElement & BasicButtonProps"
+              }
+            },
+            {
+              "name": "messages",
+              "type": {
+                "text": "{ [COPY_ERROR]?: string; [COPY_SUCCESS]?: string }"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "copyToClipboard",
+          "declaration": {
+            "name": "copyToClipboard",
+            "module": "src/basic/button/copyToClipboard.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/codeblock/module-codeblock.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "module-codeblock",
+          "name": "ModuleCodeblock",
+          "description": "",
+          "members": [
+            {
+              "kind": "field",
+              "name": "collapsed",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "collapsed",
+              "fieldName": "collapsed",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            }
+          ],
+          "demos": []
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ModuleCodeblock",
+            "module": "src/module/codeblock/module-codeblock.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "module-codeblock",
+          "declaration": {
+            "name": "ModuleCodeblock",
+            "module": "src/module/codeblock/module-codeblock.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/coloreditor/module-coloreditor.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "module-coloreditor",
+          "name": "ModuleColoreditor",
+          "description": "An interactive color editor with Oklch input, named color lookup, and a full lightness scale preview.\nUse it for exploring and selecting colors — provides form inputs for Oklch channels\nand should be paired with `module-colorinfo` for full color detail display.\nThe `color` attribute must be a valid Oklch color string; out-of-gamut values are clamped.",
+          "members": [
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "Oklch"
+              },
+              "description": "Current color in Oklch format. Read from the `color` attribute at connect time."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "Display name for the color. Read from the `name` attribute at connect time (default: \"Blue\")."
+            },
+            {
+              "kind": "field",
+              "name": "nearest",
+              "type": {
+                "text": "string"
+              },
+              "description": "Nearest named CSS color to the current Oklch value (read-only, computed)."
+            },
+            {
+              "kind": "field",
+              "name": "lightness",
+              "type": {
+                "text": "number"
+              },
+              "description": "Lightness channel of the current color (read-only, computed)."
+            },
+            {
+              "kind": "field",
+              "name": "chroma",
+              "type": {
+                "text": "number"
+              },
+              "description": "Chroma channel of the current color (read-only, computed)."
+            },
+            {
+              "kind": "field",
+              "name": "hue",
+              "type": {
+                "text": "number"
+              },
+              "description": "Hue channel of the current color (read-only, computed)."
+            }
+          ],
+          "attributes": [
+            {
+              "name": "name",
+              "fieldName": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"Blue\""
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#module-coloreditor",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ModuleColoreditor",
+            "module": "src/module/coloreditor/module-coloreditor.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "module-coloreditor",
+          "declaration": {
+            "name": "ModuleColoreditor",
+            "module": "src/module/coloreditor/module-coloreditor.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/colorinfo/module-colorinfo.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "module-colorinfo",
+          "name": "ModuleColorinfo",
+          "description": "Displays detailed color information (CSS, HEX, RGB, HSL, Oklch channels) for a given color.\nUse it for inspecting a color's various representations — useful when you need\nto evaluate contrast for accessibility or copy a specific format.\nThe `color` attribute must be a valid Oklch color string.",
+          "members": [
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "Display name of the color swatch (e.g. \"Blue 500\")."
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "Oklch"
+              },
+              "description": "Color value in Oklch format. Read from the `color` attribute at connect time."
+            },
+            {
+              "kind": "field",
+              "name": "css",
+              "type": {
+                "text": "string"
+              },
+              "description": "CSS color string derived from `color` (read-only, computed)."
+            },
+            {
+              "kind": "field",
+              "name": "hex",
+              "type": {
+                "text": "string"
+              },
+              "description": "Hex color string derived from `color` (read-only, computed)."
+            },
+            {
+              "kind": "field",
+              "name": "rgb",
+              "type": {
+                "text": "string"
+              },
+              "description": "RGB color string derived from `color` (read-only, computed)."
+            },
+            {
+              "kind": "field",
+              "name": "hsl",
+              "type": {
+                "text": "string"
+              },
+              "description": "HSL color string derived from `color` (read-only, computed)."
+            },
+            {
+              "kind": "field",
+              "name": "lightness",
+              "type": {
+                "text": "number"
+              },
+              "description": "Lightness channel of `color` (read-only, computed)."
+            },
+            {
+              "kind": "field",
+              "name": "chroma",
+              "type": {
+                "text": "number"
+              },
+              "description": "Chroma channel of `color` (read-only, computed)."
+            },
+            {
+              "kind": "field",
+              "name": "hue",
+              "type": {
+                "text": "number"
+              },
+              "description": "Hue channel of `color` (read-only, computed)."
+            }
+          ],
+          "cssProperties": [
+            {
+              "name": "--module-colorinfo-swatch-size",
+              "description": "The size of the color swatch."
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#module-colorinfo",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ModuleColorinfo",
+            "module": "src/module/colorinfo/module-colorinfo.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "module-colorinfo",
+          "declaration": {
+            "name": "ModuleColorinfo",
+            "module": "src/module/colorinfo/module-colorinfo.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/dialog/module-dialog.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "module-dialog",
+          "name": "ModuleDialog",
+          "description": "",
+          "members": [
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "demos": []
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ModuleDialog",
+            "module": "src/module/dialog/module-dialog.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "module-dialog",
+          "declaration": {
+            "name": "ModuleDialog",
+            "module": "src/module/dialog/module-dialog.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/lazyload/module-lazyload.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "module-lazyload",
+          "name": "ModuleLazyload",
+          "description": "",
+          "members": [
+            {
+              "kind": "field",
+              "name": "src",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "src",
+              "fieldName": "src",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\""
+            }
+          ],
+          "demos": []
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ModuleLazyload",
+            "module": "src/module/lazyload/module-lazyload.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "module-lazyload",
+          "declaration": {
+            "name": "ModuleLazyload",
+            "module": "src/module/lazyload/module-lazyload.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/list/module-list.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "module-list",
+          "name": "ModuleList",
+          "description": "A dynamic list component demonstrating the `createList()` keyed reconciliation API.\nItems are added via a form submission and removed via delegated click handling,\nwith stable keys across reorders.",
+          "demos": []
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ModuleList",
+            "module": "src/module/list/module-list.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "module-list",
+          "declaration": {
+            "name": "ModuleList",
+            "module": "src/module/list/module-list.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/listnav/module-listnav.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "module-listnav",
+          "name": "ModuleListnav",
+          "description": "",
+          "demos": []
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ModuleListnav",
+            "module": "src/module/listnav/module-listnav.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "module-listnav",
+          "declaration": {
+            "name": "ModuleListnav",
+            "module": "src/module/listnav/module-listnav.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/pagination/module-pagination.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "module-pagination",
+          "name": "ModulePagination",
+          "description": "",
+          "members": [
+            {
+              "kind": "field",
+              "name": "max",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "number"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "max",
+              "fieldName": "max",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            }
+          ],
+          "demos": []
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ModulePagination",
+            "module": "src/module/pagination/module-pagination.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "module-pagination",
+          "declaration": {
+            "name": "ModulePagination",
+            "module": "src/module/pagination/module-pagination.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/scrollarea/module-scrollarea.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "module-scrollarea",
+          "name": "ModuleScrollarea",
+          "description": "",
+          "demos": []
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ModuleScrollarea",
+            "module": "src/module/scrollarea/module-scrollarea.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "module-scrollarea",
+          "declaration": {
+            "name": "ModuleScrollarea",
+            "module": "src/module/scrollarea/module-scrollarea.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/splitview/module-splitview.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "module-splitview",
+          "name": "ModuleSplitview",
+          "description": "A resizable split view with a draggable divider and keyboard support.\nUse it for two-panel layouts where the user should control the split — provides\nARIA separator semantics and Arrow key support on the divider for accessibility.\nSet `orientation=\"vertical\"` for a top/bottom split.",
+          "members": [
+            {
+              "kind": "field",
+              "name": "split",
+              "type": {
+                "text": "number"
+              },
+              "description": "Split ratio between 0.1 and 0.9 (e.g. 0.5 = 50/50). Read from the `split` attribute at connect time."
+            }
+          ],
+          "attributes": [
+            {
+              "name": "split",
+              "fieldName": "split",
+              "type": {
+                "text": "number"
+              },
+              "default": "0.5"
+            },
+            {
+              "name": "orientation",
+              "type": {
+                "text": "'horizontal'|'vertical'"
+              },
+              "default": "horizontal",
+              "description": "Layout direction of the split. Read once at connect time; not a reactive property."
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#module-splitview",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ModuleSplitview",
+            "module": "src/module/splitview/module-splitview.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "module-splitview",
+          "declaration": {
+            "name": "ModuleSplitview",
+            "module": "src/module/splitview/module-splitview.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/tabgroup/module-tabgroup.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "module-tabgroup",
+          "name": "ModuleTabgroup",
+          "description": "",
+          "members": [
+            {
+              "kind": "field",
+              "name": "selected",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "demos": []
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ModuleTabgroup",
+            "module": "src/module/tabgroup/module-tabgroup.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "module-tabgroup",
+          "declaration": {
+            "name": "ModuleTabgroup",
+            "module": "src/module/tabgroup/module-tabgroup.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/ticker/module-ticker.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "module-ticker",
+          "name": "ModuleTicker",
+          "description": "A high-performance stock ticker with virtualized rows, random-walk price simulation, and pause/resume control.\nUse it for demonstrating the `each()` helper with large dynamic collections — rows are\nvirtualized for performance and the data updates should be throttled to avoid jank.",
+          "members": [
+            {
+              "kind": "field",
+              "name": "running",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the ticker is actively updating prices."
+            },
+            {
+              "kind": "field",
+              "name": "fraction",
+              "type": {
+                "text": "number"
+              },
+              "description": "Fraction of symbols updated per tick (0–1). Read from the `fraction` attribute at connect time."
+            }
+          ],
+          "attributes": [
+            {
+              "name": "fraction",
+              "fieldName": "fraction",
+              "type": {
+                "text": "number"
+              },
+              "default": "0.1"
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#module-ticker",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ModuleTicker",
+            "module": "src/module/ticker/module-ticker.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "module-ticker",
+          "declaration": {
+            "name": "ModuleTicker",
+            "module": "src/module/ticker/module-ticker.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/todo/module-todo.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "module-todo",
+          "name": "ModuleTodo",
+          "description": "A full-featured todo list with add, remove, complete, filter, inline editing, and\ndrag-and-drop reordering. Use it as a reference example of a complete Le Truc\napplication — keyboard accessible controls and ARIA labelling should be considered\nwhen adapting it for production use.\nExposes the active filter as custom states (`:state(filter-active)`, `:state(filter-completed)`)\nfor CSS-based item visibility, so filter state cannot be spoofed by setting an attribute.",
+          "demos": []
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ModuleTodo",
+            "module": "src/module/todo/module-todo.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "module-todo",
+          "declaration": {
+            "name": "ModuleTodo",
+            "module": "src/module/todo/module-todo.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/main.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_0",
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global:"
+          },
+          "tagName": "card-blogpost",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_1",
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global:"
+          },
+          "tagName": "card-callout",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_2",
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global:"
+          },
+          "tagName": "module-demo",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_3",
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global:"
+          },
+          "tagName": "module-toc",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_4",
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global:"
+          },
+          "tagName": "section-hero",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_5",
+          "superclass": {
+            "name": "HTMLElement",
+            "package": "global:"
+          },
+          "tagName": "section-menu",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "card-blogpost",
+          "declaration": {
+            "name": "anonymous_0",
+            "module": "src/main.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "card-callout",
+          "declaration": {
+            "name": "anonymous_1",
+            "module": "src/main.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "module-demo",
+          "declaration": {
+            "name": "anonymous_2",
+            "module": "src/main.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "module-toc",
+          "declaration": {
+            "name": "anonymous_3",
+            "module": "src/main.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "section-hero",
+          "declaration": {
+            "name": "anonymous_4",
+            "module": "src/main.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "section-menu",
+          "declaration": {
+            "name": "anonymous_5",
+            "module": "src/main.ts"
+          }
+        }
+      ]
+    }
+  ]
+}

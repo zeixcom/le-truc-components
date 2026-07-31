@@ -3,23 +3,22 @@ import { html, nothing } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./form-textbox.ts";
 import "./form-textbox.css";
-import type { Component } from "@zeix/le-truc";
+import type { FormAssociatedElement } from "@zeix/le-truc";
 import type { FormTextboxProps } from "./form-textbox.ts";
 
 type FormTextboxArgs = {
-  error: string;
   description: string;
   clearable: boolean;
 };
 
-const render = ({ error, description, clearable }: FormTextboxArgs) => html`
-  <form-textbox ?clearable=${clearable}>
+const render = ({ description, clearable }: FormTextboxArgs) => html`
+  <form-textbox>
     <label for="name-input">Name</label>
     <div class="input">
       <input type="text" id="name-input" name="name" autocomplete="name" required />
       ${clearable ? html`<button type="button" class="clear" aria-label="Clear input" hidden>✕</button>` : nothing}
     </div>
-    <p class="error" role="alert" aria-live="assertive" id="name-error">${error}</p>
+    <p class="error" role="alert" aria-live="assertive" id="name-error"></p>
     <p class="description" aria-live="polite" id="name-description">${description}</p>
   </form-textbox>
 `;
@@ -28,13 +27,6 @@ const meta: Meta<FormTextboxArgs> = {
   title: "Form/Textbox",
   render,
   argTypes: {
-    error: {
-      control: "text",
-      table: {
-        defaultValue: { summary: "''" },
-        category: "Reactive Properties",
-      },
-    },
     description: {
       control: "text",
       table: {
@@ -45,7 +37,7 @@ const meta: Meta<FormTextboxArgs> = {
     clearable: {
       control: "boolean",
       description:
-        "When present, a clear button is included (show/hide driven by <code>length</code>)",
+        "When enabled, a clear button is included (show/hide driven by <code>length</code>; sets the <code>:state(clearable)</code> custom state)",
       table: {
         defaultValue: { summary: "false" },
         category: "Attributes",
@@ -58,7 +50,6 @@ type Story = StoryObj<FormTextboxArgs>;
 
 export const Default: Story = {
   args: {
-    error: "",
     description: "Tell us how you want us to call you.",
     clearable: false,
   },
@@ -67,7 +58,7 @@ export const Default: Story = {
 // ⚠️ Custom render: uses a different field (search terms) with different name, placeholder, and no error/description
 export const WithClear: Story = {
   render: () => html`
-    <form-textbox clearable>
+    <form-textbox>
       <label for="search-input">Search terms</label>
       <div class="input">
         <input
@@ -84,14 +75,17 @@ export const WithClear: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-textbox");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "form-textbox",
-    ) as Component<FormTextboxProps>;
+    const el = canvasElement.querySelector("form-textbox") as HTMLElement &
+      FormAssociatedElement &
+      FormTextboxProps;
     const input = canvas.getByRole("textbox");
 
     await expect(el.length).toBe(0);
 
     await userEvent.type(input, "hello");
+    // `value` commits on `change` (native parity — `input` only updates
+    // `length`), so blur the field to fire `change` before asserting value.
+    await userEvent.tab();
     await expect(el.value).toBe("hello");
     await expect(el.length).toBe(5);
 
@@ -126,9 +120,9 @@ export const WithTextarea: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-textbox");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "form-textbox",
-    ) as Component<FormTextboxProps>;
+    const el = canvasElement.querySelector("form-textbox") as HTMLElement &
+      FormAssociatedElement &
+      FormTextboxProps;
     const textarea = canvas.getByRole("textbox");
     const description = el.querySelector(".description");
 
@@ -153,17 +147,29 @@ export const WithValidation: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-textbox");
-    const el = canvasElement.querySelector(
-      "form-textbox",
-    ) as Component<FormTextboxProps>;
+    const canvas = within(canvasElement);
+    const el = canvasElement.querySelector("form-textbox") as HTMLElement &
+      FormAssociatedElement &
+      FormTextboxProps;
+    const input = canvas.getByRole("textbox");
     const errorEl = el.querySelector(".error");
 
-    el.error = "Please enter a valid email address.";
-    await expect(errorEl).toHaveTextContent(
-      "Please enter a valid email address.",
-    );
-
-    el.error = "";
+    // No aria-invalid / aria-errormessage on host — native :invalid /
+    // ElementInternals validity replaces them.
+    await expect(el).not.toHaveAttribute("aria-errormessage");
     await expect(errorEl).toHaveTextContent("");
+
+    // Type an invalid value and blur to fire `change`, which relays native
+    // validity (`checkValidity()` / `validationMessage`) to the inline error.
+    await userEvent.type(input, "not-an-email");
+    await userEvent.tab();
+    await expect(errorEl).not.toHaveTextContent("");
+    await expect(el.validity.valid).toBe(false);
+
+    await userEvent.clear(input);
+    await userEvent.type(input, "person@example.com");
+    await userEvent.tab();
+    await expect(errorEl).toHaveTextContent("");
+    await expect(el.validity.valid).toBe(true);
   },
 };

@@ -3,7 +3,6 @@ import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
 import "./module-tabgroup.ts";
 import "./module-tabgroup.css";
-import type { Component } from "@zeix/le-truc";
 import type { ModuleTabgroupProps } from "./module-tabgroup.ts";
 
 const meta: Meta = {
@@ -27,9 +26,8 @@ export const Default: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-tabgroup");
-    const el = canvasElement.querySelector(
-      "module-tabgroup",
-    ) as Component<ModuleTabgroupProps>;
+    const el = canvasElement.querySelector("module-tabgroup") as HTMLElement &
+      ModuleTabgroupProps;
 
     await expect(el.selected).toBe("panel1");
   },
@@ -60,9 +58,8 @@ export const TabNavigation: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-tabgroup");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "module-tabgroup",
-    ) as Component<ModuleTabgroupProps>;
+    const el = canvasElement.querySelector("module-tabgroup") as HTMLElement &
+      ModuleTabgroupProps;
 
     await expect(el.selected).toBe("nav-panel1");
 
@@ -89,9 +86,8 @@ export const SecondTabInitial: Story = {
   `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-tabgroup");
-    const el = canvasElement.querySelector(
-      "module-tabgroup",
-    ) as Component<ModuleTabgroupProps>;
+    const el = canvasElement.querySelector("module-tabgroup") as HTMLElement &
+      ModuleTabgroupProps;
 
     await expect(el.selected).toBe("init-panel2");
   },
@@ -113,9 +109,8 @@ export const KeyboardNavigation: Story = {
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-tabgroup");
     const canvas = within(canvasElement);
-    const el = canvasElement.querySelector(
-      "module-tabgroup",
-    ) as Component<ModuleTabgroupProps>;
+    const el = canvasElement.querySelector("module-tabgroup") as HTMLElement &
+      ModuleTabgroupProps;
     const firstTab = canvas.getByRole("tab", { name: "First" });
 
     await expect(el.selected).toBe("key-panel1");

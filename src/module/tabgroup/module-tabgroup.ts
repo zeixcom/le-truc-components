@@ -1,25 +1,12 @@
-import {
-  type Component,
-  createEventsSensor,
-  defineComponent,
-  type Memo,
-  read,
-  setProperty,
-  show,
-} from "@zeix/le-truc";
+import { createState, defineComponent } from "@zeix/le-truc";
 
 export type ModuleTabgroupProps = {
   readonly selected: string;
 };
 
-type ModuleTabgroupUI = {
-  tabs: Memo<HTMLButtonElement[]>;
-  panels: Memo<HTMLElement[]>;
-};
-
 declare global {
   interface HTMLElementTagNameMap {
-    "module-tabgroup": Component<ModuleTabgroupProps>;
+    "module-tabgroup": HTMLElement & ModuleTabgroupProps;
   }
 }
 
@@ -33,77 +20,76 @@ const getSelected = (
 ) => {
   const currentIndex = tabs.findIndex(isCurrent);
   const newIndex = (currentIndex + offset + tabs.length) % tabs.length;
-  const tab = tabs[newIndex];
-  return tab ? getAriaControls(tab) : "";
+  // biome-ignore lint/style/noNonNullAssertion: newIndex is always within bounds — all() requires at least 2 tabs, and modulo keeps the index in [0, tabs.length).
+  return getAriaControls(tabs[newIndex]!);
 };
 
-export default defineComponent<ModuleTabgroupProps, ModuleTabgroupUI>(
+export default defineComponent<ModuleTabgroupProps>(
   "module-tabgroup",
-  {
-    selected: createEventsSensor(
-      read(
-        (ui) =>
-          getSelected(ui.tabs.get(), (tab) => tab.ariaSelected === "true"),
-        "",
-      ),
-      "tabs",
-      {
-        click: ({ target }) => getAriaControls(target),
-        keyup: ({ event, ui, target }) => {
-          const key = event.key;
-          if (
-            [
-              "ArrowLeft",
-              "ArrowRight",
-              "ArrowUp",
-              "ArrowDown",
-              "Home",
-              "End",
-            ].includes(key)
-          ) {
-            event.preventDefault();
-            event.stopPropagation();
-            const tabs = ui.tabs.get();
-            const first = tabs[0];
-            const last = tabs[tabs.length - 1];
-            if (!first || !last) return;
-            const next =
-              key === "Home"
-                ? getAriaControls(first)
-                : key === "End"
-                  ? getAriaControls(last)
-                  : getSelected(
-                      tabs,
-                      (tab) => tab === target,
-                      key === "ArrowLeft" || key === "ArrowUp" ? -1 : 1,
-                    );
-            tabs.filter((tab) => getAriaControls(tab) === next)[0]?.focus();
-            return next;
-          }
-        },
-      },
-    ),
-  },
-  ({ all }) => ({
-    tabs: all(
+  ({ all, expose, host, on, watch }) => {
+    const tabs = all(
       'button[role="tab"]',
       'At least 2 tabs as children of a <[role="tablist"]> element are needed. Each tab must reference a unique id of a <[role="tabpanel"]> element.',
-    ),
-    panels: all(
+    );
+
+    const isCurrentTab = (tab: HTMLButtonElement) =>
+      host.selected === tab.getAttribute("aria-controls");
+
+    // Private mutable state; expose as read-only via Memo so external code can't set it
+    const selectedState = createState(
+      getSelected(tabs.get(), (tab) => tab.ariaSelected === "true"),
+    );
+
+    expose({ selected: selectedState.get });
+
+    on(tabs, "click", (_e, target) => {
+      selectedState.set(getAriaControls(target));
+    });
+    on(tabs, "keyup", (e, target) => {
+      const key = e.key;
+      if (
+        [
+          "ArrowLeft",
+          "ArrowRight",
+          "ArrowUp",
+          "ArrowDown",
+          "Home",
+          "End",
+        ].includes(key)
+      ) {
+        e.preventDefault();
+        e.stopPropagation();
+        const tabsList = tabs.get();
+        const next =
+          key === "Home"
+            ? // biome-ignore lint/style/noNonNullAssertion: tabsList is always non-empty — all() requires at least 2 tabs.
+              getAriaControls(tabsList[0]!)
+            : key === "End"
+              ? // biome-ignore lint/style/noNonNullAssertion: tabsList is always non-empty — all() requires at least 2 tabs.
+                getAriaControls(tabsList[tabsList.length - 1]!)
+              : getSelected(
+                  tabsList,
+                  (tab) => tab === target,
+                  key === "ArrowLeft" || key === "ArrowUp" ? -1 : 1,
+                );
+        // biome-ignore lint/style/noNonNullAssertion: next was derived from tabsList itself, so a matching tab always exists.
+        tabsList.filter((tab) => getAriaControls(tab) === next)[0]!.focus();
+        selectedState.set(next);
+      }
+    });
+
+    const panels = all(
       '[role="tabpanel"]',
       "At least 2 tabpanels are needed. Each tabpanel must have a unique id.",
-    ),
-  }),
-  ({ host }) => {
-    const isCurrentTab = (tab: HTMLButtonElement) =>
-      host.selected === getAriaControls(tab);
-
-    return {
-      tabs: [
-        setProperty("ariaSelected", (target) => String(isCurrentTab(target))),
-        setProperty("tabIndex", (target) => (isCurrentTab(target) ? 0 : -1)),
-      ],
-      panels: show((target) => host.selected === target.id),
-    };
+    );
+    watch("selected", () => {
+      for (const tab of tabs.get()) {
+        tab.ariaSelected = String(isCurrentTab(tab));
+        tab.tabIndex = isCurrentTab(tab) ? 0 : -1;
+      }
+      for (const panel of panels.get()) {
+        panel.hidden = host.selected !== panel.id;
+      }
+    });
   },
 );

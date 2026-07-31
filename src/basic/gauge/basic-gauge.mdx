@@ -1,0 +1,78 @@
+import { Meta, Canvas } from "@storybook/addon-docs/blocks";
+import * as BasicGaugeStories from "./basic-gauge.stories";
+
+<Meta of={BasicGaugeStories} />
+
+### Basic Gauge
+
+A visual gauge meter that parses the `thresholds` attribute which configures the gauge's threshold ranges and colors.
+
+#### Tag Name
+
+`basic-gauge`
+
+#### Preview
+
+<Canvas of={BasicGaugeStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>value</code></td>
+      <td><code>number</code> (float)</td>
+      <td><code>0</code></td>
+      <td>Current gauge value; read from the <code>value</code> attribute (falling back to <code>&lt;meter value="…"&gt;</code>) at connect time, and re-parsed on later <code>value</code> attribute mutations via <code>observedAttributes()</code></td>
+    </tr>
+    <tr>
+      <td><code>thresholds</code></td>
+      <td><code>BasicGaugeThreshold[]</code></td>
+      <td><code>[]</code></td>
+      <td>Threshold ranges used to derive the active label and color; see below for format</td>
+    </tr>
+  </tbody>
+</table>
+
+`BasicGaugeThreshold[]` is an array of objects sorted from highest to lowest `min`. Each entry has `min` (number), `label` (string), and `color` (CSS color string). The first entry whose `min` is ≤ `host.value` determines the active label and color. Example: `[{"min":80,"label":"Good job!","color":"var(--color-green-70)"},{"min":50,"label":"Decent","color":"var(--color-orange-70)"},{"min":0,"label":"Try again!","color":"var(--color-pink-70)"}]`
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('meter')</code></td>
+      <td><code>HTMLMeterElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Native meter element; its <code>value</code> seeds <code>host.value</code> at initialisation and stays in sync inside <code>watch('value')</code></td>
+    </tr>
+    <tr>
+      <td><code>first('basic-number')</code></td>
+      <td><code>HTMLElementTagNameMap['basic-number']</code></td>
+      <td><strong>required</strong></td>
+      <td><code>&lt;basic-number&gt;</code> child component that displays the formatted percentage; receives <code>host.value / 100</code> via <code>pass()</code> — configure display via the <code>options</code> attribute on <code>&lt;basic-number&gt;</code></td>
+    </tr>
+    <tr>
+      <td><code>first('.label')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Displays the active threshold label</td>
+    </tr>
+  </tbody>
+</table>

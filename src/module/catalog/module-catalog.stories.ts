@@ -7,7 +7,6 @@ import "../../form/spinbutton/form-spinbutton.ts";
 import "../../form/spinbutton/form-spinbutton.css";
 import "./module-catalog.ts";
 import "./module-catalog.css";
-import type { Component } from "@zeix/le-truc";
 import type { BasicButtonProps } from "../../basic/button/basic-button.ts";
 
 const meta: Meta = {
@@ -20,8 +19,21 @@ const spinbuttonItem = (name: string, label: string, max: number) => html`
   <li>
     <p>${label}</p>
     <form-spinbutton>
-      <button type="button" class="decrement" aria-label="Decrement" hidden>−</button>
-      <input type="number" class="value" name=${name} value="0" min="0" max=${max} readonly disabled hidden />
+      <button type="button" class="decrement" aria-label="Decrement" hidden>
+        −
+      </button>
+      <input
+        type="number"
+        class="value"
+        name=${name}
+        value="0"
+        min="0"
+        max=${max}
+        readonly
+        disabled
+        hidden
+        aria-label="Quantity"
+      />
       <button type="button" class="increment" aria-label="Increment">
         <span class="zero">Add to Cart</span>
         <span class="other" hidden>+</span>
@@ -53,16 +65,19 @@ export const Default: Story = {
     await customElements.whenDefined("module-catalog");
     await customElements.whenDefined("form-spinbutton");
     const canvas = within(canvasElement);
-    const button = canvasElement.querySelector(
-      "basic-button",
-    ) as Component<BasicButtonProps>;
+    const button = canvasElement.querySelector("basic-button") as HTMLElement &
+      BasicButtonProps;
 
     // Cart button starts disabled (total = 0)
     await expect(button.disabled).toBe(true);
 
+    // At value 0 each spinbutton's increment button reads "Add to Cart" (its
+    // `.zero` label), not "Increment" — the spinbutton re-labels it while the
+    // value is zero. There is one per product.
+    const addToCartButtons = canvas.getAllByLabelText("Add to Cart");
+
     // Add product 1
-    const increments = canvas.getAllByLabelText("Increment");
-    const product1 = increments[0];
+    const product1 = addToCartButtons[0];
     if (product1) {
       await userEvent.click(product1);
 
@@ -71,7 +86,7 @@ export const Default: Story = {
     }
 
     // Add two more items from product 2
-    const product2 = increments[1];
+    const product2 = addToCartButtons[1];
     if (product2) {
       await userEvent.click(product2);
       await userEvent.click(product2);
