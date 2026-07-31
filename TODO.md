@@ -8,22 +8,6 @@ _None open._
 
 ## Follow-ups
 
-### Rewrite `module-todo` to match upstream's current implementation
-
-Upstream's `module-todo.ts` has since been rewritten to use inline
-`createList`/`createStore`/`reconcile()`-based drag-and-drop reordering and
-inline editing (via a new `form-inplace-edit` component), replacing the
-current add/complete/filter/clear-completed-only port. Our port intentionally
-kept the simpler existing feature set because `form-inplace-edit` doesn't
-exist in this repo yet.
-
-**Do this only after** the missing upstream example components (starting with
-`form-inplace-edit`, and any other newly-added examples this repo hasn't
-ported yet) have been added in a separate session. Then do a full rewrite of
-`module-todo.ts`/`.stories.ts`/`.mdx`/`.css` to match upstream's current
-drag-and-drop + inline-edit implementation, rather than patching the current
-simpler version incrementally.
-
 ### Confirm/fix `each()`'s callback return type rejecting `void` (possible upstream bug)
 
 Reported error in `module-todo.ts`'s `each(checkboxComponents, checkbox => {...})`
@@ -58,6 +42,37 @@ project's local `7.0.2`). Action items:
 ---
 
 ## Done
+
+### Rewrote `module-todo` to match upstream's current drag-and-drop + inline-edit implementation
+
+Reviewed the quality of the 13 example components migrated from upstream
+(commit `96f3e45`) before building on top of them. Baseline: `tsc --noEmit`
+clean, `npx vitest run` 111 passed | 2 skipped, 0 failed. `form-inplace-edit`
+(the component this rewrite depends on) is a byte-identical port of upstream
+with a correct, sufficient public API (`value`/`editing` get/set descriptors)
+— no blockers. Lower-priority gaps noted but deferred: no `argTypes`/controls
+across any of the 13 new stories, thin/missing play-function coverage in a
+few (`card-blogmeta`, `card-collapsible`, `module-coloreditor`,
+`module-ticker`), `form-inplace-edit.stories.ts` only covers the
+accept-on-Enter path.
+
+Rewrote `module-todo.ts`/`.css`/`.stories.ts`/`.mdx` to match upstream's
+current implementation: `createList`/`createStore`/`reconcile()`-based
+keyed list with per-item `Store<TodoItem>` signals, `form-inplace-edit` for
+inline label editing (via `pass()` `{ get, set }` on `value`), pointer-based
+drag-and-drop reordering with a drop-marker element and `data-unreconciled`
+pinning to protect transient drag state from a concurrent `reconcile()` run,
+keyboard reordering (Arrow Up/Down on a selected `button.reorder`) with a
+live region (`role="status"`) announcing position changes, and `each()` to
+disable reorder buttons when only one item remains. This replaces the
+simpler add/complete/filter/clear-completed-only port kept in the prior
+session (deferred at the time because `form-inplace-edit` didn't exist yet).
+
+Added four new stories (`Default`, `AddAndComplete`, `WithFilter` carried
+over; new `InlineEdit` and `KeyboardReorder` covering the two behaviors this
+rewrite adds). Verified: `npx tsc --noEmit` clean, `npx vite build` clean,
+`npx vitest run` → 113 passed | 2 skipped, 0 failed (38/38 files), no
+regressions.
 
 ### Fixed: the 8 failing story/play-function tests
 
