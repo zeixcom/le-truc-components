@@ -1,41 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html } from "lit";
 import { timestamp } from "../../_common/storyArgs";
-import {
-  Blogmeta,
-  blogmetaArgTypes,
-  type CardBlogmetaArgs,
-} from "../blogmeta/card-blogmeta.stories";
+import { blogmetaArgTypes } from "../blogmeta/card-blogmeta.html";
+import { Blogpost, type CardBlogpostArgs } from "./card-blogpost.html";
 import "./card-blogpost.css";
 import "../blogmeta/card-blogmeta.ts";
 import "../blogmeta/card-blogmeta.css";
 
-type CardBlogpostArgs = CardBlogmetaArgs & {
-  title: string;
-  href: string;
-  excerpt: string;
-};
-
-const render = ({
-  title,
-  href,
-  excerpt,
-  ...blogmetaArgs
-}: CardBlogpostArgs) => html`
-  <card-blogpost itemscope itemtype="https://schema.org/BlogPosting">
-    <h2>
-      <a href=${href} itemprop="url"
-        ><span itemprop="headline">${title}</span></a
-      >
-    </h2>
-    ${Blogmeta(blogmetaArgs)}
-    <p itemprop="description">${excerpt}</p>
-  </card-blogpost>
-`;
-
 const meta: Meta<CardBlogpostArgs> = {
   title: "Card/Blogpost",
-  render,
+  render: Blogpost,
   argTypes: {
     title: {
       control: "text",

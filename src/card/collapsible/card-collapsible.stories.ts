@@ -1,38 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html } from "lit";
+import { type CardCollapsibleArgs, Collapsible } from "./card-collapsible.html";
 import "./card-collapsible.ts";
 import "./card-collapsible.css";
-
-type CardCollapsibleArgs = {
-  description: string;
-  content: string;
-  open: boolean;
-};
-
-// Exported so other components' stories can embed a collapsible instance via
-// ${Collapsible(args)} instead of duplicating its markup.
-export const Collapsible = ({
-  description,
-  content,
-  open,
-}: CardCollapsibleArgs) => html`
-  <card-collapsible>
-    <details ?open=${open}>
-      <summary>
-        <span class="description">${description}</span>
-      </summary>
-      <div class="content">
-        <p>${content}</p>
-      </div>
-    </details>
-  </card-collapsible>
-`;
 
 const meta: Meta<CardCollapsibleArgs> = {
   title: "Card/Collapsible",
   render: Collapsible,
-  // Collapsible is exported for reuse by other stories files, not a story itself.
-  excludeStories: /^Collapsible$/,
   argTypes: {
     description: {
       control: "text",

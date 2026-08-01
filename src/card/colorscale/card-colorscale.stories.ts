@@ -1,43 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html } from "lit";
 import { expect, within } from "storybook/test";
+import { type CardColorscaleArgs, Colorscale } from "./card-colorscale.html";
 import "./card-colorscale.ts";
 import "./card-colorscale.css";
-
-type CardColorscaleArgs = {
-  value: string;
-  label: string;
-  size: "tiny" | "small" | "medium" | "large";
-};
-
-// Exported so other components' stories can embed a colorscale instance via
-// ${Colorscale(args)} instead of duplicating its markup.
-export const Colorscale = ({ value, label, size }: CardColorscaleArgs) => html`
-  <card-colorscale class=${size} value=${value}>
-    <ol role="presentation">
-      <li class="lighten80"></li>
-      <li class="lighten60"></li>
-      <li class="lighten40"></li>
-      <li class="lighten20"></li>
-      <li class="base">
-        <span class="label">
-          <strong>${label}</strong>
-          <small></small>
-        </span>
-      </li>
-      <li class="darken20"></li>
-      <li class="darken40"></li>
-      <li class="darken60"></li>
-      <li class="darken80"></li>
-    </ol>
-  </card-colorscale>
-`;
 
 const meta: Meta<CardColorscaleArgs> = {
   title: "Card/Colorscale",
   render: Colorscale,
-  // Colorscale is exported for reuse by other stories files, not a story itself.
-  excludeStories: /^Colorscale$/,
   argTypes: {
     value: {
       control: "color",

@@ -12,7 +12,7 @@ import "../../form/colorgraph/form-colorgraph.css";
 import "../colorinfo/module-colorinfo.ts";
 import "../colorinfo/module-colorinfo.css";
 import "../../basic/number/basic-number.ts";
-import { Colorscale } from "../../card/colorscale/card-colorscale.stories";
+import { Colorscale } from "../../card/colorscale/card-colorscale.html";
 import { Colorgraph } from "../../form/colorgraph/form-colorgraph.stories";
 import { Colorinfo } from "../colorinfo/module-colorinfo.stories";
 

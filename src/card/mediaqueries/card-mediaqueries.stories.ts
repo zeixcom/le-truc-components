@@ -1,37 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html } from "lit";
 import { expect, within } from "storybook/test";
-import { Media } from "../../context/media/context-media.stories";
+import { Media } from "../../context/media/context-media.html";
+import {
+  type CardMediaqueriesArgs,
+  Mediaqueries,
+} from "./card-mediaqueries.html";
 import "../../context/media/context-media.ts";
 import "./card-mediaqueries.ts";
-
-type CardMediaqueriesArgs = {
-  heading: string;
-};
-
-// Exported so other components' stories can embed a mediaqueries instance via
-// ${Mediaqueries(args)} instead of duplicating its markup.
-export const Mediaqueries = ({ heading }: CardMediaqueriesArgs) => html`
-  <card-mediaqueries>
-    <h2>${heading}</h2>
-    <dl>
-      <dt>Motion Preference:</dt>
-      <dd class="motion"></dd>
-      <dt>Theme Preference:</dt>
-      <dd class="theme"></dd>
-      <dt>Device Viewport:</dt>
-      <dd class="viewport"></dd>
-      <dt>Device Orientation:</dt>
-      <dd class="orientation"></dd>
-    </dl>
-  </card-mediaqueries>
-`;
 
 const meta: Meta<CardMediaqueriesArgs> = {
   title: "Card/Mediaqueries",
   render: Mediaqueries,
-  // Mediaqueries is exported for reuse by other stories files, not a story itself.
-  excludeStories: /^Mediaqueries$/,
   argTypes: {
     heading: {
       control: "text",

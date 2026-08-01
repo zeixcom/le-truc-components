@@ -1,30 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html, nothing, type TemplateResult } from "lit";
+import { html } from "lit";
 import { expect, within } from "storybook/test";
-import { Mediaqueries } from "../../card/mediaqueries/card-mediaqueries.stories";
+import { Mediaqueries } from "../../card/mediaqueries/card-mediaqueries.html";
+import { type ContextMediaArgs, Media } from "./context-media.html";
 import "../../card/mediaqueries/card-mediaqueries.ts";
 import "./context-media.ts";
-
-type ContextMediaArgs = {
-  sm: string;
-  md: string;
-  lg: string;
-  xl: string;
-  content: TemplateResult;
-};
-
-// Exported so other components' stories can embed a context-media provider
-// via ${Media(args)} instead of duplicating its markup.
-export const Media = ({ sm, md, lg, xl, content }: ContextMediaArgs) => html`
-  <context-media
-    sm=${sm || nothing}
-    md=${md || nothing}
-    lg=${lg || nothing}
-    xl=${xl || nothing}
-  >
-    ${content}
-  </context-media>
-`;
 
 const meta: Meta<ContextMediaArgs> = {
   title: "Context/Media",
@@ -36,8 +16,6 @@ const meta: Meta<ContextMediaArgs> = {
       xl,
       content: Mediaqueries({ heading: "With Context" }),
     }),
-  // Media is exported for reuse by other stories files, not a story itself.
-  excludeStories: /^Media$/,
   argTypes: {
     sm: {
       control: "text",

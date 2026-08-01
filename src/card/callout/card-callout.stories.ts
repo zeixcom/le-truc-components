@@ -1,23 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html, nothing, type TemplateResult } from "lit";
+import { html } from "lit";
+import { Callout, type CardCalloutArgs } from "./card-callout.html";
 import "./card-callout.css";
-
-type CardCalloutArgs = {
-  variant: "info" | "tip" | "caution" | "danger" | "note";
-  content: string | TemplateResult;
-};
-
-// Exported so other components' stories can embed a callout instance via
-// ${Callout(args)} instead of duplicating its markup.
-export const Callout = ({ variant, content }: CardCalloutArgs) => html`
-  <card-callout class=${variant !== "info" ? variant : nothing}>${content}</card-callout>
-`;
 
 const meta: Meta<CardCalloutArgs> = {
   title: "Card/Callout",
   render: Callout,
-  // Callout is exported for reuse by other stories files, not a story itself.
-  excludeStories: /^Callout$/,
   argTypes: {
     variant: {
       control: { type: "select" },
