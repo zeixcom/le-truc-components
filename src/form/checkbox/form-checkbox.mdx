@@ -5,7 +5,7 @@ import * as FormCheckboxStories from './form-checkbox.stories';
 
 ### Form Checkbox
 
-A wrapper for a native checkbox that demonstrates `asBoolean()` to read the initial `checked` state from the host's own attribute at connect time, a DOM-derived fallback for the `label` property, and `formAssociatedCheckbox()` for form participation via `ElementInternals`. The checked visual state is driven live off the native input via `:has(input:checked)` in CSS — the `checked` attribute itself is only the reset default (`<form>.reset()` restores it), not a live reflection of current state.
+A styled, form-associated wrapper around a native checkbox, with todo-item and toggle-switch variants. It shows how to layer custom styling and full form participation on top of native checkbox behavior.
 
 #### Tag Name
 

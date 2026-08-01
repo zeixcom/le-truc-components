@@ -5,7 +5,7 @@ import * as CardMediaqueriesStories from './card-mediaqueries.stories';
 
 ### Card Mediaqueries
 
-A demo card that displays live media query values received via context. Demonstrates `requestContext()` — each requested value falls back to `"unknown"` when no `context-media` ancestor is present, and updates reactively once one is, via `watch()` bound directly to the returned context signal. The four context keys are provided by the `context-media` component.
+A demo card that displays live media query values received from a `context-media` provider. It shows how a context consumer falls back to a default value when no provider is present, then updates reactively once one connects.
 
 #### Tag Name
 

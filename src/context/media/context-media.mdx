@@ -5,7 +5,7 @@ import * as ContextMediaStories from './context-media.stories';
 
 ### Context Media
 
-A context provider that exposes live media query state to descendant components via the W3C Context Protocol. Demonstrates using `createSensor()` inside `expose()` — rather than a static value or parser — to wire `MediaQueryList` change events into reactive properties, reading `host` attributes before `expose()` to configure breakpoints, and calling `provideContexts()` to broadcast all four properties as typed `Context` tokens (created with `createContext()`) that consumers can request with `requestContext()`.
+A context provider that exposes live media query state — breakpoints, color scheme, and more — to any descendant component. On its own it renders nothing; it must wrap one or more consumers, such as `card-mediaqueries`, that request the values. It demonstrates Le Truc's context protocol for sharing reactive state across a component tree without prop drilling.
 
 #### Tag Name
 

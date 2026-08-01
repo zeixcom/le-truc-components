@@ -5,7 +5,7 @@ import * as ModuleCarouselStories from './module-carousel.stories';
 
 ### Module Carousel
 
-A scroll-snap carousel with dot navigation and keyboard controls. Demonstrates the hand-authored descriptor pattern — `watch(() => true, …)` wraps a native `IntersectionObserver` so its setup runs once on connect and its returned cleanup disconnects it on disconnect — alongside standard Le Truc effects. `index` is initialised in `expose()` from the slide with `aria-current="true"` found in the DOM at connect time. The `all()` Memo targets (`dots`, `slides`, `buttons`) combine with `each()` to run per-element reactive effects (`bindProperty()`, custom handlers) and with `on()` for delegated event listeners across dynamic element collections.
+A scroll-snap carousel with dot navigation and keyboard controls. It demonstrates wiring a native `IntersectionObserver` into Le Truc's reactive effect system.
 
 #### Tag Name
 
