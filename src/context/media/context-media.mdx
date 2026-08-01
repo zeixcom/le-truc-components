@@ -1,4 +1,4 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as ContextMediaStories from './context-media.stories';
 
 <Meta of={ContextMediaStories} />
@@ -14,6 +14,12 @@ A context provider that exposes live media query state to descendant components 
 #### Preview
 
 <Canvas of={ContextMediaStories.Default} />
+
+#### Controls
+
+<Controls of={ContextMediaStories.Default} />
+
+See the `CustomBreakpoints` and `MultipleConsumers` stories for other variants.
 
 #### Reactive Properties
 

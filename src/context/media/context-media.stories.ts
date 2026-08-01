@@ -1,46 +1,43 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html, nothing } from "lit";
+import { html, nothing, type TemplateResult } from "lit";
 import { expect, within } from "storybook/test";
-import "./context-media.ts";
+import { Mediaqueries } from "../../card/mediaqueries/card-mediaqueries.stories";
 import "../../card/mediaqueries/card-mediaqueries.ts";
+import "./context-media.ts";
 
 type ContextMediaArgs = {
   sm: string;
   md: string;
   lg: string;
   xl: string;
+  content: TemplateResult;
 };
 
-const consumerTemplate = () => html`
-  <card-mediaqueries>
-    <h2>With Context</h2>
-    <dl>
-      <dt>Motion Preference:</dt>
-      <dd class="motion"></dd>
-      <dt>Theme Preference:</dt>
-      <dd class="theme"></dd>
-      <dt>Device Viewport:</dt>
-      <dd class="viewport"></dd>
-      <dt>Device Orientation:</dt>
-      <dd class="orientation"></dd>
-    </dl>
-  </card-mediaqueries>
-`;
-
-const render = ({ sm, md, lg, xl }: ContextMediaArgs) => html`
+// Exported so other components' stories can embed a context-media provider
+// via ${Media(args)} instead of duplicating its markup.
+export const Media = ({ sm, md, lg, xl, content }: ContextMediaArgs) => html`
   <context-media
     sm=${sm || nothing}
     md=${md || nothing}
     lg=${lg || nothing}
     xl=${xl || nothing}
   >
-    ${consumerTemplate()}
+    ${content}
   </context-media>
 `;
 
 const meta: Meta<ContextMediaArgs> = {
   title: "Context/Media",
-  render,
+  render: ({ sm, md, lg, xl }) =>
+    Media({
+      sm,
+      md,
+      lg,
+      xl,
+      content: Mediaqueries({ heading: "With Context" }),
+    }),
+  // Media is exported for reuse by other stories files, not a story itself.
+  excludeStories: /^Media$/,
   argTypes: {
     sm: {
       control: "text",
@@ -104,7 +101,7 @@ export const CustomBreakpoints: Story = {
   },
 };
 
-// ⚠️ Custom render: renders two card-mediaqueries consumers inside the same provider to verify both receive context values
+// ⚠️ Custom render: two differently-structured consumers (partial field subsets), not a prop variation of Mediaqueries
 export const MultipleConsumers: Story = {
   render: () => html`
     <context-media>

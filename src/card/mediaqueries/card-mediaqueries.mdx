@@ -1,4 +1,4 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as CardMediaqueriesStories from './card-mediaqueries.stories';
 
 <Meta of={CardMediaqueriesStories} />
@@ -13,7 +13,13 @@ A demo card that displays live media query values received via context. Demonstr
 
 #### Preview
 
-<Canvas of={CardMediaqueriesStories.SideBySide} />
+<Canvas of={CardMediaqueriesStories.WithoutContext} />
+
+#### Controls
+
+<Controls of={CardMediaqueriesStories.WithoutContext} />
+
+See the `WithContext` story for a variant wrapped in a `context-media` provider.
 
 #### Descendant Elements
 
