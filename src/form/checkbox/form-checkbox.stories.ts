@@ -12,7 +12,9 @@ type FormCheckboxArgs = {
   variant: "none" | "checkbox" | "todo" | "toggle";
 };
 
-const render = ({ checked, label, variant }: FormCheckboxArgs) => html`
+// Exported so other components' stories can embed a checkbox instance via
+// ${Checkbox(args)} instead of duplicating its markup.
+export const Checkbox = ({ checked, label, variant }: FormCheckboxArgs) => html`
   <form-checkbox class=${variant !== "none" ? variant : nothing} ?checked=${checked}>
     <label>
       <input
@@ -27,7 +29,9 @@ const render = ({ checked, label, variant }: FormCheckboxArgs) => html`
 
 const meta: Meta<FormCheckboxArgs> = {
   title: "Form/Checkbox",
-  render,
+  render: Checkbox,
+  // Checkbox is exported for reuse by other stories files, not a story itself.
+  excludeStories: /^Checkbox$/,
   argTypes: {
     checked: {
       control: "boolean",
@@ -67,7 +71,7 @@ const allVariants: FormCheckboxArgs[] = [
 
 export const AllVariants: Story = {
   render: () =>
-    html`${allVariants.map((args, i) => html`${render(args)}${i < allVariants.length - 1 ? html`<br />` : nothing}`)}`,
+    html`${allVariants.map((args, i) => html`${Checkbox(args)}${i < allVariants.length - 1 ? html`<br />` : nothing}`)}`,
 };
 
 export const InitialChecked: Story = {
