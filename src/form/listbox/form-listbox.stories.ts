@@ -15,7 +15,9 @@ type FormListboxArgs = {
   src: string;
 };
 
-const render = ({ value }: FormListboxArgs) => html`
+// Exported so other components' stories can embed a listbox instance via
+// ${Listbox(args)} instead of duplicating its markup.
+export const Listbox = ({ value }: FormListboxArgs) => html`
   <form>
     <form-listbox id="colors" name="color">
       <div role="listbox" aria-label="Colors">
@@ -31,7 +33,9 @@ const render = ({ value }: FormListboxArgs) => html`
 
 const meta: Meta<FormListboxArgs> = {
   title: "Form/Listbox",
-  render,
+  render: Listbox,
+  // Listbox is exported for reuse by other stories files, not a story itself.
+  excludeStories: /^Listbox$/,
   argTypes: {
     value: {
       control: "text",
@@ -162,7 +166,9 @@ export const KeyboardNavigation: Story = {
     const el = canvasElement.querySelector("form-listbox") as HTMLElement &
       FormAssociatedElement &
       FormListboxProps;
-    const listbox = canvasElement.querySelector('[role="listbox"]') as HTMLElement;
+    const listbox = canvasElement.querySelector(
+      '[role="listbox"]',
+    ) as HTMLElement;
     const carrot = canvas.getByRole("option", { name: "Carrot" });
     const potato = canvas.getByRole("option", { name: "Potato" });
     const onion = canvas.getByRole("option", { name: "Onion" });
@@ -194,7 +200,9 @@ export const KeyboardNavigation: Story = {
     await expect(el.value).toBe("onion");
 
     // Unrelated key on the listbox: no change.
-    listbox.dispatchEvent(new KeyboardEvent("keydown", { key: "a", bubbles: true }));
+    listbox.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "a", bubbles: true }),
+    );
     await expect(el.value).toBe("onion");
   },
 };
