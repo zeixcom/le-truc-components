@@ -11,7 +11,9 @@ type FormSpinbuttonArgs = {
   max: number;
 };
 
-const render = ({ value, max }: FormSpinbuttonArgs) => html`
+// Exported so other components' stories can embed a spinbutton instance via
+// ${Spinbutton(args)} instead of duplicating its markup.
+export const Spinbutton = ({ value, max }: FormSpinbuttonArgs) => html`
   <form-spinbutton>
     <button type="button" class="decrement" aria-label="Decrement" ?hidden=${value === 0}>−</button>
     <input
@@ -35,7 +37,9 @@ const render = ({ value, max }: FormSpinbuttonArgs) => html`
 
 const meta: Meta<FormSpinbuttonArgs> = {
   title: "Form/Spinbutton",
-  render,
+  render: Spinbutton,
+  // Spinbutton is exported for reuse by other stories files, not a story itself.
+  excludeStories: /^Spinbutton$/,
   argTypes: {
     value: {
       control: "number",
