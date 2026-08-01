@@ -11,6 +11,13 @@ const meta: Meta<FormTextboxArgs> = {
   title: "Form/Textbox",
   render: Textbox,
   argTypes: {
+    value: {
+      control: "text",
+      table: {
+        defaultValue: { summary: "''" },
+        category: "Reactive Properties",
+      },
+    },
     description: {
       control: "text",
       table: {
@@ -34,6 +41,7 @@ type Story = StoryObj<FormTextboxArgs>;
 
 export const Default: Story = {
   args: {
+    value: "",
     description: "Tell us how you want us to call you.",
     clearable: false,
   },
