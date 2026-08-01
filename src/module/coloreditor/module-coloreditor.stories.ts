@@ -1,5 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html } from "lit";
+import { expect, fireEvent, userEvent, within } from "storybook/test";
+import {
+  ModuleColoreditor,
+  type ModuleColoreditorArgs,
+} from "./module-coloreditor.html";
+import type { ModuleColoreditorProps } from "./module-coloreditor.ts";
 import "./module-coloreditor.ts";
 import "./module-coloreditor.css";
 import "../../card/colorscale/card-colorscale.ts";
@@ -12,206 +17,117 @@ import "../colorinfo/module-colorinfo.ts";
 import "../colorinfo/module-colorinfo.css";
 import "../../basic/number/basic-number.ts";
 
-// The <dl> block is repeated 9× (once per color step). A helper keeps it DRY.
-const detailsDl = () => html`
-  <div class="details">
-    <dl>
-      <dt>Lightness:</dt>
-      <dd>
-        <basic-number
-          class="lightness"
-          options='{"style":"percent","maximumFractionDigits":2}'
-        ></basic-number>
-      </dd>
-      <dt>Chroma:</dt>
-      <dd>
-        <basic-number
-          class="chroma"
-          options='{"maximumFractionDigits":4}'
-        ></basic-number>
-      </dd>
-      <dt>Hue:</dt>
-      <dd>
-        <basic-number
-          class="hue"
-          options='{"maximumFractionDigits":2}'
-        ></basic-number>
-      </dd>
-    </dl>
-    <dl>
-      <dt>OKLCH:</dt>
-      <dd lang="en">
-        oklch(<basic-number
-          class="lightness"
-          options='{"maximumFractionDigits":4}'
-        ></basic-number>
-        <basic-number
-          class="chroma"
-          options='{"maximumFractionDigits":4}'
-        ></basic-number>
-        <basic-number
-          class="hue"
-          options='{"maximumFractionDigits":2}'
-        ></basic-number
-        >)
-      </dd>
-      <dt>RGB:</dt>
-      <dd class="rgb"></dd>
-      <dt>HSL:</dt>
-      <dd class="hsl"></dd>
-    </dl>
-  </div>
-`;
-
-const colorinfo = (cls: string, open = false) => html`
-  <module-colorinfo class=${cls}>
-    <details ?open=${open}>
-      <summary>
-        <div class="summary">
-          <span class="swatch"></span>
-          <span class="label">
-            <strong></strong>
-            <small class="hex"></small>
-          </span>
-        </div>
-      </summary>
-      ${detailsDl()}
-    </details>
-  </module-colorinfo>
-`;
-
-const render = () => html`
-  <module-coloreditor color="oklch(.48 .23 263)" name="Blue">
-    <card-colorscale class="scale tiny">
-      <ol role="presentation">
-        <li class="lighten80"></li>
-        <li class="lighten60"></li>
-        <li class="lighten40"></li>
-        <li class="lighten20"></li>
-        <li class="base">
-          <span class="label">
-            <strong></strong>
-            <small></small>
-          </span>
-        </li>
-        <li class="darken20"></li>
-        <li class="darken40"></li>
-        <li class="darken60"></li>
-        <li class="darken80"></li>
-      </ol>
-    </card-colorscale>
-    <form-textbox class="name">
-      <label for="name-input">Color name</label>
-      <div class="input">
-        <input
-          type="text"
-          id="name-input"
-          name="name"
-          value="Blue"
-          autocomplete="off"
-          required
-        />
-      </div>
-      <p class="error" aria-live="assertive" id="name-error"></p>
-      <p class="description" aria-live="polite" id="name-description"></p>
-    </form-textbox>
-    <form-colorgraph>
-      <div class="graph">
-        <canvas width="400" height="400"></canvas>
-        <button type="button" class="knob">
-          <span class="visually-hidden">Drag</span>
-        </button>
-        <ol role="presentation">
-          <li class="lighten80"></li>
-          <li class="lighten60"></li>
-          <li class="lighten40"></li>
-          <li class="lighten20"></li>
-          <li class="darken20"></li>
-          <li class="darken40"></li>
-          <li class="darken60"></li>
-          <li class="darken80"></li>
-        </ol>
-      </div>
-      <div
-        class="slider"
-        role="slider"
-        tabindex="0"
-        aria-valuenow="0"
-        aria-valuemin="0"
-        aria-valuemax="360"
-        aria-controls="hue"
-        aria-labelledby="hue-label"
-      >
-        <canvas width="360" height="1"></canvas>
-        <span class="thumb"></span>
-      </div>
-      <div class="lightness">
-        <label for="lightness">Lightness</label>
-        <div class="input">
-          <input id="lightness" name="lightness" type="number" />
-          <span class="unit">%</span>
-        </div>
-        <div class="buttons">
-          <button type="button" class="decrement" aria-label="Decrement lightness">
-            −
-          </button>
-          <button type="button" class="increment" aria-label="Increment lightness">
-            +
-          </button>
-        </div>
-        <p class="error" aria-live="assertive" id="lightness-error"></p>
-      </div>
-      <div class="chroma">
-        <label for="chroma">Chroma</label>
-        <div class="input">
-          <input id="chroma" name="chroma" type="number" />
-        </div>
-        <div class="buttons">
-          <button type="button" class="decrement" aria-label="Decrement chroma">
-            −
-          </button>
-          <button type="button" class="increment" aria-label="Increment chroma">
-            +
-          </button>
-        </div>
-        <p class="error" aria-live="assertive" id="chroma-error"></p>
-      </div>
-      <div class="hue">
-        <label id="hue-label" for="hue">Hue</label>
-        <div class="input">
-          <input id="hue" name="hue" type="number" />
-          <span class="unit">°</span>
-        </div>
-        <div class="buttons">
-          <button type="button" class="decrement" aria-label="Decrement hue">
-            −
-          </button>
-          <button type="button" class="increment" aria-label="Increment hue">
-            +
-          </button>
-        </div>
-        <p class="error" aria-live="assertive" id="hue-error"></p>
-      </div>
-    </form-colorgraph>
-    <div class="info">
-      ${colorinfo("lighten80")}
-      ${colorinfo("lighten60")}
-      ${colorinfo("lighten40")}
-      ${colorinfo("lighten20")}
-      ${colorinfo("base", true)}
-      ${colorinfo("darken20")}
-      ${colorinfo("darken40")}
-      ${colorinfo("darken60")}
-      ${colorinfo("darken80")}
-    </div>
-  </module-coloreditor>
-`;
-
-const meta: Meta = {
+const meta: Meta<ModuleColoreditorArgs> = {
   title: "Module/Coloreditor",
-  render,
+  render: ModuleColoreditor,
+  argTypes: {
+    value: {
+      control: "color",
+      description:
+        "Current color — accepts any valid CSS color string, parsed internally into Oklch",
+      table: { category: "Reactive Properties" },
+    },
+    label: {
+      control: "text",
+      description: "Display name for the color",
+      table: { category: "Reactive Properties" },
+    },
+  },
 };
 export default meta;
-type Story = StoryObj;
+type Story = StoryObj<ModuleColoreditorArgs>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    value: "oklch(.48 .23 263)",
+    label: "Blue",
+  },
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("module-coloreditor");
+    await customElements.whenDefined("card-colorscale");
+    await customElements.whenDefined("module-colorinfo");
+    const canvas = within(canvasElement);
+    // card-colorscale receives value/label from module-coloreditor via pass().
+    await expect(canvas.getAllByText("Blue").length).toBeGreaterThan(0);
+    // module-colorinfo.base receives its label ("Blue 500") via pass() —
+    // only resolves if module-coloreditor's step-class selectors actually
+    // match an element in the composed markup.
+    const base = canvasElement.querySelector(
+      "module-colorinfo.base",
+    ) as HTMLElement & { label: string };
+    await expect(base.label).toBe("Blue 500");
+
+    // Readonly computed props derived from `value`.
+    const el = canvasElement.querySelector(
+      "module-coloreditor",
+    ) as HTMLElement & ModuleColoreditorProps;
+    await expect(el.lightness).toBeCloseTo(0.48, 2);
+    await expect(el.chroma).toBeCloseTo(0.23, 2);
+    await expect(el.hue).toBeCloseTo(263, 0);
+    await expect(el.nearest.length).toBeGreaterThan(0);
+
+    // Every lighten/darken step is passed its own color/label, not just base.
+    const lighten20 = canvasElement.querySelector(
+      "module-colorinfo.lighten20",
+    ) as HTMLElement & { label: string };
+    await expect(lighten20.label).toBe("Blue 400");
+    const darken40 = canvasElement.querySelector(
+      "module-colorinfo.darken40",
+    ) as HTMLElement & { label: string };
+    await expect(darken40.label).toBe("Blue 700");
+  },
+};
+
+export const NameFieldUpdatesLabel: Story = {
+  args: {
+    value: "oklch(.48 .23 263)",
+    label: "Blue",
+  },
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("module-coloreditor");
+    await customElements.whenDefined("form-textbox");
+    const canvas = within(canvasElement);
+    const el = canvasElement.querySelector(
+      "module-coloreditor",
+    ) as HTMLElement & ModuleColoreditorProps;
+    const nameInput = canvas.getByLabelText("Color name") as HTMLInputElement;
+
+    await expect(el.label).toBe("Blue");
+
+    await userEvent.clear(nameInput);
+    await userEvent.type(nameInput, "Cerulean");
+    await fireEvent.change(nameInput);
+
+    await expect(el.label).toBe("Cerulean");
+    const base = canvasElement.querySelector(
+      "module-colorinfo.base",
+    ) as HTMLElement & { label: string };
+    await expect(base.label).toBe("Cerulean 500");
+  },
+};
+
+export const AttributeMutation: Story = {
+  args: {
+    value: "oklch(.48 .23 263)",
+    label: "Blue",
+  },
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("module-coloreditor");
+    const el = canvasElement.querySelector(
+      "module-coloreditor",
+    ) as HTMLElement & ModuleColoreditorProps;
+
+    // Regression test for observedAttributes(['value', 'label']): a
+    // Storybook Controls edit (or a React wrapper) sets the attribute after
+    // connect, which must re-parse and propagate through pass() to the
+    // composed card-colorscale/form-colorgraph/module-colorinfo instances.
+    el.setAttribute("value", "oklch(.7 .1 30)");
+    el.setAttribute("label", "Coral");
+    await expect(el.hue).toBeCloseTo(30, 0);
+
+    const base = canvasElement.querySelector(
+      "module-colorinfo.base",
+    ) as HTMLElement & { label: string; value: unknown };
+    await expect(base.label).toBe("Coral 500");
+  },
+};

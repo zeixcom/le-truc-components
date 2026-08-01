@@ -11,6 +11,7 @@ import {
   each,
   type FormAssociatedElement,
   formAssociated,
+  observedAttributes,
   type State,
   throttle,
 } from "@zeix/le-truc";
@@ -556,5 +557,5 @@ export default defineComponent<FormColorgraphProps>(
     // the initial CSS color string, replacing the hand-rolled
     // initialColor capture from the previous design).
   },
-  [formAssociated()],
+  [formAssociated(), observedAttributes(["value"])],
 );

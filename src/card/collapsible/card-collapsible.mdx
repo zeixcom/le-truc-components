@@ -1,4 +1,4 @@
-import { Meta, Canvas } from "@storybook/addon-docs/blocks";
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
 import * as CardCollapsibleStories from "./card-collapsible.stories";
 
 <Meta of={CardCollapsibleStories} />
@@ -15,26 +15,11 @@ A content-agnostic collapsible card wrapping a native `<details>`/`<summary>` el
 
 <Canvas of={CardCollapsibleStories.Default} />
 
-#### Reactive Properties
+#### Controls
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>open</code></td>
-      <td><code>boolean</code></td>
-      <td>from descendant <code>&lt;details open&gt;</code></td>
-      <td>Whether the card is expanded</td>
-    </tr>
-  </tbody>
-</table>
+<Controls of={CardCollapsibleStories.Default} />
+
+See the `OpenByDefault` story for a variant that starts expanded.
 
 #### Descendant Elements
 

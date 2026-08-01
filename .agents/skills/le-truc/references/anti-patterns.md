@@ -1,6 +1,6 @@
 # Anti-Patterns
 
-**Overview:** Patterns to avoid in Le Truc components — TypeScript, HTML, CSS, and documentation.
+**Overview:** Patterns to avoid in Le Truc components — TypeScript, HTML, CSS, documentation, and Storybook.
 
 ---
 
@@ -327,6 +327,49 @@ Every component docs file must include:
 
 ---
 
+## Storybook Anti-Patterns
+
+See `references/storybook.md` for full explanations.
+
+### Exporting Helpers From `.stories.ts`
+
+```typescript
+/* ❌ Storybook's CSF/vitest addon auto-registers every named export as a
+   story candidate — this either needs excludeStories or silently breaks */
+export const Callout = (args) => html`...`
+const meta: Meta = { render: Callout, excludeStories: /^Callout$/ }
+
+/* ✅ Move the render function to callout.html.ts; .stories.ts only exports
+   default and StoryObjs */
+```
+
+### Assuming a Component Reacts to Attribute Changes in Storybook
+
+```typescript
+/* ❌ Storybook's color/text controls set the attribute on an already-connected
+   element. A Parser-backed prop with no observedAttributes silently ignores it —
+   looks like the control "does nothing" */
+expose({ value: asOklch() })
+
+/* ✅ Opt the attribute in if the component must respond to post-connect edits */
+expose({ value: asOklch() })
+// ... third arg to defineComponent:
+[observedAttributes(['value'])]
+```
+
+### Writing `element.textContent` on a Lit-Owned Node
+
+```typescript
+/* ❌ Crashes on the second Storybook re-render with
+   "This ChildPart has no parentNode..." — el's text is also a Lit ${expr} */
+watch('label', bindText(labelEl))
+
+/* ✅ */
+watch('label', bindText(labelEl, true))
+```
+
+---
+
 ## Summary Checklist
 
 | Category | Anti-Pattern | Fix |
@@ -351,3 +394,6 @@ Every component docs file must include:
 | Docs | Implementation details | Document interface only |
 | Docs | Incorrect defaults | Match source |
 | Docs | Missing sections | Add required sections |
+| Storybook | Non-story exports in `.stories.ts` | Move render function/`argTypes` to `.html.ts` |
+| Storybook | Prop looks unresponsive to controls | Add `observedAttributes([...])` for that Parser-backed prop |
+| Storybook | `ChildPart has no parentNode` crash | `bindText(el, true)` / `setTextPreservingComments` |

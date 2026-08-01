@@ -6,6 +6,7 @@
 - `references/anti-patterns.md` — what to flag and fix
 - `references/accessibility.md` — ARIA correctness for the widget type
 - `references/coordination.md` — verify correct inter-component mechanism
+- `references/storybook.md` — if `.stories.ts`/`.html.ts` are part of the review
 
 Read `references/effects.md` or `references/parsers.md` if specific choices seem wrong.
 
@@ -15,9 +16,10 @@ Read `references/effects.md` or `references/parsers.md` if specific choices seem
 
 Read **all files** for the component being reviewed:
 - `.ts` — component definition
-- `.html` — inner markup and example states
+- `.html.ts` — Storybook render function and example states
 - `.css` — styles
-- `.md` — documentation (if present)
+- `.stories.ts` — CSF: controls, stories, `play()` tests
+- `.mdx` — narrative documentation (if present)
 
 **Do not propose changes to code you have not read.**
 
@@ -39,12 +41,18 @@ Work through `references/anti-patterns.md` and flag any violations. Also verify:
 
 ---
 
-## Step 3: Check HTML
+## Step 3: Check the Storybook Render Function and Stories
 
-- Native semantic elements used inside custom element
-- Markup valid and functional without JavaScript (progressive enhancement)
-- All meaningful states and variant combinations represented as separate examples
+Follow `references/storybook.md`. Verify:
+
+- Native semantic elements used inside custom element; markup valid and functional without JavaScript (progressive enhancement)
+- All meaningful states and variant combinations represented as controls/stories, not hardcoded duplicates
 - No inline styles or inline event handlers
+- `.html.ts` has no Storybook imports and no `component.ts`/`.css` side-effect imports
+- `.stories.ts` exports only `default` and `StoryObj`s — any reusable render function or `argTypes` lives in `.html.ts`, not behind `excludeStories`
+- Per-story `render:` overrides are used only for genuine DOM-structure differences (flagged `// ⚠️ Custom render: <reason>`), not as a substitute for `args`
+- If a prop can be set via attribute after connect by an external tool (Storybook Controls, a React wrapper) and the component's own JS doesn't observe that: is `observedAttributes([...])` needed, or intentionally absent?
+- If a story renders an arg as element child *text* that the component also writes via `bindText`/`textContent`: does the component use `bindText(el, true)` / `setTextPreservingComments`, avoiding the Lit `ChildPart` crash?
 
 ---
 
@@ -70,7 +78,7 @@ Follow `references/accessibility.md` for widget type. Verify:
 
 ## Step 6: Check Documentation
 
-If `.md` file present, verify it covers sections required by `references/documentation.md` for component's feature set (properties, attributes, CSS classes, descendants, methods, events as applicable). Types and defaults must match TypeScript source.
+If `.mdx` file present, verify it covers sections required by `references/documentation.md` for component's feature set (properties, attributes, CSS classes, descendants, methods, events as applicable). Prefer `<Controls>` over a hand-written Reactive Properties table when every prop it would list is already a story control. Types and defaults must match TypeScript source.
 
 ---
 

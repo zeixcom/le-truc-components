@@ -1,31 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html, nothing } from "lit";
 import { expect, waitFor } from "storybook/test";
+import {
+  ModuleLazyload,
+  type ModuleLazyloadArgs,
+} from "./module-lazyload.html";
 import "./module-lazyload.ts";
 import "../../card/callout/card-callout.css";
 import type { ModuleLazyloadProps } from "./module-lazyload.ts";
 
-type ModuleLazyloadArgs = {
-  src: string;
-  "allow-scripts": boolean;
-};
-
-const render = ({
-  src,
-  "allow-scripts": allowScripts,
-}: ModuleLazyloadArgs) => html`
-  <module-lazyload src=${src || nothing} ?allow-scripts=${allowScripts}>
-    <card-callout>
-      <p class="loading" role="status">Loading...</p>
-      <p class="error" role="alert" aria-live="assertive" hidden></p>
-    </card-callout>
-    <div class="content" hidden></div>
-  </module-lazyload>
-`;
-
 const meta: Meta<ModuleLazyloadArgs> = {
   title: "Module/Lazyload",
-  render,
+  render: ModuleLazyload,
   argTypes: {
     src: {
       control: "text",

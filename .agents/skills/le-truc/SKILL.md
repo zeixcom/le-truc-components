@@ -6,12 +6,13 @@ user_invocable: true
 
 ## Purpose
 
-This skill provides **authoritative guidance** for developing components with `@zeix/le-truc`, a reactive custom elements library. It covers the **factory form** of `defineComponent`, reactivity patterns, DOM binding, inter-component coordination, and accessibility.
+This skill provides **authoritative guidance** for developing components with `@zeix/le-truc`, a reactive custom elements library. It covers the **factory form** of `defineComponent`, reactivity patterns, DOM binding, inter-component coordination, accessibility, and how this project documents and exercises components in Storybook (including the interop pitfalls that show up when Lit-rendered stories or React-style consumers wrap a Le Truc component — see `references/storybook.md`).
 
 **Use this skill when:**
 - Creating a new Le Truc component
 - Reviewing or extending an existing component
 - Debugging unexpected reactive behavior
+- Writing or fixing a component's Storybook stories/docs
 
 **For library development itself**, use the project's own documentation in `src/`, `ARCHITECTURE.md`, `REQUIREMENTS.md`, and `CONTEXT.md`.
 
@@ -119,7 +120,7 @@ Binding helpers connect signals to DOM properties/attributes:
 
 **What kind of task is this?**
 
-1. **Build** — create a new component (TypeScript, HTML, CSS, documentation)
+1. **Build** — create a new component (TypeScript, Storybook render function, CSS, stories/docs)
 2. **Review** — review or extend an existing component
 3. **Debug** — trace broken or unexpected reactive behavior
 
@@ -146,6 +147,7 @@ All references in `references/`:
 | `markup.md` | HTML structure: progressive enhancement, semantic nesting, variants |
 | `styling.md` | CSS: host scoping, nesting, custom properties, variant classes |
 | `documentation.md` | What to document and how: property tables, descendant tables |
+| `storybook.md` | `.stories.ts`/`.html.ts` file split, render-function reuse, Controls conventions, Storybook/React interop (`observedAttributes`, Lit `ChildPart` crash) |
 | `testing.md` | Framework-agnostic testing patterns |
 | `anti-patterns.md` | What to avoid: TypeScript, HTML, CSS, documentation |
 | `accessibility.md` | ARIA roles, native semantics, ARIA APG patterns |
@@ -156,7 +158,7 @@ All references in `references/`:
 
 | Workflow | Purpose |
 |---|---|
-| `workflows/build.md` | Create a new component (all four files) |
+| `workflows/build.md` | Create a new component (`.ts`, `.html.ts`, `.css`, `.stories.ts`, `.mdx`) |
 | `workflows/review.md` | Review or extend an existing component |
 | `workflows/debug.md` | Diagnose and fix unexpected reactive behavior |
 

@@ -1,43 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html, nothing } from "lit";
 import { expect } from "storybook/test";
+import { BasicButton, type BasicButtonArgs } from "./basic-button.html";
 import "./basic-button.ts";
 import "./basic-button.css";
 import type { BasicButtonProps } from "./basic-button.ts";
 
-type BasicButtonArgs = {
-  label: string;
-  badge: string;
-  disabled: boolean;
-  variant:
-    | "primary"
-    | "secondary"
-    | "tertiary"
-    | "constructive"
-    | "destructive";
-  size: "small" | "medium" | "large";
-};
-
-const render = ({ label, badge, disabled, variant, size }: BasicButtonArgs) => {
-  const classes = [
-    variant !== "secondary" ? variant : undefined,
-    size !== "medium" ? size : undefined,
-  ]
-    .filter(Boolean)
-    .join(" ");
-  return html`
-    <basic-button>
-      <button type="button" class=${classes || nothing} ?disabled=${disabled}>
-        <span class="label">${label}</span>
-        <span class="badge">${badge}</span>
-      </button>
-    </basic-button>
-  `;
-};
-
 const meta: Meta<BasicButtonArgs> = {
   title: "Basic/Button",
-  render,
+  render: BasicButton,
   argTypes: {
     label: { control: "text", table: { category: "Reactive Properties" } },
     badge: { control: "text", table: { category: "Reactive Properties" } },
@@ -64,6 +34,13 @@ const meta: Meta<BasicButtonArgs> = {
       options: ["small", "medium", "large"],
       table: { category: "Classes" },
     },
+    content: {
+      control: { type: "select" },
+      options: ["spans", "text"],
+      description:
+        "Whether the button renders `.label`/`.badge` spans (recommended) or plain text — `text` demonstrates the fallback to the button's own text content when the optional spans are absent",
+      table: { category: "Content" },
+    },
   },
 };
 export default meta;
@@ -76,21 +53,21 @@ export const Default: Story = {
     disabled: false,
     variant: "secondary",
     size: "medium",
+    content: "spans",
   },
 };
 
-// ⚠️ Custom render: tests property-driven updates on a button with initial label/badge in DOM.
 // disabled/label/badge are read once from DOM state at connect time — they are no longer
 // attribute-parsed, so post-connect updates go through the property setters only.
 export const DynamicUpdates: Story = {
-  render: () => html`
-    <basic-button>
-      <button type="button">
-        <span class="label">🛒 Shopping Cart</span>
-        <span class="badge">5</span>
-      </button>
-    </basic-button>
-  `,
+  args: {
+    label: "🛒 Shopping Cart",
+    badge: "5",
+    disabled: false,
+    variant: "secondary",
+    size: "medium",
+    content: "spans",
+  },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-button");
     const el = canvasElement.querySelector("basic-button") as HTMLElement &
@@ -124,18 +101,18 @@ export const DynamicUpdates: Story = {
   },
 };
 
-// ⚠️ Custom render: tests that the button's own initial DOM state (disabled attribute,
-// span text content) seeds the reactive properties — host attributes have no effect,
-// since disabled/label/badge are read directly from descendant elements at connect time.
+// disabled attribute and span text content on the button seed the reactive properties —
+// host attributes have no effect, since disabled/label/badge are read directly from
+// descendant elements at connect time.
 export const InitialDomState: Story = {
-  render: () => html`
-    <basic-button>
-      <button type="button" class="destructive" disabled>
-        <span class="label">Delete Item</span>
-        <span class="badge">99</span>
-      </button>
-    </basic-button>
-  `,
+  args: {
+    label: "Delete Item",
+    badge: "99",
+    disabled: true,
+    variant: "destructive",
+    size: "medium",
+    content: "spans",
+  },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-button");
     const el = canvasElement.querySelector("basic-button") as HTMLElement &
@@ -150,16 +127,15 @@ export const InitialDomState: Story = {
   },
 };
 
-// ⚠️ Custom render: tests property assignment on a button with a class not derived from variant/size args
 export const PropertyChanges: Story = {
-  render: () => html`
-    <basic-button>
-      <button type="button" class="large">
-        <span class="label">🛒 Shopping Cart</span>
-        <span class="badge">5</span>
-      </button>
-    </basic-button>
-  `,
+  args: {
+    label: "🛒 Shopping Cart",
+    badge: "5",
+    disabled: false,
+    variant: "secondary",
+    size: "large",
+    content: "spans",
+  },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-button");
     const el = canvasElement.querySelector("basic-button") as HTMLElement &
@@ -180,13 +156,16 @@ export const PropertyChanges: Story = {
   },
 };
 
-// ⚠️ Custom render: tests graceful handling when .label and .badge spans are absent
+// content: "text" tests graceful handling when .label and .badge spans are absent
 export const MissingOptionalElements: Story = {
-  render: () => html`
-    <basic-button>
-      <button type="button" class="small tertiary">Just Button Text</button>
-    </basic-button>
-  `,
+  args: {
+    label: "Just Button Text",
+    badge: "",
+    disabled: false,
+    variant: "tertiary",
+    size: "small",
+    content: "text",
+  },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-button");
     const el = canvasElement.querySelector("basic-button") as HTMLElement &
@@ -201,13 +180,16 @@ export const MissingOptionalElements: Story = {
   },
 };
 
-// ⚠️ Custom render: tests label fallback to button text content when .label span is absent
+// content: "text" tests label fallback to button text content when .label span is absent
 export const TextFallback: Story = {
-  render: () => html`
-    <basic-button>
-      <button type="button" class="primary">Button Text Only</button>
-    </basic-button>
-  `,
+  args: {
+    label: "Button Text Only",
+    badge: "",
+    disabled: false,
+    variant: "primary",
+    size: "medium",
+    content: "text",
+  },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-button");
     const el = canvasElement.querySelector("basic-button") as HTMLElement &
@@ -222,18 +204,17 @@ export const TextFallback: Story = {
   },
 };
 
-// ⚠️ Custom render: tests toggling disabled via property assignment (no attribute parsing
-// applies anymore — disabled is read from the button's own `disabled` property at connect
-// time and set directly via the `disabled` property thereafter).
+// disabled is read from the button's own `disabled` property at connect time and set
+// directly via the `disabled` property thereafter — no attribute parsing applies post-connect.
 export const BooleanToggle: Story = {
-  render: () => html`
-    <basic-button>
-      <button type="button" class="constructive">
-        <span class="label">Boolean Test</span>
-        <span class="badge">Test</span>
-      </button>
-    </basic-button>
-  `,
+  args: {
+    label: "Boolean Test",
+    badge: "Test",
+    disabled: false,
+    variant: "constructive",
+    size: "medium",
+    content: "spans",
+  },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-button");
     const el = canvasElement.querySelector("basic-button") as HTMLElement &

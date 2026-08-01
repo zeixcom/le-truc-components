@@ -1,4 +1,4 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as CardMediaqueriesStories from './card-mediaqueries.stories';
 
 <Meta of={CardMediaqueriesStories} />
@@ -13,7 +13,13 @@ A demo card that displays live media query values received via context. Demonstr
 
 #### Preview
 
-<Canvas of={CardMediaqueriesStories.SideBySide} />
+<Canvas of={CardMediaqueriesStories.WithoutContext} />
+
+#### Controls
+
+<Controls of={CardMediaqueriesStories.WithoutContext} />
+
+See the `WithContext` story for a variant wrapped in a `context-media` provider.
 
 #### Descendant Elements
 
@@ -24,6 +30,7 @@ All descendant elements are optional.
     <tr>
       <th>Selector</th>
       <th>Type</th>
+      <th>Required</th>
       <th>Description</th>
     </tr>
   </thead>
@@ -31,21 +38,25 @@ All descendant elements are optional.
     <tr>
       <td><code>first('.motion')</code></td>
       <td><code>HTMLElement</code></td>
+      <td>optional</td>
       <td>Displays the <code>motion</code> context value</td>
     </tr>
     <tr>
       <td><code>first('.theme')</code></td>
       <td><code>HTMLElement</code></td>
+      <td>optional</td>
       <td>Displays the <code>theme</code> context value</td>
     </tr>
     <tr>
       <td><code>first('.viewport')</code></td>
       <td><code>HTMLElement</code></td>
+      <td>optional</td>
       <td>Displays the <code>viewport</code> context value</td>
     </tr>
     <tr>
       <td><code>first('.orientation')</code></td>
       <td><code>HTMLElement</code></td>
+      <td>optional</td>
       <td>Displays the <code>orientation</code> context value</td>
     </tr>
   </tbody>

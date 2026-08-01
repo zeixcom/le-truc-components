@@ -104,6 +104,7 @@ form-listbox {
       color: var(--color-text-inverted);
     }
 
+    /* biome-ignore lint/style/noDescendingSpecificity: targets [role="option"], unrelated to button.clear above */
     &:hover {
       background: var(--color-selection-hover);
 

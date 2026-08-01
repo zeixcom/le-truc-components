@@ -1,4 +1,4 @@
-import { Meta, Canvas } from "@storybook/addon-docs/blocks";
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
 import * as FormInplaceEditStories from "./form-inplace-edit.stories";
 
 <Meta of={FormInplaceEditStories} />
@@ -14,6 +14,10 @@ A self-contained inline label editor. Wraps a `<span>` (label display) and an ed
 #### Preview
 
 <Canvas of={FormInplaceEditStories.Default} />
+
+#### Controls
+
+<Controls of={FormInplaceEditStories.Default} />
 
 #### Reactive Properties
 
@@ -32,12 +36,6 @@ A self-contained inline label editor. Wraps a `<span>` (label display) and an ed
       <td><code>boolean</code></td>
       <td>Attribute <code>editing</code></td>
       <td>Whether edit mode is currently activated</td>
-    </tr>
-    <tr>
-      <td><code>value</code></td>
-      <td><code>string</code></td>
-      <td>Text content of <code>.text</code></td>
-      <td>Current label value; reactive — set via <code>pass()</code> to keep display in sync with external data</td>
     </tr>
   </tbody>
 </table>

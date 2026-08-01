@@ -1,94 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html } from "lit";
-import { expect, userEvent } from "storybook/test";
+import { expect, spyOn, userEvent } from "storybook/test";
+import { ModuleSplitview } from "./module-splitview.html";
 import "./module-splitview.ts";
 import "./module-splitview.css";
 import "../scrollarea/module-scrollarea.ts";
 import "../scrollarea/module-scrollarea.css";
 
-const render = () => html`
-  <!-- Horizontal split (default) -->
-  <module-splitview id="horizontal-splitview">
-    <module-scrollarea>
-      <div>
-        <p>Left panel</p>
-        <p>Drag the handle or focus it and use arrow keys to resize.</p>
-      </div>
-    </module-scrollarea>
-    <button
-      type="button"
-      class="divider"
-      role="separator"
-      aria-label="Resize panels"
-      aria-orientation="horizontal"
-      aria-valuenow="50"
-      aria-valuemin="10"
-      aria-valuemax="90"
-    ></button>
-    <module-scrollarea>
-      <div>
-        <p>Right panel</p>
-        <p>The proportions are kept when the container is resized.</p>
-      </div>
-    </module-scrollarea>
-  </module-splitview>
-
-  <hr />
-
-  <!-- Pre-set split position via attribute -->
-  <module-splitview id="preset-splitview" split="0.3">
-    <module-scrollarea>
-      <div>
-        <p>Narrow panel (30%)</p>
-      </div>
-    </module-scrollarea>
-    <button
-      type="button"
-      class="divider"
-      role="separator"
-      aria-label="Resize panels"
-      aria-orientation="horizontal"
-      aria-valuenow="30"
-      aria-valuemin="10"
-      aria-valuemax="90"
-    ></button>
-    <module-scrollarea>
-      <div>
-        <p>Wide panel (70%)</p>
-      </div>
-    </module-scrollarea>
-  </module-splitview>
-
-  <hr />
-
-  <!-- Vertical split -->
-  <module-splitview id="vertical-splitview" orientation="vertical">
-    <module-scrollarea>
-      <div>
-        <p>Top panel</p>
-      </div>
-    </module-scrollarea>
-    <button
-      type="button"
-      class="divider"
-      role="separator"
-      aria-label="Resize panels"
-      aria-orientation="vertical"
-      aria-valuenow="50"
-      aria-valuemin="10"
-      aria-valuemax="90"
-    ></button>
-    <module-scrollarea>
-      <div>
-        <p>Bottom panel</p>
-      </div>
-    </module-scrollarea>
-  </module-splitview>
-`;
-
 const meta: Meta = {
   title: "Module/Splitview",
-  render,
+  render: ModuleSplitview,
 };
 export default meta;
 type Story = StoryObj;
@@ -168,6 +88,115 @@ export const KeyboardControlVertical: Story = {
 
     await userEvent.keyboard("{ArrowUp}");
     await expect(host.split).toBeCloseTo(0.5);
+
+    host.split = 0.5;
+  },
+};
+
+export const PointerDrag: Story = {
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("module-splitview");
+    const host = canvasElement.querySelector(
+      "#horizontal-splitview",
+    ) as HTMLElement & { split: number };
+    const divider = host.querySelector<HTMLButtonElement>("button.divider");
+    if (!divider) throw new Error("Missing button.divider");
+
+    const rect = host.getBoundingClientRect();
+    const clientY = rect.top + rect.height / 2;
+    const xForRatio = (ratio: number) => rect.left + ratio * rect.width;
+
+    // Real pointer capture requires an active hardware pointer, which a
+    // synthetic PointerEvent doesn't provide — stub it out so the drag
+    // handlers run without throwing.
+    const captureSpy = spyOn(
+      HTMLElement.prototype,
+      "setPointerCapture",
+    ).mockImplementation(() => {});
+
+    divider.dispatchEvent(
+      new PointerEvent("pointerdown", {
+        pointerId: 1,
+        clientX: xForRatio(0.5),
+        clientY,
+        bubbles: true,
+      }),
+    );
+    divider.dispatchEvent(
+      new PointerEvent("pointermove", {
+        pointerId: 1,
+        clientX: xForRatio(0.7),
+        clientY,
+        bubbles: true,
+      }),
+    );
+    await expect(host.split).toBeCloseTo(0.7, 1);
+    await expect(divider.getAttribute("aria-valuenow")).toBe("70");
+
+    divider.dispatchEvent(
+      new PointerEvent("pointerup", {
+        pointerId: 1,
+        clientX: xForRatio(0.7),
+        clientY,
+        bubbles: true,
+      }),
+    );
+
+    // After pointerup, dragging is false — a further move is a no-op.
+    divider.dispatchEvent(
+      new PointerEvent("pointermove", {
+        pointerId: 1,
+        clientX: xForRatio(0.2),
+        clientY,
+        bubbles: true,
+      }),
+    );
+    await expect(host.split).toBeCloseTo(0.7, 1);
+
+    // lostpointercapture (e.g. the OS steals the pointer) also stops
+    // dragging, distinct from a regular pointerup.
+    divider.dispatchEvent(
+      new PointerEvent("pointerdown", {
+        pointerId: 2,
+        clientX: xForRatio(0.7),
+        clientY,
+        bubbles: true,
+      }),
+    );
+    divider.dispatchEvent(new Event("lostpointercapture", { bubbles: true }));
+    divider.dispatchEvent(
+      new PointerEvent("pointermove", {
+        pointerId: 2,
+        clientX: xForRatio(0.3),
+        clientY,
+        bubbles: true,
+      }),
+    );
+    await expect(host.split).toBeCloseTo(0.7, 1);
+
+    captureSpy.mockRestore();
+
+    // Reset for other stories/tests sharing this DOM.
+    host.split = 0.5;
+  },
+};
+
+export const DirectPropertyAssignment: Story = {
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("module-splitview");
+    const host = canvasElement.querySelector(
+      "#horizontal-splitview",
+    ) as HTMLElement & { split: number };
+    const divider = host.querySelector<HTMLButtonElement>("button.divider");
+    if (!divider) throw new Error("Missing button.divider");
+
+    // Setting `split` as a prop (not via keyboard/pointer) still drives the
+    // CSS var and aria-valuenow watch() effect.
+    host.split = 0.3;
+    await expect(divider.getAttribute("aria-valuenow")).toBe("30");
+    await expect(host.style.getPropertyValue("--module-splitview-ratio")).toBe(
+      "30.00%",
+    );
 
     host.split = 0.5;
   },

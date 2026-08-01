@@ -1,29 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
+import { BasicHello, type BasicHelloArgs } from "./basic-hello.html";
 import "./basic-hello.ts";
 import type { BasicHelloProps } from "./basic-hello.ts";
 
-type BasicHelloArgs = {
-  subject: string;
-};
-
-const render = ({ subject }: BasicHelloArgs) => html`
-  <basic-hello>
-    <label for="hello-subject">Your name</label><br />
-    <input
-      id="hello-subject"
-      name="subject"
-      type="text"
-      autocomplete="given-name"
-    />
-    <p>Hello, <output for="hello-subject">${subject}</output>!</p>
-  </basic-hello>
-`;
-
 const meta: Meta<BasicHelloArgs> = {
   title: "Basic/Hello",
-  render,
+  render: BasicHello,
   argTypes: {
     subject: {
       control: "text",

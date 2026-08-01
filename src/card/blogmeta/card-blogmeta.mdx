@@ -1,11 +1,13 @@
-import { Meta, Canvas } from "@storybook/addon-docs/blocks";
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
 import * as CardBlogmetaStories from "./card-blogmeta.stories";
 
 <Meta of={CardBlogmetaStories} />
 
 ### Card Blogmeta
 
-A component that displays a blogpost meta information: published date, author, and read time.
+A component that displays blogpost meta information: author, published date, optional modified date, and read time. The markup is annotated with [schema.org](https://schema.org/BlogPosting) `author` (`Person`), `datePublished`, `dateModified`, and `timeRequired` properties for search engines and other structured-data consumers.
+
+If no avatar image is provided, a stylized placeholder avatar is shown instead — see the `WithoutAvatar` story.
 
 #### Tag Name
 
@@ -14,3 +16,48 @@ A component that displays a blogpost meta information: published date, author, a
 #### Preview
 
 <Canvas of={CardBlogmetaStories.Default} />
+
+#### Controls
+
+<Controls of={CardBlogmetaStories.Default} />
+
+See the `WithModifiedDate` and `WithoutAvatar` stories for variants.
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('time.published')</code></td>
+      <td><code>HTMLTimeElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Publication date; <code>dateTime</code> attribute formatted via <code>Intl.DateTimeFormat</code> for the active locale</td>
+    </tr>
+    <tr>
+      <td><code>first('.modified time')</code></td>
+      <td><code>HTMLTimeElement</code></td>
+      <td>optional</td>
+      <td>Modification date; <code>dateTime</code> attribute formatted and written as text content</td>
+    </tr>
+    <tr>
+      <td><code>first('span.modified')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Wrapping element for the modified date; removed entirely if the <code>dateTime</code> is invalid</td>
+    </tr>
+    <tr>
+      <td><code>first('.author')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Author container; a stylized placeholder avatar SVG is inserted if no <code>&lt;img&gt;</code> child is present</td>
+    </tr>
+  </tbody>
+</table>

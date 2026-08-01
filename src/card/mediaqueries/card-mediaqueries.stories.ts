@@ -1,34 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html } from "lit";
 import { expect, within } from "storybook/test";
+import { ContextMedia } from "../../context/media/context-media.html";
+import {
+  CardMediaqueries,
+  type CardMediaqueriesArgs,
+} from "./card-mediaqueries.html";
 import "../../context/media/context-media.ts";
 import "./card-mediaqueries.ts";
 
-type CardMediaqueriesArgs = {
-  heading: string;
-};
-
-const cardTemplate = (heading: string) => html`
-  <card-mediaqueries>
-    <h2>${heading}</h2>
-    <dl>
-      <dt>Motion Preference:</dt>
-      <dd class="motion"></dd>
-      <dt>Theme Preference:</dt>
-      <dd class="theme"></dd>
-      <dt>Device Viewport:</dt>
-      <dd class="viewport"></dd>
-      <dt>Device Orientation:</dt>
-      <dd class="orientation"></dd>
-    </dl>
-  </card-mediaqueries>
-`;
-
-const render = ({ heading }: CardMediaqueriesArgs) => cardTemplate(heading);
-
 const meta: Meta<CardMediaqueriesArgs> = {
   title: "Card/Mediaqueries",
-  render,
+  render: CardMediaqueries,
   argTypes: {
     heading: {
       control: "text",
@@ -56,11 +38,15 @@ export const WithoutContext: Story = {
 
 // ⚠️ Custom render: wraps the card inside a context-media provider to test that values are populated
 export const WithContext: Story = {
-  render: () => html`
-    <context-media>
-      ${cardTemplate("With Context")}
-    </context-media>
-  `,
+  args: { heading: "With Context" },
+  render: ({ heading }) =>
+    ContextMedia({
+      sm: "",
+      md: "",
+      lg: "",
+      xl: "",
+      content: CardMediaqueries({ heading }),
+    }),
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("context-media");
     await customElements.whenDefined("card-mediaqueries");
@@ -83,14 +69,4 @@ export const WithContext: Story = {
     await expect(canvas.getByText(/xs|sm|md|lg|xl/)).toBeVisible();
     await expect(canvas.getByText(/portrait|landscape/)).toBeVisible();
   },
-};
-
-// ⚠️ Custom render: renders two cards simultaneously — one inside context-media, one outside — to compare outputs
-export const SideBySide: Story = {
-  render: () => html`
-    <context-media>
-      ${cardTemplate("With Context")}
-    </context-media>
-    ${cardTemplate("Without Context (fallback)")}
-  `,
 };

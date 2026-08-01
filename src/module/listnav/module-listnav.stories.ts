@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html } from "lit";
 import { expect, userEvent, waitFor, within } from "storybook/test";
+import { ModuleListnav } from "./module-listnav.html";
 import "./module-listnav.ts";
 import "./module-listnav.css";
 import "../../form/listbox/form-listbox.ts";
@@ -10,48 +10,25 @@ import "../../card/callout/card-callout.css";
 
 const meta: Meta = {
   title: "Module/Listnav",
+  render: ModuleListnav,
 };
 export default meta;
 type Story = StoryObj;
 
 export const Default: Story = {
-  render: () => html`
-    <module-listnav>
-      <nav>
-        <h2 id="listnav-label" class="visually-hidden">Pages</h2>
-        <form-listbox value="./pages/page1.html">
-          <input type="hidden" name="page" />
-          <div role="listbox" aria-labelledby="listnav-label">
-            <div role="group" aria-labelledby="listnav-section1">
-              <div role="presentation" id="listnav-section1">Getting Started</div>
-              <button type="button" role="option" tabindex="0" value="./pages/page1.html" aria-selected="true">Page 1</button>
-              <button type="button" role="option" tabindex="-1" value="./pages/page2.html">Page 2</button>
-              <button type="button" role="option" tabindex="-1" value="./pages/page3.html">Page 3</button>
-            </div>
-            <div role="group" aria-labelledby="listnav-section2">
-              <div role="presentation" id="listnav-section2">More Pages</div>
-              <button type="button" role="option" tabindex="-1" value="./pages/page4.html">Page 4</button>
-              <button type="button" role="option" tabindex="-1" value="./pages/page5.html">Page 5</button>
-            </div>
-          </div>
-        </form-listbox>
-      </nav>
-      <module-lazyload>
-        <card-callout>
-          <p class="loading" role="status">Loading...</p>
-          <p class="error" role="alert" aria-live="assertive" hidden></p>
-        </card-callout>
-        <div class="content" hidden></div>
-      </module-lazyload>
-    </module-listnav>
-  `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-listnav");
     await customElements.whenDefined("form-listbox");
     const canvas = within(canvasElement);
-    const listbox = canvasElement.querySelector("form-listbox") as HTMLElement & {
+    const listbox = canvasElement.querySelector(
+      "form-listbox",
+    ) as HTMLElement & {
       value: string;
+      filter: string;
     };
+    const lazyload = canvasElement.querySelector(
+      "module-lazyload",
+    ) as HTMLElement & { src: string };
 
     // Initial selection is synced to the hash on connect.
     await waitFor(() => expect(location.hash).toBe("#page1"));
@@ -61,15 +38,47 @@ export const Default: Story = {
     await expect(listbox.value).toBe("./pages/page2.html");
     await waitFor(() => expect(location.hash).toBe("#page2"));
 
+    // module-lazyload receives its src via pass(lazyload, { src: () => listbox.value }).
+    await expect(lazyload.src).toBe("./pages/page2.html");
+
     // Simulating browser back/forward (hashchange) updates the selection.
     history.replaceState(null, "", "#page4");
     window.dispatchEvent(new HashChangeEvent("hashchange"));
     await waitFor(() => expect(listbox.value).toBe("./pages/page4.html"));
+    await expect(lazyload.src).toBe("./pages/page4.html");
 
     // Unknown hash: no matching option, selection stays put.
     history.replaceState(null, "", "#does-not-exist");
     window.dispatchEvent(new HashChangeEvent("hashchange"));
     await expect(listbox.value).toBe("./pages/page4.html");
+
+    history.replaceState(null, "", `${location.pathname}${location.search}`);
+  },
+};
+
+export const FilterResetOnHashChange: Story = {
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("module-listnav");
+    await customElements.whenDefined("form-listbox");
+    const listbox = canvasElement.querySelector(
+      "form-listbox",
+    ) as HTMLElement & {
+      value: string;
+      filter: string;
+    };
+
+    await waitFor(() => expect(location.hash).toBe("#page1"));
+
+    // A filter typed into the listbox must not survive a hash-driven
+    // selection change (browser back/forward) — it's cleared in the same
+    // batch as the value update.
+    listbox.filter = "page";
+    await expect(listbox.filter).toBe("page");
+
+    history.replaceState(null, "", "#page3");
+    window.dispatchEvent(new HashChangeEvent("hashchange"));
+    await waitFor(() => expect(listbox.value).toBe("./pages/page3.html"));
+    await expect(listbox.filter).toBe("");
 
     history.replaceState(null, "", `${location.pathname}${location.search}`);
   },

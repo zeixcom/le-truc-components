@@ -21,6 +21,29 @@ None. Filtering is implemented as local state inside the component (not an expos
 
 #### Descendant Elements
 
-Card content is generated server-side by the `{% cem-list %}` Markdoc tag, one `card-collapsible` per custom-element declaration in the manifest, with tabs for whichever of Fields / Methods / Attributes / CSS Properties / CSS Parts / Slots are non-empty.
+Card content is generated server-side by the `{% cem-list %}` Markdoc tag, one `card-collapsible` per custom-element declaration in the manifest.
 
-An optional `form-textbox` descendant (name `filter`) filters the cards live as you type: each keystroke is matched as a case-insensitive substring against every card's full text content (name, tag name, description, and members), so a search term can match on any of those.
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('form-textbox')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Filter input (name <code>filter</code>); each keystroke is matched as a case-insensitive substring against every card's full text content (name, tag name, description, and members)</td>
+    </tr>
+    <tr>
+      <td><code>all('card-collapsible')</code></td>
+      <td><code>HTMLElement[]</code></td>
+      <td>optional</td>
+      <td>One per custom-element declaration; hidden when it does not match the current filter</td>
+    </tr>
+  </tbody>
+</table>

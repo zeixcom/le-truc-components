@@ -1,6 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import { expect, spyOn, userEvent, waitFor, within } from "storybook/test";
+import {
+  ModuleCodeblock,
+  type ModuleCodeblockArgs,
+  sampleCode,
+} from "./module-codeblock.html";
 import "../../basic/button/basic-button.ts";
 import "../../basic/button/basic-button.css";
 import "../../module/scrollarea/module-scrollarea.ts";
@@ -10,35 +15,9 @@ import "./module-codeblock.css";
 import type { BasicButtonProps } from "../../basic/button/basic-button.ts";
 import type { ModuleCodeblockProps } from "./module-codeblock.ts";
 
-type ModuleCodeblockArgs = {
-  collapsed: boolean;
-};
-
-const sampleCode = `function greet(name) {
-  return \`Hello, \${name}!\`;
-}
-
-console.log(greet("World"));`;
-
-const render = ({ collapsed }: ModuleCodeblockArgs) => html`
-  <module-codeblock ?collapsed=${collapsed}>
-    <module-scrollarea orientation="horizontal">
-      <pre><code class="language-js">${sampleCode}</code></pre>
-    </module-scrollarea>
-    <basic-button class="copy" copy-success="Copied!" copy-error="Error!">
-      <button type="button" class="secondary small">
-        <span class="label">Copy</span>
-      </button>
-    </basic-button>
-    <button type="button" class="overlay" aria-expanded=${collapsed ? "false" : "true"}>
-      Expand
-    </button>
-  </module-codeblock>
-`;
-
 const meta: Meta<ModuleCodeblockArgs> = {
   title: "Module/Codeblock",
-  render,
+  render: ModuleCodeblock,
   argTypes: {
     collapsed: {
       control: "boolean",

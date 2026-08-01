@@ -1,4 +1,4 @@
-import { Meta, Canvas } from "@storybook/addon-docs/blocks";
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
 import * as ModuleColorinfoStories from "./module-colorinfo.stories";
 
 <Meta of={ModuleColorinfoStories} />
@@ -15,6 +15,10 @@ An expandable color swatch with OKLCH, hex, RGB, and HSL details.
 
 <Canvas of={ModuleColorinfoStories.Default} />
 
+#### Controls
+
+<Controls of={ModuleColorinfoStories.Default} />
+
 #### Reactive Properties
 
 <table>
@@ -28,57 +32,45 @@ An expandable color swatch with OKLCH, hex, RGB, and HSL details.
   </thead>
   <tbody>
     <tr>
-      <td><code>name</code></td>
-      <td><code>string</code></td>
-      <td>Text content of <code>.label strong</code></td>
-      <td>Display name of the color</td>
-    </tr>
-    <tr>
-      <td><code>color</code></td>
-      <td><code>Oklch</code></td>
-      <td><code>asOklch()</code> — parsed from <code>color</code> attribute</td>
-      <td>The color to display</td>
-    </tr>
-    <tr>
       <td><code>css</code></td>
       <td><code>string</code> (readonly)</td>
-      <td>Derived from <code>color</code></td>
+      <td>Derived from <code>value</code></td>
       <td>CSS <code>oklch(…)</code> string</td>
     </tr>
     <tr>
       <td><code>hex</code></td>
       <td><code>string</code> (readonly)</td>
-      <td>Derived from <code>color</code></td>
+      <td>Derived from <code>value</code></td>
       <td>Hex color string (e.g. <code>#7a6ab2</code>)</td>
     </tr>
     <tr>
       <td><code>rgb</code></td>
       <td><code>string</code> (readonly)</td>
-      <td>Derived from <code>color</code></td>
+      <td>Derived from <code>value</code></td>
       <td>CSS <code>rgb(…)</code> string</td>
     </tr>
     <tr>
       <td><code>hsl</code></td>
       <td><code>string</code> (readonly)</td>
-      <td>Derived from <code>color</code></td>
+      <td>Derived from <code>value</code></td>
       <td>CSS <code>hsl(…)</code> string</td>
     </tr>
     <tr>
       <td><code>lightness</code></td>
       <td><code>number</code> (readonly)</td>
-      <td>Derived from <code>color.l</code></td>
+      <td>Derived from <code>value.l</code></td>
       <td>Lightness component (0–1)</td>
     </tr>
     <tr>
       <td><code>chroma</code></td>
       <td><code>number</code> (readonly)</td>
-      <td>Derived from <code>color.c</code></td>
+      <td>Derived from <code>value.c</code></td>
       <td>Chroma component</td>
     </tr>
     <tr>
       <td><code>hue</code></td>
       <td><code>number</code> (readonly)</td>
-      <td>Derived from <code>color.h</code></td>
+      <td>Derived from <code>value.h</code></td>
       <td>Hue angle in degrees</td>
     </tr>
   </tbody>
@@ -100,7 +92,7 @@ An expandable color swatch with OKLCH, hex, RGB, and HSL details.
       <td><code>first('.label strong')</code></td>
       <td><code>HTMLElement</code></td>
       <td><strong>required</strong></td>
-      <td>Displays the color name; bound to <code>name</code></td>
+      <td>Displays the color name; bound to <code>label</code></td>
     </tr>
     <tr>
       <td><code>first('.hex')</code></td>

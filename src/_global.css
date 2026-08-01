@@ -486,7 +486,6 @@ a[href] {
   }
 }
 
-[aria-hidden="true"],
 [hidden] {
   /* biome-ignore lint/complexity/noImportantStyles: trumps all */
   display: none !important;

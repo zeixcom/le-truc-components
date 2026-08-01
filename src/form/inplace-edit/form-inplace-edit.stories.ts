@@ -1,26 +1,38 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
+import {
+  FormInplaceEdit,
+  type FormInplaceEditArgs,
+} from "./form-inplace-edit.html";
 import "./form-inplace-edit.ts";
 import "./form-inplace-edit.css";
 import "../textbox/form-textbox.ts";
 import "../textbox/form-textbox.css";
 
-const render = () => html`
-  <form-inplace-edit name="label">
-    <span class="text">Edit me</span>
-    <button type="button" aria-label="Edit">✎</button>
-  </form-inplace-edit>
-`;
-
-const meta: Meta = {
+const meta: Meta<FormInplaceEditArgs> = {
   title: "Form/Inplace Edit",
-  render,
+  render: FormInplaceEdit,
+  argTypes: {
+    name: {
+      control: "text",
+      description: "Form field name",
+      table: { category: "Attributes" },
+    },
+    value: {
+      control: "text",
+      description: "Current text value — text content of .text at connect time",
+      table: { category: "Reactive Properties" },
+    },
+  },
 };
 export default meta;
-type Story = StoryObj;
+type Story = StoryObj<FormInplaceEditArgs>;
 
 export const Default: Story = {
+  args: {
+    name: "label",
+    value: "Edit me",
+  },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-inplace-edit");
     const canvas = within(canvasElement);

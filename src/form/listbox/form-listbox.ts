@@ -9,6 +9,7 @@ import {
   escapeHTML,
   type FormAssociatedElement,
   formAssociated,
+  observedAttributes,
   schedule,
 } from "@zeix/le-truc";
 import {
@@ -275,5 +276,5 @@ export default defineComponent<FormListboxProps>(
 
     if (clearBtn) watch(lowerFilter, bindVisible(clearBtn));
   },
-  [formAssociated()],
+  [formAssociated(), observedAttributes(["src"])],
 );

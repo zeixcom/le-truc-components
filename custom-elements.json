@@ -423,7 +423,7 @@
           "customElement": true,
           "tagName": "card-blogmeta",
           "name": "CardBlogmeta",
-          "description": "Formats and displays publication and modification dates from `<time>` element `datetime` attributes.\nUse it for blog post or article metadata — the displayed dates update when the\nunderlying `datetime` attributes change.\nThe `datetime` values must be valid date strings; missing attributes are skipped.\nThe host element should contain `<time class=\"published\">` and `<time class=\"modified\">` elements.",
+          "description": "Formats and displays publication and modification dates from `<time>` element `datetime` attributes.\nUse it for blog post or article metadata — the displayed dates update when the\nunderlying `datetime` attributes change.\nThe `datetime` values must be valid date strings; missing attributes are skipped.\nThe host element should contain `<time class=\"published\">` and `<time class=\"modified\">` elements.\nIf `.author` has no `<img>` child, a stylized placeholder avatar is inserted.",
           "demos": [
             {
               "url": "https://zeixcom.github.io/le-truc/examples.html#card-blogmeta",
@@ -575,11 +575,11 @@
           "customElement": true,
           "tagName": "card-colorscale",
           "name": "CardColorscale",
-          "description": "A color scale card that displays a named Oklch color with a full set of lightness steps.\nUse it for previewing a color palette — provides lightness tints and shades\nfor when you need to evaluate contrast and accessibility of a base color.\nThe `color` attribute must be a valid Oklch color string.",
+          "description": "A color scale card that displays a named color with a full set of lightness steps.\nUse it for previewing a color palette — provides lightness tints and shades\nfor when you need to evaluate contrast and accessibility of a base color.\nThe `value` attribute accepts any valid CSS color string (hex, named, `rgb()`,\n`hsl()`, `oklch()`, etc.) and is parsed internally into Oklch via `asOklch`.",
           "members": [
             {
               "kind": "field",
-              "name": "name",
+              "name": "label",
               "type": {
                 "text": "string"
               },
@@ -587,11 +587,11 @@
             },
             {
               "kind": "field",
-              "name": "color",
+              "name": "value",
               "type": {
                 "text": "Oklch"
               },
-              "description": "Base color in Oklch format. Read from the `color` attribute at connect time."
+              "description": "Base color in Oklch format. Parsed from the `value` attribute at connect time."
             }
           ],
           "cssProperties": [
@@ -2812,23 +2812,23 @@
           "customElement": true,
           "tagName": "module-coloreditor",
           "name": "ModuleColoreditor",
-          "description": "An interactive color editor with Oklch input, named color lookup, and a full lightness scale preview.\nUse it for exploring and selecting colors — provides form inputs for Oklch channels\nand should be paired with `module-colorinfo` for full color detail display.\nThe `color` attribute must be a valid Oklch color string; out-of-gamut values are clamped.",
+          "description": "An interactive color editor with Oklch input, named color lookup, and a full lightness scale preview.\nUse it for exploring and selecting colors — provides form inputs for Oklch channels\nand should be paired with `module-colorinfo` for full color detail display.\nThe `value` attribute accepts any valid CSS color string; out-of-gamut values are clamped.",
           "members": [
             {
               "kind": "field",
-              "name": "color",
+              "name": "value",
               "type": {
                 "text": "Oklch"
               },
-              "description": "Current color in Oklch format. Read from the `color` attribute at connect time."
+              "description": "Current color in Oklch format. Parsed from the `value` attribute at connect time."
             },
             {
               "kind": "field",
-              "name": "name",
+              "name": "label",
               "type": {
                 "text": "string"
               },
-              "description": "Display name for the color. Read from the `name` attribute at connect time (default: \"Blue\")."
+              "description": "Display name for the color. Read from the `label` attribute at connect time (default: \"Blue\")."
             },
             {
               "kind": "field",
@@ -2865,8 +2865,8 @@
           ],
           "attributes": [
             {
-              "name": "name",
-              "fieldName": "name",
+              "name": "label",
+              "fieldName": "label",
               "type": {
                 "text": "string"
               },
@@ -2909,11 +2909,11 @@
           "customElement": true,
           "tagName": "module-colorinfo",
           "name": "ModuleColorinfo",
-          "description": "Displays detailed color information (CSS, HEX, RGB, HSL, Oklch channels) for a given color.\nUse it for inspecting a color's various representations — useful when you need\nto evaluate contrast for accessibility or copy a specific format.\nThe `color` attribute must be a valid Oklch color string.",
+          "description": "Displays detailed color information (CSS, HEX, RGB, HSL, Oklch channels) for a given color.\nUse it for inspecting a color's various representations — useful when you need\nto evaluate contrast for accessibility or copy a specific format.\nThe `value` attribute accepts any valid CSS color string and is parsed\ninternally into Oklch via `asOklch`.",
           "members": [
             {
               "kind": "field",
-              "name": "name",
+              "name": "label",
               "type": {
                 "text": "string"
               },
@@ -2921,11 +2921,11 @@
             },
             {
               "kind": "field",
-              "name": "color",
+              "name": "value",
               "type": {
                 "text": "Oklch"
               },
-              "description": "Color value in Oklch format. Read from the `color` attribute at connect time."
+              "description": "Color value in Oklch format. Parsed from the `value` attribute at connect time."
             },
             {
               "kind": "field",
@@ -2933,7 +2933,7 @@
               "type": {
                 "text": "string"
               },
-              "description": "CSS color string derived from `color` (read-only, computed)."
+              "description": "CSS color string derived from `value` (read-only, computed)."
             },
             {
               "kind": "field",
@@ -2941,7 +2941,7 @@
               "type": {
                 "text": "string"
               },
-              "description": "Hex color string derived from `color` (read-only, computed)."
+              "description": "Hex color string derived from `value` (read-only, computed)."
             },
             {
               "kind": "field",
@@ -2949,7 +2949,7 @@
               "type": {
                 "text": "string"
               },
-              "description": "RGB color string derived from `color` (read-only, computed)."
+              "description": "RGB color string derived from `value` (read-only, computed)."
             },
             {
               "kind": "field",
@@ -2957,7 +2957,7 @@
               "type": {
                 "text": "string"
               },
-              "description": "HSL color string derived from `color` (read-only, computed)."
+              "description": "HSL color string derived from `value` (read-only, computed)."
             },
             {
               "kind": "field",
@@ -2965,7 +2965,7 @@
               "type": {
                 "text": "number"
               },
-              "description": "Lightness channel of `color` (read-only, computed)."
+              "description": "Lightness channel of `value` (read-only, computed)."
             },
             {
               "kind": "field",
@@ -2973,7 +2973,7 @@
               "type": {
                 "text": "number"
               },
-              "description": "Chroma channel of `color` (read-only, computed)."
+              "description": "Chroma channel of `value` (read-only, computed)."
             },
             {
               "kind": "field",
@@ -2981,7 +2981,7 @@
               "type": {
                 "text": "number"
               },
-              "description": "Hue channel of `color` (read-only, computed)."
+              "description": "Hue channel of `value` (read-only, computed)."
             }
           ],
           "cssProperties": [
@@ -3592,6 +3592,64 @@
           "declaration": {
             "name": "anonymous_5",
             "module": "src/main.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/_common/storyArgs.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "toISODate",
+          "return": {
+            "type": {
+              "text": "string"
+            }
+          },
+          "parameters": [
+            {
+              "name": "timestamp",
+              "type": {
+                "text": "number"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "timestamp",
+          "return": {
+            "type": {
+              "text": "number"
+            }
+          },
+          "parameters": [
+            {
+              "name": "isoDate",
+              "type": {
+                "text": "string"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "toISODate",
+          "declaration": {
+            "name": "toISODate",
+            "module": "src/_common/storyArgs.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "timestamp",
+          "declaration": {
+            "name": "timestamp",
+            "module": "src/_common/storyArgs.ts"
           }
         }
       ]

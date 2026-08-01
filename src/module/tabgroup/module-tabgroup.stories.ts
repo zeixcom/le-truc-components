@@ -1,29 +1,19 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
+import { ModuleTabgroup } from "./module-tabgroup.html";
 import "./module-tabgroup.ts";
 import "./module-tabgroup.css";
 import type { ModuleTabgroupProps } from "./module-tabgroup.ts";
 
 const meta: Meta = {
   title: "Module/Tabgroup",
+  render: ModuleTabgroup,
 };
 export default meta;
 type Story = StoryObj;
 
 export const Default: Story = {
-  render: () => html`
-    <module-tabgroup>
-      <div role="tablist">
-        <button type="button" role="tab" aria-controls="panel1" aria-selected="true" tabindex="0">Tab 1</button>
-        <button type="button" role="tab" aria-controls="panel2" aria-selected="false" tabindex="-1">Tab 2</button>
-        <button type="button" role="tab" aria-controls="panel3" aria-selected="false" tabindex="-1">Tab 3</button>
-      </div>
-      <div role="tabpanel" id="panel1">Tab 1 content</div>
-      <div role="tabpanel" id="panel2" hidden>Tab 2 content</div>
-      <div role="tabpanel" id="panel3" hidden>Tab 3 content</div>
-    </module-tabgroup>
-  `,
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("module-tabgroup");
     const el = canvasElement.querySelector("module-tabgroup") as HTMLElement &
@@ -33,6 +23,7 @@ export const Default: Story = {
   },
 };
 
+// ⚠️ Custom render: uses distinct panel labels (Settings/Profile/Security) to test click-driven selection
 export const TabNavigation: Story = {
   render: () => html`
     <module-tabgroup>
@@ -71,6 +62,7 @@ export const TabNavigation: Story = {
   },
 };
 
+// ⚠️ Custom render: pre-selects the second tab (aria-selected/tabindex) to test initial selection from markup
 export const SecondTabInitial: Story = {
   render: () => html`
     <module-tabgroup>
@@ -93,6 +85,7 @@ export const SecondTabInitial: Story = {
   },
 };
 
+// ⚠️ Custom render: uses First/Second/Third tabs to test keyboard roving tabindex
 export const KeyboardNavigation: Story = {
   render: () => html`
     <module-tabgroup>

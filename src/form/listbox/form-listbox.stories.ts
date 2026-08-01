@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html, nothing } from "lit";
 import { expect, userEvent, waitFor, within } from "storybook/test";
+import { FormListbox, type FormListboxArgs } from "./form-listbox.html";
 import "../../card/callout/card-callout.css";
 import "../../module/scrollarea/module-scrollarea.ts";
 import "../../module/scrollarea/module-scrollarea.css";
@@ -9,29 +10,9 @@ import "./form-listbox.css";
 import type { FormAssociatedElement } from "@zeix/le-truc";
 import type { FormListboxProps } from "./form-listbox.ts";
 
-type FormListboxArgs = {
-  value: string;
-  filter: string;
-  src: string;
-};
-
-const render = ({ value }: FormListboxArgs) => html`
-  <form>
-    <form-listbox id="colors" name="color">
-      <div role="listbox" aria-label="Colors">
-        <button type="button" role="option" tabindex="-1" value="red" aria-selected=${value === "red" ? "true" : nothing}>Red</button>
-        <button type="button" role="option" tabindex="-1" value="green" aria-selected=${value === "green" ? "true" : nothing}>Green</button>
-        <button type="button" role="option" tabindex="-1" value="blue" aria-selected=${value === "blue" ? "true" : nothing}>Blue</button>
-        <button type="button" role="option" tabindex="-1" value="yellow" aria-selected=${value === "yellow" ? "true" : nothing}>Yellow</button>
-        <button type="button" role="option" tabindex="-1" value="purple" aria-selected=${value === "purple" ? "true" : nothing}>Purple</button>
-      </div>
-    </form-listbox>
-  </form>
-`;
-
 const meta: Meta<FormListboxArgs> = {
   title: "Form/Listbox",
-  render,
+  render: FormListbox,
   argTypes: {
     value: {
       control: "text",
@@ -145,6 +126,9 @@ export const WithGroups: Story = {
 };
 
 export const KeyboardNavigation: Story = {
+  // ⚠️ Custom render: distinct option set (vegetables) from the default
+  // fruit options, needed to exercise wrap-around/Home/End navigation
+  // without colliding with other stories' option values.
   render: () => html`
     <form>
       <form-listbox id="veggies" name="veggie">
@@ -162,7 +146,9 @@ export const KeyboardNavigation: Story = {
     const el = canvasElement.querySelector("form-listbox") as HTMLElement &
       FormAssociatedElement &
       FormListboxProps;
-    const listbox = canvasElement.querySelector('[role="listbox"]') as HTMLElement;
+    const listbox = canvasElement.querySelector(
+      '[role="listbox"]',
+    ) as HTMLElement;
     const carrot = canvas.getByRole("option", { name: "Carrot" });
     const potato = canvas.getByRole("option", { name: "Potato" });
     const onion = canvas.getByRole("option", { name: "Onion" });
@@ -194,7 +180,9 @@ export const KeyboardNavigation: Story = {
     await expect(el.value).toBe("onion");
 
     // Unrelated key on the listbox: no change.
-    listbox.dispatchEvent(new KeyboardEvent("keydown", { key: "a", bubbles: true }));
+    listbox.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "a", bubbles: true }),
+    );
     await expect(el.value).toBe("onion");
   },
 };

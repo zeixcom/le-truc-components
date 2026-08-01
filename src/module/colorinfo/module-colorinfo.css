@@ -73,17 +73,6 @@ module-colorinfo {
     margin-left: var(--space-l);
   }
 
-  & dl {
-    margin: 0 0 var(--space-s);
-    display: inline-grid;
-    grid-template-rows: auto auto;
-    gap: var(--space-xxs) var(--space-xs);
-
-    &:last-of-type dt {
-      display: none;
-    }
-  }
-
   & dt {
     grid-column: 1;
     color: var(--color-text-soft);
@@ -100,5 +89,16 @@ module-colorinfo {
     margin: 0;
     font-size: var(--font-size-s);
     line-height: var(--line-height-s);
+  }
+
+  & dl {
+    margin: 0 0 var(--space-s);
+    display: inline-grid;
+    grid-template-rows: auto auto;
+    gap: var(--space-xxs) var(--space-xs);
+
+    &:last-of-type dt {
+      display: none;
+    }
   }
 }

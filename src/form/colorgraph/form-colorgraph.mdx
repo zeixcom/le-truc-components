@@ -1,4 +1,4 @@
-import { Meta, Canvas } from "@storybook/addon-docs/blocks";
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
 import * as FormColorgraphStories from "./form-colorgraph.stories";
 
 <Meta of={FormColorgraphStories} />
@@ -15,6 +15,10 @@ An interactive OKLCH color picker combining a 2D lightness/chroma graph, a hue s
 
 <Canvas of={FormColorgraphStories.Default} />
 
+#### Controls
+
+<Controls of={FormColorgraphStories.Default} />
+
 #### Reactive Properties
 
 <table>
@@ -27,12 +31,6 @@ An interactive OKLCH color picker combining a 2D lightness/chroma graph, a hue s
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td><code>value</code></td>
-      <td><code>string</code></td>
-      <td><code>asString('oklch(0.48 0.23 263)')</code> — parsed from <code>value</code> attribute</td>
-      <td>The selected color as a CSS string (e.g. <code>oklch(0.48 0.23 263)</code>). Form value.</td>
-    </tr>
     <tr>
       <td><code>lightness</code></td>
       <td><code>number</code> (readonly)</td>

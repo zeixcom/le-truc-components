@@ -6,6 +6,7 @@
 - `references/component-model.md` — factory form, reactivity flow, signal types
 - `references/markup.md` — HTML structure, progressive enhancement
 - `references/styling.md` — CSS scoping, custom properties, variants
+- `references/storybook.md` — file layout, render-function conventions, Storybook/React interop pitfalls
 - `references/documentation.md` — what to document and how
 
 Read `references/effects.md` and `references/parsers.md` as you write TypeScript.
@@ -89,43 +90,34 @@ export default defineComponent<MyComponentProps>(
 
 ---
 
-## Step 3: Write HTML (`.html`)
+## Step 3: Write the Storybook Render Function (`.html.ts`)
 
-Provide multiple representative examples:
+**Required reading:** `references/storybook.md` — file layout, render-function conventions, the Lit `ChildPart` interop crash, and `observedAttributes()`.
 
-```html
-<!-- Default state -->
-<my-component>
-  <button type="button"><span class="label">Click me</span></button>
-</my-component>
+```typescript
+// my-component.html.ts
+import { html, nothing } from 'lit'
 
-<hr />
+export type MyComponentArgs = {
+  label: string
+  disabled: boolean
+  variant: 'none' | 'primary'
+}
 
-<!-- Disabled state -->
-<my-component disabled>
-  <button type="button" disabled><span class="label">Disabled</span></button>
-</my-component>
-
-<hr />
-
-<!-- Variant -->
-<my-component class="primary">
-  <button type="button"><span class="label">Primary action</span></button>
-</my-component>
-```
-
-Parsers in `expose()` read attributes at connect time:
-```html
-<my-component disabled label="Disabled">
-  <button type="button" disabled><span class="label">Disabled</span></button>
-</my-component>
+export const MyComponent = ({ label, disabled, variant }: MyComponentArgs) => html`
+  <my-component class=${variant !== 'none' ? variant : nothing} ?disabled=${disabled}>
+    <button type="button" ?disabled=${disabled}><span class="label">${label}</span></button>
+  </my-component>
+`
 ```
 
 **Rules:**
-- Valid, functional HTML before JavaScript runs (progressive enhancement)
-- Use native semantic elements inside custom element
-- Include at least one instance per meaningful state/variant
-- Separate examples with `<hr />`
+- Valid, functional markup — this is what Storybook mounts before/alongside the component's own JS (progressive enhancement in miniature)
+- Use native semantic elements inside the custom element
+- Args cover every meaningful state/variant combination the component supports
+- Export the render function under a capitalized name (not the tag name) and export its `Args` type — both may be imported by other components' `.html.ts` files
+- No Storybook imports here, and no `import "./my-component.ts"` / `.css` side effects — those belong in `.stories.ts`
+- If a prop's dynamic value lands in an element's own child text (`<span>${label}</span>`) *and* the component also writes that text via `bindText`/`textContent`, the component needs `bindText(el, true)` (or `setTextPreservingComments`) — see `references/storybook.md`
 
 ---
 
@@ -156,9 +148,43 @@ my-component {
 
 ---
 
-## Step 5: Write Documentation (`.md`)
+## Step 5: Write the Stories File (`.stories.ts`) and Docs (`.mdx`)
 
-```markdown
+```typescript
+// my-component.stories.ts
+import type { Meta, StoryObj } from '@storybook/web-components'
+import { MyComponent, type MyComponentArgs } from './my-component.html'
+import './my-component.ts'
+import './my-component.css'
+
+const meta: Meta<MyComponentArgs> = {
+  title: 'Category/MyComponent',
+  render: MyComponent,
+  argTypes: {
+    label: { control: 'text', table: { category: 'Reactive Properties' } },
+    disabled: { control: 'boolean', table: { category: 'Reactive Properties' } },
+    variant: {
+      control: { type: 'select' },
+      options: ['none', 'primary'],
+      table: { category: 'Classes' },
+    },
+  },
+}
+export default meta
+type Story = StoryObj<MyComponentArgs>
+
+export const Default: Story = {
+  args: { label: 'Click me', disabled: false, variant: 'none' },
+}
+```
+
+```mdx
+{/* my-component.mdx */}
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as MyComponentStories from './my-component.stories'
+
+<Meta of={MyComponentStories} />
+
 ### My Component
 
 One paragraph describing what the component does and which patterns it demonstrates.
@@ -167,24 +193,13 @@ One paragraph describing what the component does and which patterns it demonstra
 
 `my-component`
 
-#### Reactive Properties
+#### Preview
 
-| Name | Type | Default | Description |
-|---|---|---|---|
-| `disabled` | `boolean` | `false` | Whether the button is disabled |
-| `label` | `string` | `''` | Button label text |
+<Canvas of={MyComponentStories.Default} />
 
-#### Attributes
+#### Controls
 
-| Name | Description |
-|---|---|
-| `disabled` | Boolean attribute; presence sets `disabled` to `true` (read at connect time) |
-
-#### CSS Classes
-
-| Class | Description |
-|---|---|
-| `primary` | Applies primary action styling |
+<Controls of={MyComponentStories.Default} />
 
 #### Descendant Elements
 
@@ -194,7 +209,7 @@ One paragraph describing what the component does and which patterns it demonstra
 | `first('span.label')` | `HTMLSpanElement` | required | Displays the label text |
 ```
 
-See `references/documentation.md` for required sections.
+See `references/storybook.md` for the render-function/CSF split and control conventions, and `references/documentation.md` for the table formats (used both inside `<Controls>`-adjacent hand-written tables and as the source of truth for what each control needs to say).
 
 ---
 
@@ -209,7 +224,8 @@ If no tests exist, follow `references/testing.md`.
 ## Success Criteria
 
 - TypeScript: no type errors; all imports resolve; `Props` type explicit; `defineComponent` generic matches
-- HTML: valid markup; works before JS; covers all states/variants
+- `.html.ts`: valid markup; works before JS; covers all states/variants; no Storybook imports; exported render function + `Args` type
+- `.stories.ts`: pure CSF (no non-CSF exports needing `excludeStories`); controls grouped by category; genuine custom renders marked with `// ⚠️ Custom render: <reason>`
 - CSS: all rules scoped to host; custom properties for design tokens; no hardcoded values
-- Docs: all required tables present; accurate types/defaults; Attributes section if using parsers
+- `.mdx`: all required tables/`<Controls>` present; accurate types/defaults; Attributes section if using parsers
 - Project test suite passes

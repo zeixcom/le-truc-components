@@ -1,23 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
+import { BasicCounter, type BasicCounterArgs } from "./basic-counter.html";
 import "./basic-counter.ts";
 import "./basic-counter.css";
 import type { BasicCounterProps } from "./basic-counter.ts";
 
-type BasicCounterArgs = {
-  count: number;
-};
-
-const render = ({ count }: BasicCounterArgs) => html`
-  <basic-counter>
-    <button type="button">💐 <span>${count}</span></button>
-  </basic-counter>
-`;
-
 const meta: Meta<BasicCounterArgs> = {
   title: "Basic/Counter",
-  render,
+  render: BasicCounter,
   argTypes: {
     count: {
       control: "number",

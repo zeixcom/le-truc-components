@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
+import { FormCombobox, type FormComboboxArgs } from "./form-combobox.html";
 import "../listbox/form-listbox.ts";
 import "../listbox/form-listbox.css";
 import "../../card/callout/card-callout.css";
@@ -11,43 +12,17 @@ import "./form-combobox.css";
 import type { FormAssociatedElement } from "@zeix/le-truc";
 import type { FormComboboxProps } from "./form-combobox.ts";
 
-type FormComboboxArgs = {
-  description: string;
-};
-
-const render = ({ description }: FormComboboxArgs) => html`
-  <form-combobox>
-    <label for="color-input" id="color-label">Favourite color</label>
-    <div class="input">
-      <input
-        id="color-input"
-        type="text"
-        name="color"
-        role="combobox"
-        aria-expanded="false"
-        aria-controls="color-popup"
-        aria-autocomplete="list"
-        autocomplete="off"
-      />
-      <form-listbox id="color-popup">
-        <div role="listbox" aria-labelledby="color-label">
-          <button type="button" role="option" tabindex="-1" value="red">Red</button>
-          <button type="button" role="option" tabindex="-1" value="green">Green</button>
-          <button type="button" role="option" tabindex="-1" value="blue">Blue</button>
-          <button type="button" role="option" tabindex="-1" value="yellow">Yellow</button>
-          <button type="button" role="option" tabindex="-1" value="purple">Purple</button>
-        </div>
-      </form-listbox>
-    </div>
-    <p class="error" role="alert" aria-live="assertive" id="color-error"></p>
-    <p class="description" aria-live="polite" id="color-description">${description}</p>
-  </form-combobox>
-`;
-
 const meta: Meta<FormComboboxArgs> = {
   title: "Form/Combobox",
-  render,
+  render: FormCombobox,
   argTypes: {
+    value: {
+      control: "text",
+      table: {
+        defaultValue: { summary: "''" },
+        category: "Reactive Properties",
+      },
+    },
     description: {
       control: "text",
       table: {
@@ -62,7 +37,73 @@ type Story = StoryObj<FormComboboxArgs>;
 
 export const Default: Story = {
   args: {
+    value: "",
     description: "Choose your favourite color.",
+  },
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("form-combobox");
+    const canvas = within(canvasElement);
+    const el = canvasElement.querySelector("form-combobox") as HTMLElement &
+      FormAssociatedElement &
+      FormComboboxProps;
+    const input = canvas.getByRole("combobox");
+
+    await expect(el.length).toBe(0);
+    await expect(input).toHaveAttribute("aria-expanded", "false");
+
+    await userEvent.type(input, "red");
+    await expect(el.length).toBe(3);
+    await expect(input).toHaveAttribute("aria-expanded", "true");
+
+    // Selecting an option from the popup syncs value, closes the popup, and
+    // refocuses the textbox — driven by the listbox's own `change` event.
+    await userEvent.click(canvas.getByRole("option", { name: "Red" }));
+    await expect(el.value).toBe("red");
+    await expect(input).toHaveAttribute("aria-expanded", "false");
+    await expect(input).toHaveFocus();
+  },
+};
+
+export const KeyboardInteraction: Story = {
+  args: {
+    value: "",
+    description: "Choose your favourite color.",
+  },
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("form-combobox");
+    const canvas = within(canvasElement);
+    const el = canvasElement.querySelector("form-combobox") as HTMLElement &
+      FormAssociatedElement &
+      FormComboboxProps;
+    const input = canvas.getByRole("combobox");
+
+    input.focus();
+    // Alt+ArrowDown opens the popup; since all options are already present
+    // (empty filter), the popup is immediately expanded and the same
+    // keydown moves focus onto the first option.
+    await userEvent.keyboard("{Alt>}{ArrowDown}{/Alt}");
+    await expect(input).toHaveAttribute("aria-expanded", "true");
+    await expect(canvas.getByRole("option", { name: "Red" })).toHaveFocus();
+
+    // Escape closes the popup and refocuses the textbox.
+    input.focus();
+    await userEvent.keyboard("{Escape}");
+    await expect(input).toHaveAttribute("aria-expanded", "false");
+    await expect(input).toHaveFocus();
+
+    // Plain ArrowDown (while the popup is already open from typing) moves
+    // focus onto the first option.
+    await userEvent.type(input, "red");
+    await expect(input).toHaveAttribute("aria-expanded", "true");
+    await userEvent.keyboard("{ArrowDown}");
+    await expect(canvas.getByRole("option", { name: "Red" })).toHaveFocus();
+
+    // Delete on the host clears the value (shortcut, distinct from the
+    // clear-button click path already covered in WithClear).
+    input.focus();
+    await userEvent.keyboard("{Delete}");
+    await expect(el.value).toBe("");
+    await expect(input).toHaveValue("");
   },
 };
 

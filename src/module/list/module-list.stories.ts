@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
+import { ModuleList } from "./module-list.html";
 import "./module-list.ts";
 import "./module-list.css";
 import "../../basic/button/basic-button.ts";
@@ -8,37 +9,9 @@ import "../../basic/button/basic-button.css";
 import "../../form/textbox/form-textbox.ts";
 import "../../form/textbox/form-textbox.css";
 
-const render = () => html`
-  <module-list>
-    <form action="#">
-      <form-textbox>
-        <label for="new-item-input">New item</label>
-        <div class="input">
-          <input type="text" id="new-item-input" name="new-item" autocomplete="off" />
-          <button type="button" class="clear" aria-label="Clear input" hidden>✕</button>
-        </div>
-      </form-textbox>
-      <basic-button class="submit">
-        <button type="submit" class="constructive" disabled>
-          <span class="label">Add</span>
-        </button>
-      </basic-button>
-    </form>
-    <ul data-container></ul>
-    <template>
-      <li>
-        <span><slot></slot></span>
-        <basic-button class="remove">
-          <button type="button" class="tertiary destructive small">Remove</button>
-        </basic-button>
-      </li>
-    </template>
-  </module-list>
-`;
-
 const meta: Meta = {
   title: "Module/List",
-  render,
+  render: ModuleList,
 };
 export default meta;
 type Story = StoryObj;

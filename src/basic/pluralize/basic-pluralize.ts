@@ -3,6 +3,7 @@ import {
   bindText,
   bindVisible,
   defineComponent,
+  observedAttributes,
 } from "@zeix/le-truc";
 import { getLocale } from "../../_common/getLocale";
 
@@ -57,4 +58,7 @@ export default defineComponent<BasicPluralizeProps>(
         );
     }
   },
+  // Storybook uses React which updates attributes instead of properties
+  // Remove if you don't need that interoperability layer
+  [observedAttributes(["count"])],
 );

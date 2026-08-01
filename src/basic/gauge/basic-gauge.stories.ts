@@ -1,61 +1,78 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html } from "lit";
 import { expect } from "storybook/test";
+import { BasicGauge, type BasicGaugeArgs } from "./basic-gauge.html";
 import "./basic-gauge.ts";
 import "./basic-gauge.css";
 import "../number/basic-number.ts";
+import type { BasicGaugeProps } from "./basic-gauge.ts";
 
-const thresholds = JSON.stringify([
+const defaultThresholds = JSON.stringify([
   { min: 0.8, label: "Good job!", color: "var(--color-green-70)" },
   { min: 0.5, label: "Decent", color: "var(--color-orange-70)" },
   { min: 0, label: "Try again!", color: "var(--color-pink-70)" },
 ]);
 
-const gauge = (value: number, labelText: string, id: string) => html`
-  <basic-gauge thresholds=${thresholds}>
-    <p id=${id}>Speed:</p>
-    <meter
-      class="visually-hidden"
-      value=${value}
-      aria-labelledby=${id}
-    ></meter>
-    <basic-number
-      value=${value}
-      options='{"style":"percent","maximumFractionDigits":1}'
-      >${(value * 100).toFixed(value < 0.21 ? 2 : 0)}%</basic-number
-    >
-    <small class="label">${labelText}</small>
-  </basic-gauge>
-`;
-
-const render = () => html`
-  ${gauge(0.84, "Good job!", "basic-gauge-label-1")}
-  ${gauge(0.65, "Decent", "basic-gauge-label-2")}
-  ${gauge(0.20566788, "Try again!", "basic-gauge-label-3")}
-`;
-
-const meta: Meta = {
+const meta: Meta<BasicGaugeArgs> = {
   title: "Basic/Gauge",
-  render,
+  render: BasicGauge,
+  argTypes: {
+    value: {
+      control: "number",
+      table: {
+        defaultValue: { summary: "0" },
+        category: "Reactive Properties",
+      },
+    },
+    thresholds: {
+      control: "text",
+      description:
+        "JSON array of threshold ranges, sorted from highest to lowest <code>min</code>; each entry has <code>min</code> (number), <code>label</code> (string) and <code>color</code> (CSS color string)",
+      table: { category: "Attributes" },
+    },
+  },
 };
 export default meta;
-type Story = StoryObj;
+type Story = StoryObj<BasicGaugeArgs>;
 
 export const Default: Story = {
+  args: {
+    value: 0.84,
+    thresholds: defaultThresholds,
+  },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("basic-gauge");
-    const gauges = canvasElement.querySelectorAll("basic-gauge");
-    // Threshold labels are derived from the value.
-    await expect(gauges[0]?.querySelector(".label")?.textContent).toBe(
-      "Good job!",
-    );
-    await expect(gauges[2]?.querySelector(".label")?.textContent).toBe(
-      "Try again!",
-    );
+    const el = canvasElement.querySelector("basic-gauge") as HTMLElement &
+      BasicGaugeProps;
+
+    // Threshold label is derived from the value.
+    await expect(el.querySelector(".label")?.textContent).toBe("Good job!");
+
     // Setting the value property updates the label reactively.
-    (gauges[0] as any).value = 0.1;
-    await expect(gauges[0]?.querySelector(".label")?.textContent).toBe(
-      "Try again!",
-    );
+    el.value = 0.1;
+    await expect(el.querySelector(".label")?.textContent).toBe("Try again!");
+  },
+};
+
+export const Decent: Story = {
+  args: {
+    value: 0.65,
+    thresholds: defaultThresholds,
+  },
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("basic-gauge");
+    const el = canvasElement.querySelector("basic-gauge");
+    await expect(el?.querySelector(".label")?.textContent).toBe("Decent");
+  },
+};
+
+export const TryAgain: Story = {
+  args: {
+    value: 0.20566788,
+    thresholds: defaultThresholds,
+  },
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("basic-gauge");
+    const el = canvasElement.querySelector("basic-gauge");
+    await expect(el?.querySelector(".label")?.textContent).toBe("Try again!");
   },
 };

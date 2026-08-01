@@ -1,41 +1,18 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, fireEvent, userEvent, within } from "storybook/test";
+import {
+  FormSpinbutton,
+  type FormSpinbuttonArgs,
+} from "./form-spinbutton.html";
 import "./form-spinbutton.ts";
 import "./form-spinbutton.css";
 import type { FormAssociatedElement } from "@zeix/le-truc";
 import type { FormSpinbuttonProps } from "./form-spinbutton.ts";
 
-type FormSpinbuttonArgs = {
-  value: number;
-  max: number;
-};
-
-const render = ({ value, max }: FormSpinbuttonArgs) => html`
-  <form-spinbutton>
-    <button type="button" class="decrement" aria-label="Decrement" ?hidden=${value === 0}>−</button>
-    <input
-      type="number"
-      class="value"
-      name="amount"
-      value=${value}
-      min="0"
-      max=${max}
-      aria-label="Quantity"
-      readonly
-      disabled
-      ?hidden=${value === 0}
-    />
-    <button type="button" class="increment" aria-label="Increment">
-      <span class="zero" ?hidden=${value !== 0}>Add to Cart</span>
-      <span class="other" ?hidden=${value === 0}>+</span>
-    </button>
-  </form-spinbutton>
-`;
-
 const meta: Meta<FormSpinbuttonArgs> = {
   title: "Form/Spinbutton",
-  render,
+  render: FormSpinbutton,
   argTypes: {
     value: {
       control: "number",
@@ -196,5 +173,109 @@ export const PropertyChanges: Story = {
 
     el.value = 0;
     await expect(input).not.toBeVisible();
+  },
+};
+
+export const DecrementAtZero: Story = {
+  args: { value: 0, max: 5 },
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("form-spinbutton");
+    const canvas = within(canvasElement);
+    const el = canvasElement.querySelector("form-spinbutton") as HTMLElement &
+      FormAssociatedElement &
+      FormSpinbuttonProps;
+
+    // At value 0 the decrement button is hidden, but the shared keydown
+    // handler on `controls` still clamps at the lower bound — exercise it
+    // via the (always-visible) increment button.
+    const addToCart = canvas.getByLabelText("Add to Cart");
+    addToCart.focus();
+    await userEvent.keyboard("{ArrowDown}");
+    await expect(el.value).toBe(0);
+    await userEvent.keyboard("-");
+    await expect(el.value).toBe(0);
+  },
+};
+
+export const MaxChangesPostConnect: Story = {
+  args: { value: 5, max: 5 },
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("form-spinbutton");
+    const el = canvasElement.querySelector("form-spinbutton") as HTMLElement &
+      FormAssociatedElement &
+      FormSpinbuttonProps;
+    const input = el.querySelector("input.value") as HTMLInputElement;
+    const increment = el.querySelector("button.increment") as HTMLElement;
+
+    await expect(el.value).toBe(5);
+    await expect(input).toHaveAttribute("max", "5");
+    await expect(increment).toBeDisabled();
+    await expect(el.validity.rangeOverflow).toBe(false);
+
+    el.max = 10;
+    await expect(input).toHaveAttribute("max", "10");
+    await expect(increment).not.toBeDisabled();
+
+    // Existing value is untouched by a widening max — no auto re-clamp.
+    await expect(el.value).toBe(5);
+
+    // A narrowing max below the current value trips rangeOverflow, mirroring
+    // Validity's direct-value-assignment check but from the max side.
+    el.max = 3;
+    await expect(el.validity.rangeOverflow).toBe(true);
+    await expect(el.validationMessage).toBe("Value must be 3 or less");
+  },
+};
+
+// ⚠️ Custom render: the default markup's input is readonly + disabled (value
+// only changes via buttons/keyboard). This story uses an editable input to
+// exercise the on(controls, 'change') native-change-event path.
+export const DirectInputChange: Story = {
+  render: () => html`
+    <form-spinbutton>
+      <button type="button" class="decrement" aria-label="Decrement">−</button>
+      <input
+        type="number"
+        class="value"
+        name="amount"
+        value="3"
+        min="0"
+        max="5"
+        aria-label="Quantity"
+      />
+      <button type="button" class="increment" aria-label="Increment">
+        <span class="other">+</span>
+      </button>
+    </form-spinbutton>
+  `,
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("form-spinbutton");
+    const canvas = within(canvasElement);
+    const el = canvasElement.querySelector("form-spinbutton") as HTMLElement &
+      FormAssociatedElement &
+      FormSpinbuttonProps;
+    const input = canvas.getByLabelText("Quantity") as HTMLInputElement;
+
+    await expect(el.value).toBe(3);
+
+    // Typing a value in range and firing a native change commits it.
+    await userEvent.clear(input);
+    await userEvent.type(input, "4");
+    await fireEvent.change(input);
+    await expect(el.value).toBe(4);
+
+    // Out-of-range: change event clamps both the input and host.value.
+    await userEvent.clear(input);
+    await userEvent.type(input, "9");
+    await fireEvent.change(input);
+    await expect(el.value).toBe(5);
+    await expect(input).toHaveValue(5);
+
+    // Non-integer input reverts the input's displayed value to host.value,
+    // without changing host.value itself.
+    input.value = "2.5";
+    await fireEvent.change(input);
+    await expect(el.value).toBe(5);
+    await expect(input).toHaveValue(5);
   },
 };

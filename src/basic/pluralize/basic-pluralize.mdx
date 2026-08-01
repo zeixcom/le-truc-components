@@ -21,50 +21,70 @@ A locale-aware pluralisation component driven by `Intl.PluralRules`. Demonstrate
 
 #### Descendant Elements
 
-All descendant elements are optional. Any `HTMLElement` with one of the following classes will receive the corresponding effect.
+All descendant elements are optional — each is guarded with `if (element)` before its effect is attached.
 
 <table>
   <thead>
     <tr>
       <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
       <th>Description</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><code>first('.count')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
       <td>Displays the current count value</td>
     </tr>
     <tr>
       <td><code>first('.none')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
       <td>Shown when <code>count === 0</code></td>
     </tr>
     <tr>
       <td><code>first('.some')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
       <td>Shown when <code>count &gt; 0</code></td>
     </tr>
     <tr>
       <td><code>first('.zero')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
       <td>Shown when count matches the <code>zero</code> plural category</td>
     </tr>
     <tr>
       <td><code>first('.one')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
       <td>Shown when count matches the <code>one</code> plural category</td>
     </tr>
     <tr>
       <td><code>first('.two')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
       <td>Shown when count matches the <code>two</code> plural category</td>
     </tr>
     <tr>
       <td><code>first('.few')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
       <td>Shown when count matches the <code>few</code> plural category</td>
     </tr>
     <tr>
       <td><code>first('.many')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
       <td>Shown when count matches the <code>many</code> plural category</td>
     </tr>
     <tr>
       <td><code>first('.other')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
       <td>Shown when count matches the <code>other</code> plural category</td>
     </tr>
   </tbody>

@@ -1,0 +1,77 @@
+import { html } from "lit";
+
+// Exported so other components' stories can embed a todo instance via
+// ${ModuleTodo()} instead of duplicating its markup.
+export const ModuleTodo = () => html`
+  <module-todo>
+    <form action="#">
+      <form-textbox>
+        <label for="add-todo">What needs to be done?</label>
+        <div class="input">
+          <input id="add-todo" type="text" value="" />
+          <button type="button" class="clear" aria-label="Clear input" hidden>✕</button>
+        </div>
+      </form-textbox>
+      <basic-button class="submit">
+        <button type="submit" class="constructive" disabled>
+          <span class="label">Add Todo</span>
+        </button>
+      </basic-button>
+    </form>
+    <span role="status" class="visually-hidden"></span>
+    <ol data-container></ol>
+    <template>
+      <li>
+        <button type="button" class="reorder" aria-label="Drag to reorder" aria-pressed="false">
+          ≡
+        </button>
+        <form-checkbox class="todo">
+          <input type="checkbox" class="visually-hidden" />
+          <form-inplace-edit>
+            <label class="label text"><slot></slot></label>
+            <button type="button" aria-label="Edit">✎</button>
+          </form-inplace-edit>
+        </form-checkbox>
+        <basic-button class="remove">
+          <button type="button" class="tertiary destructive small" aria-label="Remove">
+            <span class="label">✕</span>
+          </button>
+        </basic-button>
+      </li>
+    </template>
+    <footer>
+      <basic-pluralize>
+        <p class="none">Well done, all done!</p>
+        <p class="some">
+          <span class="count"></span>
+          <span class="one"> task</span>
+          <span class="other"> tasks</span>
+          remaining
+        </p>
+      </basic-pluralize>
+      <form-radiogroup value="all" class="split-button">
+        <fieldset>
+          <legend class="visually-hidden">Filter</legend>
+          <label class="selected">
+            <input type="radio" class="visually-hidden" name="filter" value="all" checked />
+            <span>All</span>
+          </label>
+          <label>
+            <input type="radio" class="visually-hidden" name="filter" value="active" />
+            <span>Active</span>
+          </label>
+          <label>
+            <input type="radio" class="visually-hidden" name="filter" value="completed" />
+            <span>Completed</span>
+          </label>
+        </fieldset>
+      </form-radiogroup>
+      <basic-button class="clear-completed">
+        <button type="button" class="tertiary destructive">
+          <span class="label">Clear Completed</span>
+          <span class="badge"></span>
+        </button>
+      </basic-button>
+    </footer>
+  </module-todo>
+`;

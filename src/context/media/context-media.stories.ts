@@ -1,46 +1,21 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html, nothing } from "lit";
+import { html } from "lit";
 import { expect, within } from "storybook/test";
-import "./context-media.ts";
+import { CardMediaqueries } from "../../card/mediaqueries/card-mediaqueries.html";
+import { ContextMedia, type ContextMediaArgs } from "./context-media.html";
 import "../../card/mediaqueries/card-mediaqueries.ts";
-
-type ContextMediaArgs = {
-  sm: string;
-  md: string;
-  lg: string;
-  xl: string;
-};
-
-const consumerTemplate = () => html`
-  <card-mediaqueries>
-    <h2>With Context</h2>
-    <dl>
-      <dt>Motion Preference:</dt>
-      <dd class="motion"></dd>
-      <dt>Theme Preference:</dt>
-      <dd class="theme"></dd>
-      <dt>Device Viewport:</dt>
-      <dd class="viewport"></dd>
-      <dt>Device Orientation:</dt>
-      <dd class="orientation"></dd>
-    </dl>
-  </card-mediaqueries>
-`;
-
-const render = ({ sm, md, lg, xl }: ContextMediaArgs) => html`
-  <context-media
-    sm=${sm || nothing}
-    md=${md || nothing}
-    lg=${lg || nothing}
-    xl=${xl || nothing}
-  >
-    ${consumerTemplate()}
-  </context-media>
-`;
+import "./context-media.ts";
 
 const meta: Meta<ContextMediaArgs> = {
   title: "Context/Media",
-  render,
+  render: ({ sm, md, lg, xl }) =>
+    ContextMedia({
+      sm,
+      md,
+      lg,
+      xl,
+      content: CardMediaqueries({ heading: "With Context" }),
+    }),
   argTypes: {
     sm: {
       control: "text",
@@ -104,7 +79,7 @@ export const CustomBreakpoints: Story = {
   },
 };
 
-// ⚠️ Custom render: renders two card-mediaqueries consumers inside the same provider to verify both receive context values
+// ⚠️ Custom render: two differently-structured consumers (partial field subsets), not a prop variation of CardMediaqueries
 export const MultipleConsumers: Story = {
   render: () => html`
     <context-media>

@@ -1,4 +1,4 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as ModuleScrollareaStories from './module-scrollarea.stories';
 
 <Meta of={ModuleScrollareaStories} />
@@ -14,6 +14,31 @@ Detects and reflects scroll overflow state as custom `:state()` pseudo-classes. 
 #### Preview
 
 <Canvas of={ModuleScrollareaStories.Default} />
+
+#### Controls
+
+<Controls of={ModuleScrollareaStories.Default} />
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>host.firstElementChild</code></td>
+      <td><code>Element</code></td>
+      <td><strong>required</strong></td>
+      <td>The scrollable content; observed with <code>IntersectionObserver</code> to detect overflow. The component does nothing if absent.</td>
+    </tr>
+  </tbody>
+</table>
 
 #### Attributes
 

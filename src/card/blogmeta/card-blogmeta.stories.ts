@@ -1,45 +1,83 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html } from "lit";
+import { expect } from "storybook/test";
+import { timestamp } from "../../_common/storyArgs";
+import {
+  blogmetaArgTypes,
+  CardBlogmeta,
+  type CardBlogmetaArgs,
+} from "./card-blogmeta.html";
 import "./card-blogmeta.ts";
 import "./card-blogmeta.css";
 
-const avatar =
-  "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64'><rect width='64' height='64' rx='32' fill='%23667'/></svg>";
-
-const render = () => html`
-  <card-blogmeta>
-    <span>
-      <img src=${avatar} alt="Avatar of Esther Brunner" />
-      <span>Esther Brunner</span>
-    </span>
-    <time class="published" datetime="2026-03-09">2026-03-09</time>
-    <span>5 min read</span>
-  </card-blogmeta>
-
-  <br />
-
-  <card-blogmeta>
-    <span>
-      <img src=${avatar} alt="Avatar of Esther Brunner" />
-      <span>Esther Brunner</span>
-    </span>
-    <span>
-      <time class="published" datetime="2026-04-04">2026-04-04</time>
-      <span class="modified">
-        · updated on <time datetime="2026-04-08">2026-04-08</time>
-      </span>
-    </span>
-    <span>7 min read</span>
-  </card-blogmeta>
-`;
-
-const meta: Meta = {
+const meta: Meta<CardBlogmetaArgs> = {
   title: "Card/Blogmeta",
-  render,
+  render: CardBlogmeta,
+  argTypes: blogmetaArgTypes,
 };
 export default meta;
-type Story = StoryObj;
+type Story = StoryObj<CardBlogmetaArgs>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    author: "Esther Brunner",
+    avatarSrc:
+      "https://zeixcom.github.io/le-truc/assets/img/avatar/esther-brunner.jpg",
+    datePublished: timestamp("2026-03-09"),
+    dateModified: 0,
+    timeRequired: 5,
+    lang: "",
+  },
+};
 
-export const WithModifiedDate: Story = {};
+export const WithModifiedDate: Story = {
+  args: {
+    author: "Esther Brunner",
+    avatarSrc:
+      "https://zeixcom.github.io/le-truc/assets/img/avatar/esther-brunner.jpg",
+    datePublished: timestamp("2026-04-04"),
+    dateModified: timestamp("2026-04-08"),
+    timeRequired: 7,
+    lang: "",
+  },
+};
+
+// No avatarSrc: card-blogmeta falls back to a stylized inline SVG placeholder avatar
+export const WithoutAvatar: Story = {
+  args: {
+    author: "Anonymous Contributor",
+    avatarSrc: "",
+    datePublished: timestamp("2026-05-12"),
+    dateModified: 0,
+    timeRequired: 3,
+    lang: "",
+  },
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("card-blogmeta");
+    const el = canvasElement.querySelector("card-blogmeta");
+    await expect(el?.querySelector(".author img")).not.toBeInTheDocument();
+    await expect(el?.querySelector(".author svg.avatar")).toBeInTheDocument();
+  },
+};
+
+// lang="de": dates are formatted per German locale conventions (e.g. "9. März 2026")
+export const GermanLocale: Story = {
+  args: {
+    author: "Esther Brunner",
+    avatarSrc:
+      "https://zeixcom.github.io/le-truc/assets/img/avatar/esther-brunner.jpg",
+    datePublished: timestamp("2026-03-09"),
+    dateModified: 0,
+    timeRequired: 5,
+    lang: "de",
+  },
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("card-blogmeta");
+    const el = canvasElement.querySelector("card-blogmeta");
+    const expected = new Intl.DateTimeFormat("de", {
+      dateStyle: "long",
+    }).format(new Date(2026, 2, 9));
+    await expect(el?.querySelector("time.published")).toHaveTextContent(
+      expected,
+    );
+  },
+};

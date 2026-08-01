@@ -55,26 +55,26 @@ A live market data table that updates at 10 ms intervals, demonstrating Le Truc'
   </thead>
   <tbody>
     <tr>
-      <td><code>basic-button.toggle</code></td>
+      <td><code>first('basic-button.toggle')</code></td>
       <td><code>HTMLElement</code></td>
       <td>optional</td>
       <td>Button that toggles <code>running</code>; text is set to "Pause" or "Resume" reactively</td>
     </tr>
     <tr>
-      <td><code>basic-button.add-rows</code></td>
+      <td><code>first('basic-button.add-rows')</code></td>
       <td><code>HTMLElement</code></td>
       <td>optional</td>
       <td>Button that appends a block of new rows</td>
     </tr>
     <tr>
-      <td><code>template</code></td>
+      <td><code>first('template')</code></td>
       <td><code>HTMLTemplateElement</code></td>
       <td>optional</td>
       <td>Row template used for materializing virtualized blocks and adding new rows</td>
     </tr>
     <tr>
-      <td><code>tr[data-symbol]</code></td>
-      <td><code>HTMLTableRowElement</code></td>
+      <td><code>all('tr[data-symbol]')</code></td>
+      <td><code>HTMLTableRowElement[]</code></td>
       <td>required</td>
       <td>One row per ticker symbol; must contain <code>.price</code>, <code>.change</code>, and <code>.volume</code> cells</td>
     </tr>

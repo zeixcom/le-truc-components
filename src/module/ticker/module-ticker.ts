@@ -234,7 +234,14 @@ export default defineComponent<ModuleTickerProps>(
         return (price - open) / open;
       });
 
-      watch(() => priceFormat.format(item.get().price), bindText(priceEl));
+      // preserveComments: module-ticker.html.ts renders this <td>'s text via
+      // a lit-html expression; the default (non-preserving) write would
+      // eject Lit's ChildPart marker comments and break re-renders driven
+      // by Controls.
+      watch(
+        () => priceFormat.format(item.get().price),
+        bindText(priceEl, true),
+      );
       watch(() => changeFormat.format(changeMemo.get()), bindText(changeEl));
       watch(
         () => {
