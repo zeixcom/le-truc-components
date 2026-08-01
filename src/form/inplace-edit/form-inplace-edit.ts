@@ -87,7 +87,11 @@ export default defineComponent<FormInplaceEditProps>(
       host.editing = false;
     });
 
-    watch("value", bindText(textEl));
+    // preserveComments: the Storybook story interpolates this element's
+    // content via a lit-html expression; the default (non-preserving) write
+    // would eject Lit's ChildPart marker comments and break re-renders
+    // driven by Controls.
+    watch("value", bindText(textEl, true));
     watch("editing", (editing) => {
       host.toggleAttribute("editing", editing);
       if (editing) {

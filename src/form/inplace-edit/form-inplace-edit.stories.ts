@@ -6,21 +6,46 @@ import "./form-inplace-edit.css";
 import "../textbox/form-textbox.ts";
 import "../textbox/form-textbox.css";
 
-const render = () => html`
-  <form-inplace-edit name="label">
-    <span class="text">Edit me</span>
+type FormInplaceEditArgs = {
+  name: string;
+  value: string;
+};
+
+// Exported so other components' stories can embed an inplace-edit instance
+// via ${InplaceEdit(args)} instead of duplicating its markup.
+export const InplaceEdit = ({ name, value }: FormInplaceEditArgs) => html`
+  <form-inplace-edit name=${name}>
+    <span class="text">${value}</span>
     <button type="button" aria-label="Edit">✎</button>
   </form-inplace-edit>
 `;
 
-const meta: Meta = {
+const meta: Meta<FormInplaceEditArgs> = {
   title: "Form/Inplace Edit",
-  render,
+  render: InplaceEdit,
+  // InplaceEdit is exported for reuse by other stories files, not a story itself.
+  excludeStories: /^InplaceEdit$/,
+  argTypes: {
+    name: {
+      control: "text",
+      description: "Form field name",
+      table: { category: "Attributes" },
+    },
+    value: {
+      control: "text",
+      description: "Current text value — text content of .text at connect time",
+      table: { category: "Reactive Properties" },
+    },
+  },
 };
 export default meta;
-type Story = StoryObj;
+type Story = StoryObj<FormInplaceEditArgs>;
 
 export const Default: Story = {
+  args: {
+    name: "label",
+    value: "Edit me",
+  },
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("form-inplace-edit");
     const canvas = within(canvasElement);
