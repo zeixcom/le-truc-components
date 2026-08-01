@@ -40,6 +40,71 @@ export const Default: Story = {
     value: "",
     description: "Choose your favourite color.",
   },
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("form-combobox");
+    const canvas = within(canvasElement);
+    const el = canvasElement.querySelector("form-combobox") as HTMLElement &
+      FormAssociatedElement &
+      FormComboboxProps;
+    const input = canvas.getByRole("combobox");
+
+    await expect(el.length).toBe(0);
+    await expect(input).toHaveAttribute("aria-expanded", "false");
+
+    await userEvent.type(input, "red");
+    await expect(el.length).toBe(3);
+    await expect(input).toHaveAttribute("aria-expanded", "true");
+
+    // Selecting an option from the popup syncs value, closes the popup, and
+    // refocuses the textbox — driven by the listbox's own `change` event.
+    await userEvent.click(canvas.getByRole("option", { name: "Red" }));
+    await expect(el.value).toBe("red");
+    await expect(input).toHaveAttribute("aria-expanded", "false");
+    await expect(input).toHaveFocus();
+  },
+};
+
+export const KeyboardInteraction: Story = {
+  args: {
+    value: "",
+    description: "Choose your favourite color.",
+  },
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("form-combobox");
+    const canvas = within(canvasElement);
+    const el = canvasElement.querySelector("form-combobox") as HTMLElement &
+      FormAssociatedElement &
+      FormComboboxProps;
+    const input = canvas.getByRole("combobox");
+
+    input.focus();
+    // Alt+ArrowDown opens the popup; since all options are already present
+    // (empty filter), the popup is immediately expanded and the same
+    // keydown moves focus onto the first option.
+    await userEvent.keyboard("{Alt>}{ArrowDown}{/Alt}");
+    await expect(input).toHaveAttribute("aria-expanded", "true");
+    await expect(canvas.getByRole("option", { name: "Red" })).toHaveFocus();
+
+    // Escape closes the popup and refocuses the textbox.
+    input.focus();
+    await userEvent.keyboard("{Escape}");
+    await expect(input).toHaveAttribute("aria-expanded", "false");
+    await expect(input).toHaveFocus();
+
+    // Plain ArrowDown (while the popup is already open from typing) moves
+    // focus onto the first option.
+    await userEvent.type(input, "red");
+    await expect(input).toHaveAttribute("aria-expanded", "true");
+    await userEvent.keyboard("{ArrowDown}");
+    await expect(canvas.getByRole("option", { name: "Red" })).toHaveFocus();
+
+    // Delete on the host clears the value (shortcut, distinct from the
+    // clear-button click path already covered in WithClear).
+    input.focus();
+    await userEvent.keyboard("{Delete}");
+    await expect(el.value).toBe("");
+    await expect(input).toHaveValue("");
+  },
 };
 
 // ⚠️ Custom render: uses a different field (fruit) with clearable attribute and a clear button in the input wrapper
