@@ -26,7 +26,6 @@ form-checkbox {
     &::before {
       display: inline-block;
       box-sizing: border-box;
-      /* biome-ignore lint/suspicious/noIrregularWhitespace: fix-to ensure same line-height */
       content: " ";
       text-align: center;
       width: var(--space-l);
@@ -74,7 +73,6 @@ form-checkbox {
     &::before {
       display: inline-block;
       box-sizing: border-box;
-      /* biome-ignore lint/suspicious/noIrregularWhitespace: fix-to ensure same line-height */
       content: " ";
       text-align: center;
       width: var(--space-l);
@@ -129,7 +127,6 @@ form-checkbox {
       display: inline-block;
       flex-shrink: 0;
       box-sizing: border-box;
-      /* biome-ignore lint/suspicious/noIrregularWhitespace: fix-to ensure same line-height */
       content: " ";
       width: calc(var(--space-l) * 2);
       height: var(--space-l);

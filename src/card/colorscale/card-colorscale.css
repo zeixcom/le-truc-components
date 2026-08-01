@@ -60,6 +60,21 @@ card-colorscale {
     margin: 0;
   }
 
+  & strong {
+    display: block;
+    color: var(--card-colorscale-color-text);
+    font-size: 15cqi;
+    font-weight: 700;
+  }
+
+  /* biome-ignore lint/style/noDescendingSpecificity: .label small in &.small intentionally overrides this via higher specificity */
+  & small {
+    display: block;
+    color: var(--card-colorscale-color-text-soft);
+    font-size: 10cqi;
+    font-weight: 400;
+  }
+
   .lighten80 {
     grid-area: lighten80;
     background: var(--card-colorscale-color-lighten80);
@@ -104,20 +119,6 @@ card-colorscale {
     align-items: flex-start;
     padding: var(--card-colorscale-padding);
     line-height: 1;
-  }
-
-  & strong {
-    display: block;
-    color: var(--card-colorscale-color-text);
-    font-size: 15cqi;
-    font-weight: 700;
-  }
-
-  & small {
-    display: block;
-    color: var(--card-colorscale-color-text-soft);
-    font-size: 10cqi;
-    font-weight: 400;
   }
 }
 
