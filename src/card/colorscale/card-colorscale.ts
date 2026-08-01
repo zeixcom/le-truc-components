@@ -1,4 +1,8 @@
-import { bindText, defineComponent } from "@zeix/le-truc";
+import {
+  bindText,
+  defineComponent,
+  setTextPreservingComments,
+} from "@zeix/le-truc";
 import "culori/css";
 import { formatCss, formatHex, type Oklch } from "culori/fn";
 import { asOklch } from "../../_common/asOklch";
@@ -43,14 +47,14 @@ export default defineComponent<CardColorscaleProps>(
       value: asOklch(),
     });
 
-    watch("label", bindText(labelStrong));
+    watch("label", bindText(labelStrong, true));
 
     const labelSmall = first(
       ".label small",
       "Add a <small> element inside .label.",
     );
     watch("value", (color) => {
-      labelSmall.textContent = formatHex(color);
+      setTextPreservingComments(labelSmall, formatHex(color));
       const props = new Map<string, string>();
       const isLight = color.l > CONTRAST_THRESHOLD;
       const softStep = isLight ? 0.1 : 0.9;
