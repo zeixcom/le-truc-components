@@ -1,37 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html, nothing } from "lit";
 import { expect, userEvent, within } from "storybook/test";
+import { Checkbox, type FormCheckboxArgs } from "./form-checkbox.html";
 import "./form-checkbox.ts";
 import "./form-checkbox.css";
 import type { FormAssociatedElement } from "@zeix/le-truc";
 import type { FormCheckboxProps } from "./form-checkbox.ts";
 
-type FormCheckboxArgs = {
-  checked: boolean;
-  label: string;
-  variant: "none" | "checkbox" | "todo" | "toggle";
-};
-
-// Exported so other components' stories can embed a checkbox instance via
-// ${Checkbox(args)} instead of duplicating its markup.
-export const Checkbox = ({ checked, label, variant }: FormCheckboxArgs) => html`
-  <form-checkbox class=${variant !== "none" ? variant : nothing} ?checked=${checked}>
-    <label>
-      <input
-        type="checkbox"
-        class=${variant !== "none" ? "visually-hidden" : nothing}
-        ?checked=${checked}
-      />
-      <span class="label">${label}</span>
-    </label>
-  </form-checkbox>
-`;
-
 const meta: Meta<FormCheckboxArgs> = {
   title: "Form/Checkbox",
   render: Checkbox,
-  // Checkbox is exported for reuse by other stories files, not a story itself.
-  excludeStories: /^Checkbox$/,
   argTypes: {
     checked: {
       control: "boolean",

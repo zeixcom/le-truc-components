@@ -1,30 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
+import {
+  type FormInplaceEditArgs,
+  InplaceEdit,
+} from "./form-inplace-edit.html";
 import "./form-inplace-edit.ts";
 import "./form-inplace-edit.css";
 import "../textbox/form-textbox.ts";
 import "../textbox/form-textbox.css";
 
-type FormInplaceEditArgs = {
-  name: string;
-  value: string;
-};
-
-// Exported so other components' stories can embed an inplace-edit instance
-// via ${InplaceEdit(args)} instead of duplicating its markup.
-export const InplaceEdit = ({ name, value }: FormInplaceEditArgs) => html`
-  <form-inplace-edit name=${name}>
-    <span class="text">${value}</span>
-    <button type="button" aria-label="Edit">✎</button>
-  </form-inplace-edit>
-`;
-
 const meta: Meta<FormInplaceEditArgs> = {
   title: "Form/Inplace Edit",
   render: InplaceEdit,
-  // InplaceEdit is exported for reuse by other stories files, not a story itself.
-  excludeStories: /^InplaceEdit$/,
   argTypes: {
     name: {
       control: "text",

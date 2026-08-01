@@ -13,7 +13,7 @@ import "../colorinfo/module-colorinfo.ts";
 import "../colorinfo/module-colorinfo.css";
 import "../../basic/number/basic-number.ts";
 import { Colorscale } from "../../card/colorscale/card-colorscale.html";
-import { Colorgraph } from "../../form/colorgraph/form-colorgraph.stories";
+import { Colorgraph } from "../../form/colorgraph/form-colorgraph.html";
 import { Colorinfo } from "../colorinfo/module-colorinfo.stories";
 
 type ModuleColoreditorArgs = {

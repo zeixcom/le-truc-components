@@ -1,35 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html, nothing } from "lit";
+import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
+import { type FormTextboxArgs, Textbox } from "./form-textbox.html";
 import "./form-textbox.ts";
 import "./form-textbox.css";
 import type { FormAssociatedElement } from "@zeix/le-truc";
 import type { FormTextboxProps } from "./form-textbox.ts";
 
-type FormTextboxArgs = {
-  description: string;
-  clearable: boolean;
-};
-
-// Exported so other components' stories can embed a textbox instance via
-// ${Textbox(args)} instead of duplicating its markup.
-export const Textbox = ({ description, clearable }: FormTextboxArgs) => html`
-  <form-textbox>
-    <label for="name-input">Name</label>
-    <div class="input">
-      <input type="text" id="name-input" name="name" autocomplete="name" required />
-      ${clearable ? html`<button type="button" class="clear" aria-label="Clear input" hidden>✕</button>` : nothing}
-    </div>
-    <p class="error" role="alert" aria-live="assertive" id="name-error"></p>
-    <p class="description" aria-live="polite" id="name-description">${description}</p>
-  </form-textbox>
-`;
-
 const meta: Meta<FormTextboxArgs> = {
   title: "Form/Textbox",
   render: Textbox,
-  // Textbox is exported for reuse by other stories files, not a story itself.
-  excludeStories: /^Textbox$/,
   argTypes: {
     description: {
       control: "text",

@@ -1,43 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html, nothing } from "lit";
+import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
+import { type FormRadiogroupArgs, Radiogroup } from "./form-radiogroup.html";
 import "./form-radiogroup.ts";
 import "./form-radiogroup.css";
 import type { FormAssociatedElement } from "@zeix/le-truc";
 import type { FormRadiogroupProps } from "./form-radiogroup.ts";
 
-type FormRadiogroupArgs = {
-  value: string;
-  variant: "none" | "radio-group" | "split-button";
-};
-
-// Exported so other components' stories can embed a radiogroup instance via
-// ${Radiogroup(args)} instead of duplicating its markup.
-export const Radiogroup = ({ value, variant }: FormRadiogroupArgs) => html`
-  <form-radiogroup class=${variant !== "none" ? variant : nothing}>
-    <fieldset>
-      <legend>Theme</legend>
-      <label class=${value === "light" ? "selected" : nothing}>
-        <input type="radio" class="visually-hidden" name="theme" value="light" ?checked=${value === "light"} />
-        <span>Light</span>
-      </label>
-      <label class=${value === "dark" ? "selected" : nothing}>
-        <input type="radio" class="visually-hidden" name="theme" value="dark" ?checked=${value === "dark"} />
-        <span>Dark</span>
-      </label>
-      <label class=${value === "system" ? "selected" : nothing}>
-        <input type="radio" class="visually-hidden" name="theme" value="system" ?checked=${value === "system"} />
-        <span>System</span>
-      </label>
-    </fieldset>
-  </form-radiogroup>
-`;
-
 const meta: Meta<FormRadiogroupArgs> = {
   title: "Form/Radiogroup",
   render: Radiogroup,
-  // Radiogroup is exported for reuse by other stories files, not a story itself.
-  excludeStories: /^Radiogroup$/,
   argTypes: {
     value: {
       control: "text",

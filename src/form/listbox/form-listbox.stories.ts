@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html, nothing } from "lit";
 import { expect, userEvent, waitFor, within } from "storybook/test";
+import { type FormListboxArgs, Listbox } from "./form-listbox.html";
 import "../../card/callout/card-callout.css";
 import "../../module/scrollarea/module-scrollarea.ts";
 import "../../module/scrollarea/module-scrollarea.css";
@@ -9,33 +10,9 @@ import "./form-listbox.css";
 import type { FormAssociatedElement } from "@zeix/le-truc";
 import type { FormListboxProps } from "./form-listbox.ts";
 
-type FormListboxArgs = {
-  value: string;
-  filter: string;
-  src: string;
-};
-
-// Exported so other components' stories can embed a listbox instance via
-// ${Listbox(args)} instead of duplicating its markup.
-export const Listbox = ({ value }: FormListboxArgs) => html`
-  <form>
-    <form-listbox id="colors" name="color">
-      <div role="listbox" aria-label="Colors">
-        <button type="button" role="option" tabindex="-1" value="red" aria-selected=${value === "red" ? "true" : nothing}>Red</button>
-        <button type="button" role="option" tabindex="-1" value="green" aria-selected=${value === "green" ? "true" : nothing}>Green</button>
-        <button type="button" role="option" tabindex="-1" value="blue" aria-selected=${value === "blue" ? "true" : nothing}>Blue</button>
-        <button type="button" role="option" tabindex="-1" value="yellow" aria-selected=${value === "yellow" ? "true" : nothing}>Yellow</button>
-        <button type="button" role="option" tabindex="-1" value="purple" aria-selected=${value === "purple" ? "true" : nothing}>Purple</button>
-      </div>
-    </form-listbox>
-  </form>
-`;
-
 const meta: Meta<FormListboxArgs> = {
   title: "Form/Listbox",
   render: Listbox,
-  // Listbox is exported for reuse by other stories files, not a story itself.
-  excludeStories: /^Listbox$/,
   argTypes: {
     value: {
       control: "text",
