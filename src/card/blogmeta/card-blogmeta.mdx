@@ -22,3 +22,42 @@ If no avatar image is provided, a stylized placeholder avatar is shown instead â
 <Controls of={CardBlogmetaStories.Default} />
 
 See the `WithModifiedDate` and `WithoutAvatar` stories for variants.
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('time.published')</code></td>
+      <td><code>HTMLTimeElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Publication date; <code>dateTime</code> attribute formatted via <code>Intl.DateTimeFormat</code> for the active locale</td>
+    </tr>
+    <tr>
+      <td><code>first('.modified time')</code></td>
+      <td><code>HTMLTimeElement</code></td>
+      <td>optional</td>
+      <td>Modification date; <code>dateTime</code> attribute formatted and written as text content</td>
+    </tr>
+    <tr>
+      <td><code>first('span.modified')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Wrapping element for the modified date; removed entirely if the <code>dateTime</code> is invalid</td>
+    </tr>
+    <tr>
+      <td><code>first('.author')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Author container; a stylized placeholder avatar SVG is inserted if no <code>&lt;img&gt;</code> child is present</td>
+    </tr>
+  </tbody>
+</table>

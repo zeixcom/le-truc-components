@@ -76,10 +76,10 @@ A two-panel resizable container with a drag handle between the panels, supportin
       <td>The resize handle; carries <code>role="separator"</code> and <code>aria-valuenow/min/max</code></td>
     </tr>
     <tr>
-      <td><code>module-scrollarea</code> (×2)</td>
+      <td>two content children (CSS contract)</td>
       <td><code>HTMLElement</code></td>
-      <td><strong>required</strong></td>
-      <td>The two resizable content areas; sized by the CSS grid via <code>--module-splitview-ratio</code>. Use a <code>module-scrollarea</code> for each panel so overflowing content stays keyboard-accessible.</td>
+      <td>optional</td>
+      <td>Sized by the CSS grid via <code>--module-splitview-ratio</code>. Not queried by the component — use a <code>module-scrollarea</code> for each panel so overflowing content stays keyboard-accessible.</td>
     </tr>
   </tbody>
 </table>

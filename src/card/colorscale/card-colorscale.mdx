@@ -45,23 +45,7 @@ See the `Tiny`, `Small`, and `Large` stories for the other size variants.
       <td><strong>required</strong></td>
       <td>Displays the hex color value; updated on <code>value</code> change</td>
     </tr>
-    <tr>
-      <td><code>li.lighten80</code> … <code>li.lighten20</code></td>
-      <td><code>HTMLLIElement</code></td>
-      <td>optional</td>
-      <td>Lightened tonal steps; background set via <code>--color-lighten*</code></td>
-    </tr>
-    <tr>
-      <td><code>li.base</code></td>
-      <td><code>HTMLLIElement</code></td>
-      <td>optional</td>
-      <td>Base color step; background set via <code>--color-base</code></td>
-    </tr>
-    <tr>
-      <td><code>li.darken20</code> … <code>li.darken80</code></td>
-      <td><code>HTMLLIElement</code></td>
-      <td>optional</td>
-      <td>Darkened tonal steps; background set via <code>--color-darken*</code></td>
-    </tr>
   </tbody>
 </table>
+
+The tonal `<li>` steps (`li.lighten80` … `li.darken80`, `li.base`) are styled via CSS custom properties (`--color-lighten*`, `--color-base`, `--color-darken*`) set on the host; they are not queried by the component.
