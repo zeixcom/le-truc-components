@@ -1,6 +1,6 @@
 # Documentation
 
-**Overview:** What to document for each Le Truc component and how to structure it. Use **standard Markdown only** — no custom syntax.
+**Overview:** What to document for each Le Truc component and how to structure it. This project documents components in a `.mdx` file per component (see `references/storybook.md` for the full file layout) — the tables below are the hand-written sections of that file; `<Canvas>`/`<Controls>` (from `@storybook/addon-docs/blocks`) cover the interactive preview and, wherever every prop it lists is already a story control, the Reactive Properties table itself. Use plain Markdown for prose; the tables below still apply verbatim inside `.mdx`.
 
 ---
 
@@ -18,7 +18,9 @@ Include a section only when it applies to the component.
 
 ### Conditional Sections (Include When Applicable)
 
-**Reactive properties** — when component has JS-accessible reactive props beyond what attributes cover.
+**Controls** — a `<Controls of={ComponentStories.Default} />` block, when the component's story has settable args. Place it right after `<Canvas>`.
+
+**Reactive properties** — hand-written table, only for props `<Controls>` doesn't cover: `readonly` sensor/computed props, or when the component has no stories file at all. Don't duplicate a table for props already shown by `<Controls>`.
 
 **Attributes** — when one or more props driven by HTML attributes (parser-initialized).
 

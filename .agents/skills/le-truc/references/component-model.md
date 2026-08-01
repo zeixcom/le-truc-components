@@ -7,13 +7,32 @@
 ## `defineComponent` — Factory Form (v2.0)
 
 ```typescript
-defineComponent<P extends ComponentProps>(name, factory)
+defineComponent<P extends ComponentProps>(name, factory, extensions?)
 ```
 
 | Argument | Type | Purpose |
 |---|---|---|
 | `name` | `string` | Tag name — lowercase, must contain hyphen |
 | `factory` | `(context: FactoryContext<P>) => FactoryResult \| Falsy \| void` | Called at connect time; queries elements, calls `expose()`, calls effect helpers |
+| `extensions` | `ComponentExtension[]` | Optional dependency-injected features — `formAssociated()`, `formAssociatedCheckbox()` (must be listed first if present), `observedAttributes([...])` |
+
+### `observedAttributes(names)` — re-parse an attribute after connect
+
+Opt-in extension (v2.3+) that keeps a Parser-backed `expose()`d prop in sync with its attribute **after** connect — attributes normally only drive state once, at connect time (see Key Constraints below). Re-runs the same `Parser` retained from `expose()` against the attribute's new string value on every mutation.
+
+```typescript
+import { defineComponent, observedAttributes } from '@zeix/le-truc'
+
+export default defineComponent<MyProps>(
+  'my-component',
+  ({ expose /* ... */ }) => {
+    expose({ value: asOklch() })
+  },
+  [observedAttributes(['value'])],
+)
+```
+
+This is the interop escape hatch for consumers that only ever set DOM **attributes**, not properties — React, and any tool (Storybook's Controls addon) that mutates an attribute on an already-connected element. See `references/storybook.md` for the full failure mode and a regression-test pattern. Reach for it only for props that actually need this; it is not the default.
 
 ### Factory Context Helpers
 
@@ -61,9 +80,8 @@ Explicit `return [...]` of the same descriptors still works (dual support in v2.
 ## Key Constraints
 
 - `expose()` **must** be called before any signal access that reads `host.propName`
-- `defineComponent` never registers `observedAttributes` — `attributeChangedCallback` support was dropped entirely in v2.0
-- Parsers in `expose()` called **once at connect time** — HTML authors configure via attributes in server-rendered markup
-- Attribute changes after connect **are not re-parsed** — reactive state flows through property interface only
+- `defineComponent` does not register `observedAttributes`/`attributeChangedCallback` by default — that support was dropped in v2.0. Parsers in `expose()` are called **once at connect time**; HTML authors configure via attributes in server-rendered markup, and attribute changes after connect **are not re-parsed** by default — reactive state flows through the property interface only
+- **Opt-in exception (v2.3+):** the `observedAttributes(names)` extension (third argument to `defineComponent`) re-runs a Parser-backed prop's retained `Parser` when its attribute mutates post-connect. This is the sanctioned escape hatch for frameworks that only ever set DOM attributes (React) or tools that mutate attributes on an already-mounted element (Storybook Controls) — see `references/storybook.md`
 - Effect helpers register themselves when called — no `return` needed. Explicit `return [...]` of a `FactoryResult` (`Array<EffectDescriptor | FactoryResult | Falsy>`) still works but is deprecated; nested arrays are flattened and falsy values filtered, so the legacy `element && watch(...)` pattern still works too, but prefer `if (element) watch(...)` in new code
 
 ---

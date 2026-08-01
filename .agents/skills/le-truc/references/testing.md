@@ -118,7 +118,7 @@ type FormCheckboxProps = {
 
 ## Test Structure Advice
 
-Each component's example `.html` file already contains representative instances (default state, variants, states). Use these **directly as test fixtures** — they exercise same markup component documented to support.
+Each component's `.stories.ts` already contains representative instances (default state, variants, states) via its `Story` exports and `.html.ts` render function. In this project, Storybook's `play()` functions **are** the test suite for a component — see `references/storybook.md` for the file layout and how `play()` fits `.stories.ts`. Elsewhere, use the same markup the stories render as test fixtures rather than re-deriving it.
 
 Group tests by behavior, not by file:
 - "reads initial state from DOM"

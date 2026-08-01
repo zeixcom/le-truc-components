@@ -43,6 +43,7 @@ Without thunks, these require custom handlers. Thunks keep intent declarative.
 | Goal | Helper | Handler Type |
 |---|---|---|
 | Set text content | `bindText(el, preserveComments?)` | `(value: string \| number) => void` |
+| Set text content inside a custom `watch` handler | `setTextPreservingComments(el, text)` | called directly, not a `bind*` factory |
 | Set DOM property | `bindProperty(el, key)` | `(value: E[K]) => void` |
 | Show/hide element | `bindVisible(el, transform?)` | `(value: T) => void` |
 | Toggle CSS class | `bindClass(el, token, transform?)` | `(value: T) => void` |
@@ -68,6 +69,8 @@ Returns `(value: string | number) => void`. Sets `element.textContent`. Numbers 
 watch('label', bindText(span))
 watch('label', bindText(el, true))  // preserve HTML comment nodes
 ```
+
+`preserveComments: true` swaps the default `element.textContent = value` write for one that only replaces the text nodes between any existing comment markers, leaving the markers themselves in place. Needed whenever this element's text is *also* a Lit-rendered dynamic child (`<span>${arg}</span>` in a Storybook story) — Lit tracks that region with invisible marker comments, and a plain `textContent` write ejects them, crashing the next Lit re-render with `"This ChildPart has no parentNode..."`. See `references/storybook.md` for the full explanation. For a `watch` handler that isn't just `bindText` (e.g. it also computes CSS custom properties from the same value), use the standalone `setTextPreservingComments(element, text)` directly instead of `element.textContent = text`.
 
 ### `bindProperty(element, key)`
 

@@ -41,8 +41,9 @@ Check each link in order:
 
 ### Attribute → Signal (connect time only)
 - Parsers in `expose()` called **once** at connect time
-- Attribute changes after connect do NOT re-run parsers — no `observedAttributes`
+- Attribute changes after connect do NOT re-run parsers by default
 - Is attribute name exactly matching prop name passed to `expose()`?
+- **If the symptom is "a Storybook control / React prop edit does nothing after first render"**: this is expected default behavior, not a bug — the fix is opting the prop into `observedAttributes([...])` (v2.3+), not chasing the reactivity chain further. See `references/component-model.md` and `references/storybook.md`.
 
 ### Signal → `watch`
 - Is source of `watch()` correct? String prop name looks up `host[name]`; thunk tracks all signals read inside; `Signal` used directly
