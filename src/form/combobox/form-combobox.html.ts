@@ -1,12 +1,13 @@
 import { html } from "lit";
 
 export type FormComboboxArgs = {
+  value: string;
   description: string;
 };
 
 // Exported so other components' stories can embed a combobox instance via
 // ${Combobox(args)} instead of duplicating its markup.
-export const Combobox = ({ description }: FormComboboxArgs) => html`
+export const Combobox = ({ value, description }: FormComboboxArgs) => html`
   <form-combobox>
     <label for="color-input" id="color-label">Favourite color</label>
     <div class="input">
@@ -19,6 +20,7 @@ export const Combobox = ({ description }: FormComboboxArgs) => html`
         aria-controls="color-popup"
         aria-autocomplete="list"
         autocomplete="off"
+        value=${value}
       />
       <form-listbox id="color-popup">
         <div role="listbox" aria-labelledby="color-label">

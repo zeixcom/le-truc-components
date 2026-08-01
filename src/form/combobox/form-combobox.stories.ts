@@ -16,6 +16,13 @@ const meta: Meta<FormComboboxArgs> = {
   title: "Form/Combobox",
   render: Combobox,
   argTypes: {
+    value: {
+      control: "text",
+      table: {
+        defaultValue: { summary: "''" },
+        category: "Reactive Properties",
+      },
+    },
     description: {
       control: "text",
       table: {
@@ -30,6 +37,7 @@ type Story = StoryObj<FormComboboxArgs>;
 
 export const Default: Story = {
   args: {
+    value: "",
     description: "Choose your favourite color.",
   },
 };
