@@ -28,13 +28,13 @@ const meta: Meta<BasicNumberArgs> = {
     caption: {
       control: "text",
       description: "Descriptive text shown above the number in this demo",
-      table: { category: "Demo" },
+      table: { category: "Content" },
     },
     wrapperLang: {
       control: "text",
       description:
         "<code>lang</code> attribute on the wrapping <code>&lt;p&gt;</code> — used to demo locale inheritance when the <code>lang</code> attribute is absent from <code>&lt;basic-number&gt;</code> itself",
-      table: { category: "Demo" },
+      table: { category: "Content" },
     },
   },
 };

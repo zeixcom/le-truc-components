@@ -39,7 +39,7 @@ const meta: Meta<BasicButtonArgs> = {
       options: ["spans", "text"],
       description:
         "Whether the button renders `.label`/`.badge` spans (recommended) or plain text — `text` demonstrates the fallback to the button's own text content when the optional spans are absent",
-      table: { category: "DOM Structure" },
+      table: { category: "Content" },
     },
   },
 };
