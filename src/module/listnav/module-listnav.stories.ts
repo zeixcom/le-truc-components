@@ -24,7 +24,11 @@ export const Default: Story = {
       "form-listbox",
     ) as HTMLElement & {
       value: string;
+      filter: string;
     };
+    const lazyload = canvasElement.querySelector(
+      "module-lazyload",
+    ) as HTMLElement & { src: string };
 
     // Initial selection is synced to the hash on connect.
     await waitFor(() => expect(location.hash).toBe("#page1"));
@@ -34,15 +38,47 @@ export const Default: Story = {
     await expect(listbox.value).toBe("./pages/page2.html");
     await waitFor(() => expect(location.hash).toBe("#page2"));
 
+    // module-lazyload receives its src via pass(lazyload, { src: () => listbox.value }).
+    await expect(lazyload.src).toBe("./pages/page2.html");
+
     // Simulating browser back/forward (hashchange) updates the selection.
     history.replaceState(null, "", "#page4");
     window.dispatchEvent(new HashChangeEvent("hashchange"));
     await waitFor(() => expect(listbox.value).toBe("./pages/page4.html"));
+    await expect(lazyload.src).toBe("./pages/page4.html");
 
     // Unknown hash: no matching option, selection stays put.
     history.replaceState(null, "", "#does-not-exist");
     window.dispatchEvent(new HashChangeEvent("hashchange"));
     await expect(listbox.value).toBe("./pages/page4.html");
+
+    history.replaceState(null, "", `${location.pathname}${location.search}`);
+  },
+};
+
+export const FilterResetOnHashChange: Story = {
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("module-listnav");
+    await customElements.whenDefined("form-listbox");
+    const listbox = canvasElement.querySelector(
+      "form-listbox",
+    ) as HTMLElement & {
+      value: string;
+      filter: string;
+    };
+
+    await waitFor(() => expect(location.hash).toBe("#page1"));
+
+    // A filter typed into the listbox must not survive a hash-driven
+    // selection change (browser back/forward) — it's cleared in the same
+    // batch as the value update.
+    listbox.filter = "page";
+    await expect(listbox.filter).toBe("page");
+
+    history.replaceState(null, "", "#page3");
+    window.dispatchEvent(new HashChangeEvent("hashchange"));
+    await waitFor(() => expect(listbox.value).toBe("./pages/page3.html"));
+    await expect(listbox.filter).toBe("");
 
     history.replaceState(null, "", `${location.pathname}${location.search}`);
   },
