@@ -1,94 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html } from "lit";
 import { expect, userEvent } from "storybook/test";
+import { Splitview } from "./module-splitview.html";
 import "./module-splitview.ts";
 import "./module-splitview.css";
 import "../scrollarea/module-scrollarea.ts";
 import "../scrollarea/module-scrollarea.css";
 
-const render = () => html`
-  <!-- Horizontal split (default) -->
-  <module-splitview id="horizontal-splitview">
-    <module-scrollarea>
-      <div>
-        <p>Left panel</p>
-        <p>Drag the handle or focus it and use arrow keys to resize.</p>
-      </div>
-    </module-scrollarea>
-    <button
-      type="button"
-      class="divider"
-      role="separator"
-      aria-label="Resize panels"
-      aria-orientation="horizontal"
-      aria-valuenow="50"
-      aria-valuemin="10"
-      aria-valuemax="90"
-    ></button>
-    <module-scrollarea>
-      <div>
-        <p>Right panel</p>
-        <p>The proportions are kept when the container is resized.</p>
-      </div>
-    </module-scrollarea>
-  </module-splitview>
-
-  <hr />
-
-  <!-- Pre-set split position via attribute -->
-  <module-splitview id="preset-splitview" split="0.3">
-    <module-scrollarea>
-      <div>
-        <p>Narrow panel (30%)</p>
-      </div>
-    </module-scrollarea>
-    <button
-      type="button"
-      class="divider"
-      role="separator"
-      aria-label="Resize panels"
-      aria-orientation="horizontal"
-      aria-valuenow="30"
-      aria-valuemin="10"
-      aria-valuemax="90"
-    ></button>
-    <module-scrollarea>
-      <div>
-        <p>Wide panel (70%)</p>
-      </div>
-    </module-scrollarea>
-  </module-splitview>
-
-  <hr />
-
-  <!-- Vertical split -->
-  <module-splitview id="vertical-splitview" orientation="vertical">
-    <module-scrollarea>
-      <div>
-        <p>Top panel</p>
-      </div>
-    </module-scrollarea>
-    <button
-      type="button"
-      class="divider"
-      role="separator"
-      aria-label="Resize panels"
-      aria-orientation="vertical"
-      aria-valuenow="50"
-      aria-valuemin="10"
-      aria-valuemax="90"
-    ></button>
-    <module-scrollarea>
-      <div>
-        <p>Bottom panel</p>
-      </div>
-    </module-scrollarea>
-  </module-splitview>
-`;
-
 const meta: Meta = {
   title: "Module/Splitview",
-  render,
+  render: Splitview,
 };
 export default meta;
 type Story = StoryObj;

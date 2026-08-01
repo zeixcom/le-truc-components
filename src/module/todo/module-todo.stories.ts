@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html } from "lit";
 import { expect, spyOn, userEvent, within } from "storybook/test";
+import { Todo } from "./module-todo.html";
 import "./module-todo.ts";
 import "./module-todo.css";
 import "../../basic/button/basic-button.ts";
@@ -15,83 +15,9 @@ import "../../form/radiogroup/form-radiogroup.css";
 import "../../form/textbox/form-textbox.ts";
 import "../../form/textbox/form-textbox.css";
 
-const todoTemplate = html`
-  <module-todo>
-    <form action="#">
-      <form-textbox>
-        <label for="add-todo">What needs to be done?</label>
-        <div class="input">
-          <input id="add-todo" type="text" value="" />
-          <button type="button" class="clear" aria-label="Clear input" hidden>✕</button>
-        </div>
-      </form-textbox>
-      <basic-button class="submit">
-        <button type="submit" class="constructive" disabled>
-          <span class="label">Add Todo</span>
-        </button>
-      </basic-button>
-    </form>
-    <span role="status" class="visually-hidden"></span>
-    <ol data-container></ol>
-    <template>
-      <li>
-        <button type="button" class="reorder" aria-label="Drag to reorder" aria-pressed="false">
-          ≡
-        </button>
-        <form-checkbox class="todo">
-          <input type="checkbox" class="visually-hidden" />
-          <form-inplace-edit>
-            <label class="label text"><slot></slot></label>
-            <button type="button" aria-label="Edit">✎</button>
-          </form-inplace-edit>
-        </form-checkbox>
-        <basic-button class="remove">
-          <button type="button" class="tertiary destructive small" aria-label="Remove">
-            <span class="label">✕</span>
-          </button>
-        </basic-button>
-      </li>
-    </template>
-    <footer>
-      <basic-pluralize>
-        <p class="none">Well done, all done!</p>
-        <p class="some">
-          <span class="count"></span>
-          <span class="one"> task</span>
-          <span class="other"> tasks</span>
-          remaining
-        </p>
-      </basic-pluralize>
-      <form-radiogroup value="all" class="split-button">
-        <fieldset>
-          <legend class="visually-hidden">Filter</legend>
-          <label class="selected">
-            <input type="radio" class="visually-hidden" name="filter" value="all" checked />
-            <span>All</span>
-          </label>
-          <label>
-            <input type="radio" class="visually-hidden" name="filter" value="active" />
-            <span>Active</span>
-          </label>
-          <label>
-            <input type="radio" class="visually-hidden" name="filter" value="completed" />
-            <span>Completed</span>
-          </label>
-        </fieldset>
-      </form-radiogroup>
-      <basic-button class="clear-completed">
-        <button type="button" class="tertiary destructive">
-          <span class="label">Clear Completed</span>
-          <span class="badge"></span>
-        </button>
-      </basic-button>
-    </footer>
-  </module-todo>
-`;
-
 const meta: Meta = {
   title: "Module/Todo",
-  render: () => todoTemplate,
+  render: Todo,
 };
 export default meta;
 type Story = StoryObj;
@@ -321,9 +247,8 @@ export const DragReorder: Story = {
     const todo = canvasElement.querySelector("module-todo") as HTMLElement;
     const items = () =>
       Array.from(canvasElement.querySelectorAll<HTMLElement>("[data-key]"));
-    const firstHandle = items()[0]?.querySelector<HTMLButtonElement>(
-      "button.reorder",
-    );
+    const firstHandle =
+      items()[0]?.querySelector<HTMLButtonElement>("button.reorder");
     if (!firstHandle) throw new Error("Missing reorder button");
     const startRect = firstHandle.getBoundingClientRect();
     const lastRect = items()[2]?.getBoundingClientRect();
@@ -385,9 +310,8 @@ export const DragCancelRestoresOrder: Story = {
     const todo = canvasElement.querySelector("module-todo") as HTMLElement;
     const items = () =>
       Array.from(canvasElement.querySelectorAll<HTMLElement>("[data-key]"));
-    const firstHandle = items()[0]?.querySelector<HTMLButtonElement>(
-      "button.reorder",
-    );
+    const firstHandle =
+      items()[0]?.querySelector<HTMLButtonElement>("button.reorder");
     if (!firstHandle) throw new Error("Missing reorder button");
     const startRect = firstHandle.getBoundingClientRect();
 

@@ -1,25 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
+import {
+  type ModuleScrollareaArgs,
+  Scrollarea,
+} from "./module-scrollarea.html";
 import "./module-scrollarea.ts";
 import "./module-scrollarea.css";
 
-type ModuleScrollareaArgs = {
-  orientation: "vertical" | "horizontal";
-};
-
-const render = ({ orientation }: ModuleScrollareaArgs) => html`
-  <module-scrollarea orientation=${orientation} style="height: 200px; width: 300px; border: 1px solid #ccc;">
-    <div>
-      <p>Forts torterep mansporternme hood, weres mainig foold low, awayor inged penecke acrief naugui lancenc. Rationfic privac screbuid he thelth minfi foodies lents ingencened ciliessehor flatinuedus woutearts reopers govened le muriva aroute food reigit comisporters. Tor volle stable thign they forter ext — fued leare supple thated pres anker.</p>
-      <p>Towth theatione dates firmen reig twour trundelay dinareban ine cres rebuicesin, ne thatedgete cauguille heacrent, asever necks twountralism run. Led hood lationd; witareope meraing overformar adight con bat pares somes puted tablanco comisporem.</p>
-      <p>Prom neerfore leacci dangeno inals cleaskete prial whiche gaidayor — fileare woutinflon maine shispo cond cludi surarepor — yeals. Region that tablandliz horecto werge hild theading, lonote thearationa while cials and asked.</p>
-    </div>
-  </module-scrollarea>
-`;
-
 const meta: Meta<ModuleScrollareaArgs> = {
   title: "Module/Scrollarea",
-  render,
+  render: Scrollarea,
   argTypes: {
     orientation: {
       control: { type: "select" },

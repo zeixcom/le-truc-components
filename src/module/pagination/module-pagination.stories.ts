@@ -1,35 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
+import {
+  type ModulePaginationArgs,
+  Pagination,
+} from "./module-pagination.html";
 import "./module-pagination.ts";
 import "./module-pagination.css";
 import type { ModulePaginationProps } from "./module-pagination.ts";
 
-type ModulePaginationArgs = {
-  value: number;
-  max: number;
-};
-
-const render = ({ value, max }: ModulePaginationArgs) => html`
-  <module-pagination>
-    <div>
-      <label>
-        <span class="visually-hidden">Page</span>
-        <input type="number" name="page" min="1" max=${max} value=${value} />
-      </label>
-      <span class="value visually-hidden" aria-current="page">${value}</span> of
-      <span class="max">${max}</span>
-    </div>
-    <div class="buttons">
-      <button type="button" class="prev" ?disabled=${value <= 1} aria-label="Previous page">❮</button>
-      <button type="button" class="next" ?disabled=${value >= max} aria-label="Next page">❯</button>
-    </div>
-  </module-pagination>
-`;
-
 const meta: Meta<ModulePaginationArgs> = {
   title: "Module/Pagination",
-  render,
+  render: Pagination,
   argTypes: {
     value: {
       control: "number",
