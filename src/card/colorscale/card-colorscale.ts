@@ -1,6 +1,7 @@
 import {
   bindText,
   defineComponent,
+  observedAttributes,
   setTextPreservingComments,
 } from "@zeix/le-truc";
 import "culori/css";
@@ -75,4 +76,5 @@ export default defineComponent<CardColorscaleProps>(
         host.style.setProperty(`--card-colorscale-color-${key}`, value);
     });
   },
+  [observedAttributes(["value"])],
 );

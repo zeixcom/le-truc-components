@@ -2,6 +2,7 @@ import {
   bindStyle,
   bindText,
   defineComponent,
+  observedAttributes,
   setTextPreservingComments,
 } from "@zeix/le-truc";
 import "culori/css";
@@ -88,4 +89,5 @@ export default defineComponent<ModuleColorinfoProps>(
     const hslEl = first(".hsl");
     if (hslEl) watch("hsl", (hsl) => setTextPreservingComments(hslEl, hsl));
   },
+  [observedAttributes(["value"])],
 );

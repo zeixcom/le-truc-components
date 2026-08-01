@@ -75,6 +75,13 @@ export const Medium: Story = {
     const canvas = within(canvasElement);
     // The hex label is computed from the parsed color.
     await expect(canvas.getByText(/^#[0-9a-f]{6}$/i)).toBeInTheDocument();
+
+    // Simulates a Storybook control edit: the value attribute changes after
+    // connect (not just at initial render), which only re-parses if
+    // observedAttributes(["value"]) is wired up.
+    const el = canvasElement.querySelector("card-colorscale");
+    el?.setAttribute("value", "oklch(.7 .15 150)");
+    await expect(canvas.getByText("#4cb86a")).toBeInTheDocument();
   },
 };
 

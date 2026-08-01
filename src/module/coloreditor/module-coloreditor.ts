@@ -1,4 +1,4 @@
-import { asString, defineComponent } from "@zeix/le-truc";
+import { asString, defineComponent, observedAttributes } from "@zeix/le-truc";
 import {
   colorsNamed,
   converter,
@@ -117,4 +117,5 @@ export default defineComponent<ModuleColoreditorProps>(
       });
     }
   },
+  [observedAttributes(["value", "label"])],
 );
