@@ -19,27 +19,6 @@ Fetches and injects remote HTML content into the page. Uses `createTask` to mana
 
 <Controls of={ModuleLazyloadStories.Default} />
 
-#### Reactive Properties
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>src</code></td>
-      <td><code>string</code></td>
-      <td><code>''</code></td>
-      <td>URL of the HTML partial to fetch and inject; changing it triggers a new fetch</td>
-    </tr>
-  </tbody>
-</table>
-
 #### Attributes
 
 <table>
@@ -95,7 +74,7 @@ Fetches and injects remote HTML content into the page. Uses `createTask` to mana
       <td><code>first('.content')</code></td>
       <td><code>HTMLElement</code></td>
       <td><strong>required</strong></td>
-      <td>Shown on success; fetched HTML is injected here via <code>dangerouslySetInnerHTML</code></td>
+      <td>Shown on success; fetched HTML is injected here via <code>dangerouslyBindInnerHTML</code></td>
     </tr>
   </tbody>
 </table>
