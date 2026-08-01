@@ -46,8 +46,9 @@ const meta: Meta<CardCollapsibleArgs> = {
     },
     open: {
       control: "boolean",
-      description: "Whether the card starts expanded",
-      table: { category: "Attributes" },
+      description:
+        "Whether the card is expanded — reflects the descendant &lt;details&gt; element's <code>open</code> state as a reactive property",
+      table: { category: "Reactive Properties" },
     },
   },
 };
