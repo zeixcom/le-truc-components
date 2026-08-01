@@ -11,7 +11,9 @@ type FormRadiogroupArgs = {
   variant: "none" | "radio-group" | "split-button";
 };
 
-const render = ({ value, variant }: FormRadiogroupArgs) => html`
+// Exported so other components' stories can embed a radiogroup instance via
+// ${Radiogroup(args)} instead of duplicating its markup.
+export const Radiogroup = ({ value, variant }: FormRadiogroupArgs) => html`
   <form-radiogroup class=${variant !== "none" ? variant : nothing}>
     <fieldset>
       <legend>Theme</legend>
@@ -33,7 +35,9 @@ const render = ({ value, variant }: FormRadiogroupArgs) => html`
 
 const meta: Meta<FormRadiogroupArgs> = {
   title: "Form/Radiogroup",
-  render,
+  render: Radiogroup,
+  // Radiogroup is exported for reuse by other stories files, not a story itself.
+  excludeStories: /^Radiogroup$/,
   argTypes: {
     value: {
       control: "text",
