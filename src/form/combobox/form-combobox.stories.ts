@@ -15,7 +15,9 @@ type FormComboboxArgs = {
   description: string;
 };
 
-const render = ({ description }: FormComboboxArgs) => html`
+// Exported so other components' stories can embed a combobox instance via
+// ${Combobox(args)} instead of duplicating its markup.
+export const Combobox = ({ description }: FormComboboxArgs) => html`
   <form-combobox>
     <label for="color-input" id="color-label">Favourite color</label>
     <div class="input">
@@ -46,7 +48,9 @@ const render = ({ description }: FormComboboxArgs) => html`
 
 const meta: Meta<FormComboboxArgs> = {
   title: "Form/Combobox",
-  render,
+  render: Combobox,
+  // Combobox is exported for reuse by other stories files, not a story itself.
+  excludeStories: /^Combobox$/,
   argTypes: {
     description: {
       control: "text",
