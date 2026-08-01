@@ -11,7 +11,9 @@ type FormTextboxArgs = {
   clearable: boolean;
 };
 
-const render = ({ description, clearable }: FormTextboxArgs) => html`
+// Exported so other components' stories can embed a textbox instance via
+// ${Textbox(args)} instead of duplicating its markup.
+export const Textbox = ({ description, clearable }: FormTextboxArgs) => html`
   <form-textbox>
     <label for="name-input">Name</label>
     <div class="input">
@@ -25,7 +27,9 @@ const render = ({ description, clearable }: FormTextboxArgs) => html`
 
 const meta: Meta<FormTextboxArgs> = {
   title: "Form/Textbox",
-  render,
+  render: Textbox,
+  // Textbox is exported for reuse by other stories files, not a story itself.
+  excludeStories: /^Textbox$/,
   argTypes: {
     description: {
       control: "text",
