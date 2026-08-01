@@ -1,52 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html, nothing } from "lit";
 import { expect } from "storybook/test";
+import { type BasicButtonArgs, Button } from "./basic-button.html";
 import "./basic-button.ts";
 import "./basic-button.css";
 import type { BasicButtonProps } from "./basic-button.ts";
 
-type BasicButtonArgs = {
-  label: string;
-  badge: string;
-  disabled: boolean;
-  variant:
-    | "primary"
-    | "secondary"
-    | "tertiary"
-    | "constructive"
-    | "destructive";
-  size: "small" | "medium" | "large";
-  content: "spans" | "text";
-};
-
-const render = ({
-  label,
-  badge,
-  disabled,
-  variant,
-  size,
-  content,
-}: BasicButtonArgs) => {
-  const classes = [
-    variant !== "secondary" ? variant : undefined,
-    size !== "medium" ? size : undefined,
-  ]
-    .filter(Boolean)
-    .join(" ");
-  return html`
-    <basic-button>
-      <button
-        type="button"
-        class=${classes || nothing}
-        ?disabled=${disabled}
-      >${content === "text" ? label : html`<span class="label">${label}</span><span class="badge">${badge}</span>`}</button>
-    </basic-button>
-  `;
-};
-
 const meta: Meta<BasicButtonArgs> = {
   title: "Basic/Button",
-  render,
+  render: Button,
   argTypes: {
     label: { control: "text", table: { category: "Reactive Properties" } },
     badge: { control: "text", table: { category: "Reactive Properties" } },

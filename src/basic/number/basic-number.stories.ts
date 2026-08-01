@@ -1,42 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html, nothing } from "lit";
 import { expect } from "storybook/test";
+import { type BasicNumberArgs, NumberDemo } from "./basic-number.html";
 import "./basic-number.ts";
 import type { BasicNumberProps } from "./basic-number.ts";
 
-type BasicNumberArgs = {
-  value: number;
-  options: string;
-  lang: string;
-  caption: string;
-  wrapperLang: string;
-};
-
-const render = ({
-  value,
-  options,
-  lang,
-}: Pick<BasicNumberArgs, "value" | "options" | "lang">) => html`
-  <basic-number
-    value=${value}
-    options=${options || nothing}
-    lang=${lang || nothing}
-  ></basic-number>
-`;
-
-const renderWithWrapper = ({
-  caption,
-  wrapperLang,
-  ...args
-}: BasicNumberArgs) => html`
-  <p lang=${wrapperLang || nothing}>
-    ${caption ? html`${caption}:<br />` : nothing}${render(args)}
-  </p>
-`;
-
 const meta: Meta<BasicNumberArgs> = {
   title: "Basic/Number",
-  render: renderWithWrapper,
+  render: NumberDemo,
   argTypes: {
     value: {
       control: "number",

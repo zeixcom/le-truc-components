@@ -1,30 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html, nothing } from "lit";
 import { expect } from "storybook/test";
+import { type BasicPluralizeArgs, Pluralize } from "./basic-pluralize.html";
 import "./basic-pluralize.ts";
 import type { BasicPluralizeProps } from "./basic-pluralize.ts";
 
-type BasicPluralizeArgs = {
-  count: number;
-  lang: string;
-  ordinal: boolean;
-};
-
-const render = ({ count, ordinal, lang }: BasicPluralizeArgs) => html`
-  <p>Remaining tasks:</p>
-  <basic-pluralize count=${count} ?ordinal=${ordinal} lang=${lang || nothing}>
-    <p class="none">Well done, all done!</p>
-    <p class="some">
-      <span class="count"></span>
-      task<span class="other">s</span>
-      remaining
-    </p>
-  </basic-pluralize>
-`;
-
 const meta: Meta<BasicPluralizeArgs> = {
   title: "Basic/Pluralize",
-  render,
+  render: Pluralize,
   argTypes: {
     count: {
       control: "number",

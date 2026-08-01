@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { html } from "lit";
 import { expect } from "storybook/test";
+import { type BasicGaugeArgs, Gauge } from "./basic-gauge.html";
 import "./basic-gauge.ts";
 import "./basic-gauge.css";
 import "../number/basic-number.ts";
@@ -12,32 +12,9 @@ const defaultThresholds = JSON.stringify([
   { min: 0, label: "Try again!", color: "var(--color-pink-70)" },
 ]);
 
-type BasicGaugeArgs = {
-  value: number;
-  thresholds: string;
-  id?: string;
-};
-
-const render = ({ value, thresholds, id = 'basic-gauge-label' }: BasicGaugeArgs) => html`
-  <basic-gauge thresholds=${thresholds} value=${value}>
-    <p id=${id}>Speed:</p>
-    <meter
-      class="visually-hidden"
-      value=${value}
-      aria-labelledby=${id}
-    ></meter>
-    <basic-number
-      value=${value}
-      options='{"style":"percent","maximumFractionDigits":1}'
-      ></basic-number
-    >
-    <small class="label"></small>
-  </basic-gauge>
-`;
-
 const meta: Meta<BasicGaugeArgs> = {
   title: "Basic/Gauge",
-  render,
+  render: Gauge,
   argTypes: {
     value: {
       control: "number",
