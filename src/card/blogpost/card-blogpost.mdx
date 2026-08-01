@@ -1,11 +1,11 @@
-import { Meta, Canvas } from "@storybook/addon-docs/blocks";
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
 import * as CardBlogpostStories from "./card-blogpost.stories";
 
 <Meta of={CardBlogpostStories} />
 
 ### Card Blogpost
 
-A CSS-only component that displays a blogpost teaser card.
+A CSS-only component that displays a blogpost teaser card. It embeds a [`card-blogmeta`](?path=/docs/card-blogmeta--docs) for the author/date/read-time line, and the whole card is annotated with schema.org [`BlogPosting`](https://schema.org/BlogPosting) microdata (`headline`, `url`, `description`, plus `author`/`datePublished`/`dateModified`/`timeRequired` from the embedded `card-blogmeta`).
 
 #### Tag Name
 
@@ -14,3 +14,9 @@ A CSS-only component that displays a blogpost teaser card.
 #### Preview
 
 <Canvas of={CardBlogpostStories.Default} />
+
+#### Controls
+
+<Controls of={CardBlogpostStories.Default} />
+
+See the `WithModifiedDate` story for a variant with an updated date.

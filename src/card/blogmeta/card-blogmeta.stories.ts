@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html, nothing } from "lit";
 import { expect } from "storybook/test";
+import { timestamp, toISODate } from "../../_common/storyArgs";
 import "./card-blogmeta.ts";
 import "./card-blogmeta.css";
 
-type CardBlogmetaArgs = {
+export type CardBlogmetaArgs = {
   author: string;
   avatarSrc: string;
   datePublished: number;
@@ -13,28 +14,9 @@ type CardBlogmetaArgs = {
   lang: string;
 };
 
-// Storybook's date control hands back a timestamp (local midnight of the
-// picked day); convert to the YYYY-MM-DD string the datetime attribute needs.
-const toISODate = (timestamp: number) => {
-  const date = new Date(timestamp);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-};
-
-// Converts an ISO date literal to the local timestamp toISODate round-trips,
-// so story args can still be written as readable YYYY-MM-DD strings.
-const timestamp = (isoDate: string) => {
-  const [year, month, day] = isoDate.split("-").map(Number) as [
-    number,
-    number,
-    number,
-  ];
-  return new Date(year, month - 1, day).getTime();
-};
-
-const render = ({
+// Exported so card-blogpost.stories.ts can embed a blogmeta instance via
+// ${Blogmeta(args)} instead of duplicating its markup.
+export const Blogmeta = ({
   author,
   avatarSrc,
   datePublished,
@@ -83,46 +65,53 @@ const render = ({
   </card-blogmeta>
 `;
 
+// Exported so card-blogpost.stories.ts can fold these into its own
+// argTypes when it embeds Blogmeta(args).
+export const blogmetaArgTypes: Meta<CardBlogmetaArgs>["argTypes"] = {
+  author: {
+    control: "text",
+    description: "Author name, annotated with schema.org <code>Person</code>",
+    table: { category: "Content" },
+  },
+  avatarSrc: {
+    control: "text",
+    description:
+      "Author avatar image URL — when empty, a stylized placeholder avatar is shown instead",
+    table: { category: "Content" },
+  },
+  datePublished: {
+    control: "date",
+    description:
+      "Publication date, annotated with schema.org <code>datePublished</code>",
+    table: { category: "Content" },
+  },
+  dateModified: {
+    control: "date",
+    description:
+      "Optional modification date, annotated with schema.org <code>dateModified</code> — leave unset (0) to omit",
+    table: { category: "Content" },
+  },
+  timeRequired: {
+    control: "number",
+    description:
+      "Estimated reading time in minutes, annotated with schema.org <code>timeRequired</code> as an ISO 8601 duration",
+    table: { category: "Content" },
+  },
+  lang: {
+    control: "text",
+    description:
+      "Optional BCP 47 language tag — demonstrates that dates are formatted according to the (possibly inherited) locale",
+    table: { category: "Attributes" },
+  },
+};
+
 const meta: Meta<CardBlogmetaArgs> = {
   title: "Card/Blogmeta",
-  render,
-  argTypes: {
-    author: {
-      control: "text",
-      description: "Author name, annotated with schema.org <code>Person</code>",
-      table: { category: "Content" },
-    },
-    avatarSrc: {
-      control: "text",
-      description:
-        "Author avatar image URL — when empty, a stylized placeholder avatar is shown instead",
-      table: { category: "Content" },
-    },
-    datePublished: {
-      control: "date",
-      description:
-        "Publication date, annotated with schema.org <code>datePublished</code>",
-      table: { category: "Content" },
-    },
-    dateModified: {
-      control: "date",
-      description:
-        "Optional modification date, annotated with schema.org <code>dateModified</code> — leave unset (0) to omit",
-      table: { category: "Content" },
-    },
-    timeRequired: {
-      control: "number",
-      description:
-        "Estimated reading time in minutes, annotated with schema.org <code>timeRequired</code> as an ISO 8601 duration",
-      table: { category: "Content" },
-    },
-    lang: {
-      control: "text",
-      description:
-        "Optional BCP 47 language tag — demonstrates that dates are formatted according to the (possibly inherited) locale",
-      table: { category: "Attributes" },
-    },
-  },
+  render: Blogmeta,
+  argTypes: blogmetaArgTypes,
+  // Blogmeta/blogmetaArgTypes are exported for reuse by
+  // card-blogpost.stories.ts, not stories themselves — exclude them from CSF.
+  excludeStories: /^(Blogmeta|blogmetaArgTypes)$/,
 };
 export default meta;
 type Story = StoryObj<CardBlogmetaArgs>;
