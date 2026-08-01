@@ -205,6 +205,8 @@ This re-runs the *same* `Parser` retained from `expose()` against the attribute'
 - Combine with other extensions in the array; if `formAssociated()`/`formAssociatedCheckbox()` is present, it must come first.
 - This is opt-in per attribute name, not global — list only the attributes that actually need it. Don't reach for it by default; it exists specifically for the interop case above.
 
+**Do not add it to a prop the component reflects back onto the same attribute.** If a `watch()` handler in the component itself calls `bindAttribute(host, name)` or `host.setAttribute(name, ...)` for that prop, adding `observedAttributes([name])` creates a write → re-parse → write loop — le-truc throws `[Slot] Circular delegation detected in set()`. This is a real failure mode, not a hypothetical: it reproduces immediately in `module-pagination` (`value`/`max`, reflected via `host.setAttribute`) and `module-codeblock` (`collapsed`, reflected via `bindAttribute(host, 'collapsed')`) — both are intentionally left **without** `observedAttributes`, with a comment explaining why. If a component both reflects a prop to its host attribute *and* needs to pick up external attribute edits, that's a sign the attribute shouldn't be the single source of truth — don't reach for `observedAttributes` there.
+
 ### Regression-test this
 
 Because this failure mode only shows up on the *second* render (attribute mutated after connect, not the initial one), a story with only static `args` never exercises it. Add a `play()` test that mutates the attribute directly, simulating what a control edit does:

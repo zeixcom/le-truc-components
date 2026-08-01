@@ -48,6 +48,8 @@ const allVariants: FormCheckboxArgs[] = [
 ];
 
 export const AllVariants: Story = {
+  // ⚠️ Custom render: renders multiple checkbox instances at once (one per
+  // variant), not a single component with varying args.
   render: () =>
     html`${allVariants.map((args, i) => html`${Checkbox(args)}${i < allVariants.length - 1 ? html`<br />` : nothing}`)}`,
 };

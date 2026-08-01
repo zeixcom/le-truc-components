@@ -5,6 +5,7 @@ import {
   defineComponent,
   type FormAssociatedElement,
   formAssociatedCheckbox,
+  observedAttributes,
 } from "@zeix/le-truc";
 
 export type FormCheckboxProps = {
@@ -45,5 +46,5 @@ export default defineComponent<FormCheckboxProps>(
     // driven by Controls.
     if (label) watch("label", bindText(label, true));
   },
-  [formAssociatedCheckbox()],
+  [formAssociatedCheckbox(), observedAttributes(["checked"])],
 );

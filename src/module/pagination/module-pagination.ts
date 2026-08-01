@@ -87,4 +87,8 @@ export default defineComponent<ModulePaginationProps>(
     const maxEl = first(".max");
     if (maxEl) watch("max", bindText(maxEl, true));
   },
+  // Not observedAttributes(['value', 'max']): both props' watch() handlers
+  // reflect back onto the same host attribute via setAttribute(), so
+  // re-parsing that self-write on attributeChangedCallback would be a
+  // circular update (le-truc throws "[Slot] Circular delegation detected").
 );

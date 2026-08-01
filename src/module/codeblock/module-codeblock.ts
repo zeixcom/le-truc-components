@@ -38,4 +38,9 @@ export default defineComponent<ModuleCodeblockProps>(
 
     watch("collapsed", bindAttribute(host, "collapsed"));
   },
+  // Not observedAttributes(['collapsed']): the watch() handler above
+  // reflects the prop back onto the same host attribute via
+  // bindAttribute(host, ...), so re-parsing that self-write on
+  // attributeChangedCallback would be a circular update (le-truc throws
+  // "[Slot] Circular delegation detected").
 );

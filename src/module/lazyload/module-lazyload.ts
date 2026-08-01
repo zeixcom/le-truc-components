@@ -3,6 +3,7 @@ import {
   createTask,
   dangerouslyBindInnerHTML,
   defineComponent,
+  observedAttributes,
   schedule,
 } from "@zeix/le-truc";
 import {
@@ -100,4 +101,5 @@ export default defineComponent<ModuleLazyloadProps>(
       },
     });
   },
+  [observedAttributes(["src"])],
 );

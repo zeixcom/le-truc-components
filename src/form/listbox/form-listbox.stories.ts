@@ -126,6 +126,9 @@ export const WithGroups: Story = {
 };
 
 export const KeyboardNavigation: Story = {
+  // ⚠️ Custom render: distinct option set (vegetables) from the default
+  // fruit options, needed to exercise wrap-around/Home/End navigation
+  // without colliding with other stories' option values.
   render: () => html`
     <form>
       <form-listbox id="veggies" name="veggie">
