@@ -94,8 +94,8 @@ export default defineComponent<ModuleColoreditorProps>(
       "Needed to preview the color scale.",
     );
     pass(colorscale, {
-      color: () => host.color,
-      name: () => host.name,
+      value: () => host.color,
+      label: () => host.name,
     });
 
     const colorinfoBase = first("module-colorinfo.base");
