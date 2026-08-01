@@ -5,7 +5,7 @@ import * as ModuleDialogStories from './module-dialog.stories';
 
 ### Module Dialog
 
-A modal dialog component that manages `open` state and handles scroll locking. Demonstrates a `watch('open', ...)` custom handler for imperative side-effects: `showModal()`, `close()`, scroll-lock body styles, and focus management, including a returned cleanup function run on disconnect. Uses `on('click')` on the open button, backdrop click, and close button to toggle `host.open`.
+A modal dialog wrapper around the native `<dialog>` element, with scroll locking and focus management. It shows how to layer accessible interaction behavior on top of native browser primitives.
 
 #### Tag Name
 

@@ -5,7 +5,7 @@ import * as BasicPluralizeStories from './basic-pluralize.stories';
 
 ### Basic Pluralize
 
-A locale-aware pluralisation component driven by `Intl.PluralRules`. Demonstrates `asClampedInteger()` to clamp the count to a non-negative integer, `bindVisible()` for conditional visibility, and `bindText()` for the count display. The factory attaches `watch()` calls dynamically — only for the plural categories that the given locale actually uses — guarding each optional descendant with `if (element)`.
+A locale-aware pluralization component built on `Intl.PluralRules`. It demonstrates wiring up only the plural-category elements a given locale actually needs, rather than all of them unconditionally.
 
 #### Tag Name
 

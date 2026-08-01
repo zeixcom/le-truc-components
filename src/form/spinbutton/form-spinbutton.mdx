@@ -5,7 +5,7 @@ import * as FormSpinbuttonStories from './form-spinbutton.stories';
 
 ### Form Spinbutton
 
-A quantity spinbutton with increment/decrement buttons, clamped values, and keyboard support that works both controlled and uncontrolled. Reads both `value` and `max` from the native input's DOM state before `expose()`, and uses `on()` effects on the shared `controls` collection (from `all()`) for all three event types (`change`, `click`, `keydown`). `createMemo()` derives a private `nonZero` signal used to show/hide zero-state UI without exposing it as a reactive property. Range validity (`rangeOverflow`/`rangeUnderflow`) is reported via the `internals` helper from the factory context and `formAssociated()`.
+A quantity spinbutton with increment/decrement buttons, clamped values, and keyboard support. It works both controlled and uncontrolled, and participates in forms just like a native input.
 
 #### Tag Name
 

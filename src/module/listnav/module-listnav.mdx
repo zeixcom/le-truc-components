@@ -5,7 +5,7 @@ import * as ModuleListnavStories from './module-listnav.stories';
 
 ### Module Listnav
 
-A navigation coordinator that syncs `form-listbox` selection with `module-lazyload` and the browser's location hash. Uses `pass()` to reactively push `listbox.value` as the `src` of the lazyload. The hash-sync logic — a `createEffect` that writes `location.hash` when the selection changes, plus a `hashchange` listener for browser back/forward navigation — has no signal dependency of its own, so it's registered via `watch(() => true, …)`: the setup runs once on connect, and its returned cleanup tears both down on disconnect.
+Keeps a `form-listbox` selection, the URL hash, and lazily loaded content all in sync with each other. It demonstrates coordinating multiple components together with browser navigation state.
 
 #### Tag Name
 

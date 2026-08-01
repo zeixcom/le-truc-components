@@ -5,7 +5,7 @@ import * as ModuleTodoStories from './module-todo.stories';
 
 ### Module Todo
 
-A full-featured todo list that owns the data, manages the list DOM directly, and handles all interactions — adding, deleting, reordering (keyboard and drag), inline editing labels, and toggling completion. Uses `createList()` with per-item `createStore()` signals and `reconcile()` to sync a keyed list of todo items to the `<ol data-container>`/`<template>` pair, and `createMemo()` to derive reactive `activeCount`/`completedCount` from the list. Demonstrates `pass()` with `{ get, set }` descriptors to mediate each rendered `form-checkbox`'s `checked` prop and each `form-inplace-edit`'s `value` prop to the matching item's `Store`, `pass()` with thunks to push `disabled`/`badge`/`count` into child components, `bindState()` on the host's `internals` to expose the active filter as custom states for CSS-based filtering, `each()` to wire up per-item reorder buttons, and event delegation (`click`/`keydown`/`pointerdown`/`pointermove`/`pointerup`/`pointercancel`) on the host for removal, keyboard reordering, and pointer-based drag-and-drop. Use it as a reference example of a complete Le Truc application — keyboard accessible controls and ARIA labelling should be considered when adapting it for production use.
+A complete todo list application — add, delete, reorder by keyboard or drag, inline-edit labels, and toggle completion. It's the most complete reference example of a real Le Truc application, combining most of the library's patterns in one component.
 
 #### Tag Name
 

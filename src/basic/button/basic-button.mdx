@@ -5,7 +5,7 @@ import * as BasicButtonStories from './basic-button.stories';
 
 ### Basic Button
 
-A reusable button component designed to be controlled by a parent component via `pass()`. Demonstrates initializing reactive properties by reading DOM state directly inside the factory (`button.disabled`, `span.label` text content) rather than via attribute parsers, and shows how optional descendant elements (`span.label`, `span.badge`) are handled gracefully: when absent, the corresponding `watch()` calls are guarded with `if (element)` and never attach.
+A reusable button component controlled entirely by a parent through reactive properties, rather than direct DOM manipulation. It shows how to initialize state from existing DOM content and how optional descendant elements — a label, a badge — can be wired up only when present.
 
 #### Tag Name
 

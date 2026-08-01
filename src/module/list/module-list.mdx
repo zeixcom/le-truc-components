@@ -5,7 +5,7 @@ import * as ModuleListStories from './module-list.stories';
 
 ### Module List
 
-A dynamic list component that owns its data with a reactive `createList()` and keeps the DOM in sync via `reconcile()` — the keyed-list-reconciliation complement to `each()`. Items are added by calling `list.add(value)` on form submission and removed via delegated click handling on a `basic-button.remove` inside each item; `reconcile()` clones the `<template>`'s root element for each entering key (stamping it with `data-key`), removes elements for keys that left, and reuses/moves survivors. The `bindItem` callback passed to `reconcile()` fills the cloned content — it also runs once for server-rendered items adopted by their `data-key` on first run, so it's written to be idempotent (replacing the `<slot>` rather than assuming it's always present).
+A dynamic list component that owns its data and keeps the DOM in sync via keyed reconciliation. It's the reference example for adding, removing, and reordering items without losing element identity.
 
 #### Tag Name
 

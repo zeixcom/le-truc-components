@@ -5,7 +5,7 @@ import * as FormComboboxStories from './form-combobox.stories';
 
 ### Form Combobox
 
-An advanced form component that coordinates a text input with a popup `form-listbox`. Demonstrates a private `createState()` signal (`length`) updated via `on(textbox, 'input', ...)` and exposed read-only as `length.get`, `createState()`/`createMemo()` for private reactive popup-visibility state (`showPopup`/`isExpanded`), `pass(listbox, { filter: () => host.value })` to push the filter value into the child listbox reactively, `on(listbox, 'change', ...)` to receive the listbox's native-parity commit event instead of reaching into its DOM, and the shared `relayValidity()` helper for validation. `defineMethod()` provides the `clear` method. Form participation and validity are via ElementInternals (`formAssociated()`) — external consumers read `host.validity`/`host.validationMessage` like on a native input; there is no separate `error` reactive property, and no manual `aria-invalid`/`aria-errormessage` on the textbox.
+An advanced form control that coordinates a text input with a popup `form-listbox` for filtering and selection. It's a reference example of composing several components into one form-associated whole.
 
 #### Tag Name
 
