@@ -1,8 +1,8 @@
 import { html } from "lit";
 
 // Exported so other components' stories can embed a calctable instance via
-// ${Calctable()} instead of duplicating its markup.
-export const Calctable = () => html`
+// ${ModuleCalctable()} instead of duplicating its markup.
+export const ModuleCalctable = () => html`
   <module-calctable options='{"style":"currency","currency":"CHF"}'>
     <table>
       <thead>

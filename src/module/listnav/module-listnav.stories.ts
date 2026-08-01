@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { expect, userEvent, waitFor, within } from "storybook/test";
-import { Listnav } from "./module-listnav.html";
+import { ModuleListnav } from "./module-listnav.html";
 import "./module-listnav.ts";
 import "./module-listnav.css";
 import "../../form/listbox/form-listbox.ts";
@@ -10,7 +10,7 @@ import "../../card/callout/card-callout.css";
 
 const meta: Meta = {
   title: "Module/Listnav",
-  render: Listnav,
+  render: ModuleListnav,
 };
 export default meta;
 type Story = StoryObj;

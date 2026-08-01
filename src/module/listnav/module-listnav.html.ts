@@ -1,8 +1,8 @@
 import { html } from "lit";
 
 // Exported so other components' stories can embed a listnav instance via
-// ${Listnav()} instead of duplicating its markup.
-export const Listnav = () => html`
+// ${ModuleListnav()} instead of duplicating its markup.
+export const ModuleListnav = () => html`
   <module-listnav>
     <nav>
       <h2 id="listnav-label" class="visually-hidden">Pages</h2>

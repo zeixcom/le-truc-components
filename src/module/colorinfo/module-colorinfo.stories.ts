@@ -1,13 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { expect, within } from "storybook/test";
-import { Colorinfo, type ModuleColorinfoArgs } from "./module-colorinfo.html";
+import {
+  ModuleColorinfo,
+  type ModuleColorinfoArgs,
+} from "./module-colorinfo.html";
 import "./module-colorinfo.ts";
 import "./module-colorinfo.css";
 import "../../basic/number/basic-number.ts";
 
 const meta: Meta<ModuleColorinfoArgs> = {
   title: "Module/Colorinfo",
-  render: Colorinfo,
+  render: ModuleColorinfo,
   argTypes: {
     value: {
       control: "color",

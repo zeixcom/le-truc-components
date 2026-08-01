@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import { expect, spyOn, userEvent, waitFor, within } from "storybook/test";
 import {
-  Codeblock,
+  ModuleCodeblock,
   type ModuleCodeblockArgs,
   sampleCode,
 } from "./module-codeblock.html";
@@ -17,7 +17,7 @@ import type { ModuleCodeblockProps } from "./module-codeblock.ts";
 
 const meta: Meta<ModuleCodeblockArgs> = {
   title: "Module/Codeblock",
-  render: Codeblock,
+  render: ModuleCodeblock,
   argTypes: {
     collapsed: {
       control: "boolean",

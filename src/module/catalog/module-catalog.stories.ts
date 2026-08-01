@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { expect, userEvent, within } from "storybook/test";
-import { Catalog } from "./module-catalog.html";
+import { ModuleCatalog } from "./module-catalog.html";
 import "../../basic/button/basic-button.ts";
 import "../../basic/button/basic-button.css";
 import "../../form/spinbutton/form-spinbutton.ts";
@@ -11,7 +11,7 @@ import type { BasicButtonProps } from "../../basic/button/basic-button.ts";
 
 const meta: Meta = {
   title: "Module/Catalog",
-  render: Catalog,
+  render: ModuleCatalog,
 };
 export default meta;
 type Story = StoryObj;

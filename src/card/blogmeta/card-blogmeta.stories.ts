@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import { expect } from "storybook/test";
 import { timestamp } from "../../_common/storyArgs";
 import {
-  Blogmeta,
   blogmetaArgTypes,
+  CardBlogmeta,
   type CardBlogmetaArgs,
 } from "./card-blogmeta.html";
 import "./card-blogmeta.ts";
@@ -11,7 +11,7 @@ import "./card-blogmeta.css";
 
 const meta: Meta<CardBlogmetaArgs> = {
   title: "Card/Blogmeta",
-  render: Blogmeta,
+  render: CardBlogmeta,
   argTypes: blogmetaArgTypes,
 };
 export default meta;

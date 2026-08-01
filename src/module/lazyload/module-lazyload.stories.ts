@@ -1,13 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { expect, waitFor } from "storybook/test";
-import { Lazyload, type ModuleLazyloadArgs } from "./module-lazyload.html";
+import {
+  ModuleLazyload,
+  type ModuleLazyloadArgs,
+} from "./module-lazyload.html";
 import "./module-lazyload.ts";
 import "../../card/callout/card-callout.css";
 import type { ModuleLazyloadProps } from "./module-lazyload.ts";
 
 const meta: Meta<ModuleLazyloadArgs> = {
   title: "Module/Lazyload",
-  render: Lazyload,
+  render: ModuleLazyload,
   argTypes: {
     src: {
       control: "text",

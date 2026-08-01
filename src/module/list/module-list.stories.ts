@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
-import { List } from "./module-list.html";
+import { ModuleList } from "./module-list.html";
 import "./module-list.ts";
 import "./module-list.css";
 import "../../basic/button/basic-button.ts";
@@ -11,7 +11,7 @@ import "../../form/textbox/form-textbox.css";
 
 const meta: Meta = {
   title: "Module/List",
-  render: List,
+  render: ModuleList,
 };
 export default meta;
 type Story = StoryObj;

@@ -5,8 +5,8 @@ export type ModuleCarouselArgs = {
 };
 
 // Exported so other components' stories can embed a carousel instance via
-// ${Carousel(args)} instead of duplicating its markup.
-export const Carousel = ({ index }: ModuleCarouselArgs) => html`
+// ${ModuleCarousel(args)} instead of duplicating its markup.
+export const ModuleCarousel = ({ index }: ModuleCarouselArgs) => html`
   <module-carousel>
     <h2 class="visually-hidden">Slides</h2>
     <div class="slides" tabindex="0">

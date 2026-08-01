@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { expect, userEvent, within } from "storybook/test";
 import {
+  FormInplaceEdit,
   type FormInplaceEditArgs,
-  InplaceEdit,
 } from "./form-inplace-edit.html";
 import "./form-inplace-edit.ts";
 import "./form-inplace-edit.css";
@@ -11,7 +11,7 @@ import "../textbox/form-textbox.css";
 
 const meta: Meta<FormInplaceEditArgs> = {
   title: "Form/Inplace Edit",
-  render: InplaceEdit,
+  render: FormInplaceEdit,
   argTypes: {
     name: {
       control: "text",

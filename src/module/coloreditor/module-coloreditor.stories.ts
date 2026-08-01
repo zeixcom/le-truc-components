@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { expect, fireEvent, userEvent, within } from "storybook/test";
 import {
-  Coloreditor,
+  ModuleColoreditor,
   type ModuleColoreditorArgs,
 } from "./module-coloreditor.html";
 import type { ModuleColoreditorProps } from "./module-coloreditor.ts";
@@ -19,7 +19,7 @@ import "../../basic/number/basic-number.ts";
 
 const meta: Meta<ModuleColoreditorArgs> = {
   title: "Module/Coloreditor",
-  render: Coloreditor,
+  render: ModuleColoreditor,
   argTypes: {
     value: {
       control: "color",

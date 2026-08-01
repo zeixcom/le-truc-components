@@ -6,8 +6,8 @@ export type FormComboboxArgs = {
 };
 
 // Exported so other components' stories can embed a combobox instance via
-// ${Combobox(args)} instead of duplicating its markup.
-export const Combobox = ({ value, description }: FormComboboxArgs) => html`
+// ${FormCombobox(args)} instead of duplicating its markup.
+export const FormCombobox = ({ value, description }: FormComboboxArgs) => html`
   <form-combobox>
     <label for="color-input" id="color-label">Favourite color</label>
     <div class="input">

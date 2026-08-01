@@ -1,16 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { expect, within } from "storybook/test";
-import { Media } from "../../context/media/context-media.html";
+import { ContextMedia } from "../../context/media/context-media.html";
 import {
+  CardMediaqueries,
   type CardMediaqueriesArgs,
-  Mediaqueries,
 } from "./card-mediaqueries.html";
 import "../../context/media/context-media.ts";
 import "./card-mediaqueries.ts";
 
 const meta: Meta<CardMediaqueriesArgs> = {
   title: "Card/Mediaqueries",
-  render: Mediaqueries,
+  render: CardMediaqueries,
   argTypes: {
     heading: {
       control: "text",
@@ -40,12 +40,12 @@ export const WithoutContext: Story = {
 export const WithContext: Story = {
   args: { heading: "With Context" },
   render: ({ heading }) =>
-    Media({
+    ContextMedia({
       sm: "",
       md: "",
       lg: "",
       xl: "",
-      content: Mediaqueries({ heading }),
+      content: CardMediaqueries({ heading }),
     }),
   play: async ({ canvasElement }) => {
     await customElements.whenDefined("context-media");

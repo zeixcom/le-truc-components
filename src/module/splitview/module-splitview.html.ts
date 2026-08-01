@@ -1,8 +1,8 @@
 import { html } from "lit";
 
 // Exported so other components' stories can embed a splitview instance via
-// ${Splitview()} instead of duplicating its markup.
-export const Splitview = () => html`
+// ${ModuleSplitview()} instead of duplicating its markup.
+export const ModuleSplitview = () => html`
   <!-- Horizontal split (default) -->
   <module-splitview id="horizontal-splitview">
     <module-scrollarea>

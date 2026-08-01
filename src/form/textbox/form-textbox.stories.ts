@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
-import { type FormTextboxArgs, Textbox } from "./form-textbox.html";
+import { FormTextbox, type FormTextboxArgs } from "./form-textbox.html";
 import "./form-textbox.ts";
 import "./form-textbox.css";
 import type { FormAssociatedElement } from "@zeix/le-truc";
@@ -9,7 +9,7 @@ import type { FormTextboxProps } from "./form-textbox.ts";
 
 const meta: Meta<FormTextboxArgs> = {
   title: "Form/Textbox",
-  render: Textbox,
+  render: FormTextbox,
   argTypes: {
     value: {
       control: "text",

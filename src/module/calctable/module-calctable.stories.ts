@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { expect, userEvent } from "storybook/test";
-import { Calctable } from "./module-calctable.html";
+import { ModuleCalctable } from "./module-calctable.html";
 import "./module-calctable.ts";
 import "./module-calctable.css";
 
 const meta: Meta = {
   title: "Module/Calctable",
-  render: Calctable,
+  render: ModuleCalctable,
 };
 export default meta;
 type Story = StoryObj;

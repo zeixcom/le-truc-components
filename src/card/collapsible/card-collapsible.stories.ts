@@ -1,11 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
-import { type CardCollapsibleArgs, Collapsible } from "./card-collapsible.html";
+import {
+  CardCollapsible,
+  type CardCollapsibleArgs,
+} from "./card-collapsible.html";
 import "./card-collapsible.ts";
 import "./card-collapsible.css";
 
 const meta: Meta<CardCollapsibleArgs> = {
   title: "Card/Collapsible",
-  render: Collapsible,
+  render: CardCollapsible,
   argTypes: {
     description: {
       control: "text",

@@ -1,12 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { expect, within } from "storybook/test";
-import { type CardColorscaleArgs, Colorscale } from "./card-colorscale.html";
+import {
+  CardColorscale,
+  type CardColorscaleArgs,
+} from "./card-colorscale.html";
 import "./card-colorscale.ts";
 import "./card-colorscale.css";
 
 const meta: Meta<CardColorscaleArgs> = {
   title: "Card/Colorscale",
-  render: Colorscale,
+  render: CardColorscale,
   argTypes: {
     value: {
       control: "color",

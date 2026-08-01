@@ -1,7 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
-import { type FormRadiogroupArgs, Radiogroup } from "./form-radiogroup.html";
+import {
+  FormRadiogroup,
+  type FormRadiogroupArgs,
+} from "./form-radiogroup.html";
 import "./form-radiogroup.ts";
 import "./form-radiogroup.css";
 import type { FormAssociatedElement } from "@zeix/le-truc";
@@ -9,7 +12,7 @@ import type { FormRadiogroupProps } from "./form-radiogroup.ts";
 
 const meta: Meta<FormRadiogroupArgs> = {
   title: "Form/Radiogroup",
-  render: Radiogroup,
+  render: FormRadiogroup,
   argTypes: {
     value: {
       control: "text",

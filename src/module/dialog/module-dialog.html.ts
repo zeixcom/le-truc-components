@@ -5,8 +5,8 @@ export type ModuleDialogArgs = {
 };
 
 // Exported so other components' stories can embed a dialog instance via
-// ${Dialog(args)} instead of duplicating its markup.
-export const Dialog = ({ open }: ModuleDialogArgs) => html`
+// ${ModuleDialog(args)} instead of duplicating its markup.
+export const ModuleDialog = ({ open }: ModuleDialogArgs) => html`
   <module-dialog ?open=${open}>
     <basic-button>
       <button type="button" aria-haspopup="dialog" aria-controls="story-dialog">

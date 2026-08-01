@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { expect, userEvent, within } from "storybook/test";
-import { Dialog, type ModuleDialogArgs } from "./module-dialog.html";
+import { ModuleDialog, type ModuleDialogArgs } from "./module-dialog.html";
 import "./module-dialog.ts";
 import "./module-dialog.css";
 import "../../basic/button/basic-button.ts";
@@ -11,7 +11,7 @@ import type { ModuleDialogProps } from "./module-dialog.ts";
 
 const meta: Meta<ModuleDialogArgs> = {
   title: "Module/Dialog",
-  render: Dialog,
+  render: ModuleDialog,
   argTypes: {
     open: {
       control: "boolean",

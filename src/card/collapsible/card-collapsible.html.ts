@@ -7,8 +7,8 @@ export type CardCollapsibleArgs = {
 };
 
 // Exported so other components' stories can embed a collapsible instance via
-// ${Collapsible(args)} instead of duplicating its markup.
-export const Collapsible = ({
+// ${CardCollapsible(args)} instead of duplicating its markup.
+export const CardCollapsible = ({
   description,
   content,
   open,

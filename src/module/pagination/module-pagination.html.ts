@@ -6,8 +6,8 @@ export type ModulePaginationArgs = {
 };
 
 // Exported so other components' stories can embed a pagination instance via
-// ${Pagination(args)} instead of duplicating its markup.
-export const Pagination = ({ value, max }: ModulePaginationArgs) => html`
+// ${ModulePagination(args)} instead of duplicating its markup.
+export const ModulePagination = ({ value, max }: ModulePaginationArgs) => html`
   <module-pagination>
     <div>
       <label>

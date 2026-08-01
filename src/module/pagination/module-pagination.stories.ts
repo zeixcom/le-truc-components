@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { expect, userEvent, within } from "storybook/test";
 import {
+  ModulePagination,
   type ModulePaginationArgs,
-  Pagination,
 } from "./module-pagination.html";
 import "./module-pagination.ts";
 import "./module-pagination.css";
@@ -10,7 +10,7 @@ import type { ModulePaginationProps } from "./module-pagination.ts";
 
 const meta: Meta<ModulePaginationArgs> = {
   title: "Module/Pagination",
-  render: Pagination,
+  render: ModulePagination,
   argTypes: {
     value: {
       control: "number",

@@ -5,8 +5,8 @@ export type CardMediaqueriesArgs = {
 };
 
 // Exported so other components' stories can embed a mediaqueries instance via
-// ${Mediaqueries(args)} instead of duplicating its markup.
-export const Mediaqueries = ({ heading }: CardMediaqueriesArgs) => html`
+// ${CardMediaqueries(args)} instead of duplicating its markup.
+export const CardMediaqueries = ({ heading }: CardMediaqueriesArgs) => html`
   <card-mediaqueries>
     <h2>${heading}</h2>
     <dl>

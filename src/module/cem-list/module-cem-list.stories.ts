@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { expect, userEvent, within } from "storybook/test";
-import { CemList } from "./module-cem-list.html";
+import { ModuleCemList } from "./module-cem-list.html";
 import "./module-cem-list.ts";
 import "./module-cem-list.css";
 import "../../card/collapsible/card-collapsible.ts";
@@ -10,7 +10,7 @@ import "../../form/textbox/form-textbox.css";
 
 const meta: Meta = {
   title: "Module/Cem List",
-  render: CemList,
+  render: ModuleCemList,
 };
 export default meta;
 type Story = StoryObj;

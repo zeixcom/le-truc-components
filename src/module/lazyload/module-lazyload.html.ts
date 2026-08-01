@@ -6,8 +6,8 @@ export type ModuleLazyloadArgs = {
 };
 
 // Exported so other components' stories can embed a lazyload instance via
-// ${Lazyload(args)} instead of duplicating its markup.
-export const Lazyload = ({
+// ${ModuleLazyload(args)} instead of duplicating its markup.
+export const ModuleLazyload = ({
   src,
   "allow-scripts": allowScripts,
 }: ModuleLazyloadArgs) => html`

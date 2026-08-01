@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { expect, userEvent, within } from "storybook/test";
-import { type BasicHelloArgs, Hello } from "./basic-hello.html";
+import { BasicHello, type BasicHelloArgs } from "./basic-hello.html";
 import "./basic-hello.ts";
 import type { BasicHelloProps } from "./basic-hello.ts";
 
 const meta: Meta<BasicHelloArgs> = {
   title: "Basic/Hello",
-  render: Hello,
+  render: BasicHello,
   argTypes: {
     subject: {
       control: "text",

@@ -7,8 +7,8 @@ export type FormListboxArgs = {
 };
 
 // Exported so other components' stories can embed a listbox instance via
-// ${Listbox(args)} instead of duplicating its markup.
-export const Listbox = ({ value }: FormListboxArgs) => html`
+// ${FormListbox(args)} instead of duplicating its markup.
+export const FormListbox = ({ value }: FormListboxArgs) => html`
   <form>
     <form-listbox id="colors" name="color">
       <div role="listbox" aria-label="Colors">

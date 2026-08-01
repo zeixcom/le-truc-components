@@ -9,8 +9,8 @@ export type ModuleColorinfoArgs = {
 };
 
 // Exported so other components' stories can embed a colorinfo instance via
-// ${Colorinfo(args)} instead of duplicating its markup.
-export const Colorinfo = ({
+// ${ModuleColorinfo(args)} instead of duplicating its markup.
+export const ModuleColorinfo = ({
   value,
   label,
   open,

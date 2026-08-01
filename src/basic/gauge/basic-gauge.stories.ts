@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { expect } from "storybook/test";
-import { type BasicGaugeArgs, Gauge } from "./basic-gauge.html";
+import { BasicGauge, type BasicGaugeArgs } from "./basic-gauge.html";
 import "./basic-gauge.ts";
 import "./basic-gauge.css";
 import "../number/basic-number.ts";
@@ -14,7 +14,7 @@ const defaultThresholds = JSON.stringify([
 
 const meta: Meta<BasicGaugeArgs> = {
   title: "Basic/Gauge",
-  render: Gauge,
+  render: BasicGauge,
   argTypes: {
     value: {
       control: "number",

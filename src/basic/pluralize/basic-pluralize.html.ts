@@ -6,7 +6,11 @@ export type BasicPluralizeArgs = {
   ordinal: boolean;
 };
 
-export const Pluralize = ({ count, ordinal, lang }: BasicPluralizeArgs) => html`
+export const BasicPluralize = ({
+  count,
+  ordinal,
+  lang,
+}: BasicPluralizeArgs) => html`
   <p>Remaining tasks:</p>
   <basic-pluralize count=${count} ?ordinal=${ordinal} lang=${lang || nothing}>
     <p class="none">Well done, all done!</p>

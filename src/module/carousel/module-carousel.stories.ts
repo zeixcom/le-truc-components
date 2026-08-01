@@ -1,13 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { expect, userEvent, within } from "storybook/test";
-import { Carousel, type ModuleCarouselArgs } from "./module-carousel.html";
+import {
+  ModuleCarousel,
+  type ModuleCarouselArgs,
+} from "./module-carousel.html";
 import "./module-carousel.ts";
 import "./module-carousel.css";
 import type { ModuleCarouselProps } from "./module-carousel.ts";
 
 const meta: Meta<ModuleCarouselArgs> = {
   title: "Module/Carousel",
-  render: Carousel,
+  render: ModuleCarousel,
   argTypes: {
     index: {
       control: "number",

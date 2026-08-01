@@ -1,8 +1,8 @@
 import { html } from "lit";
 
 // Exported so other components' stories can embed a todo instance via
-// ${Todo()} instead of duplicating its markup.
-export const Todo = () => html`
+// ${ModuleTodo()} instead of duplicating its markup.
+export const ModuleTodo = () => html`
   <module-todo>
     <form action="#">
       <form-textbox>

@@ -6,7 +6,7 @@ export type CardCalloutArgs = {
 };
 
 // Exported so other components' stories can embed a callout instance via
-// ${Callout(args)} instead of duplicating its markup.
-export const Callout = ({ variant, content }: CardCalloutArgs) => html`
+// ${CardCallout(args)} instead of duplicating its markup.
+export const CardCallout = ({ variant, content }: CardCalloutArgs) => html`
   <card-callout class=${variant !== "info" ? variant : nothing}>${content}</card-callout>
 `;

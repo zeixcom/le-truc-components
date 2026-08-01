@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { expect, spyOn, userEvent } from "storybook/test";
-import { Splitview } from "./module-splitview.html";
+import { ModuleSplitview } from "./module-splitview.html";
 import "./module-splitview.ts";
 import "./module-splitview.css";
 import "../scrollarea/module-scrollarea.ts";
@@ -8,7 +8,7 @@ import "../scrollarea/module-scrollarea.css";
 
 const meta: Meta = {
   title: "Module/Splitview",
-  render: Splitview,
+  render: ModuleSplitview,
 };
 export default meta;
 type Story = StoryObj;

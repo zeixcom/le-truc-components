@@ -9,8 +9,8 @@ export type BasicNumberArgs = {
 };
 
 // Exported so other components' stories can embed a number instance via
-// ${NumberEl(args)} instead of duplicating its markup.
-export const NumberEl = ({
+// ${BasicNumber(args)} instead of duplicating its markup.
+export const BasicNumber = ({
   value,
   options,
   lang,
@@ -22,7 +22,7 @@ export const NumberEl = ({
   ></basic-number>
 `;
 
-// Wraps NumberEl with a demo caption and a lang-carrying <p> ancestor —
+// Wraps BasicNumber with a demo caption and a lang-carrying <p> ancestor —
 // used as this component's own story render, not meant for embedding.
 export const NumberDemo = ({
   caption,
@@ -30,6 +30,6 @@ export const NumberDemo = ({
   ...args
 }: BasicNumberArgs) => html`
   <p lang=${wrapperLang || nothing}>
-    ${caption ? html`${caption}:<br />` : nothing}${NumberEl(args)}
+    ${caption ? html`${caption}:<br />` : nothing}${BasicNumber(args)}
   </p>
 `;

@@ -7,8 +7,12 @@ export type CardColorscaleArgs = {
 };
 
 // Exported so other components' stories can embed a colorscale instance via
-// ${Colorscale(args)} instead of duplicating its markup.
-export const Colorscale = ({ value, label, size }: CardColorscaleArgs) => html`
+// ${CardColorscale(args)} instead of duplicating its markup.
+export const CardColorscale = ({
+  value,
+  label,
+  size,
+}: CardColorscaleArgs) => html`
   <card-colorscale class=${size} value=${value}>
     <ol role="presentation">
       <li class="lighten80"></li>

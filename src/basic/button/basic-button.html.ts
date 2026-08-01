@@ -14,7 +14,7 @@ export type BasicButtonArgs = {
   content: "spans" | "text";
 };
 
-export const Button = ({
+export const BasicButton = ({
   label,
   badge,
   disabled,

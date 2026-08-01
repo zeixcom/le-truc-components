@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { expect, userEvent, within } from "storybook/test";
-import { type BasicCounterArgs, Counter } from "./basic-counter.html";
+import { BasicCounter, type BasicCounterArgs } from "./basic-counter.html";
 import "./basic-counter.ts";
 import "./basic-counter.css";
 import type { BasicCounterProps } from "./basic-counter.ts";
 
 const meta: Meta<BasicCounterArgs> = {
   title: "Basic/Counter",
-  render: Counter,
+  render: BasicCounter,
   argTypes: {
     count: {
       control: "number",

@@ -1,13 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html, nothing } from "lit";
 import { expect } from "storybook/test";
-import { type BasicPluralizeArgs, Pluralize } from "./basic-pluralize.html";
+import {
+  BasicPluralize,
+  type BasicPluralizeArgs,
+} from "./basic-pluralize.html";
 import "./basic-pluralize.ts";
 import type { BasicPluralizeProps } from "./basic-pluralize.ts";
 
 const meta: Meta<BasicPluralizeArgs> = {
   title: "Basic/Pluralize",
-  render: Pluralize,
+  render: BasicPluralize,
   argTypes: {
     count: {
       control: "number",

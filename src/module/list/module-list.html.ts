@@ -1,8 +1,8 @@
 import { html } from "lit";
 
 // Exported so other components' stories can embed a list instance via
-// ${List()} instead of duplicating its markup.
-export const List = () => html`
+// ${ModuleList()} instead of duplicating its markup.
+export const ModuleList = () => html`
   <module-list>
     <form action="#">
       <form-textbox>

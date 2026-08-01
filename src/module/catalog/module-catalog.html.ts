@@ -28,8 +28,8 @@ const spinbuttonItem = (name: string, label: string, max: number) => html`
 `;
 
 // Exported so other components' stories can embed a catalog instance via
-// ${Catalog()} instead of duplicating its markup.
-export const Catalog = () => html`
+// ${ModuleCatalog()} instead of duplicating its markup.
+export const ModuleCatalog = () => html`
   <module-catalog>
     <header>
       <p>Shop</p>

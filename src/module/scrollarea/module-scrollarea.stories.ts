@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import {
+  ModuleScrollarea,
   type ModuleScrollareaArgs,
-  Scrollarea,
 } from "./module-scrollarea.html";
 import "./module-scrollarea.ts";
 import "./module-scrollarea.css";
 
 const meta: Meta<ModuleScrollareaArgs> = {
   title: "Module/Scrollarea",
-  render: Scrollarea,
+  render: ModuleScrollarea,
   argTypes: {
     orientation: {
       control: { type: "select" },

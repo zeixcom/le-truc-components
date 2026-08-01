@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { expect, userEvent, within } from "storybook/test";
-import { Ticker } from "./module-ticker.html";
+import { ModuleTicker } from "./module-ticker.html";
 import "./module-ticker.ts";
 import "./module-ticker.css";
 import "../../basic/button/basic-button.ts";
@@ -8,7 +8,7 @@ import "../../basic/button/basic-button.css";
 
 const meta: Meta = {
   title: "Module/Ticker",
-  render: Ticker,
+  render: ModuleTicker,
 };
 export default meta;
 type Story = StoryObj;

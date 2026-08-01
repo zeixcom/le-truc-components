@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
-import { Tabgroup } from "./module-tabgroup.html";
+import { ModuleTabgroup } from "./module-tabgroup.html";
 import "./module-tabgroup.ts";
 import "./module-tabgroup.css";
 import type { ModuleTabgroupProps } from "./module-tabgroup.ts";
 
 const meta: Meta = {
   title: "Module/Tabgroup",
-  render: Tabgroup,
+  render: ModuleTabgroup,
 };
 export default meta;
 type Story = StoryObj;

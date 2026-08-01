@@ -6,8 +6,8 @@ export type FormColorgraphArgs = {
 };
 
 // Exported so other components' stories can embed a colorgraph instance via
-// ${Colorgraph(args)} instead of duplicating its markup.
-export const Colorgraph = ({ name, value }: FormColorgraphArgs) => html`
+// ${FormColorgraph(args)} instead of duplicating its markup.
+export const FormColorgraph = ({ name, value }: FormColorgraphArgs) => html`
   <form-colorgraph name=${name} value=${value}>
     <div class="graph">
       <canvas width="400" height="400"></canvas>

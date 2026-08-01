@@ -17,8 +17,8 @@ const SYMBOLS: Array<[string, number]> = [
 ];
 
 // Exported so other components' stories can embed a ticker instance via
-// ${Ticker()} instead of duplicating its markup.
-export const Ticker = () => html`
+// ${ModuleTicker()} instead of duplicating its markup.
+export const ModuleTicker = () => html`
   <module-ticker fraction="0.1">
     <div class="controls">
       <basic-button class="toggle">

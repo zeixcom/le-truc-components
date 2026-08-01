@@ -6,7 +6,7 @@ export type BasicGaugeArgs = {
   id?: string;
 };
 
-export const Gauge = ({
+export const BasicGauge = ({
   value,
   thresholds,
   id = "basic-gauge-label",

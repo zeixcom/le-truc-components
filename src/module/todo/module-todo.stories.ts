@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { expect, spyOn, userEvent, within } from "storybook/test";
-import { Todo } from "./module-todo.html";
+import { ModuleTodo } from "./module-todo.html";
 import "./module-todo.ts";
 import "./module-todo.css";
 import "../../basic/button/basic-button.ts";
@@ -17,7 +17,7 @@ import "../../form/textbox/form-textbox.css";
 
 const meta: Meta = {
   title: "Module/Todo",
-  render: Todo,
+  render: ModuleTodo,
 };
 export default meta;
 type Story = StoryObj;

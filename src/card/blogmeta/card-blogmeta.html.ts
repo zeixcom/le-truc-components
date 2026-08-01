@@ -12,8 +12,8 @@ export type CardBlogmetaArgs = {
 };
 
 // Exported so card-blogpost.html.ts can embed a blogmeta instance via
-// ${Blogmeta(args)} instead of duplicating its markup.
-export const Blogmeta = ({
+// ${CardBlogmeta(args)} instead of duplicating its markup.
+export const CardBlogmeta = ({
   author,
   avatarSrc,
   datePublished,
@@ -63,7 +63,7 @@ export const Blogmeta = ({
 `;
 
 // Exported so card-blogpost.html.ts can fold these into its own
-// argTypes when it embeds Blogmeta(args).
+// argTypes when it embeds CardBlogmeta(args).
 export const blogmetaArgTypes = {
   author: {
     control: "text",

@@ -9,8 +9,14 @@ export type ContextMediaArgs = {
 };
 
 // Exported so other components' stories can embed a context-media provider
-// via ${Media(args)} instead of duplicating its markup.
-export const Media = ({ sm, md, lg, xl, content }: ContextMediaArgs) => html`
+// via ${ContextMedia(args)} instead of duplicating its markup.
+export const ContextMedia = ({
+  sm,
+  md,
+  lg,
+  xl,
+  content,
+}: ContextMediaArgs) => html`
   <context-media
     sm=${sm || nothing}
     md=${md || nothing}

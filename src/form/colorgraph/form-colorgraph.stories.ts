@@ -2,7 +2,10 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import type { FormAssociatedElement } from "@zeix/le-truc";
 import { html } from "lit";
 import { expect, fireEvent, userEvent, within } from "storybook/test";
-import { Colorgraph, type FormColorgraphArgs } from "./form-colorgraph.html";
+import {
+  FormColorgraph,
+  type FormColorgraphArgs,
+} from "./form-colorgraph.html";
 import "./form-colorgraph.ts";
 import "./form-colorgraph.css";
 import type { FormColorgraphProps } from "./form-colorgraph.ts";
@@ -12,7 +15,7 @@ type ColorgraphEl = HTMLElement & FormAssociatedElement & FormColorgraphProps;
 const meta: Meta<FormColorgraphArgs> = {
   title: "Form/Colorgraph",
   render: ({ name, value }) => html`
-    <form>${Colorgraph({ name, value })}</form>
+    <form>${FormColorgraph({ name, value })}</form>
   `,
   argTypes: {
     name: {

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html, nothing } from "lit";
 import { expect, userEvent, waitFor, within } from "storybook/test";
-import { type FormListboxArgs, Listbox } from "./form-listbox.html";
+import { FormListbox, type FormListboxArgs } from "./form-listbox.html";
 import "../../card/callout/card-callout.css";
 import "../../module/scrollarea/module-scrollarea.ts";
 import "../../module/scrollarea/module-scrollarea.css";
@@ -12,7 +12,7 @@ import type { FormListboxProps } from "./form-listbox.ts";
 
 const meta: Meta<FormListboxArgs> = {
   title: "Form/Listbox",
-  render: Listbox,
+  render: FormListbox,
   argTypes: {
     value: {
       control: "text",

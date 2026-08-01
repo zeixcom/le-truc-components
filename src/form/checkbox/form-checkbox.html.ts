@@ -7,8 +7,12 @@ export type FormCheckboxArgs = {
 };
 
 // Exported so other components' stories can embed a checkbox instance via
-// ${Checkbox(args)} instead of duplicating its markup.
-export const Checkbox = ({ checked, label, variant }: FormCheckboxArgs) => html`
+// ${FormCheckbox(args)} instead of duplicating its markup.
+export const FormCheckbox = ({
+  checked,
+  label,
+  variant,
+}: FormCheckboxArgs) => html`
   <form-checkbox class=${variant !== "none" ? variant : nothing} ?checked=${checked}>
     <label>
       <input

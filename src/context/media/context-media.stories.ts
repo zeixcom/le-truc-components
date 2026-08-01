@@ -1,20 +1,20 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import { expect, within } from "storybook/test";
-import { Mediaqueries } from "../../card/mediaqueries/card-mediaqueries.html";
-import { type ContextMediaArgs, Media } from "./context-media.html";
+import { CardMediaqueries } from "../../card/mediaqueries/card-mediaqueries.html";
+import { ContextMedia, type ContextMediaArgs } from "./context-media.html";
 import "../../card/mediaqueries/card-mediaqueries.ts";
 import "./context-media.ts";
 
 const meta: Meta<ContextMediaArgs> = {
   title: "Context/Media",
   render: ({ sm, md, lg, xl }) =>
-    Media({
+    ContextMedia({
       sm,
       md,
       lg,
       xl,
-      content: Mediaqueries({ heading: "With Context" }),
+      content: CardMediaqueries({ heading: "With Context" }),
     }),
   argTypes: {
     sm: {
@@ -79,7 +79,7 @@ export const CustomBreakpoints: Story = {
   },
 };
 
-// ⚠️ Custom render: two differently-structured consumers (partial field subsets), not a prop variation of Mediaqueries
+// ⚠️ Custom render: two differently-structured consumers (partial field subsets), not a prop variation of CardMediaqueries
 export const MultipleConsumers: Story = {
   render: () => html`
     <context-media>

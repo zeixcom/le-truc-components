@@ -7,8 +7,8 @@ export type FormTextboxArgs = {
 };
 
 // Exported so other components' stories can embed a textbox instance via
-// ${Textbox(args)} instead of duplicating its markup.
-export const Textbox = ({
+// ${FormTextbox(args)} instead of duplicating its markup.
+export const FormTextbox = ({
   value,
   description,
   clearable,

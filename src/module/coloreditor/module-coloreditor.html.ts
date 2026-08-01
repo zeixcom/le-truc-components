@@ -1,7 +1,7 @@
 import { html } from "lit";
-import { Colorscale } from "../../card/colorscale/card-colorscale.html";
-import { Colorgraph } from "../../form/colorgraph/form-colorgraph.html";
-import { Colorinfo } from "../colorinfo/module-colorinfo.html";
+import { CardColorscale } from "../../card/colorscale/card-colorscale.html";
+import { FormColorgraph } from "../../form/colorgraph/form-colorgraph.html";
+import { ModuleColorinfo } from "../colorinfo/module-colorinfo.html";
 
 export type ModuleColoreditorArgs = {
   value: string;
@@ -22,9 +22,12 @@ const INFO_STEPS: { cls: string; weight: number; open: boolean }[] = [
   { cls: "darken80", weight: 900, open: false },
 ];
 
-export const Coloreditor = ({ value, label }: ModuleColoreditorArgs) => html`
+export const ModuleColoreditor = ({
+  value,
+  label,
+}: ModuleColoreditorArgs) => html`
   <module-coloreditor value=${value} label=${label}>
-    ${Colorscale({ value, label, size: "tiny" })}
+    ${CardColorscale({ value, label, size: "tiny" })}
     <form-textbox class="name">
       <label for="name-input">Color name</label>
       <div class="input">
@@ -40,10 +43,15 @@ export const Coloreditor = ({ value, label }: ModuleColoreditorArgs) => html`
       <p class="error" aria-live="assertive" id="name-error"></p>
       <p class="description" aria-live="polite" id="name-description"></p>
     </form-textbox>
-    ${Colorgraph({ name: "", value })}
+    ${FormColorgraph({ name: "", value })}
     <div class="info">
       ${INFO_STEPS.map(({ cls, weight, open }) =>
-        Colorinfo({ value, label: `${label} ${weight}`, open, class: cls }),
+        ModuleColorinfo({
+          value,
+          label: `${label} ${weight}`,
+          open,
+          class: cls,
+        }),
       )}
     </div>
   </module-coloreditor>

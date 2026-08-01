@@ -4,7 +4,7 @@ export type BasicHelloArgs = {
   subject: string;
 };
 
-export const Hello = ({ subject }: BasicHelloArgs) => html`
+export const BasicHello = ({ subject }: BasicHelloArgs) => html`
   <basic-hello>
     <label for="hello-subject">Your name</label><br />
     <input

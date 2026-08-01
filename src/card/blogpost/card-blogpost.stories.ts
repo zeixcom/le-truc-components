@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { timestamp } from "../../_common/storyArgs";
 import { blogmetaArgTypes } from "../blogmeta/card-blogmeta.html";
-import { Blogpost, type CardBlogpostArgs } from "./card-blogpost.html";
+import { CardBlogpost, type CardBlogpostArgs } from "./card-blogpost.html";
 import "./card-blogpost.css";
 import "../blogmeta/card-blogmeta.ts";
 import "../blogmeta/card-blogmeta.css";
 
 const meta: Meta<CardBlogpostArgs> = {
   title: "Card/Blogpost",
-  render: Blogpost,
+  render: CardBlogpost,
   argTypes: {
     title: {
       control: "text",

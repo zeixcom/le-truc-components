@@ -6,8 +6,8 @@ export type FormRadiogroupArgs = {
 };
 
 // Exported so other components' stories can embed a radiogroup instance via
-// ${Radiogroup(args)} instead of duplicating its markup.
-export const Radiogroup = ({ value, variant }: FormRadiogroupArgs) => html`
+// ${FormRadiogroup(args)} instead of duplicating its markup.
+export const FormRadiogroup = ({ value, variant }: FormRadiogroupArgs) => html`
   <form-radiogroup class=${variant !== "none" ? variant : nothing}>
     <fieldset>
       <legend>Theme</legend>

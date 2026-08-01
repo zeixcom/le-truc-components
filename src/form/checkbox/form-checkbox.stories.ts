@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html, nothing } from "lit";
 import { expect, userEvent, within } from "storybook/test";
-import { Checkbox, type FormCheckboxArgs } from "./form-checkbox.html";
+import { FormCheckbox, type FormCheckboxArgs } from "./form-checkbox.html";
 import "./form-checkbox.ts";
 import "./form-checkbox.css";
 import type { FormAssociatedElement } from "@zeix/le-truc";
@@ -9,7 +9,7 @@ import type { FormCheckboxProps } from "./form-checkbox.ts";
 
 const meta: Meta<FormCheckboxArgs> = {
   title: "Form/Checkbox",
-  render: Checkbox,
+  render: FormCheckbox,
   argTypes: {
     checked: {
       control: "boolean",
@@ -51,7 +51,7 @@ export const AllVariants: Story = {
   // ⚠️ Custom render: renders multiple checkbox instances at once (one per
   // variant), not a single component with varying args.
   render: () =>
-    html`${allVariants.map((args, i) => html`${Checkbox(args)}${i < allVariants.length - 1 ? html`<br />` : nothing}`)}`,
+    html`${allVariants.map((args, i) => html`${FormCheckbox(args)}${i < allVariants.length - 1 ? html`<br />` : nothing}`)}`,
 };
 
 export const InitialChecked: Story = {

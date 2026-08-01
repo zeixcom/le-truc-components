@@ -1,7 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import { expect, fireEvent, userEvent, within } from "storybook/test";
-import { type FormSpinbuttonArgs, Spinbutton } from "./form-spinbutton.html";
+import {
+  FormSpinbutton,
+  type FormSpinbuttonArgs,
+} from "./form-spinbutton.html";
 import "./form-spinbutton.ts";
 import "./form-spinbutton.css";
 import type { FormAssociatedElement } from "@zeix/le-truc";
@@ -9,7 +12,7 @@ import type { FormSpinbuttonProps } from "./form-spinbutton.ts";
 
 const meta: Meta<FormSpinbuttonArgs> = {
   title: "Form/Spinbutton",
-  render: Spinbutton,
+  render: FormSpinbutton,
   argTypes: {
     value: {
       control: "number",

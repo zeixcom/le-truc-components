@@ -5,8 +5,8 @@ import { html } from "lit";
 // a filter <form-textbox> plus one <card-collapsible> per declaration.
 //
 // Exported so other components' stories can embed a cem-list instance via
-// ${CemList()} instead of duplicating its markup.
-export const CemList = () => html`
+// ${ModuleCemList()} instead of duplicating its markup.
+export const ModuleCemList = () => html`
   <module-cem-list>
     <form-textbox name="filter">
       <label for="module-cem-list-demo-filter-input">Filter</label>

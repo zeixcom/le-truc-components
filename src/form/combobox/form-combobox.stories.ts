@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
-import { Combobox, type FormComboboxArgs } from "./form-combobox.html";
+import { FormCombobox, type FormComboboxArgs } from "./form-combobox.html";
 import "../listbox/form-listbox.ts";
 import "../listbox/form-listbox.css";
 import "../../card/callout/card-callout.css";
@@ -14,7 +14,7 @@ import type { FormComboboxProps } from "./form-combobox.ts";
 
 const meta: Meta<FormComboboxArgs> = {
   title: "Form/Combobox",
-  render: Combobox,
+  render: FormCombobox,
   argTypes: {
     value: {
       control: "text",

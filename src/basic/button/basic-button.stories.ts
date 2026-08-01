@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { expect } from "storybook/test";
-import { type BasicButtonArgs, Button } from "./basic-button.html";
+import { BasicButton, type BasicButtonArgs } from "./basic-button.html";
 import "./basic-button.ts";
 import "./basic-button.css";
 import type { BasicButtonProps } from "./basic-button.ts";
 
 const meta: Meta<BasicButtonArgs> = {
   title: "Basic/Button",
-  render: Button,
+  render: BasicButton,
   argTypes: {
     label: { control: "text", table: { category: "Reactive Properties" } },
     badge: { control: "text", table: { category: "Reactive Properties" } },

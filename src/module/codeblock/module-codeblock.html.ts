@@ -11,8 +11,8 @@ export const sampleCode = `function greet(name) {
 console.log(greet("World"));`;
 
 // Exported so other components' stories can embed a codeblock instance via
-// ${Codeblock(args)} instead of duplicating its markup.
-export const Codeblock = ({ collapsed }: ModuleCodeblockArgs) => html`
+// ${ModuleCodeblock(args)} instead of duplicating its markup.
+export const ModuleCodeblock = ({ collapsed }: ModuleCodeblockArgs) => html`
   <module-codeblock ?collapsed=${collapsed}>
     <module-scrollarea orientation="horizontal">
       <pre><code class="language-js">${sampleCode}</code></pre>
