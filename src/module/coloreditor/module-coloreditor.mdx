@@ -1,4 +1,4 @@
-import { Meta, Canvas } from "@storybook/addon-docs/blocks";
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
 import * as ModuleColoreditorStories from "./module-coloreditor.stories";
 
 <Meta of={ModuleColoreditorStories} />
@@ -15,6 +15,10 @@ A full-featured color editor that composes `card-colorscale`, `form-textbox`, `f
 
 <Canvas of={ModuleColoreditorStories.Default} />
 
+#### Controls
+
+<Controls of={ModuleColoreditorStories.Default} />
+
 #### Reactive Properties
 
 <table>
@@ -28,39 +32,27 @@ A full-featured color editor that composes `card-colorscale`, `form-textbox`, `f
   </thead>
   <tbody>
     <tr>
-      <td><code>color</code></td>
-      <td><code>Oklch</code></td>
-      <td><code>asOklch()</code> — parsed from <code>color</code> attribute</td>
-      <td>The base color for the editor and color scale</td>
-    </tr>
-    <tr>
-      <td><code>name</code></td>
-      <td><code>string</code></td>
-      <td><code>'Blue'</code></td>
-      <td>Display name of the color; editable via the embedded textbox</td>
-    </tr>
-    <tr>
       <td><code>nearest</code></td>
       <td><code>string</code> (readonly)</td>
-      <td>Computed from <code>color</code></td>
+      <td>Computed from <code>value</code></td>
       <td>Nearest named CSS color (by CIEDE2000 difference)</td>
     </tr>
     <tr>
       <td><code>lightness</code></td>
       <td><code>number</code> (readonly)</td>
-      <td>Derived from <code>color.l</code></td>
+      <td>Derived from <code>value.l</code></td>
       <td>Lightness component (0–1)</td>
     </tr>
     <tr>
       <td><code>chroma</code></td>
       <td><code>number</code> (readonly)</td>
-      <td>Derived from <code>color.c</code></td>
+      <td>Derived from <code>value.c</code></td>
       <td>Chroma component (0–0.4)</td>
     </tr>
     <tr>
       <td><code>hue</code></td>
       <td><code>number</code> (readonly)</td>
-      <td>Derived from <code>color.h</code></td>
+      <td>Derived from <code>value.h</code></td>
       <td>Hue angle in degrees (0–360)</td>
     </tr>
   </tbody>
@@ -88,7 +80,7 @@ A full-featured color editor that composes `card-colorscale`, `form-textbox`, `f
       <td><code>first('form-colorgraph')</code></td>
       <td><code>form-colorgraph</code></td>
       <td>optional</td>
-      <td>Color picker graph; receives <code>color</code> via <code>pass()</code></td>
+      <td>Color picker graph; receives <code>value</code> via <code>pass()</code></td>
     </tr>
     <tr>
       <td><code>first('card-colorscale')</code></td>
@@ -100,19 +92,19 @@ A full-featured color editor that composes `card-colorscale`, `form-textbox`, `f
       <td><code>first('module-colorinfo.base')</code></td>
       <td><code>module-colorinfo</code></td>
       <td>optional</td>
-      <td>Info panel for the base color (500 step); receives <code>color</code> and <code>name</code> via <code>pass()</code></td>
+      <td>Info panel for the base color (500 step); receives <code>value</code> and <code>label</code> via <code>pass()</code></td>
     </tr>
     <tr>
       <td><code>first('module-colorinfo.lighten80')</code> … <code>.lighten20</code></td>
       <td><code>module-colorinfo</code></td>
       <td>optional</td>
-      <td>Info panels for lightened steps (100–400); color and name computed reactively</td>
+      <td>Info panels for lightened steps (100–400); value and label computed reactively</td>
     </tr>
     <tr>
       <td><code>first('module-colorinfo.darken20')</code> … <code>.darken80</code></td>
       <td><code>module-colorinfo</code></td>
       <td>optional</td>
-      <td>Info panels for darkened steps (600–900); color and name computed reactively</td>
+      <td>Info panels for darkened steps (600–900); value and label computed reactively</td>
     </tr>
   </tbody>
 </table>
