@@ -13,27 +13,27 @@
     "build-storybook": "npm run analyze && storybook build"
   },
   "dependencies": {
-    "@zeix/le-truc": "^2.3.2",
+    "@zeix/le-truc": "^2.3.3",
     "culori": "^4.0.2"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.6",
     "@chromatic-com/storybook": "^5.2.1",
     "@custom-elements-manifest/analyzer": "^0.11.0",
-    "@storybook/addon-a11y": "^10.5.5",
-    "@storybook/addon-docs": "^10.5.5",
-    "@storybook/addon-vitest": "^10.5.5",
-    "@storybook/web-components-vite": "^10.5.5",
+    "@storybook/addon-a11y": "^10.5.6",
+    "@storybook/addon-docs": "^10.5.6",
+    "@storybook/addon-vitest": "^10.5.6",
+    "@storybook/web-components-vite": "^10.5.6",
     "@types/culori": "^4.0.1",
     "@types/node": "^26.1.2",
     "@vitest/browser-playwright": "^4.1.10",
     "@vitest/coverage-v8": "^4.1.10",
     "@zeix/cem-plugin-le-truc": "^0.3.2",
     "lit": "^3.3.3",
-    "playwright": "^1.62.0",
-    "storybook": "^10.5.5",
+    "playwright": "^1.62.1",
+    "storybook": "^10.5.6",
     "typescript": "^7.0.2",
-    "vite": "^8.1.5",
+    "vite": "^8.2.0",
     "vitest": "^4.1.10"
   },
   "customElements": "custom-elements.json"
