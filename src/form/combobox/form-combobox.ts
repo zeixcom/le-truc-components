@@ -9,7 +9,6 @@ import {
   type FormAssociatedElement,
   formAssociated,
 } from "@zeix/le-truc";
-import { relayValidity } from "../../_common/relayValidity";
 import type { FormListboxProps } from "../listbox/form-listbox";
 
 export type FormComboboxProps = {
@@ -34,7 +33,9 @@ declare global {
  * Use it for searchable selection — provides ARIA roles for the combobox pattern,
  * keyboard interaction (type to filter, Escape to close, Enter to select), and focus management.
  * Form participation and validity are via ElementInternals (`formAssociated()`).
- * External consumers read `host.validationMessage` / `host.validity` like on a native input.
+ * External consumers read `host.validationMessage` / `host.validity` like on a
+ * native input; the inline `.error` element watches the same reactive
+ * `validationMessage` prop, so it stays in sync without any extra plumbing.
  *
  * @demo {https://zeixcom.github.io/le-truc/examples.html#form-combobox} Interactive preview and usage examples
  **/
@@ -56,9 +57,6 @@ export default defineComponent<FormComboboxProps>(
       () => showPopup.get() && listbox.options.length > 0,
     );
     const length = createState(textbox.value.length);
-    // Internal error state — not a public prop. External consumers read
-    // host.validationMessage / host.validity (native parity).
-    const error = createState("");
 
     expose({
       value: textbox.value,
@@ -87,8 +85,9 @@ export default defineComponent<FormComboboxProps>(
     on(textbox, "input", () => {
       length.set(textbox.value.length);
       batch(() => {
+        textbox.checkValidity()
+        host.setCustomValidity(textbox.validationMessage ?? '')
         host.value = textbox.value;
-        relayValidity(textbox, host, error);
         showPopup.set(true);
       });
     });
@@ -105,8 +104,9 @@ export default defineComponent<FormComboboxProps>(
       const optionValue = listbox.value;
       textbox.value = optionValue;
       batch(() => {
+        textbox.checkValidity()
+        host.setCustomValidity(textbox.validationMessage ?? '')
         host.value = optionValue;
-        relayValidity(textbox, host, error);
         showPopup.set(false);
         textbox.focus();
       });
@@ -120,9 +120,10 @@ export default defineComponent<FormComboboxProps>(
     // Form value sync: managed (value → setFormValue via ElementInternals)
     // Form reset: managed (value attribute is the default)
     // Validity: host.setCustomValidity() drives native :invalid /
-    // :user-invalid + host.validationMessage for external consumers.
+    // :user-invalid + reactive host.validationMessage. The inline .error
+    // element just watches that same prop — no separate error state to sync.
     const errorEl = first("form-combobox > .error");
-    if (errorEl) watch(error, bindText(errorEl));
+    if (errorEl) watch("validationMessage", bindText(errorEl));
     // preserveComments: the Storybook story interpolates this element's
     // content via a lit-html expression; the default (non-preserving) write
     // would eject Lit's ChildPart marker comments and break re-renders
