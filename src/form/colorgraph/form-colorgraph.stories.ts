@@ -6,11 +6,16 @@ import {
   FormColorgraph,
   type FormColorgraphArgs,
 } from "./form-colorgraph.html";
+import "./axis-spinbutton.ts";
 import "./form-colorgraph.ts";
 import "./form-colorgraph.css";
+import type { AxisSpinbuttonProps } from "./axis-spinbutton.ts";
 import type { FormColorgraphProps } from "./form-colorgraph.ts";
 
 type ColorgraphEl = HTMLElement & FormAssociatedElement & FormColorgraphProps;
+type AxisSpinbuttonEl = HTMLElement &
+  FormAssociatedElement &
+  AxisSpinbuttonProps;
 
 const meta: Meta<FormColorgraphArgs> = {
   title: "Form/Colorgraph",
@@ -155,6 +160,45 @@ export const OutOfGamutError: Story = {
     await fireEvent.change(chromaInput);
     await expect(el.validity.valid).toBe(true);
     await expect(colorError).toHaveTextContent("");
+  },
+};
+
+export const AxisRangeError: Story = {
+  args: {
+    name: "color",
+    value: "oklch(.48 .23 263)",
+  },
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("form-colorgraph");
+    await customElements.whenDefined("axis-spinbutton");
+    const canvas = within(canvasElement);
+    const el = canvasElement.querySelector("form-colorgraph") as ColorgraphEl;
+    const chromaAxis = canvasElement.querySelector(
+      "axis-spinbutton.chroma",
+    ) as AxisSpinbuttonEl;
+    const chromaInput = canvas.getByLabelText("Chroma") as HTMLInputElement;
+
+    // Typing a value past the chroma axis's own max (0.4) is a plain
+    // rangeOverflow on that single field — not a joint gamut question, so
+    // form-colorgraph never even attempts a P3 commit and its own validity
+    // stays untouched. Only the axis-spinbutton itself goes invalid.
+    await expect(el.validity.valid).toBe(true);
+    chromaInput.focus();
+    chromaInput.value = "0.5";
+    await fireEvent.change(chromaInput);
+
+    await expect(chromaAxis.validity.rangeOverflow).toBe(true);
+    await expect(el.validity.valid).toBe(true);
+    const chromaError = canvasElement.querySelector("#chroma-error");
+    await expect(chromaError).not.toHaveTextContent("");
+    const colorError = canvasElement.querySelector("#color-error");
+    await expect(colorError).toHaveTextContent("");
+
+    // A subsequent in-range value clears the axis-local error.
+    chromaInput.value = "0.1";
+    await fireEvent.change(chromaInput);
+    await expect(chromaAxis.validity.valid).toBe(true);
+    await expect(chromaError).toHaveTextContent("");
   },
 };
 

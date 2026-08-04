@@ -952,6 +952,222 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/form/colorgraph/axis-spinbutton.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "axis-spinbutton",
+          "name": "AxisSpinbutton",
+          "description": "A bounded floating-point spinbutton: a native number input plus\nincrement/decrement buttons and Arrow-key stepping, with its own\nmin/max/step range validity delegated from the native input via\nElementInternals. Unlike `form-spinbutton` (a cart-style quantity control\nwhose input and decrement button hide at zero), this is a plain continuous\nfield — built for composing into multi-axis controls like `form-colorgraph`,\nwhere each axis needs its own native constraint validity (valueMissing /\nrangeOverflow / rangeUnderflow), independent of any joint constraint the\nparent layers on top via its own `host.setCustomValidity()`.",
+          "members": [
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "number"
+              },
+              "description": "Current value, in the units of the underlying native input (e.g. percent for lightness)."
+            },
+            {
+              "kind": "field",
+              "name": "min",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "max",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "step",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "bigStep",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "stepDown",
+              "parameters": [
+                {
+                  "name": "bigStep",
+                  "type": {
+                    "text": "boolean | undefined"
+                  },
+                  "optional": true
+                }
+              ],
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "stepUp",
+              "parameters": [
+                {
+                  "name": "bigStep",
+                  "type": {
+                    "text": "boolean | undefined"
+                  },
+                  "optional": true
+                }
+              ],
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              }
+            },
+            {
+              "kind": "field",
+              "name": "form",
+              "type": {
+                "text": "HTMLFormElement | null"
+              },
+              "description": "The form this element is associated with, or null."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "The form control's name, reflects the name attribute."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the form control is disabled, reflects the disabled attribute."
+            },
+            {
+              "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "NodeList"
+              },
+              "description": "The label elements associated with this form control."
+            },
+            {
+              "kind": "field",
+              "name": "validity",
+              "type": {
+                "text": "ValidityState"
+              },
+              "description": "The validity state of the form control."
+            },
+            {
+              "kind": "field",
+              "name": "validationMessage",
+              "type": {
+                "text": "string"
+              },
+              "description": "The validation message of the form control."
+            },
+            {
+              "kind": "field",
+              "name": "willValidate",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the form control will be validated."
+            },
+            {
+              "kind": "method",
+              "name": "checkValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Checks the validity of the form control."
+            },
+            {
+              "kind": "method",
+              "name": "reportValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Checks the validity of the form control and reports it to the user."
+            },
+            {
+              "kind": "method",
+              "name": "setCustomValidity",
+              "parameters": [
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Sets a custom validity message on the form control."
+            }
+          ],
+          "attributes": [
+            {
+              "name": "name",
+              "fieldName": "name",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "demos": []
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "AxisSpinbutton",
+            "module": "src/form/colorgraph/axis-spinbutton.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "axis-spinbutton",
+          "declaration": {
+            "name": "AxisSpinbutton",
+            "module": "src/form/colorgraph/axis-spinbutton.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/form/colorgraph/form-colorgraph.ts",
       "declarations": [
         {
@@ -3764,6 +3980,62 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/basic/pluralize/basic-pluralize.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "BasicPluralize",
+          "parameters": [
+            {
+              "name": "{\n  count,\n  ordinal,\n  lang,\n}",
+              "type": {
+                "text": "BasicPluralizeArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "BasicPluralize",
+          "declaration": {
+            "name": "BasicPluralize",
+            "module": "src/basic/pluralize/basic-pluralize.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/context/media/context-media.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ContextMedia",
+          "parameters": [
+            {
+              "name": "{\n  sm,\n  md,\n  lg,\n  xl,\n  content,\n}",
+              "type": {
+                "text": "ContextMediaArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ContextMedia",
+          "declaration": {
+            "name": "ContextMedia",
+            "module": "src/context/media/context-media.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/card/blogmeta/card-blogmeta.html.ts",
       "declarations": [
         {
@@ -3799,6 +4071,34 @@
           "declaration": {
             "name": "blogmetaArgTypes",
             "module": "src/card/blogmeta/card-blogmeta.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/hello/basic-hello.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "BasicHello",
+          "parameters": [
+            {
+              "name": "{ subject }",
+              "type": {
+                "text": "BasicHelloArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "BasicHello",
+          "declaration": {
+            "name": "BasicHello",
+            "module": "src/basic/hello/basic-hello.html.ts"
           }
         }
       ]
@@ -3855,62 +4155,6 @@
           "declaration": {
             "name": "CardCallout",
             "module": "src/card/callout/card-callout.html.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/basic/hello/basic-hello.html.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "BasicHello",
-          "parameters": [
-            {
-              "name": "{ subject }",
-              "type": {
-                "text": "BasicHelloArgs"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "BasicHello",
-          "declaration": {
-            "name": "BasicHello",
-            "module": "src/basic/hello/basic-hello.html.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/basic/pluralize/basic-pluralize.html.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "BasicPluralize",
-          "parameters": [
-            {
-              "name": "{\n  count,\n  ordinal,\n  lang,\n}",
-              "type": {
-                "text": "BasicPluralizeArgs"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "BasicPluralize",
-          "declaration": {
-            "name": "BasicPluralize",
-            "module": "src/basic/pluralize/basic-pluralize.html.ts"
           }
         }
       ]
@@ -4225,34 +4469,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/context/media/context-media.html.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "ContextMedia",
-          "parameters": [
-            {
-              "name": "{\n  sm,\n  md,\n  lg,\n  xl,\n  content,\n}",
-              "type": {
-                "text": "ContextMediaArgs"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ContextMedia",
-          "declaration": {
-            "name": "ContextMedia",
-            "module": "src/context/media/context-media.html.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/module/calctable/module-calctable.html.ts",
       "declarations": [
         {
@@ -4410,6 +4626,34 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/module/coloreditor/module-coloreditor.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ModuleColoreditor",
+          "parameters": [
+            {
+              "name": "{\n  value,\n  label,\n}",
+              "type": {
+                "text": "ModuleColoreditorArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ModuleColoreditor",
+          "declaration": {
+            "name": "ModuleColoreditor",
+            "module": "src/module/coloreditor/module-coloreditor.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/module/dialog/module-dialog.html.ts",
       "declarations": [
         {
@@ -4438,16 +4682,16 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/module/coloreditor/module-coloreditor.html.ts",
+      "path": "src/module/lazyload/module-lazyload.html.ts",
       "declarations": [
         {
           "kind": "function",
-          "name": "ModuleColoreditor",
+          "name": "ModuleLazyload",
           "parameters": [
             {
-              "name": "{\n  value,\n  label,\n}",
+              "name": "{\n  src,\n  \"allow-scripts\": allowScripts,\n}",
               "type": {
-                "text": "ModuleColoreditorArgs"
+                "text": "ModuleLazyloadArgs"
               }
             }
           ]
@@ -4456,10 +4700,10 @@
       "exports": [
         {
           "kind": "js",
-          "name": "ModuleColoreditor",
+          "name": "ModuleLazyload",
           "declaration": {
-            "name": "ModuleColoreditor",
-            "module": "src/module/coloreditor/module-coloreditor.html.ts"
+            "name": "ModuleLazyload",
+            "module": "src/module/lazyload/module-lazyload.html.ts"
           }
         }
       ]
@@ -4576,34 +4820,6 @@
           "declaration": {
             "name": "ModuleSplitview",
             "module": "src/module/splitview/module-splitview.html.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/module/lazyload/module-lazyload.html.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "ModuleLazyload",
-          "parameters": [
-            {
-              "name": "{\n  src,\n  \"allow-scripts\": allowScripts,\n}",
-              "type": {
-                "text": "ModuleLazyloadArgs"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ModuleLazyload",
-          "declaration": {
-            "name": "ModuleLazyload",
-            "module": "src/module/lazyload/module-lazyload.html.ts"
           }
         }
       ]

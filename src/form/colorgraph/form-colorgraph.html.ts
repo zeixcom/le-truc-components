@@ -39,10 +39,17 @@ export const FormColorgraph = ({ name, value }: FormColorgraphArgs) => html`
       <span class="thumb"></span>
     </div>
     <p class="error" aria-live="assertive" id="color-error"></p>
-    <div class="axis lightness">
+    <axis-spinbutton class="lightness">
       <label for="lightness">Lightness</label>
       <div class="input">
-        <input id="lightness" type="number" />
+        <input
+          id="lightness"
+          type="number"
+          min="0"
+          max="100"
+          step="0.25"
+          data-big-step="5"
+        />
         <span class="unit">%</span>
       </div>
       <div class="buttons">
@@ -54,11 +61,18 @@ export const FormColorgraph = ({ name, value }: FormColorgraphArgs) => html`
         </button>
       </div>
       <p class="error" aria-live="assertive" id="lightness-error"></p>
-    </div>
-    <div class="axis chroma">
+    </axis-spinbutton>
+    <axis-spinbutton class="chroma">
       <label for="chroma">Chroma</label>
       <div class="input">
-        <input id="chroma" type="number" />
+        <input
+          id="chroma"
+          type="number"
+          min="0"
+          max="0.4"
+          step="0.001"
+          data-big-step="0.02"
+        />
       </div>
       <div class="buttons">
         <button type="button" class="decrement" aria-label="Decrement chroma">
@@ -69,11 +83,18 @@ export const FormColorgraph = ({ name, value }: FormColorgraphArgs) => html`
         </button>
       </div>
       <p class="error" aria-live="assertive" id="chroma-error"></p>
-    </div>
-    <div class="axis hue">
+    </axis-spinbutton>
+    <axis-spinbutton class="hue">
       <label id="hue-label" for="hue">Hue</label>
       <div class="input">
-        <input id="hue" type="number" />
+        <input
+          id="hue"
+          type="number"
+          min="0"
+          max="360"
+          step="1"
+          data-big-step="15"
+        />
         <span class="unit">°</span>
       </div>
       <div class="buttons">
@@ -85,6 +106,6 @@ export const FormColorgraph = ({ name, value }: FormColorgraphArgs) => html`
         </button>
       </div>
       <p class="error" aria-live="assertive" id="hue-error"></p>
-    </div>
+    </axis-spinbutton>
   </form-colorgraph>
 `;

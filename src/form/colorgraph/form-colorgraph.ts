@@ -8,7 +8,6 @@ import {
   createState,
   defineComponent,
   defineMethod,
-  each,
   type FormAssociatedElement,
   formAssociated,
   observedAttributes,
@@ -17,6 +16,7 @@ import {
 import { clampChroma, formatCss, inGamut, type Oklch } from "culori/fn";
 import { asOklch } from "../../_common/asOklch";
 import { getStepColor } from "../../_common/getStepColor";
+import type { AxisSpinbuttonProps } from "./axis-spinbutton";
 
 export type FormColorgraphAxis = "l" | "c" | "h";
 
@@ -49,10 +49,17 @@ const fn4Digits = new Intl.NumberFormat("en-US", {
 const TRACK_OFFSET = 20; // pixels
 const CONTRAST_THRESHOLD = 0.71; // lightness
 const AXIS_MAX = { l: 1, c: 0.4, h: 360 };
-const AXIS_STEP = { l: 0.0025, c: 0.001, h: 1 };
-const AXIS_BIGSTEP = { l: 0.05, c: 0.02, h: 15 };
-const getStep = (axis: FormColorgraphAxis, shiftKey: boolean) =>
-  shiftKey ? AXIS_BIGSTEP[axis] : AXIS_STEP[axis];
+// Raw-value → axis-spinbutton-display-unit conversion. Only lightness has a
+// non-1 scale (displayed as a percentage); range/step for each axis live as
+// markup attributes on the corresponding <axis-spinbutton>, not here.
+const AXIS_SCALE = { l: 100, c: 1, h: 1 };
+const AXIS_DECIMALS = { l: 2, c: 4, h: 2 };
+const toDisplay = (axis: FormColorgraphAxis, raw: number) => {
+  const factor = 10 ** AXIS_DECIMALS[axis];
+  return Math.round(raw * AXIS_SCALE[axis] * factor) / factor;
+};
+const fromDisplay = (axis: FormColorgraphAxis, display: number) =>
+  display / AXIS_SCALE[axis];
 
 /**
  * An interactive Oklch color editor with sliders for lightness, chroma, and hue.
@@ -66,20 +73,26 @@ const getStep = (axis: FormColorgraphAxis, shiftKey: boolean) =>
  **/
 export default defineComponent<FormColorgraphProps>(
   "form-colorgraph",
-  ({ all, expose, first, host, on, watch }) => {
-    // Required elements
-    const inputs = {
-      l: first(
-        "input#lightness",
-        'Add an <input id="lightness"> element to control the lightness of the color.',
+  ({ expose, first, host, on, watch }) => {
+    // Required elements — range/step live as markup attributes on each
+    // <axis-spinbutton>; each one owns its own native constraint validity
+    // (valueMissing/rangeOverflow/rangeUnderflow) independent of the joint
+    // out-of-gamut constraint this component layers on top of them.
+    const axisSpinbuttons: Record<
+      FormColorgraphAxis,
+      FormAssociatedElement & AxisSpinbuttonProps
+    > = {
+      l: first<FormAssociatedElement & AxisSpinbuttonProps>(
+        "axis-spinbutton.lightness",
+        'Add an <axis-spinbutton class="lightness"> element to control the lightness of the color.',
       ),
-      c: first(
-        "input#chroma",
-        'Add an <input id="chroma"> element to control the chroma of the color.',
+      c: first<FormAssociatedElement & AxisSpinbuttonProps>(
+        "axis-spinbutton.chroma",
+        'Add an <axis-spinbutton class="chroma"> element to control the chroma of the color.',
       ),
-      h: first(
-        "input#hue",
-        'Add an <input id="hue"> element to control the hue of the color.',
+      h: first<FormAssociatedElement & AxisSpinbuttonProps>(
+        "axis-spinbutton.hue",
+        'Add an <axis-spinbutton class="hue"> element to control the hue of the color.',
       ),
     };
     const graphEl = first(
@@ -108,11 +121,6 @@ export default defineComponent<FormColorgraphProps>(
     );
 
     // Initialize
-    for (const [key, input] of Object.entries(inputs)) {
-      input.min = "0";
-      input.max = key === "l" ? "100" : key === "c" ? "0.4" : "360";
-      input.step = "any";
-    }
     sliderEl.setAttribute("aria-valuemin", "0");
     sliderEl.setAttribute("aria-valuemax", "360");
 
@@ -137,12 +145,6 @@ export default defineComponent<FormColorgraphProps>(
     const formatNumber = (axis: FormColorgraphAxis, value: number) => {
       const v = axis === "l" ? value * 100 : value;
       return axis === "c" ? fn4Digits(v) : fn2Digits(v);
-    };
-    const getAxis = (target: HTMLElement): FormColorgraphAxis | null => {
-      if (target.closest(".lightness")) return "l";
-      if (target.closest(".chroma")) return "c";
-      if (target.closest(".hue")) return "h";
-      return null;
     };
     const getColorFromPosition = (
       x: number,
@@ -183,17 +185,6 @@ export default defineComponent<FormColorgraphProps>(
         host.setCustomValidity("");
       });
     };
-    const getValue = (axis: FormColorgraphAxis) => {
-      const c = color.get();
-      return axis === "l" ? c.l : axis === "c" ? c.c : (c.h ?? 0);
-    };
-    const setToNearestStep = (axis: FormColorgraphAxis, value: number) => {
-      const nearest = Math.round(value / AXIS_STEP[axis]) * AXIS_STEP[axis];
-      if (nearest < 0 || nearest > AXIS_MAX[axis]) return;
-      const c = { ...color.get(), [axis]: nearest };
-      if (inP3Gamut(c)) commit(c);
-      else host.setCustomValidity("Color out of gamut");
-    };
     const moveKnob = throttle(
       (x: number, y: number, top: number, left: number, size: number) => {
         const c = {
@@ -218,10 +209,10 @@ export default defineComponent<FormColorgraphProps>(
       chroma: () => color.get().c,
       hue: () => color.get().h ?? 0,
       stepDown: defineMethod((axis: FormColorgraphAxis, bigStep = false) => {
-        setToNearestStep(axis, getValue(axis) - getStep(axis, bigStep));
+        axisSpinbuttons[axis].stepDown(bigStep);
       }),
       stepUp: defineMethod((axis: FormColorgraphAxis, bigStep = false) => {
-        setToNearestStep(axis, getValue(axis) + getStep(axis, bigStep));
+        axisSpinbuttons[axis].stepUp(bigStep);
       }),
     });
 
@@ -246,37 +237,30 @@ export default defineComponent<FormColorgraphProps>(
     // Host CSS variable
     watch(() => formatCss(color.get()), bindStyle(host, "--color-base"));
 
-    // Input per-element effects
-    const allInputs = all("input");
-    each(allInputs, (input) => {
-      const axis = getAxis(input);
+    // Axis spinbutton wiring: push the current color into each axis's
+    // display value, and commit typed/stepped changes back — but only once
+    // the axis-spinbutton itself reports a valid value (its own
+    // valueMissing/rangeOverflow/rangeUnderflow/stepMismatch are its
+    // business, not this component's). A valid per-axis value can still
+    // fail the joint gamut constraint, which surfaces as this component's
+    // own customError, not the axis-spinbutton's.
+    for (const axis of ["l", "c", "h"] as const) {
+      const el = axisSpinbuttons[axis];
       watch(color, (c) => {
-        if (axis) input.value = formatNumber(axis, c[axis] ?? 0);
+        el.value = toDisplay(axis, c[axis] ?? 0);
       });
-      on(input, "change", () => {
-        if (!axis) return;
-        const value = input.valueAsNumber;
-        const c = {
-          ...color.get(),
-          [axis]: axis === "l" ? value / 100 : value,
-        };
+      on(el, "change", () => {
+        if (!el.validity.valid) return;
+        const c = { ...color.get(), [axis]: fromDisplay(axis, el.value) };
         if (inP3Gamut(c)) commit(c);
         else host.setCustomValidity("Color out of gamut");
       });
-    });
+    }
 
     // Error text — one shared .error element watches the reactive
     // validationMessage prop directly for the joint gamut constraint.
     const errorEl = first(".error");
     if (errorEl) watch("validationMessage", bindText(errorEl));
-
-    // Error text — per-axis: each .error element binds to its own axis
-    // const allErrors = all(".axis .error");
-    // each(allErrors, (errorEl) => {
-    //   const axis = getAxis(errorEl);
-    //   if (!axis) return;
-    //   watch(errors[axis], bindText(errorEl));
-    // });
 
     // Graph pointer interaction + canvas size CSS variable
     on(graphEl, "pointerdown", (event) => {
@@ -429,39 +413,10 @@ export default defineComponent<FormColorgraphProps>(
       },
     );
 
-    // Decrement buttons
-    const decrementBtns = all("button.decrement");
-    each(decrementBtns, (btn) => {
-      const axis = getAxis(btn);
-      on(btn, "click", (event) => {
-        if (axis) host.stepDown(axis, (event as MouseEvent).shiftKey);
-      });
-      watch(color, (c) => {
-        if (!axis) {
-          btn.disabled = true;
-          return;
-        }
-        btn.disabled = (c[axis] ?? 0) <= 0;
-      });
-    });
-
-    // Increment buttons
-    const incrementBtns = all("button.increment");
-    each(incrementBtns, (btn) => {
-      const axis = getAxis(btn);
-      on(btn, "click", (event) => {
-        if (axis) host.stepUp(axis, (event as MouseEvent).shiftKey);
-      });
-      watch(color, (c) => {
-        if (!axis) {
-          btn.disabled = true;
-          return;
-        }
-        btn.disabled = (c[axis] ?? 0) >= AXIS_MAX[axis];
-      });
-    });
-
-    // Keyboard navigation
+    // Keyboard navigation for the graph knob and hue slider. Arrow-key/+-
+    // stepping while focus is inside an <axis-spinbutton> is handled by
+    // that component itself (and stops propagation), so it never reaches
+    // here — this only covers focus on the graph or the slider.
     on(host, "keydown", (event) => {
       const { key, shiftKey } = event as KeyboardEvent;
       const target = (event as KeyboardEvent).target as HTMLElement | null;
@@ -474,13 +429,7 @@ export default defineComponent<FormColorgraphProps>(
       if (key.substring(0, 5) === "Arrow" || ["+", "-"].includes(key)) {
         event.preventDefault();
         event.stopPropagation();
-        const axis = getAxis(target);
-        if (axis) {
-          if (key === "ArrowLeft" || key === "ArrowDown" || key === "-")
-            host.stepDown(axis, shiftKey);
-          else if (key === "ArrowRight" || key === "ArrowUp" || key === "+")
-            host.stepUp(axis, shiftKey);
-        } else if (target.role === "slider") {
+        if (target.role === "slider") {
           if (key === "ArrowLeft" || key === "ArrowDown" || key === "-")
             host.stepDown("h", shiftKey);
           else if (key === "ArrowRight" || key === "ArrowUp" || key === "+")
@@ -530,8 +479,6 @@ export default defineComponent<FormColorgraphProps>(
           },
         );
     }
-
-
   },
   [formAssociated(), observedAttributes(["value"])],
 );

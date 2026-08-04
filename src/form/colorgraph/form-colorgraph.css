@@ -97,11 +97,11 @@ form-colorgraph {
     }
   }
 
-  > .axis {
+  > axis-spinbutton {
     display: grid;
     align-items: center;
     column-gap: var(--space-xs);
-    grid-template-areas: "label label" "input buttons";
+    grid-template-areas: "label label" "input buttons" "error error";
     grid-template-columns: 1fr auto;
     max-width: 12rem;
   }
@@ -281,13 +281,13 @@ form-colorgraph {
     .slider {
       grid-area: slider;
     }
-    .lightness {
+    > .lightness {
       grid-area: lightness;
     }
-    .chroma {
+    > .chroma {
       grid-area: chroma;
     }
-    .hue {
+    > .hue {
       grid-area: hue;
     }
     > .error {
