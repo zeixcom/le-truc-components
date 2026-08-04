@@ -1651,7 +1651,7 @@
           "customElement": true,
           "tagName": "form-combobox",
           "name": "FormCombobox",
-          "description": "A combobox (searchable select) that combines a text input with a filterable listbox popup.\nUse it for searchable selection — provides ARIA roles for the combobox pattern,\nkeyboard interaction (type to filter, Escape to close, Enter to select), and focus management.\nForm participation and validity are via ElementInternals (`formAssociated()`).\nExternal consumers read `host.validationMessage` / `host.validity` like on a native input.",
+          "description": "A combobox (searchable select) that combines a text input with a filterable listbox popup.\nUse it for searchable selection — provides ARIA roles for the combobox pattern,\nkeyboard interaction (type to filter, Escape to close, Enter to select), and focus management.\nForm participation and validity are via ElementInternals (`formAssociated()`).\nExternal consumers read `host.validationMessage` / `host.validity` like on a\nnative input; the inline `.error` element watches the same reactive\n`validationMessage` prop, so it stays in sync without any extra plumbing.",
           "members": [
             {
               "kind": "field",
@@ -2329,7 +2329,7 @@
           "customElement": true,
           "tagName": "form-textbox",
           "name": "FormTextbox",
-          "description": "A single-line or multiline text input with validation, optional clear button, and helper text.\nUse it when you need a styled text field — the underlying native input provides\nkeyboard accessibility and standard ARIA textbox semantics. Form participation\nand validity are via ElementInternals (`formAssociated()`).\nExternal consumers read `host.validationMessage` / `host.validity` like on a\nnative input; inline error display binds to component-internal state.",
+          "description": "A single-line or multiline text input with validation, optional clear button, and helper text.\nUse it when you need a styled text field — the underlying native input provides\nkeyboard accessibility and standard ARIA textbox semantics. Form participation\nand validity are via ElementInternals (`formAssociated()`).\nExternal consumers read `host.validationMessage` / `host.validity` like on a\nnative input; the inline `.error` element watches the same reactive\n`validationMessage` prop, so it stays in sync without any extra plumbing.",
           "members": [
             {
               "kind": "field",
@@ -3688,16 +3688,16 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/basic/hello/basic-hello.html.ts",
+      "path": "src/basic/gauge/basic-gauge.html.ts",
       "declarations": [
         {
           "kind": "function",
-          "name": "BasicHello",
+          "name": "BasicGauge",
           "parameters": [
             {
-              "name": "{ subject }",
+              "name": "{\n  value,\n  thresholds,\n  id = \"basic-gauge-label\",\n}",
               "type": {
-                "text": "BasicHelloArgs"
+                "text": "BasicGaugeArgs"
               }
             }
           ]
@@ -3706,26 +3706,38 @@
       "exports": [
         {
           "kind": "js",
-          "name": "BasicHello",
+          "name": "BasicGauge",
           "declaration": {
-            "name": "BasicHello",
-            "module": "src/basic/hello/basic-hello.html.ts"
+            "name": "BasicGauge",
+            "module": "src/basic/gauge/basic-gauge.html.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/basic/pluralize/basic-pluralize.html.ts",
+      "path": "src/basic/number/basic-number.html.ts",
       "declarations": [
         {
           "kind": "function",
-          "name": "BasicPluralize",
+          "name": "BasicNumber",
           "parameters": [
             {
-              "name": "{\n  count,\n  ordinal,\n  lang,\n}",
+              "name": "{\n  value,\n  options,\n  lang,\n}",
               "type": {
-                "text": "BasicPluralizeArgs"
+                "text": "Pick<BasicNumberArgs, \"value\" | \"options\" | \"lang\">"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "NumberDemo",
+          "parameters": [
+            {
+              "name": "{\n  caption,\n  wrapperLang,\n  ...args\n}",
+              "type": {
+                "text": "BasicNumberArgs"
               }
             }
           ]
@@ -3734,10 +3746,18 @@
       "exports": [
         {
           "kind": "js",
-          "name": "BasicPluralize",
+          "name": "BasicNumber",
           "declaration": {
-            "name": "BasicPluralize",
-            "module": "src/basic/pluralize/basic-pluralize.html.ts"
+            "name": "BasicNumber",
+            "module": "src/basic/number/basic-number.html.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "NumberDemo",
+          "declaration": {
+            "name": "NumberDemo",
+            "module": "src/basic/number/basic-number.html.ts"
           }
         }
       ]
@@ -3813,34 +3833,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/basic/gauge/basic-gauge.html.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "BasicGauge",
-          "parameters": [
-            {
-              "name": "{\n  value,\n  thresholds,\n  id = \"basic-gauge-label\",\n}",
-              "type": {
-                "text": "BasicGaugeArgs"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "BasicGauge",
-          "declaration": {
-            "name": "BasicGauge",
-            "module": "src/basic/gauge/basic-gauge.html.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/card/callout/card-callout.html.ts",
       "declarations": [
         {
@@ -3863,6 +3855,62 @@
           "declaration": {
             "name": "CardCallout",
             "module": "src/card/callout/card-callout.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/hello/basic-hello.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "BasicHello",
+          "parameters": [
+            {
+              "name": "{ subject }",
+              "type": {
+                "text": "BasicHelloArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "BasicHello",
+          "declaration": {
+            "name": "BasicHello",
+            "module": "src/basic/hello/basic-hello.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/pluralize/basic-pluralize.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "BasicPluralize",
+          "parameters": [
+            {
+              "name": "{\n  count,\n  ordinal,\n  lang,\n}",
+              "type": {
+                "text": "BasicPluralizeArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "BasicPluralize",
+          "declaration": {
+            "name": "BasicPluralize",
+            "module": "src/basic/pluralize/basic-pluralize.html.ts"
           }
         }
       ]
@@ -3897,28 +3945,16 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/basic/number/basic-number.html.ts",
+      "path": "src/card/colorscale/card-colorscale.html.ts",
       "declarations": [
         {
           "kind": "function",
-          "name": "BasicNumber",
+          "name": "CardColorscale",
           "parameters": [
             {
-              "name": "{\n  value,\n  options,\n  lang,\n}",
+              "name": "{\n  value,\n  label,\n  size,\n}",
               "type": {
-                "text": "Pick<BasicNumberArgs, \"value\" | \"options\" | \"lang\">"
-              }
-            }
-          ]
-        },
-        {
-          "kind": "function",
-          "name": "NumberDemo",
-          "parameters": [
-            {
-              "name": "{\n  caption,\n  wrapperLang,\n  ...args\n}",
-              "type": {
-                "text": "BasicNumberArgs"
+                "text": "CardColorscaleArgs"
               }
             }
           ]
@@ -3927,18 +3963,10 @@
       "exports": [
         {
           "kind": "js",
-          "name": "BasicNumber",
+          "name": "CardColorscale",
           "declaration": {
-            "name": "BasicNumber",
-            "module": "src/basic/number/basic-number.html.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "NumberDemo",
-          "declaration": {
-            "name": "NumberDemo",
-            "module": "src/basic/number/basic-number.html.ts"
+            "name": "CardColorscale",
+            "module": "src/card/colorscale/card-colorscale.html.ts"
           }
         }
       ]
@@ -3995,34 +4023,6 @@
           "declaration": {
             "name": "FormCheckbox",
             "module": "src/form/checkbox/form-checkbox.html.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/card/colorscale/card-colorscale.html.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "CardColorscale",
-          "parameters": [
-            {
-              "name": "{\n  value,\n  label,\n  size,\n}",
-              "type": {
-                "text": "CardColorscaleArgs"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "CardColorscale",
-          "declaration": {
-            "name": "CardColorscale",
-            "module": "src/card/colorscale/card-colorscale.html.ts"
           }
         }
       ]
@@ -4410,34 +4410,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/module/coloreditor/module-coloreditor.html.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "ModuleColoreditor",
-          "parameters": [
-            {
-              "name": "{\n  value,\n  label,\n}",
-              "type": {
-                "text": "ModuleColoreditorArgs"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ModuleColoreditor",
-          "declaration": {
-            "name": "ModuleColoreditor",
-            "module": "src/module/coloreditor/module-coloreditor.html.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/module/dialog/module-dialog.html.ts",
       "declarations": [
         {
@@ -4466,16 +4438,16 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/module/lazyload/module-lazyload.html.ts",
+      "path": "src/module/coloreditor/module-coloreditor.html.ts",
       "declarations": [
         {
           "kind": "function",
-          "name": "ModuleLazyload",
+          "name": "ModuleColoreditor",
           "parameters": [
             {
-              "name": "{\n  src,\n  \"allow-scripts\": allowScripts,\n}",
+              "name": "{\n  value,\n  label,\n}",
               "type": {
-                "text": "ModuleLazyloadArgs"
+                "text": "ModuleColoreditorArgs"
               }
             }
           ]
@@ -4484,10 +4456,30 @@
       "exports": [
         {
           "kind": "js",
-          "name": "ModuleLazyload",
+          "name": "ModuleColoreditor",
           "declaration": {
-            "name": "ModuleLazyload",
-            "module": "src/module/lazyload/module-lazyload.html.ts"
+            "name": "ModuleColoreditor",
+            "module": "src/module/coloreditor/module-coloreditor.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/list/module-list.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ModuleList"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ModuleList",
+          "declaration": {
+            "name": "ModuleList",
+            "module": "src/module/list/module-list.html.ts"
           }
         }
       ]
@@ -4590,6 +4582,34 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/module/lazyload/module-lazyload.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ModuleLazyload",
+          "parameters": [
+            {
+              "name": "{\n  src,\n  \"allow-scripts\": allowScripts,\n}",
+              "type": {
+                "text": "ModuleLazyloadArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ModuleLazyload",
+          "declaration": {
+            "name": "ModuleLazyload",
+            "module": "src/module/lazyload/module-lazyload.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/module/tabgroup/module-tabgroup.html.ts",
       "declarations": [
         {
@@ -4644,26 +4664,6 @@
           "declaration": {
             "name": "ModuleTodo",
             "module": "src/module/todo/module-todo.html.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/module/list/module-list.html.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "ModuleList"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ModuleList",
-          "declaration": {
-            "name": "ModuleList",
-            "module": "src/module/list/module-list.html.ts"
           }
         }
       ]

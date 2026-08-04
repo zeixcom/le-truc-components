@@ -511,3 +511,8 @@ a[href] {
   padding: var(--space-s);
   text-decoration: none;
 }
+
+/* Storybook */
+#root-inner {
+  container-type: inline-size;
+}

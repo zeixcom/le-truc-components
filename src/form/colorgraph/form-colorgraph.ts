@@ -12,7 +12,6 @@ import {
   type FormAssociatedElement,
   formAssociated,
   observedAttributes,
-  type State,
   throttle,
 } from "@zeix/le-truc";
 import { clampChroma, formatCss, inGamut, type Oklch } from "culori/fn";
@@ -120,29 +119,14 @@ export default defineComponent<FormColorgraphProps>(
     // Internal states
     const canvasSize = createState(graphEl.getBoundingClientRect().width);
     const trackWidth = createMemo(() => canvasSize.get() - 2 * TRACK_OFFSET);
-    // Per-axis error states — a gamut error on one axis must only display
-    // under that axis, not under all three. Each `.error` element binds to
-    // its own axis's state.
-    const errors: Record<FormColorgraphAxis, State<string>> = {
-      l: createState(""),
-      c: createState(""),
-      h: createState(""),
-    };
-    const clearErrors = () => {
-      batch(() => {
-        errors.l.set("");
-        errors.c.set("");
-        errors.h.set("");
-      });
-    };
-    const setError = (axis: FormColorgraphAxis, msg: string) => {
-      batch(() => {
-        errors.l.set("");
-        errors.c.set("");
-        errors.h.set("");
-        errors[axis].set(msg);
-      });
-    };
+    // Out-of-gamut is a single joint constraint over all three axes, not a
+    // per-axis one — the color can usually be brought back in gamut by
+    // adjusting lightness, chroma, or hue alone, regardless of which axis
+    // triggered the overflow. There is no native ValidityState category for
+    // a multi-axis constraint like this, so it goes straight to
+    // host.setCustomValidity() as a customError; the reactive
+    // `validationMessage` prop is the single source of truth, same as
+    // form-textbox/form-combobox.
 
     // Internal Oklch memo derived from the string value (the form value).
     // `value` is the source of truth; `color` is the parsed representation
@@ -196,7 +180,7 @@ export default defineComponent<FormColorgraphProps>(
     const commit = (c: Oklch) => {
       batch(() => {
         host.value = formatCss(c);
-        clearErrors();
+        host.setCustomValidity("");
       });
     };
     const getValue = (axis: FormColorgraphAxis) => {
@@ -208,7 +192,7 @@ export default defineComponent<FormColorgraphProps>(
       if (nearest < 0 || nearest > AXIS_MAX[axis]) return;
       const c = { ...color.get(), [axis]: nearest };
       if (inP3Gamut(c)) commit(c);
-      else setError(axis, "Color out of gamut");
+      else host.setCustomValidity("Color out of gamut");
     };
     const moveKnob = throttle(
       (x: number, y: number, top: number, left: number, size: number) => {
@@ -277,17 +261,22 @@ export default defineComponent<FormColorgraphProps>(
           [axis]: axis === "l" ? value / 100 : value,
         };
         if (inP3Gamut(c)) commit(c);
-        else setError(axis, "Color out of gamut");
+        else host.setCustomValidity("Color out of gamut");
       });
     });
 
+    // Error text — one shared .error element watches the reactive
+    // validationMessage prop directly for the joint gamut constraint.
+    const errorEl = first(".error");
+    if (errorEl) watch("validationMessage", bindText(errorEl));
+
     // Error text — per-axis: each .error element binds to its own axis
-    const allErrors = all(".error");
-    each(allErrors, (errorEl) => {
-      const axis = getAxis(errorEl);
-      if (!axis) return;
-      watch(errors[axis], bindText(errorEl));
-    });
+    // const allErrors = all(".axis .error");
+    // each(allErrors, (errorEl) => {
+    //   const axis = getAxis(errorEl);
+    //   if (!axis) return;
+    //   watch(errors[axis], bindText(errorEl));
+    // });
 
     // Graph pointer interaction + canvas size CSS variable
     on(graphEl, "pointerdown", (event) => {
@@ -542,20 +531,7 @@ export default defineComponent<FormColorgraphProps>(
         );
     }
 
-    // Host-level validity from any axis error. Goes through the managed
-    // host.setCustomValidity() so the validation anchor (first focusable
-    // descendant) is resolved for focus-on-blocked-submission — consistent
-    // with the other form examples.
-    watch(
-      () => errors.l.get() || errors.c.get() || errors.h.get(),
-      (err) => {
-        host.setCustomValidity(err);
-      },
-    );
-    // Form value sync: managed (value → setFormValue via ElementInternals)
-    // Form reset: managed (value attribute is the default — restores
-    // the initial CSS color string, replacing the hand-rolled
-    // initialColor capture from the previous design).
+
   },
   [formAssociated(), observedAttributes(["value"])],
 );

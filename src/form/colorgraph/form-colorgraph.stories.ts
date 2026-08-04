@@ -138,21 +138,23 @@ export const OutOfGamutError: Story = {
     const chromaInput = canvas.getByLabelText("Chroma") as HTMLInputElement;
 
     // A very high lightness combined with high chroma falls outside the
-    // P3 gamut, so the commit is rejected and a per-axis error shown.
+    // P3 gamut, so the commit is rejected and the shared out-of-gamut
+    // error is shown as a customError (not tied to any single axis).
     await expect(el.validity.valid).toBe(true);
     chromaInput.focus();
     chromaInput.value = "0.4";
     await fireEvent.change(chromaInput);
 
     await expect(el.validity.valid).toBe(false);
-    const chromaError = canvasElement.querySelector("#chroma-error");
-    await expect(chromaError).toHaveTextContent("Color out of gamut");
+    await expect(el.validity.customError).toBe(true);
+    const colorError = canvasElement.querySelector("#color-error");
+    await expect(colorError).toHaveTextContent("Color out of gamut");
 
     // A subsequent valid commit clears the error.
     chromaInput.value = "0.05";
     await fireEvent.change(chromaInput);
     await expect(el.validity.valid).toBe(true);
-    await expect(chromaError).toHaveTextContent("");
+    await expect(colorError).toHaveTextContent("");
   },
 };
 

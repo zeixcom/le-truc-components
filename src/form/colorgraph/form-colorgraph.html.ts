@@ -38,7 +38,8 @@ export const FormColorgraph = ({ name, value }: FormColorgraphArgs) => html`
       <canvas width="360" height="1"></canvas>
       <span class="thumb"></span>
     </div>
-    <div class="lightness">
+    <p class="error" aria-live="assertive" id="color-error"></p>
+    <div class="axis lightness">
       <label for="lightness">Lightness</label>
       <div class="input">
         <input id="lightness" type="number" />
@@ -54,7 +55,7 @@ export const FormColorgraph = ({ name, value }: FormColorgraphArgs) => html`
       </div>
       <p class="error" aria-live="assertive" id="lightness-error"></p>
     </div>
-    <div class="chroma">
+    <div class="axis chroma">
       <label for="chroma">Chroma</label>
       <div class="input">
         <input id="chroma" type="number" />
@@ -69,7 +70,7 @@ export const FormColorgraph = ({ name, value }: FormColorgraphArgs) => html`
       </div>
       <p class="error" aria-live="assertive" id="chroma-error"></p>
     </div>
-    <div class="hue">
+    <div class="axis hue">
       <label id="hue-label" for="hue">Hue</label>
       <div class="input">
         <input id="hue" type="number" />

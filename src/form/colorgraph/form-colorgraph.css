@@ -97,13 +97,11 @@ form-colorgraph {
     }
   }
 
-  > .lightness,
-  > .chroma,
-  > .hue {
+  > .axis {
     display: grid;
     align-items: center;
     column-gap: var(--space-xs);
-    grid-template-areas: "label label" "input buttons" "error error";
+    grid-template-areas: "label label" "input buttons";
     grid-template-columns: 1fr auto;
     max-width: 12rem;
   }
@@ -150,8 +148,8 @@ form-colorgraph {
     }
   }
 
-  /* Native validity styling — replaces the old aria-invalid attribute hook. */
-  &:user-invalid input {
+  &:invalid input,
+  input:user-invalid {
     box-shadow: 0 0 var(--space-xxs) 2px var(--color-error-invalid);
   }
 
@@ -268,7 +266,11 @@ form-colorgraph {
 @container (width > 27rem) {
   form-colorgraph {
     display: grid;
-    grid-template-areas: "graph graph graph" "slider slider slider" "lightness chroma hue";
+    grid-template-areas:
+      "graph graph graph"
+      "slider slider slider"
+      "error error error"
+      "lightness chroma hue";
     grid-template-columns: 1fr 1fr 1fr;
     gap: var(--space-s) var(--space-m);
     align-items: start;
@@ -287,6 +289,9 @@ form-colorgraph {
     }
     .hue {
       grid-area: hue;
+    }
+    > .error {
+      grid-area: error;
     }
   }
 }
