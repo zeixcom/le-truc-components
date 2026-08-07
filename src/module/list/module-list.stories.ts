@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import { expect, userEvent, within } from "storybook/test";
+import { BasicButton } from "../../basic/button/basic-button.html";
+import { FormTextbox } from "../../form/textbox/form-textbox.html";
 import { ModuleList } from "./module-list.html";
 import "./module-list.ts";
 import "./module-list.css";
@@ -45,33 +47,46 @@ export const WithInitialItems: Story = {
   render: () => html`
     <module-list>
       <form action="#">
-        <form-textbox>
-          <label for="initial-item-input">New item</label>
-          <div class="input">
-            <input type="text" id="initial-item-input" name="new-item" autocomplete="off" />
-            <button type="button" class="clear" aria-label="Clear input" hidden>✕</button>
-          </div>
-        </form-textbox>
-        <basic-button class="submit">
-          <button type="submit" class="constructive" disabled>
-            <span class="label">Add</span>
-          </button>
-        </basic-button>
+        ${FormTextbox({
+          id: "initial-item-input",
+          label: "New item",
+          name: "new-item",
+          autocomplete: "off",
+          required: false,
+          clearable: true,
+          showError: false,
+        })}
+        ${BasicButton({
+          label: "Add",
+          disabled: true,
+          variant: "constructive",
+          type: "submit",
+          hostClass: "submit",
+        })}
       </form>
       <ul data-container>
         <li data-key="item0">
           <span>Existing item 1</span>
-          <basic-button class="remove">
-            <button type="button" class="tertiary destructive small">Remove</button>
-          </basic-button>
+          ${BasicButton({
+            label: "Remove",
+            variant: ["tertiary", "destructive"],
+            size: "small",
+            content: "text",
+            hostClass: "remove",
+          })}
         </li>
         <li data-key="item1">
           <span>Existing item 2</span>
-          <basic-button class="remove">
-            <button type="button" class="tertiary destructive small">Remove</button>
-          </basic-button>
+          ${BasicButton({
+            label: "Remove",
+            variant: ["tertiary", "destructive"],
+            size: "small",
+            content: "text",
+            hostClass: "remove",
+          })}
         </li>
       </ul>
+      <!-- lit-html forbids expressions inside <template>, so this clone source stays static markup -->
       <template>
         <li>
           <span><slot></slot></span>

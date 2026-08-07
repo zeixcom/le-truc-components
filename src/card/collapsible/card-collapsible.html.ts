@@ -1,8 +1,8 @@
-import { html } from "lit";
+import { html, type TemplateResult } from "lit";
 
 export type CardCollapsibleArgs = {
-  description: string;
-  content: string;
+  description: string | TemplateResult;
+  content: string | TemplateResult;
   open: boolean;
 };
 
@@ -16,10 +16,14 @@ export const CardCollapsible = ({
   <card-collapsible>
     <details ?open=${open}>
       <summary>
-        <span class="description">${description}</span>
+        ${
+          typeof description === "string"
+            ? html`<span class="description">${description}</span>`
+            : description
+        }
       </summary>
       <div class="content">
-        <p>${content}</p>
+        ${typeof content === "string" ? html`<p>${content}</p>` : content}
       </div>
     </details>
   </card-collapsible>

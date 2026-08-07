@@ -1,4 +1,6 @@
 import { html } from "lit";
+import { BasicButton } from "../../basic/button/basic-button.html";
+import { ModuleScrollarea } from "../scrollarea/module-scrollarea.html";
 
 export type ModuleCodeblockArgs = {
   collapsed: boolean;
@@ -14,14 +16,18 @@ console.log(greet("World"));`;
 // ${ModuleCodeblock(args)} instead of duplicating its markup.
 export const ModuleCodeblock = ({ collapsed }: ModuleCodeblockArgs) => html`
   <module-codeblock ?collapsed=${collapsed}>
-    <module-scrollarea orientation="horizontal">
-      <pre><code class="language-js">${sampleCode}</code></pre>
-    </module-scrollarea>
-    <basic-button class="copy" copy-success="Copied!" copy-error="Error!">
-      <button type="button" class="secondary small">
-        <span class="label">Copy</span>
-      </button>
-    </basic-button>
+    ${ModuleScrollarea({
+      orientation: "horizontal",
+      style: "",
+      content: html`<pre><code class="language-js">${sampleCode}</code></pre>`,
+    })}
+    ${BasicButton({
+      label: "Copy",
+      size: "small",
+      hostClass: "copy",
+      copySuccess: "Copied!",
+      copyError: "Error!",
+    })}
     <button type="button" class="overlay" aria-expanded=${collapsed ? "false" : "true"}>
       Expand
     </button>

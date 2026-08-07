@@ -1,4 +1,5 @@
 import { html, nothing } from "lit";
+import { BasicNumber } from "../../basic/number/basic-number.html";
 
 export type ModuleColorinfoArgs = {
   value: string;
@@ -31,42 +32,41 @@ export const ModuleColorinfo = ({
         <dl>
           <dt>Lightness:</dt>
           <dd>
-            <basic-number
-              class="lightness"
-              options='{"style":"percent","maximumFractionDigits":2}'
-            ></basic-number>
+            ${BasicNumber({
+              class: "lightness",
+              options: '{"style":"percent","maximumFractionDigits":2}',
+            })}
           </dd>
           <dt>Chroma:</dt>
           <dd>
-            <basic-number
-              class="chroma"
-              options='{"maximumFractionDigits":4}'
-            ></basic-number>
+            ${BasicNumber({
+              class: "chroma",
+              options: '{"maximumFractionDigits":4}',
+            })}
           </dd>
           <dt>Hue:</dt>
           <dd>
-            <basic-number
-              class="hue"
-              options='{"maximumFractionDigits":2}'
-            ></basic-number>
+            ${BasicNumber({
+              class: "hue",
+              options: '{"maximumFractionDigits":2}',
+            })}
           </dd>
         </dl>
         <dl>
           <dt>OKLCH:</dt>
           <dd lang="en">
-            oklch(<basic-number
-              class="lightness"
-              options='{"maximumFractionDigits":4}'
-            ></basic-number>
-            <basic-number
-              class="chroma"
-              options='{"maximumFractionDigits":4}'
-            ></basic-number>
-            <basic-number
-              class="hue"
-              options='{"maximumFractionDigits":2}'
-            ></basic-number
-            >)
+            oklch(${BasicNumber({
+              class: "lightness",
+              options: '{"maximumFractionDigits":4}',
+            })}
+            ${BasicNumber({
+              class: "chroma",
+              options: '{"maximumFractionDigits":4}',
+            })}
+            ${BasicNumber({
+              class: "hue",
+              options: '{"maximumFractionDigits":2}',
+            })})
           </dd>
           <dt>RGB:</dt>
           <dd class="rgb"></dd>

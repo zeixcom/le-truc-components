@@ -1,4 +1,5 @@
 import { html } from "lit";
+import { FormListbox } from "../listbox/form-listbox.html";
 
 export type FormComboboxArgs = {
   value: string;
@@ -22,15 +23,13 @@ export const FormCombobox = ({ value, description }: FormComboboxArgs) => html`
         autocomplete="off"
         value=${value}
       />
-      <form-listbox id="color-popup">
-        <div role="listbox" aria-labelledby="color-label">
-          <button type="button" role="option" tabindex="-1" value="red">Red</button>
-          <button type="button" role="option" tabindex="-1" value="green">Green</button>
-          <button type="button" role="option" tabindex="-1" value="blue">Blue</button>
-          <button type="button" role="option" tabindex="-1" value="yellow">Yellow</button>
-          <button type="button" role="option" tabindex="-1" value="purple">Purple</button>
-        </div>
-      </form-listbox>
+      ${FormListbox({
+        id: "color-popup",
+        name: "",
+        ariaLabelledby: "color-label",
+        wrapInForm: false,
+        showSelected: false,
+      })}
     </div>
     <p class="error" role="alert" aria-live="assertive" id="color-error"></p>
     <p class="description" aria-live="polite" id="color-description">${description}</p>

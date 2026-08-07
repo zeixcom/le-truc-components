@@ -1,4 +1,5 @@
 import { html } from "lit";
+import { BasicButton } from "../../basic/button/basic-button.html";
 
 // The same seed symbols/prices used in the upstream demo page. The component
 // reads these server-rendered rows to build its reactive list, so the markup
@@ -21,14 +22,12 @@ const SYMBOLS: Array<[string, number]> = [
 export const ModuleTicker = () => html`
   <module-ticker fraction="0.1">
     <div class="controls">
-      <basic-button class="toggle">
-        <button type="button">
-          <span class="label">⏸️ Pause</span>
-        </button>
-      </basic-button>
-      <basic-button class="add-rows">
-        <button type="button">➕ Add 100 rows</button>
-      </basic-button>
+      ${BasicButton({ label: "⏸️ Pause", hostClass: "toggle" })}
+      ${BasicButton({
+        label: "➕ Add 100 rows",
+        content: "text",
+        hostClass: "add-rows",
+      })}
     </div>
     <table>
       <thead>

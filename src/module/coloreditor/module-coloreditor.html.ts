@@ -1,6 +1,7 @@
 import { html } from "lit";
 import { CardColorscale } from "../../card/colorscale/card-colorscale.html";
 import { FormColorgraph } from "../../form/colorgraph/form-colorgraph.html";
+import { FormTextbox } from "../../form/textbox/form-textbox.html";
 import { ModuleColorinfo } from "../colorinfo/module-colorinfo.html";
 
 export type ModuleColoreditorArgs = {
@@ -28,21 +29,13 @@ export const ModuleColoreditor = ({
 }: ModuleColoreditorArgs) => html`
   <module-coloreditor value=${value} label=${label}>
     ${CardColorscale({ value, label, size: "tiny" })}
-    <form-textbox class="name">
-      <label for="name-input">Color name</label>
-      <div class="input">
-        <input
-          type="text"
-          id="name-input"
-          name="name"
-          value=${label}
-          autocomplete="off"
-          required
-        />
-      </div>
-      <p class="error" aria-live="assertive" id="name-error"></p>
-      <p class="description" aria-live="polite" id="name-description"></p>
-    </form-textbox>
+    ${FormTextbox({
+      hostClass: "name",
+      label: "Color name",
+      value: label,
+      autocomplete: "off",
+      description: "",
+    })}
     ${FormColorgraph({ name: "", value })}
     <div class="info">
       ${INFO_STEPS.map(({ cls, weight, open }) =>

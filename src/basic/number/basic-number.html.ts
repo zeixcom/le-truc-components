@@ -1,9 +1,11 @@
 import { html, nothing } from "lit";
 
 export type BasicNumberArgs = {
-  value: number;
-  options: string;
-  lang: string;
+  value?: number;
+  options?: string;
+  lang?: string;
+  // Selector class, e.g. one of the lightness/chroma/hue steps module-colorinfo queries.
+  class?: string;
   caption: string;
   wrapperLang: string;
 };
@@ -14,9 +16,11 @@ export const BasicNumber = ({
   value,
   options,
   lang,
-}: Pick<BasicNumberArgs, "value" | "options" | "lang">) => html`
+  class: cls,
+}: Pick<BasicNumberArgs, "value" | "options" | "lang" | "class">) => html`
   <basic-number
-    value=${value}
+    class=${cls || nothing}
+    value=${value ?? nothing}
     options=${options || nothing}
     lang=${lang || nothing}
   ></basic-number>
