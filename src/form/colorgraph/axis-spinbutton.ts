@@ -123,7 +123,7 @@ export default defineComponent<AxisSpinbuttonProps>(
     on(decrement, "click", () => stepBy(-1, false));
     on(increment, "click", () => stepBy(1, false));
     on(host, "keydown", (event) => {
-      const { key, shiftKey } = event as KeyboardEvent;
+      const { key, shiftKey } = event;
       if (!["ArrowUp", "ArrowDown", "+", "-"].includes(key)) return;
       event.preventDefault();
       event.stopPropagation();

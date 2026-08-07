@@ -16,7 +16,6 @@ import {
 import { clampChroma, formatCss, inGamut, type Oklch } from "culori/fn";
 import { asOklch } from "../../_common/asOklch";
 import { getStepColor } from "../../_common/getStepColor";
-import type { AxisSpinbuttonProps } from "./axis-spinbutton";
 
 export type FormColorgraphAxis = "l" | "c" | "h";
 
@@ -78,19 +77,16 @@ export default defineComponent<FormColorgraphProps>(
     // <axis-spinbutton>; each one owns its own native constraint validity
     // (valueMissing/rangeOverflow/rangeUnderflow) independent of the joint
     // out-of-gamut constraint this component layers on top of them.
-    const axisSpinbuttons: Record<
-      FormColorgraphAxis,
-      FormAssociatedElement & AxisSpinbuttonProps
-    > = {
-      l: first<FormAssociatedElement & AxisSpinbuttonProps>(
+    const axisSpinbuttons = {
+      l: first(
         "axis-spinbutton.lightness",
         'Add an <axis-spinbutton class="lightness"> element to control the lightness of the color.',
       ),
-      c: first<FormAssociatedElement & AxisSpinbuttonProps>(
+      c: first(
         "axis-spinbutton.chroma",
         'Add an <axis-spinbutton class="chroma"> element to control the chroma of the color.',
       ),
-      h: first<FormAssociatedElement & AxisSpinbuttonProps>(
+      h: first(
         "axis-spinbutton.hue",
         'Add an <axis-spinbutton class="hue"> element to control the hue of the color.',
       ),
@@ -110,7 +106,7 @@ export default defineComponent<FormColorgraphProps>(
     const track = first(
       ".slider canvas",
       "Add a <canvas> element inside the slider to display the hue slider track.",
-    ) as HTMLCanvasElement;
+    );
     const knob = first(
       ".knob",
       "Add a <.knob> element as a drag knob to control lightness and chroma.",
@@ -237,13 +233,6 @@ export default defineComponent<FormColorgraphProps>(
     // Host CSS variable
     watch(() => formatCss(color.get()), bindStyle(host, "--color-base"));
 
-    // Axis spinbutton wiring: push the current color into each axis's
-    // display value, and commit typed/stepped changes back — but only once
-    // the axis-spinbutton itself reports a valid value (its own
-    // valueMissing/rangeOverflow/rangeUnderflow/stepMismatch are its
-    // business, not this component's). A valid per-axis value can still
-    // fail the joint gamut constraint, which surfaces as this component's
-    // own customError, not the axis-spinbutton's.
     for (const axis of ["l", "c", "h"] as const) {
       const el = axisSpinbuttons[axis];
       watch(color, (c) => {

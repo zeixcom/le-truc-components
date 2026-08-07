@@ -3848,6 +3848,34 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/context/media/context-media.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ContextMedia",
+          "parameters": [
+            {
+              "name": "{\n  sm,\n  md,\n  lg,\n  xl,\n  content,\n}",
+              "type": {
+                "text": "ContextMediaArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ContextMedia",
+          "declaration": {
+            "name": "ContextMedia",
+            "module": "src/context/media/context-media.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/basic/button/basic-button.html.ts",
       "declarations": [
         {
@@ -3898,34 +3926,6 @@
           "declaration": {
             "name": "BasicCounter",
             "module": "src/basic/counter/basic-counter.html.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/basic/gauge/basic-gauge.html.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "BasicGauge",
-          "parameters": [
-            {
-              "name": "{\n  value,\n  thresholds,\n  id = \"basic-gauge-label\",\n}",
-              "type": {
-                "text": "BasicGaugeArgs"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "BasicGauge",
-          "declaration": {
-            "name": "BasicGauge",
-            "module": "src/basic/gauge/basic-gauge.html.ts"
           }
         }
       ]
@@ -4008,16 +4008,16 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/context/media/context-media.html.ts",
+      "path": "src/basic/gauge/basic-gauge.html.ts",
       "declarations": [
         {
           "kind": "function",
-          "name": "ContextMedia",
+          "name": "BasicGauge",
           "parameters": [
             {
-              "name": "{\n  sm,\n  md,\n  lg,\n  xl,\n  content,\n}",
+              "name": "{\n  value,\n  thresholds,\n  id = \"basic-gauge-label\",\n}",
               "type": {
-                "text": "ContextMediaArgs"
+                "text": "BasicGaugeArgs"
               }
             }
           ]
@@ -4026,10 +4026,10 @@
       "exports": [
         {
           "kind": "js",
-          "name": "ContextMedia",
+          "name": "BasicGauge",
           "declaration": {
-            "name": "ContextMedia",
-            "module": "src/context/media/context-media.html.ts"
+            "name": "BasicGauge",
+            "module": "src/basic/gauge/basic-gauge.html.ts"
           }
         }
       ]
@@ -4071,34 +4071,6 @@
           "declaration": {
             "name": "blogmetaArgTypes",
             "module": "src/card/blogmeta/card-blogmeta.html.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/basic/hello/basic-hello.html.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "BasicHello",
-          "parameters": [
-            {
-              "name": "{ subject }",
-              "type": {
-                "text": "BasicHelloArgs"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "BasicHello",
-          "declaration": {
-            "name": "BasicHello",
-            "module": "src/basic/hello/basic-hello.html.ts"
           }
         }
       ]
@@ -4155,6 +4127,34 @@
           "declaration": {
             "name": "CardCallout",
             "module": "src/card/callout/card-callout.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/hello/basic-hello.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "BasicHello",
+          "parameters": [
+            {
+              "name": "{ subject }",
+              "type": {
+                "text": "BasicHelloArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "BasicHello",
+          "declaration": {
+            "name": "BasicHello",
+            "module": "src/basic/hello/basic-hello.html.ts"
           }
         }
       ]
@@ -4267,34 +4267,6 @@
           "declaration": {
             "name": "FormCheckbox",
             "module": "src/form/checkbox/form-checkbox.html.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/form/colorgraph/form-colorgraph.html.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "FormColorgraph",
-          "parameters": [
-            {
-              "name": "{ name, value }",
-              "type": {
-                "text": "FormColorgraphArgs"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "FormColorgraph",
-          "declaration": {
-            "name": "FormColorgraph",
-            "module": "src/form/colorgraph/form-colorgraph.html.ts"
           }
         }
       ]
@@ -4489,6 +4461,34 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/form/colorgraph/form-colorgraph.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "FormColorgraph",
+          "parameters": [
+            {
+              "name": "{ name, value }",
+              "type": {
+                "text": "FormColorgraphArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FormColorgraph",
+          "declaration": {
+            "name": "FormColorgraph",
+            "module": "src/form/colorgraph/form-colorgraph.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/module/carousel/module-carousel.html.ts",
       "declarations": [
         {
@@ -4517,26 +4517,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/module/catalog/module-catalog.html.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "ModuleCatalog"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ModuleCatalog",
-          "declaration": {
-            "name": "ModuleCatalog",
-            "module": "src/module/catalog/module-catalog.html.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/module/cem-list/module-cem-list.html.ts",
       "declarations": [
         {
@@ -4551,6 +4531,26 @@
           "declaration": {
             "name": "ModuleCemList",
             "module": "src/module/cem-list/module-cem-list.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/catalog/module-catalog.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ModuleCatalog"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ModuleCatalog",
+          "declaration": {
+            "name": "ModuleCatalog",
+            "module": "src/module/catalog/module-catalog.html.ts"
           }
         }
       ]
@@ -4626,34 +4626,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/module/coloreditor/module-coloreditor.html.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "ModuleColoreditor",
-          "parameters": [
-            {
-              "name": "{\n  value,\n  label,\n}",
-              "type": {
-                "text": "ModuleColoreditorArgs"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ModuleColoreditor",
-          "declaration": {
-            "name": "ModuleColoreditor",
-            "module": "src/module/coloreditor/module-coloreditor.html.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/module/dialog/module-dialog.html.ts",
       "declarations": [
         {
@@ -4704,6 +4676,34 @@
           "declaration": {
             "name": "ModuleLazyload",
             "module": "src/module/lazyload/module-lazyload.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/coloreditor/module-coloreditor.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ModuleColoreditor",
+          "parameters": [
+            {
+              "name": "{\n  value,\n  label,\n}",
+              "type": {
+                "text": "ModuleColoreditorArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ModuleColoreditor",
+          "declaration": {
+            "name": "ModuleColoreditor",
+            "module": "src/module/coloreditor/module-coloreditor.html.ts"
           }
         }
       ]
@@ -4778,28 +4778,20 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/module/scrollarea/module-scrollarea.html.ts",
+      "path": "src/module/tabgroup/module-tabgroup.html.ts",
       "declarations": [
         {
           "kind": "function",
-          "name": "ModuleScrollarea",
-          "parameters": [
-            {
-              "name": "{ orientation }",
-              "type": {
-                "text": "ModuleScrollareaArgs"
-              }
-            }
-          ]
+          "name": "ModuleTabgroup"
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "ModuleScrollarea",
+          "name": "ModuleTabgroup",
           "declaration": {
-            "name": "ModuleScrollarea",
-            "module": "src/module/scrollarea/module-scrollarea.html.ts"
+            "name": "ModuleTabgroup",
+            "module": "src/module/tabgroup/module-tabgroup.html.ts"
           }
         }
       ]
@@ -4820,26 +4812,6 @@
           "declaration": {
             "name": "ModuleSplitview",
             "module": "src/module/splitview/module-splitview.html.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/module/tabgroup/module-tabgroup.html.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "ModuleTabgroup"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ModuleTabgroup",
-          "declaration": {
-            "name": "ModuleTabgroup",
-            "module": "src/module/tabgroup/module-tabgroup.html.ts"
           }
         }
       ]
@@ -4880,6 +4852,34 @@
           "declaration": {
             "name": "ModuleTodo",
             "module": "src/module/todo/module-todo.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/scrollarea/module-scrollarea.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ModuleScrollarea",
+          "parameters": [
+            {
+              "name": "{ orientation }",
+              "type": {
+                "text": "ModuleScrollareaArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ModuleScrollarea",
+          "declaration": {
+            "name": "ModuleScrollarea",
+            "module": "src/module/scrollarea/module-scrollarea.html.ts"
           }
         }
       ]
