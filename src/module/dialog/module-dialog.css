@@ -86,7 +86,7 @@ module-dialog {
   }
 }
 
-@media (min-width: 48em) {
+@media (min-width: 45em) {
   module-dialog dialog[open] {
     width: min(var(--content-max-width), calc(100% - 2 * var(--space-l)));
     max-height: calc(100dvh - 2rem);

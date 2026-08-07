@@ -79,10 +79,10 @@ export default defineComponent<ContextMediaProps>(
       // Context for screen viewport size
       viewport: (() => {
         const breakpoints: [ContextMediaViewport, string][] = [
-          ["sm", getBreakpoint("sm", "32em")],
-          ["md", getBreakpoint("md", "48em")],
-          ["lg", getBreakpoint("lg", "72em")],
-          ["xl", getBreakpoint("xl", "104em")],
+          ["sm", getBreakpoint("sm", "27em")],
+          ["md", getBreakpoint("md", "45em")],
+          ["lg", getBreakpoint("lg", "75em")],
+          ["xl", getBreakpoint("xl", "125em")],
         ];
         const mqls = new Map<ContextMediaViewport, MediaQueryList>(
           breakpoints.map(([name, size]) => [

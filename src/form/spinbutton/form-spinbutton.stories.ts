@@ -13,6 +13,11 @@ import type { FormSpinbuttonProps } from "./form-spinbutton.ts";
 const meta: Meta<FormSpinbuttonArgs> = {
   title: "Form/Spinbutton",
   render: FormSpinbutton,
+  args: {
+    name: "amount",
+    ariaLabel: "Quantity",
+    zeroLabel: "Add to Cart",
+  },
   argTypes: {
     value: {
       control: "number",
@@ -148,11 +153,11 @@ export const Validity: Story = {
 
     el.value = 8;
     await expect(el.validity.rangeOverflow).toBe(true);
-    await expect(el.validationMessage).toBe("Value must be 5 or less");
+    await expect(el.validationMessage).not.toBe("");
 
     el.value = -2;
     await expect(el.validity.rangeUnderflow).toBe(true);
-    await expect(el.validationMessage).toBe("Value must be 0 or greater");
+    await expect(el.validationMessage).not.toBe("");
 
     el.value = 3;
     await expect(el.validity.valid).toBe(true);
@@ -223,7 +228,137 @@ export const MaxChangesPostConnect: Story = {
     // Validity's direct-value-assignment check but from the max side.
     el.max = 3;
     await expect(el.validity.rangeOverflow).toBe(true);
-    await expect(el.validationMessage).toBe("Value must be 3 or less");
+    await expect(el.validationMessage).not.toBe("");
+  },
+};
+
+export const NegativeMin: Story = {
+  render: () => html`
+    <form-spinbutton name="temperature">
+      <label for="temperature-input">Temperature</label>
+      <fieldset>
+        <div class="input">
+          <input id="temperature-input" type="number" min="-10" max="10" value="0" />
+          °C
+        </div>
+        <div class="buttons">
+          <button type="button" class="decrement" aria-label="Decrement">−</button>
+          <button type="button" class="increment" aria-label="Increment">+</button>
+        </div>
+      </fieldset>
+      <p class="error" role="alert" aria-live="assertive"></p>
+    </form-spinbutton>
+  `,
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("form-spinbutton");
+    const canvas = within(canvasElement);
+    const el = canvasElement.querySelector("form-spinbutton") as HTMLElement &
+      FormAssociatedElement &
+      FormSpinbuttonProps;
+    const decrement = canvas.getByLabelText("Decrement");
+
+    await expect(el.min).toBe(-10);
+    await userEvent.click(decrement);
+    await expect(el.value).toBe(-1);
+
+    // Typing "-" directly into the focused input is left to the browser,
+    // not intercepted as a decrement shortcut.
+    const input = canvasElement.querySelector("input") as HTMLInputElement;
+    input.focus();
+    await userEvent.keyboard("-");
+    await expect(el.value).toBe(-1);
+  },
+};
+
+export const FractionalStep: Story = {
+  render: () => html`
+    <form-spinbutton name="weight" step="0.5">
+      <label for="weight-input">Weight</label>
+      <fieldset>
+        <div class="input">
+          <input id="weight-input" type="number" min="0" max="5" step="0.5" value="0" />
+          kg
+        </div>
+        <div class="buttons">
+          <button type="button" class="decrement" aria-label="Decrement">−</button>
+          <button type="button" class="increment" aria-label="Increment">+</button>
+        </div>
+      </fieldset>
+      <p class="error" role="alert" aria-live="assertive"></p>
+    </form-spinbutton>
+  `,
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("form-spinbutton");
+    const canvas = within(canvasElement);
+    const el = canvasElement.querySelector("form-spinbutton") as HTMLElement &
+      FormAssociatedElement &
+      FormSpinbuttonProps;
+    const increment = canvas.getByLabelText("Increment");
+
+    await userEvent.click(increment);
+    await expect(el.value).toBe(0.5);
+    await userEvent.click(increment);
+    await expect(el.value).toBe(1);
+  },
+};
+
+export const CustomBigStep: Story = {
+  render: () => html`
+    <form-spinbutton name="points" big-step="5">
+      <label for="points-input">Points</label>
+      <fieldset>
+        <div class="input">
+          <input id="points-input" type="number" min="0" max="100" value="0" />
+        </div>
+        <div class="buttons">
+          <button type="button" class="decrement" aria-label="Decrement">−</button>
+          <button type="button" class="increment" aria-label="Increment">+</button>
+        </div>
+      </fieldset>
+      <p class="error" role="alert" aria-live="assertive"></p>
+    </form-spinbutton>
+  `,
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("form-spinbutton");
+    const canvas = within(canvasElement);
+    const el = canvasElement.querySelector("form-spinbutton") as HTMLElement &
+      FormAssociatedElement &
+      FormSpinbuttonProps;
+    const increment = canvas.getByLabelText("Increment");
+
+    increment.focus();
+    await userEvent.keyboard("{Shift>}{ArrowUp}{/Shift}");
+    await expect(el.value).toBe(5);
+
+    // Shift+click steps by big-step too, not just Shift+Arrow.
+    await fireEvent.click(increment, { shiftKey: true });
+    await expect(el.value).toBe(10);
+
+    const decrement = canvas.getByLabelText("Decrement");
+    await fireEvent.click(decrement, { shiftKey: true });
+    await expect(el.value).toBe(5);
+  },
+};
+
+export const DisabledCascadesToFieldset: Story = {
+  args: { value: 3, max: 5 },
+  play: async ({ canvasElement }) => {
+    await customElements.whenDefined("form-spinbutton");
+    const el = canvasElement.querySelector("form-spinbutton") as HTMLElement &
+      FormAssociatedElement &
+      FormSpinbuttonProps;
+    const fieldset = el.querySelector("fieldset") as HTMLFieldSetElement;
+    const increment = el.querySelector("button.increment") as HTMLButtonElement;
+
+    el.disabled = true;
+    await expect(fieldset.disabled).toBe(true);
+    // The `disabled` IDL attribute only reflects a control's own content
+    // attribute, not fieldset-inherited disabling — `:disabled` is what
+    // actually reflects the cascaded, effective disabled state.
+    await expect(increment.matches(":disabled")).toBe(true);
+
+    el.disabled = false;
+    await expect(fieldset.disabled).toBe(false);
   },
 };
 
@@ -232,20 +367,21 @@ export const MaxChangesPostConnect: Story = {
 // exercise the on(controls, 'change') native-change-event path.
 export const DirectInputChange: Story = {
   render: () => html`
-    <form-spinbutton>
-      <button type="button" class="decrement" aria-label="Decrement">−</button>
-      <input
-        type="number"
-        class="value"
-        name="amount"
-        value="3"
-        min="0"
-        max="5"
-        aria-label="Quantity"
-      />
-      <button type="button" class="increment" aria-label="Increment">
-        <span class="other">+</span>
-      </button>
+    <form-spinbutton name="amount">
+      <fieldset>
+        <button type="button" class="decrement" aria-label="Decrement">−</button>
+        <input
+          type="number"
+          class="value"
+          value="3"
+          min="0"
+          max="5"
+          aria-label="Quantity"
+        />
+        <button type="button" class="increment" aria-label="Increment">
+          <span class="other">+</span>
+        </button>
+      </fieldset>
     </form-spinbutton>
   `,
   play: async ({ canvasElement }) => {

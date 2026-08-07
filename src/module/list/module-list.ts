@@ -24,27 +24,27 @@ export default defineComponent("module-list", ({ first, host, on, pass }) => {
   // across reorders, which is what lets removal target the right item.
   const list: List<string> = createList<string>([], { keyConfig: "item" });
 
+  // Sync the container's children to the list: clones the template for
+  // entering keys, removes leavers, moves survivors. bindItem fills the
+  // cloned content — server-adopted items have no <slot> left, so the
+  // fill is naturally idempotent.
   const container = first(
     "[data-container]",
     "Add a container element for items.",
   );
   const template = first("template", "Add a template element for items.");
-  // Sync the container's children to the list: clones the template for
-  // entering keys, removes leavers, moves survivors. bindItem fills the
-  // cloned content — server-adopted items have no <slot> left, so the
-  // fill is naturally idempotent.
   reconcile(container, template, list, (element, item) => {
     element
       .querySelector("slot")
       ?.replaceWith(document.createTextNode(item.get()));
   });
 
+  // Add on submit, then clear the input by calling the child's method.
   const form = first("form", "Add a form element to enter a new list item.");
   const textbox = first(
     "form-textbox",
     "Add <form-textbox> component to enter a new list item.",
   ) as HTMLElement & FormTextboxProps;
-  // Add on submit, then clear the input by calling the child's method.
   on(form, "submit", (e) => {
     e.preventDefault();
     const value = textbox.value.trim();
@@ -60,6 +60,7 @@ export default defineComponent("module-list", ({ first, host, on, pass }) => {
     if (!target.closest("basic-button.remove")) return;
     const item = target.closest("[data-key]");
     if (!(item instanceof HTMLElement)) return;
+  // Disable the submit button while the textbox is empty.
     e.stopPropagation();
     const key = item.dataset.key;
     if (key) list.remove(key);
@@ -69,6 +70,5 @@ export default defineComponent("module-list", ({ first, host, on, pass }) => {
     "basic-button.submit",
     "Add <basic-button.submit> component to submit the form.",
   ) as HTMLElement & BasicButtonProps;
-  // Disable the submit button while the textbox is empty.
   pass(submit, { disabled: () => !textbox.length });
 });

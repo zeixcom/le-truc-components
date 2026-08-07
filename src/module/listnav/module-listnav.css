@@ -2,7 +2,7 @@ module-listnav module-lazyload {
   contain: inline-size;
 }
 
-@media screen and (min-width: 48em) {
+@media screen and (min-width: 45em) {
   module-listnav {
     display: grid;
     grid-template-columns: 1fr 2fr;

@@ -5,7 +5,7 @@ import * as FormSpinbuttonStories from './form-spinbutton.stories';
 
 ### Form Spinbutton
 
-A quantity spinbutton with increment/decrement buttons, clamped values, and keyboard support. It works both controlled and uncontrolled, and participates in forms just like a native input.
+A quantity spinbutton with increment/decrement buttons, clamped values, and keyboard support. It works both controlled and uncontrolled, and participates in forms just like a native input. A fractional `step` attribute switches the whole component to floating-point mode (`value`/`min`/`max` parsed and rounded as decimals instead of integers), and negative ranges are supported.
 
 #### Tag Name
 
@@ -18,6 +18,94 @@ A quantity spinbutton with increment/decrement buttons, clamped values, and keyb
 #### Controls
 
 <Controls of={FormSpinbuttonStories.Default} />
+
+#### Attributes
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>step</code></td>
+      <td><code>number</code></td>
+      <td><code>1</code> (or <code>input.step</code>, if set)</td>
+      <td>Increment size. A fractional value (e.g. <code>0.5</code>) switches <code>value</code>/<code>min</code>/<code>max</code> to floating-point parsing; <code>0</code> or negative values fall back to <code>1</code></td>
+    </tr>
+    <tr>
+      <td><code>big-step</code></td>
+      <td><code>number</code></td>
+      <td><code>step * 10</code></td>
+      <td>Increment size used when Shift is held, or <code>stepDown(true)</code>/<code>stepUp(true)</code> is called</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>value</code></td>
+      <td><code>number</code></td>
+      <td>Parsed from the host's <code>value</code> attribute, falling back to <code>input.value</code>, clamped to <code>min..max</code></td>
+      <td>Current value; settable for controlled use</td>
+    </tr>
+    <tr>
+      <td><code>min</code></td>
+      <td><code>number</code></td>
+      <td>Parsed from the host's <code>min</code> attribute, falling back to <code>input.min</code></td>
+      <td>Minimum allowed value; may be negative</td>
+    </tr>
+    <tr>
+      <td><code>max</code></td>
+      <td><code>number</code></td>
+      <td>Parsed from the host's <code>max</code> attribute, falling back to <code>input.max</code></td>
+      <td>Maximum allowed value</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Methods
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>stepDown</code></td>
+      <td><code>(big?: boolean) =&gt; void</code></td>
+      <td>Decrements <code>value</code> by <code>step</code> (or <code>big-step</code> if <code>big</code> is <code>true</code>), clamped to <code>min</code></td>
+    </tr>
+    <tr>
+      <td><code>stepUp</code></td>
+      <td><code>(big?: boolean) =&gt; void</code></td>
+      <td>Increments <code>value</code> by <code>step</code> (or <code>big-step</code> if <code>big</code> is <code>true</code>), clamped to <code>max</code></td>
+    </tr>
+  </tbody>
+</table>
+
+#### Keyboard Support
+
+Arrow Up/Down step the value by one `step` (Shift for `big-step`) regardless of which control has focus. `+`/`-` do the same, but only when a button has focus — when the input itself is focused, `+`/`-` are left to the browser's native text entry so a negative value can be typed directly (e.g. `-5`) when `min` is below `0`.
 
 #### Descendant Elements
 
@@ -41,31 +129,37 @@ A quantity spinbutton with increment/decrement buttons, clamped values, and keyb
       <td><code>first('button.decrement')</code></td>
       <td><code>HTMLButtonElement</code></td>
       <td><strong>required</strong></td>
-      <td>Decrements <code>value</code>; hidden when <code>value === 0</code></td>
+      <td>Decrements <code>value</code>; disabled at <code>min</code>, hidden when <code>value === 0</code> if <code>.zero</code> is present</td>
     </tr>
     <tr>
-      <td><code>first('input.value')</code></td>
+      <td><code>first('input')</code></td>
       <td><code>HTMLInputElement</code></td>
       <td><strong>required</strong></td>
-      <td>Numeric value source and sync target; hidden when <code>value === 0</code></td>
+      <td>Numeric value source and sync target; no <code>name</code> attribute needed (the host carries it)</td>
     </tr>
     <tr>
-      <td><code>all('button, input:not([disabled])')</code></td>
-      <td><code>Memo&lt;(HTMLButtonElement | HTMLInputElement)[]&gt;</code></td>
+      <td><code>first('fieldset')</code></td>
+      <td><code>HTMLFieldSetElement</code></td>
       <td><strong>required</strong></td>
-      <td>Interactive controls tracked for <code>change</code>, <code>click</code>, and <code>keydown</code> events</td>
+      <td>Wraps the increment/decrement/input controls so <code>host.disabled</code> cascades to them natively</td>
     </tr>
     <tr>
       <td><code>first('.zero')</code></td>
       <td><code>HTMLElement</code></td>
       <td>optional</td>
-      <td>Shown when <code>value === 0</code>; its text is used as the increment button's aria-label at zero</td>
+      <td>Opts into zero-state UI: shown when <code>value === 0</code>, hides <code>input</code>/<code>decrement</code> and swaps the increment label; omit for a plain generic spinbutton</td>
     </tr>
     <tr>
       <td><code>first('.other')</code></td>
       <td><code>HTMLElement</code></td>
       <td>optional</td>
-      <td>Shown when <code>value !== 0</code></td>
+      <td>Shown when <code>value !== 0</code>; only wired up if <code>.zero</code> is also present</td>
+    </tr>
+    <tr>
+      <td><code>first('.error')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Shows <code>host.validationMessage</code> — the range constraint (relayed from the native input's own <code>ValidityState</code> via <code>relayValidity()</code>) or an externally-set <code>customError</code></td>
     </tr>
   </tbody>
 </table>

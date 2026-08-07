@@ -594,6 +594,15 @@
               "description": "Base color in Oklch format. Parsed from the `value` attribute at connect time."
             }
           ],
+          "attributes": [
+            {
+              "name": "value",
+              "fieldName": "value",
+              "type": {
+                "text": "Oklch"
+              }
+            }
+          ],
           "cssProperties": [
             {
               "name": "--card-colorscale-max-size",
@@ -1177,55 +1186,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/_common/relayValidity.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "relayValidity",
-          "return": {
-            "type": {
-              "text": "void"
-            }
-          },
-          "parameters": [
-            {
-              "name": "input",
-              "type": {
-                "text": "HTMLInputElement | HTMLTextAreaElement"
-              },
-              "description": "The inner native form control driving validity"
-            },
-            {
-              "name": "host",
-              "type": {
-                "text": "FormAssociatedElement"
-              },
-              "description": "The form-associated host element"
-            },
-            {
-              "name": "error",
-              "type": {
-                "text": "ErrorSink"
-              },
-              "description": "A write-handle (e.g. a `State<string>`) for the inline error"
-            }
-          ],
-          "description": "Relay an inner native form control's validity to the host and the inline\nerror display in one step.\n\n- Runs `checkValidity()` on the inner control so the browser recomputes its\n  `validationMessage` from native constraints (required, pattern, etc.).\n- Mirrors that message into the component-internal error signal, which the\n  inline `.error` element binds to.\n- Forwards it to `host.setCustomValidity()` so external consumers see native\n  parity (`host.validity`, `host.validationMessage`, `:user-invalid`)."
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "relayValidity",
-          "declaration": {
-            "name": "relayValidity",
-            "module": "src/_common/relayValidity.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/_common/fetchWithCache.ts",
       "declarations": [
         {
@@ -1691,7 +1651,7 @@
           "customElement": true,
           "tagName": "form-combobox",
           "name": "FormCombobox",
-          "description": "A combobox (searchable select) that combines a text input with a filterable listbox popup.\nUse it for searchable selection — provides ARIA roles for the combobox pattern,\nkeyboard interaction (type to filter, Escape to close, Enter to select), and focus management.\nForm participation and validity are via ElementInternals (`formAssociated()`).\nExternal consumers read `host.validationMessage` / `host.validity` like on a native input.",
+          "description": "A combobox (searchable select) that combines a text input with a filterable listbox popup.\nUse it for searchable selection — provides ARIA roles for the combobox pattern,\nkeyboard interaction (type to filter, Escape to close, Enter to select), and focus management.\nForm participation and validity are via ElementInternals (`formAssociated()`).\nExternal consumers read `host.validationMessage` / `host.validity` like on a\nnative input; the inline `.error` element watches the same reactive\n`validationMessage` prop, so it stays in sync without any extra plumbing.",
           "members": [
             {
               "kind": "field",
@@ -2204,7 +2164,7 @@
           "customElement": true,
           "tagName": "form-spinbutton",
           "name": "FormSpinbutton",
-          "description": "A numeric spinbutton with increment/decrement buttons and keyboard support.\nUse it for numeric input within a bounded range — provides ARIA spinbutton\nsemantics and Arrow key support for incrementing and decrementing the value.\nForm participation and range validation are via ElementInternals (`formAssociated()`,\n`setFormValue`, `setValidity`).",
+          "description": "A numeric spinbutton with increment/decrement buttons and keyboard support.\nUse it for numeric input within a bounded range — provides ARIA spinbutton\nsemantics and Arrow key support for incrementing and decrementing the value.\nStep size is read from the host's `step` attribute (falling back to the\nnested `input.step`, default `1`); a fractional step (e.g. `step=\"0.1\"`)\nswitches the whole component to floating-point mode, so `value`/`min`/`max`\nare parsed and rounded as decimals instead of integers. An optional\n`big-step` attribute (default `step * 10`) sets the increment used when\nShift is held or `stepDown(true)`/`stepUp(true)` is called. `min` is no\nlonger fixed at `0` — negative ranges work, and typing `-`/`+` directly\ninto a focused input is left to the browser rather than intercepted as a\nstep shortcut (only Arrow keys and clicks on the buttons step by `±1`\ncharacter). Form participation and range validation are via ElementInternals\n(`formAssociated()`, `setFormValue`, `relayValidity`). Exposes\n`stepDown`/`stepUp` methods (clamped to `min`/`max`) so other components can\ndrive the value without duplicating the clamp logic. An optional `.error`\ndescendant, if present, shows `host.validationMessage` — whichever of the\nrange constraint or an externally-set `customError` currently applies (see\n`module-catalog.ts` for a composed example: a stock-availability check that\nsets both). A required `fieldset` descendant wraps the interactive\ncontrols: native `disabled` cascade to all of them when `host.disabled` is\nset, without per-element wiring. An optional `.zero` descendant opts into\nhiding the input/decrement button and swapping the increment label at\n`value === 0` (e.g. a \"Add to Cart\" affordance) — without it, this is a\nplain generic spinbutton.",
           "members": [
             {
               "kind": "field",
@@ -2212,7 +2172,15 @@
               "type": {
                 "text": "number"
               },
-              "description": "Current numeric value. Clamped to [0, max]."
+              "description": "Current numeric value. Clamped to [min, max]."
+            },
+            {
+              "kind": "field",
+              "name": "min",
+              "type": {
+                "text": "number"
+              },
+              "description": "Lower bound for the value. Read from `input.min`, may be negative."
             },
             {
               "kind": "field",
@@ -2220,7 +2188,45 @@
               "type": {
                 "text": "number"
               },
-              "description": "Upper bound for the value."
+              "description": "Upper bound for the value. Read from `input.max`."
+            },
+            {
+              "kind": "method",
+              "name": "stepDown",
+              "parameters": [
+                {
+                  "name": "big",
+                  "type": {
+                    "text": "boolean | undefined"
+                  },
+                  "optional": true
+                }
+              ],
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Decrements value by a step, clamped to `min`. `big` uses the big-step instead of step."
+            },
+            {
+              "kind": "method",
+              "name": "stepUp",
+              "parameters": [
+                {
+                  "name": "big",
+                  "type": {
+                    "text": "boolean | undefined"
+                  },
+                  "optional": true
+                }
+              ],
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Increments value by a step, clamped to `max`. `big` uses the big-step instead of step."
             },
             {
               "kind": "field",
@@ -2369,7 +2375,7 @@
           "customElement": true,
           "tagName": "form-textbox",
           "name": "FormTextbox",
-          "description": "A single-line or multiline text input with validation, optional clear button, and helper text.\nUse it when you need a styled text field — the underlying native input provides\nkeyboard accessibility and standard ARIA textbox semantics. Form participation\nand validity are via ElementInternals (`formAssociated()`).\nExternal consumers read `host.validationMessage` / `host.validity` like on a\nnative input; inline error display binds to component-internal state.",
+          "description": "A single-line or multiline text input with validation, optional clear button, and helper text.\nUse it when you need a styled text field — the underlying native input provides\nkeyboard accessibility and standard ARIA textbox semantics. Form participation\nand validity are via ElementInternals (`formAssociated()`).\nExternal consumers read `host.validationMessage` / `host.validity` like on a\nnative input; the inline `.error` element watches the same reactive\n`validationMessage` prop, so it stays in sync without any extra plumbing.",
           "members": [
             {
               "kind": "field",
@@ -2647,8 +2653,13 @@
           "customElement": true,
           "tagName": "module-catalog",
           "name": "ModuleCatalog",
-          "description": "",
-          "demos": []
+          "description": "A product catalog that aggregates spinbutton quantities and passes the total to a cart button.\nUse it as a demo of inter-component communication via `pass()` — when spinbutton\nvalues change, the aggregated total updates the cart button reactively.\nEach product row should contain a `<form-spinbutton data-product=\"…\">` for quantity\ninput; the cart button must have class `cart` for the total binding to attach.\n\nAlso demonstrates validity composition (ADR 0020): clicking the cart button\nre-checks real availability for items in the cart and may lower a\nspinbutton's `max` — an internally-derived `rangeOverflow` typed flag the\nspinbutton computes itself — while separately explaining why via\n`setCustomValidity()`, an externally-set `customError`. Both coexist on the\nsame `internals` without either clobbering the other, as long as `max` is\nassigned *before* `setCustomValidity()` — reversing the order would let the\n`customError` merge onto a stale `rangeOverflow`, or (if the spinbutton's\nown watch fired later) get wiped by it. See `form-spinbutton.ts` for the\ncorresponding half of this composition. A sold-out item (`max: 0`) also\ngets `disabled` set, which `form-spinbutton`'s `fieldset` cascades to its\nincrement/decrement/input controls natively.",
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#module-catalog",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
         }
       ],
       "exports": [
@@ -2871,6 +2882,13 @@
                 "text": "string"
               },
               "default": "\"Blue\""
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "type": {
+                "text": "Oklch"
+              }
             }
           ],
           "demos": [
@@ -2982,6 +3000,15 @@
                 "text": "number"
               },
               "description": "Hue channel of `value` (read-only, computed)."
+            }
+          ],
+          "attributes": [
+            {
+              "name": "value",
+              "fieldName": "value",
+              "type": {
+                "text": "Oklch"
+              }
             }
           ],
           "cssProperties": [
@@ -3650,6 +3677,1044 @@
           "declaration": {
             "name": "timestamp",
             "module": "src/_common/storyArgs.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/button/basic-button.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "BasicButton",
+          "parameters": [
+            {
+              "name": "{\n  label,\n  badge,\n  disabled,\n  variant,\n  size,\n  content,\n}",
+              "type": {
+                "text": "BasicButtonArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "BasicButton",
+          "declaration": {
+            "name": "BasicButton",
+            "module": "src/basic/button/basic-button.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/counter/basic-counter.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "BasicCounter",
+          "parameters": [
+            {
+              "name": "{ count }",
+              "type": {
+                "text": "BasicCounterArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "BasicCounter",
+          "declaration": {
+            "name": "BasicCounter",
+            "module": "src/basic/counter/basic-counter.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/gauge/basic-gauge.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "BasicGauge",
+          "parameters": [
+            {
+              "name": "{\n  value,\n  thresholds,\n  id = \"basic-gauge-label\",\n}",
+              "type": {
+                "text": "BasicGaugeArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "BasicGauge",
+          "declaration": {
+            "name": "BasicGauge",
+            "module": "src/basic/gauge/basic-gauge.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/number/basic-number.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "BasicNumber",
+          "parameters": [
+            {
+              "name": "{\n  value,\n  options,\n  lang,\n}",
+              "type": {
+                "text": "Pick<BasicNumberArgs, \"value\" | \"options\" | \"lang\">"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "NumberDemo",
+          "parameters": [
+            {
+              "name": "{\n  caption,\n  wrapperLang,\n  ...args\n}",
+              "type": {
+                "text": "BasicNumberArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "BasicNumber",
+          "declaration": {
+            "name": "BasicNumber",
+            "module": "src/basic/number/basic-number.html.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "NumberDemo",
+          "declaration": {
+            "name": "NumberDemo",
+            "module": "src/basic/number/basic-number.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/card/blogmeta/card-blogmeta.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "CardBlogmeta",
+          "parameters": [
+            {
+              "name": "{\n  author,\n  avatarSrc,\n  datePublished,\n  dateModified,\n  timeRequired,\n  lang,\n}",
+              "type": {
+                "text": "CardBlogmetaArgs"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "variable",
+          "name": "blogmetaArgTypes",
+          "default": "{ author: { control: \"text\", description: \"Author name, annotated with schema.org <code>Person</code>\", table: { category: \"Content\" }, }, avatarSrc: { control: \"text\", description: \"Author avatar image URL — when empty, a stylized placeholder avatar is shown instead\", table: { category: \"Content\" }, }, datePublished: { control: \"date\", description: \"Publication date, annotated with schema.org <code>datePublished</code>\", table: { category: \"Content\" }, }, dateModified: { control: \"date\", description: \"Optional modification date, annotated with schema.org <code>dateModified</code> — leave unset (0) to omit\", table: { category: \"Content\" }, }, timeRequired: { control: \"number\", description: \"Estimated reading time in minutes, annotated with schema.org <code>timeRequired</code> as an ISO 8601 duration\", table: { category: \"Content\" }, }, lang: { control: \"text\", description: \"Optional BCP 47 language tag — demonstrates that dates are formatted according to the (possibly inherited) locale\", table: { category: \"Attributes\" }, }, } satisfies Meta<CardBlogmetaArgs>[\"argTypes\"]"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CardBlogmeta",
+          "declaration": {
+            "name": "CardBlogmeta",
+            "module": "src/card/blogmeta/card-blogmeta.html.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "blogmetaArgTypes",
+          "declaration": {
+            "name": "blogmetaArgTypes",
+            "module": "src/card/blogmeta/card-blogmeta.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/card/blogpost/card-blogpost.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "CardBlogpost",
+          "parameters": [
+            {
+              "name": "{\n  title,\n  href,\n  excerpt,\n  ...blogmetaArgs\n}",
+              "type": {
+                "text": "CardBlogpostArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CardBlogpost",
+          "declaration": {
+            "name": "CardBlogpost",
+            "module": "src/card/blogpost/card-blogpost.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/card/callout/card-callout.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "CardCallout",
+          "parameters": [
+            {
+              "name": "{ variant, content }",
+              "type": {
+                "text": "CardCalloutArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CardCallout",
+          "declaration": {
+            "name": "CardCallout",
+            "module": "src/card/callout/card-callout.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/hello/basic-hello.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "BasicHello",
+          "parameters": [
+            {
+              "name": "{ subject }",
+              "type": {
+                "text": "BasicHelloArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "BasicHello",
+          "declaration": {
+            "name": "BasicHello",
+            "module": "src/basic/hello/basic-hello.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/card/collapsible/card-collapsible.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "CardCollapsible",
+          "parameters": [
+            {
+              "name": "{\n  description,\n  content,\n  open,\n}",
+              "type": {
+                "text": "CardCollapsibleArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CardCollapsible",
+          "declaration": {
+            "name": "CardCollapsible",
+            "module": "src/card/collapsible/card-collapsible.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/pluralize/basic-pluralize.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "BasicPluralize",
+          "parameters": [
+            {
+              "name": "{\n  count,\n  ordinal,\n  lang,\n}",
+              "type": {
+                "text": "BasicPluralizeArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "BasicPluralize",
+          "declaration": {
+            "name": "BasicPluralize",
+            "module": "src/basic/pluralize/basic-pluralize.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/card/colorscale/card-colorscale.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "CardColorscale",
+          "parameters": [
+            {
+              "name": "{\n  value,\n  label,\n  size,\n}",
+              "type": {
+                "text": "CardColorscaleArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CardColorscale",
+          "declaration": {
+            "name": "CardColorscale",
+            "module": "src/card/colorscale/card-colorscale.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/card/mediaqueries/card-mediaqueries.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "CardMediaqueries",
+          "parameters": [
+            {
+              "name": "{ heading }",
+              "type": {
+                "text": "CardMediaqueriesArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CardMediaqueries",
+          "declaration": {
+            "name": "CardMediaqueries",
+            "module": "src/card/mediaqueries/card-mediaqueries.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/context/media/context-media.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ContextMedia",
+          "parameters": [
+            {
+              "name": "{\n  sm,\n  md,\n  lg,\n  xl,\n  content,\n}",
+              "type": {
+                "text": "ContextMediaArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ContextMedia",
+          "declaration": {
+            "name": "ContextMedia",
+            "module": "src/context/media/context-media.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/form/checkbox/form-checkbox.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "FormCheckbox",
+          "parameters": [
+            {
+              "name": "{\n  checked,\n  label,\n  variant,\n}",
+              "type": {
+                "text": "FormCheckboxArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FormCheckbox",
+          "declaration": {
+            "name": "FormCheckbox",
+            "module": "src/form/checkbox/form-checkbox.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/form/spinbutton/form-spinbutton.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "FormSpinbutton",
+          "parameters": [
+            {
+              "name": "{\n  name,\n  className,\n  id,\n  label,\n  labelId,\n  unit,\n  dataProduct,\n  value,\n  min = 0,\n  max,\n  step,\n  bigStep,\n  ariaLabel,\n  decrementLabel = \"Decrement\",\n  incrementLabel = \"Increment\",\n  zeroLabel,\n  errorId,\n}",
+              "type": {
+                "text": "FormSpinbuttonArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FormSpinbutton",
+          "declaration": {
+            "name": "FormSpinbutton",
+            "module": "src/form/spinbutton/form-spinbutton.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/form/colorgraph/form-colorgraph.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "FormColorgraph",
+          "parameters": [
+            {
+              "name": "{ name, value }",
+              "type": {
+                "text": "FormColorgraphArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FormColorgraph",
+          "declaration": {
+            "name": "FormColorgraph",
+            "module": "src/form/colorgraph/form-colorgraph.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/form/combobox/form-combobox.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "FormCombobox",
+          "parameters": [
+            {
+              "name": "{ value, description }",
+              "type": {
+                "text": "FormComboboxArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FormCombobox",
+          "declaration": {
+            "name": "FormCombobox",
+            "module": "src/form/combobox/form-combobox.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/form/inplace-edit/form-inplace-edit.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "FormInplaceEdit",
+          "parameters": [
+            {
+              "name": "{ name, value }",
+              "type": {
+                "text": "FormInplaceEditArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FormInplaceEdit",
+          "declaration": {
+            "name": "FormInplaceEdit",
+            "module": "src/form/inplace-edit/form-inplace-edit.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/form/listbox/form-listbox.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "FormListbox",
+          "parameters": [
+            {
+              "name": "{ value }",
+              "type": {
+                "text": "FormListboxArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FormListbox",
+          "declaration": {
+            "name": "FormListbox",
+            "module": "src/form/listbox/form-listbox.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/form/radiogroup/form-radiogroup.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "FormRadiogroup",
+          "parameters": [
+            {
+              "name": "{ value, variant }",
+              "type": {
+                "text": "FormRadiogroupArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FormRadiogroup",
+          "declaration": {
+            "name": "FormRadiogroup",
+            "module": "src/form/radiogroup/form-radiogroup.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/form/textbox/form-textbox.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "FormTextbox",
+          "parameters": [
+            {
+              "name": "{\n  value,\n  description,\n  clearable,\n}",
+              "type": {
+                "text": "FormTextboxArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FormTextbox",
+          "declaration": {
+            "name": "FormTextbox",
+            "module": "src/form/textbox/form-textbox.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/calctable/module-calctable.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ModuleCalctable"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ModuleCalctable",
+          "declaration": {
+            "name": "ModuleCalctable",
+            "module": "src/module/calctable/module-calctable.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/carousel/module-carousel.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ModuleCarousel",
+          "parameters": [
+            {
+              "name": "{ index }",
+              "type": {
+                "text": "ModuleCarouselArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ModuleCarousel",
+          "declaration": {
+            "name": "ModuleCarousel",
+            "module": "src/module/carousel/module-carousel.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/catalog/module-catalog.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ModuleCatalog"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ModuleCatalog",
+          "declaration": {
+            "name": "ModuleCatalog",
+            "module": "src/module/catalog/module-catalog.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/cem-list/module-cem-list.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ModuleCemList"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ModuleCemList",
+          "declaration": {
+            "name": "ModuleCemList",
+            "module": "src/module/cem-list/module-cem-list.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/codeblock/module-codeblock.html.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "sampleCode",
+          "default": "`function greet(name) { return \\`Hello, \\${name}!\\`; } console.log(greet(\"World\"));`"
+        },
+        {
+          "kind": "function",
+          "name": "ModuleCodeblock",
+          "parameters": [
+            {
+              "name": "{ collapsed }",
+              "type": {
+                "text": "ModuleCodeblockArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "sampleCode",
+          "declaration": {
+            "name": "sampleCode",
+            "module": "src/module/codeblock/module-codeblock.html.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ModuleCodeblock",
+          "declaration": {
+            "name": "ModuleCodeblock",
+            "module": "src/module/codeblock/module-codeblock.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/colorinfo/module-colorinfo.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ModuleColorinfo",
+          "parameters": [
+            {
+              "name": "{\n  value,\n  label,\n  open,\n  class: cls,\n}",
+              "type": {
+                "text": "ModuleColorinfoArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ModuleColorinfo",
+          "declaration": {
+            "name": "ModuleColorinfo",
+            "module": "src/module/colorinfo/module-colorinfo.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/coloreditor/module-coloreditor.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ModuleColoreditor",
+          "parameters": [
+            {
+              "name": "{\n  value,\n  label,\n}",
+              "type": {
+                "text": "ModuleColoreditorArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ModuleColoreditor",
+          "declaration": {
+            "name": "ModuleColoreditor",
+            "module": "src/module/coloreditor/module-coloreditor.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/dialog/module-dialog.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ModuleDialog",
+          "parameters": [
+            {
+              "name": "{ open }",
+              "type": {
+                "text": "ModuleDialogArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ModuleDialog",
+          "declaration": {
+            "name": "ModuleDialog",
+            "module": "src/module/dialog/module-dialog.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/lazyload/module-lazyload.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ModuleLazyload",
+          "parameters": [
+            {
+              "name": "{\n  src,\n  \"allow-scripts\": allowScripts,\n}",
+              "type": {
+                "text": "ModuleLazyloadArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ModuleLazyload",
+          "declaration": {
+            "name": "ModuleLazyload",
+            "module": "src/module/lazyload/module-lazyload.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/list/module-list.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ModuleList"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ModuleList",
+          "declaration": {
+            "name": "ModuleList",
+            "module": "src/module/list/module-list.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/listnav/module-listnav.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ModuleListnav"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ModuleListnav",
+          "declaration": {
+            "name": "ModuleListnav",
+            "module": "src/module/listnav/module-listnav.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/pagination/module-pagination.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ModulePagination",
+          "parameters": [
+            {
+              "name": "{ value, max }",
+              "type": {
+                "text": "ModulePaginationArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ModulePagination",
+          "declaration": {
+            "name": "ModulePagination",
+            "module": "src/module/pagination/module-pagination.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/scrollarea/module-scrollarea.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ModuleScrollarea",
+          "parameters": [
+            {
+              "name": "{ orientation }",
+              "type": {
+                "text": "ModuleScrollareaArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ModuleScrollarea",
+          "declaration": {
+            "name": "ModuleScrollarea",
+            "module": "src/module/scrollarea/module-scrollarea.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/splitview/module-splitview.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ModuleSplitview"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ModuleSplitview",
+          "declaration": {
+            "name": "ModuleSplitview",
+            "module": "src/module/splitview/module-splitview.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/tabgroup/module-tabgroup.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ModuleTabgroup"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ModuleTabgroup",
+          "declaration": {
+            "name": "ModuleTabgroup",
+            "module": "src/module/tabgroup/module-tabgroup.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/ticker/module-ticker.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ModuleTicker"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ModuleTicker",
+          "declaration": {
+            "name": "ModuleTicker",
+            "module": "src/module/ticker/module-ticker.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/todo/module-todo.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ModuleTodo"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ModuleTodo",
+          "declaration": {
+            "name": "ModuleTodo",
+            "module": "src/module/todo/module-todo.html.ts"
           }
         }
       ]

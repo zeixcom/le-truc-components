@@ -1,29 +1,23 @@
 import { html } from "lit";
+import { FormSpinbutton } from "../../form/spinbutton/form-spinbutton.html";
 
-const spinbuttonItem = (name: string, label: string, max: number) => html`
+const spinbuttonItem = (
+  productId: string,
+  name: string,
+  label: string,
+  max: number,
+) => html`
   <li>
     <p>${label}</p>
-    <form-spinbutton>
-      <button type="button" class="decrement" aria-label="Decrement" hidden>
-        −
-      </button>
-      <input
-        type="number"
-        class="value"
-        name=${name}
-        value="0"
-        min="0"
-        max=${max}
-        readonly
-        disabled
-        hidden
-        aria-label="Quantity"
-      />
-      <button type="button" class="increment" aria-label="Increment">
-        <span class="zero">Add to Cart</span>
-        <span class="other" hidden>+</span>
-      </button>
-    </form-spinbutton>
+    ${FormSpinbutton({
+      name,
+      dataProduct: productId,
+      value: 0,
+      min: 0,
+      max,
+      ariaLabel: "Quantity",
+      zeroLabel: "Add to Cart",
+    })}
   </li>
 `;
 
@@ -41,9 +35,9 @@ export const ModuleCatalog = () => html`
       </basic-button>
     </header>
     <ul>
-      ${spinbuttonItem("product1", "Product 1", 10)}
-      ${spinbuttonItem("product2", "Product 2", 5)}
-      ${spinbuttonItem("product3", "Product 3", 20)}
+      ${spinbuttonItem("product-1", "product1", "Product 1", 10)}
+      ${spinbuttonItem("product-2", "product2", "Product 2", 5)}
+      ${spinbuttonItem("product-3", "product3", "Product 3", 20)}
     </ul>
   </module-catalog>
 `;
