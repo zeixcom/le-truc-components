@@ -1,4 +1,5 @@
 import { html, nothing } from "lit";
+import { CardCallout } from "../../card/callout/card-callout.html";
 
 export type ModuleLazyloadArgs = {
   src: string;
@@ -12,10 +13,13 @@ export const ModuleLazyload = ({
   "allow-scripts": allowScripts,
 }: ModuleLazyloadArgs) => html`
   <module-lazyload src=${src || nothing} ?allow-scripts=${allowScripts}>
-    <card-callout>
-      <p class="loading" role="status">Loading...</p>
-      <p class="error" role="alert" aria-live="assertive" hidden></p>
-    </card-callout>
+    ${CardCallout({
+      variant: "info",
+      content: html`
+        <p class="loading" role="status">Loading...</p>
+        <p class="error" role="alert" aria-live="assertive" hidden></p>
+      `,
+    })}
     <div class="content" hidden></div>
   </module-lazyload>
 `;

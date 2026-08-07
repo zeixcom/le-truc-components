@@ -1,4 +1,5 @@
 import { html } from "lit";
+import { BasicNumber } from "../number/basic-number.html";
 
 export type BasicGaugeArgs = {
   value: number;
@@ -18,11 +19,10 @@ export const BasicGauge = ({
       value=${value}
       aria-labelledby=${id}
     ></meter>
-    <basic-number
-      value=${value}
-      options='{"style":"percent","maximumFractionDigits":1}'
-      ></basic-number
-    >
+    ${BasicNumber({
+      value,
+      options: '{"style":"percent","maximumFractionDigits":1}',
+    })}
     <small class="label"></small>
   </basic-gauge>
 `;

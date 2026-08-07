@@ -1,4 +1,5 @@
 import { html } from "lit";
+import { BasicButton } from "../../basic/button/basic-button.html";
 import { FormSpinbutton } from "../../form/spinbutton/form-spinbutton.html";
 
 const spinbuttonItem = (
@@ -27,12 +28,7 @@ export const ModuleCatalog = () => html`
   <module-catalog>
     <header>
       <p>Shop</p>
-      <basic-button disabled>
-        <button type="button" disabled>
-          <span class="label">🛒 Shopping Cart</span>
-          <span class="badge"></span>
-        </button>
-      </basic-button>
+      ${BasicButton({ label: "🛒 Shopping Cart", disabled: true })}
     </header>
     <ul>
       ${spinbuttonItem("product-1", "product1", "Product 1", 10)}

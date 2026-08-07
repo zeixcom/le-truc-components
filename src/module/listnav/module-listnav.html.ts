@@ -1,4 +1,5 @@
 import { html } from "lit";
+import { ModuleLazyload } from "../lazyload/module-lazyload.html";
 
 // Exported so other components' stories can embed a listnav instance via
 // ${ModuleListnav()} instead of duplicating its markup.
@@ -23,12 +24,6 @@ export const ModuleListnav = () => html`
         </div>
       </form-listbox>
     </nav>
-    <module-lazyload>
-      <card-callout>
-        <p class="loading" role="status">Loading...</p>
-        <p class="error" role="alert" aria-live="assertive" hidden></p>
-      </card-callout>
-      <div class="content" hidden></div>
-    </module-lazyload>
+    ${ModuleLazyload({ src: "", "allow-scripts": false })}
   </module-listnav>
 `;

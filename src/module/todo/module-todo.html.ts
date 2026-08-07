@@ -1,25 +1,32 @@
 import { html } from "lit";
+import { BasicButton } from "../../basic/button/basic-button.html";
+import { FormTextbox } from "../../form/textbox/form-textbox.html";
 
 // Exported so other components' stories can embed a todo instance via
 // ${ModuleTodo()} instead of duplicating its markup.
 export const ModuleTodo = () => html`
   <module-todo>
     <form action="#">
-      <form-textbox>
-        <label for="add-todo">What needs to be done?</label>
-        <div class="input">
-          <input id="add-todo" type="text" value="" />
-          <button type="button" class="clear" aria-label="Clear input" hidden>✕</button>
-        </div>
-      </form-textbox>
-      <basic-button class="submit">
-        <button type="submit" class="constructive" disabled>
-          <span class="label">Add Todo</span>
-        </button>
-      </basic-button>
+      ${FormTextbox({
+        id: "add-todo",
+        label: "What needs to be done?",
+        name: "",
+        autocomplete: "",
+        required: false,
+        clearable: true,
+        showError: false,
+      })}
+      ${BasicButton({
+        label: "Add Todo",
+        disabled: true,
+        variant: "constructive",
+        type: "submit",
+        hostClass: "submit",
+      })}
     </form>
     <span role="status" class="visually-hidden"></span>
     <ol data-container></ol>
+    <!-- lit-html forbids expressions inside <template>, so this clone source stays static markup -->
     <template>
       <li>
         <button type="button" class="reorder" aria-label="Drag to reorder" aria-pressed="false">
@@ -66,12 +73,11 @@ export const ModuleTodo = () => html`
           </label>
         </fieldset>
       </form-radiogroup>
-      <basic-button class="clear-completed">
-        <button type="button" class="tertiary destructive">
-          <span class="label">Clear Completed</span>
-          <span class="badge"></span>
-        </button>
-      </basic-button>
+      ${BasicButton({
+        label: "Clear Completed",
+        variant: ["tertiary", "destructive"],
+        hostClass: "clear-completed",
+      })}
     </footer>
   </module-todo>
 `;
