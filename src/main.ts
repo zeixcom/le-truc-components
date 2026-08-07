@@ -10,7 +10,6 @@ import "./card/colorscale/card-colorscale.ts";
 import "./card/mediaqueries/card-mediaqueries.ts";
 import "./context/media/context-media.ts";
 import "./form/checkbox/form-checkbox.ts";
-import "./form/colorgraph/axis-spinbutton.ts";
 import "./form/colorgraph/form-colorgraph.ts";
 import "./form/combobox/form-combobox.ts";
 import "./form/inplace-edit/form-inplace-edit.ts";

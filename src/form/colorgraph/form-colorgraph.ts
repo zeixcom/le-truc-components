@@ -42,15 +42,13 @@ const inRGBGamut = inGamut("rgb");
 const fn2Digits = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 2,
 }).format;
-const fn4Digits = new Intl.NumberFormat("en-US", {
-  maximumFractionDigits: 4,
-}).format;
 const TRACK_OFFSET = 20; // pixels
 const CONTRAST_THRESHOLD = 0.71; // lightness
 const AXIS_MAX = { l: 1, c: 0.4, h: 360 };
-// Raw-value → axis-spinbutton-display-unit conversion. Only lightness has a
-// non-1 scale (displayed as a percentage); range/step for each axis live as
-// markup attributes on the corresponding <axis-spinbutton>, not here.
+// Raw-value → form-spinbutton-display-unit conversion. Only lightness has a
+// non-1 scale (displayed as a percentage); min/max/step/big-step for each
+// axis live solely on the corresponding <form-spinbutton>'s attributes in
+// the HTML — bounds validation and step rounding aren't duplicated here.
 const AXIS_SCALE = { l: 100, c: 1, h: 1 };
 const AXIS_DECIMALS = { l: 2, c: 4, h: 2 };
 const toDisplay = (axis: FormColorgraphAxis, raw: number) => {
@@ -73,22 +71,22 @@ const fromDisplay = (axis: FormColorgraphAxis, display: number) =>
 export default defineComponent<FormColorgraphProps>(
   "form-colorgraph",
   ({ expose, first, host, on, watch }) => {
-    // Required elements — range/step live as markup attributes on each
-    // <axis-spinbutton>; each one owns its own native constraint validity
-    // (valueMissing/rangeOverflow/rangeUnderflow) independent of the joint
-    // out-of-gamut constraint this component layers on top of them.
+    // Required elements — min/max/step/big-step live as markup attributes on
+    // each <form-spinbutton>; each one owns its own native constraint
+    // validity (valueMissing/rangeOverflow/rangeUnderflow) independent of
+    // the joint out-of-gamut constraint this component layers on top of them.
     const axisSpinbuttons = {
       l: first(
-        "axis-spinbutton.lightness",
-        'Add an <axis-spinbutton class="lightness"> element to control the lightness of the color.',
+        "form-spinbutton.lightness",
+        'Add an <form-spinbutton class="lightness"> element to control the lightness of the color.',
       ),
       c: first(
-        "axis-spinbutton.chroma",
-        'Add an <axis-spinbutton class="chroma"> element to control the chroma of the color.',
+        "form-spinbutton.chroma",
+        'Add an <form-spinbutton class="chroma"> element to control the chroma of the color.',
       ),
       h: first(
-        "axis-spinbutton.hue",
-        'Add an <axis-spinbutton class="hue"> element to control the hue of the color.',
+        "form-spinbutton.hue",
+        'Add an <form-spinbutton class="hue"> element to control the hue of the color.',
       ),
     };
     const graphEl = first(
@@ -138,10 +136,6 @@ export default defineComponent<FormColorgraphProps>(
     const color = createMemo<Oklch>(() => parseOklch(host.value));
 
     // Helper functions
-    const formatNumber = (axis: FormColorgraphAxis, value: number) => {
-      const v = axis === "l" ? value * 100 : value;
-      return axis === "c" ? fn4Digits(v) : fn2Digits(v);
-    };
     const getColorFromPosition = (
       x: number,
       y: number,
@@ -365,7 +359,7 @@ export default defineComponent<FormColorgraphProps>(
     watch(color, (c) => {
       const hue = c.h ?? 0;
       sliderEl.setAttribute("aria-valuenow", String(hue));
-      sliderEl.setAttribute("aria-valuetext", `${formatNumber("h", hue)}°`);
+      sliderEl.setAttribute("aria-valuetext", `${fn2Digits(hue)}°`);
     });
 
     // Track canvas: redraw on color or track width change
@@ -402,10 +396,17 @@ export default defineComponent<FormColorgraphProps>(
       },
     );
 
-    // Keyboard navigation for the graph knob and hue slider. Arrow-key/+-
-    // stepping while focus is inside an <axis-spinbutton> is handled by
-    // that component itself (and stops propagation), so it never reaches
-    // here — this only covers focus on the graph or the slider.
+    // Keyboard navigation. Arrow Up/Down and +/- while focus is inside a
+    // <form-spinbutton> are handled by that component itself (and stop
+    // propagation), so they never reach here — but form-spinbutton doesn't
+    // listen for Arrow Left/Right, so those bubble up and are routed to the
+    // axis matching the focused control below.
+    const getAxis = (target: HTMLElement): FormColorgraphAxis | null => {
+      if (target.closest(".lightness")) return "l";
+      if (target.closest(".chroma")) return "c";
+      if (target.closest(".hue")) return "h";
+      return null;
+    };
     on(host, "keydown", (event) => {
       const { key, shiftKey } = event as KeyboardEvent;
       const target = (event as KeyboardEvent).target as HTMLElement | null;
@@ -418,7 +419,13 @@ export default defineComponent<FormColorgraphProps>(
       if (key.substring(0, 5) === "Arrow" || ["+", "-"].includes(key)) {
         event.preventDefault();
         event.stopPropagation();
-        if (target.role === "slider") {
+        const axis = getAxis(target);
+        if (axis) {
+          if (key === "ArrowLeft" || key === "ArrowDown" || key === "-")
+            host.stepDown(axis, shiftKey);
+          else if (key === "ArrowRight" || key === "ArrowUp" || key === "+")
+            host.stepUp(axis, shiftKey);
+        } else if (target.role === "slider") {
           if (key === "ArrowLeft" || key === "ArrowDown" || key === "-")
             host.stepDown("h", shiftKey);
           else if (key === "ArrowRight" || key === "ArrowUp" || key === "+")

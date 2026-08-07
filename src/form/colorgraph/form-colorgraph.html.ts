@@ -1,4 +1,5 @@
 import { html } from "lit";
+import { FormSpinbutton } from "../spinbutton/form-spinbutton.html";
 
 export type FormColorgraphArgs = {
   name: string;
@@ -39,73 +40,47 @@ export const FormColorgraph = ({ name, value }: FormColorgraphArgs) => html`
       <span class="thumb"></span>
     </div>
     <p class="error" aria-live="assertive" id="color-error"></p>
-    <axis-spinbutton class="lightness">
-      <label for="lightness">Lightness</label>
-      <div class="input">
-        <input
-          id="lightness"
-          type="number"
-          min="0"
-          max="100"
-          step="0.25"
-          data-big-step="5"
-        />
-        <span class="unit">%</span>
-      </div>
-      <div class="buttons">
-        <button type="button" class="decrement" aria-label="Decrement lightness">
-          −
-        </button>
-        <button type="button" class="increment" aria-label="Increment lightness">
-          +
-        </button>
-      </div>
-      <p class="error" aria-live="assertive" id="lightness-error"></p>
-    </axis-spinbutton>
-    <axis-spinbutton class="chroma">
-      <label for="chroma">Chroma</label>
-      <div class="input">
-        <input
-          id="chroma"
-          type="number"
-          min="0"
-          max="0.4"
-          step="0.001"
-          data-big-step="0.02"
-        />
-      </div>
-      <div class="buttons">
-        <button type="button" class="decrement" aria-label="Decrement chroma">
-          −
-        </button>
-        <button type="button" class="increment" aria-label="Increment chroma">
-          +
-        </button>
-      </div>
-      <p class="error" aria-live="assertive" id="chroma-error"></p>
-    </axis-spinbutton>
-    <axis-spinbutton class="hue">
-      <label id="hue-label" for="hue">Hue</label>
-      <div class="input">
-        <input
-          id="hue"
-          type="number"
-          min="0"
-          max="360"
-          step="1"
-          data-big-step="15"
-        />
-        <span class="unit">°</span>
-      </div>
-      <div class="buttons">
-        <button type="button" class="decrement" aria-label="Decrement hue">
-          −
-        </button>
-        <button type="button" class="increment" aria-label="Increment hue">
-          +
-        </button>
-      </div>
-      <p class="error" aria-live="assertive" id="hue-error"></p>
-    </axis-spinbutton>
+    ${FormSpinbutton({
+      className: "lightness",
+      id: "lightness",
+      label: "Lightness",
+      unit: "%",
+      value: 0,
+      min: 0,
+      max: 100,
+      step: 0.25,
+      bigStep: 5,
+      decrementLabel: "Decrement lightness",
+      incrementLabel: "Increment lightness",
+      errorId: "lightness-error",
+    })}
+    ${FormSpinbutton({
+      className: "chroma",
+      id: "chroma",
+      label: "Chroma",
+      value: 0,
+      min: 0,
+      max: 0.4,
+      step: 0.001,
+      bigStep: 0.02,
+      decrementLabel: "Decrement chroma",
+      incrementLabel: "Increment chroma",
+      errorId: "chroma-error",
+    })}
+    ${FormSpinbutton({
+      className: "hue",
+      id: "hue",
+      label: "Hue",
+      labelId: "hue-label",
+      unit: "°",
+      value: 0,
+      min: 0,
+      max: 360,
+      step: 0.01,
+      bigStep: 15,
+      decrementLabel: "Decrement hue",
+      incrementLabel: "Increment hue",
+      errorId: "hue-error",
+    })}
   </form-colorgraph>
 `;

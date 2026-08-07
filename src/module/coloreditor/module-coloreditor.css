@@ -50,8 +50,7 @@ module-coloreditor {
       "graph graph info"
       "lightness lightness info"
       "chroma chroma info"
-      "hue hue info"
-      "error error info";
+      "hue hue info";
     grid-template-columns: auto 3fr 2fr;
   }
 }
