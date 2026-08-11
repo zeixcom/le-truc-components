@@ -1,4 +1,7 @@
 module-ticker {
+  --module-ticker-color-positive: #2a6328;
+  --module-ticker-color-negative: #6e2123;
+
   display: block;
 
   > .controls {
@@ -40,11 +43,11 @@ module-ticker {
 
   /* Direction indicators on the change cell */
   & tr[data-direction="up"] .change {
-    color: var(--color-positive, var(--color-green-60));
+    color: var(--module-ticker-color-positive, var(--color-green-70));
   }
 
   & tr[data-direction="down"] .change {
-    color: var(--color-negative, var(--color-pink-60));
+    color: var(--module-ticker-color-negative, var(--color-pink-70));
   }
 
   & tr[data-direction="flat"] .change {
