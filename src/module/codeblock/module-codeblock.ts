@@ -3,6 +3,7 @@ import type { BasicButtonProps } from "../../basic/button/basic-button";
 import { copyToClipboard } from "../../basic/button/copyToClipboard";
 
 export type ModuleCodeblockProps = {
+  /** Whether the codeblock is shown collapsed (with an "Expand" overlay). */
   collapsed: boolean;
 };
 
@@ -12,6 +13,17 @@ declare global {
   }
 }
 
+/**
+ * Displays a code sample with a collapsible overlay and a copy-to-clipboard
+ * button. Expects the host to already contain highlighted markup inside a
+ * `<code>` element (highlighting must happen upstream — e.g. server-side via
+ * Shiki — this component never highlights on its own); the copy button
+ * copies the `<code>` element's `textContent`. An optional
+ * `basic-button.copy` descendant, with `copy-success`/`copy-error`
+ * attributes for its feedback labels, wires up the copy action.
+ *
+ * @demo {https://zeixcom.github.io/le-truc/examples.html#module-codeblock} Interactive preview and usage examples
+ */
 export default defineComponent<ModuleCodeblockProps>(
   "module-codeblock",
   ({ expose, first, host, on, watch }) => {

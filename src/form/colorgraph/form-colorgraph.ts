@@ -22,10 +22,15 @@ export type FormColorgraphAxis = "l" | "c" | "h";
 export type FormColorgraphProps = {
   /** Current color as a CSS string (e.g. `oklch(0.48 0.23 263)`). Form value. */
   value: string;
+  /** Lightness component of the current color, in the Oklch range `[0, 1]` (read-only). */
   readonly lightness: number;
+  /** Chroma component of the current color, in the Oklch range `[0, 0.4]` (read-only). */
   readonly chroma: number;
+  /** Hue component of the current color, in degrees `[0, 360]` (read-only). */
   readonly hue: number;
+  /** Decrements the given axis by its `<form-spinbutton>`'s step (or big-step, if `bigStep` is `true`). */
   stepDown: (axis: FormColorgraphAxis, bigStep?: boolean) => void;
+  /** Increments the given axis by its `<form-spinbutton>`'s step (or big-step, if `bigStep` is `true`). */
   stepUp: (axis: FormColorgraphAxis, bigStep?: boolean) => void;
 };
 
@@ -258,11 +263,13 @@ export default defineComponent<FormColorgraphProps>(
       const handleUp = () => {
         graphEl.removeEventListener("pointermove", handleMove);
         graphEl.removeEventListener("pointerup", handleUp);
+        graphEl.removeEventListener("pointercancel", handleUp);
         moveKnob.cancel();
         knob.ariaPressed = "false";
       };
       graphEl.addEventListener("pointermove", handleMove, { passive: true });
       graphEl.addEventListener("pointerup", handleUp);
+      graphEl.addEventListener("pointercancel", handleUp);
     });
     watch(() => `${canvasSize.get()}px`, bindStyle(graphEl, "--canvas-size"));
 
@@ -337,11 +344,10 @@ export default defineComponent<FormColorgraphProps>(
     );
 
     // Slider pointer interaction + ARIA + CSS variable
-    on(sliderEl, "pointerdown", (event) => {
+    on(sliderEl, "pointerdown", ({ pointerId }) => {
       const left = track.getBoundingClientRect().left;
       const width = trackWidth.get();
-      thumb.ariaPressed = "true";
-      sliderEl.setPointerCapture(event.pointerId);
+      sliderEl.setPointerCapture(pointerId);
       const handleMove = (e: PointerEvent) => {
         const last = e.getCoalescedEvents?.().pop() || e;
         moveThumb(last.clientX, left, width);
@@ -349,11 +355,12 @@ export default defineComponent<FormColorgraphProps>(
       const handleUp = () => {
         sliderEl.removeEventListener("pointermove", handleMove);
         sliderEl.removeEventListener("pointerup", handleUp);
+        sliderEl.removeEventListener("pointercancel", handleUp);
         moveThumb.cancel();
-        thumb.ariaPressed = "false";
       };
       sliderEl.addEventListener("pointermove", handleMove, { passive: true });
       sliderEl.addEventListener("pointerup", handleUp);
+      sliderEl.addEventListener("pointercancel", handleUp);
     });
     watch(() => `${trackWidth.get()}px`, bindStyle(sliderEl, "--track-width"));
     watch(color, (c) => {
@@ -408,10 +415,9 @@ export default defineComponent<FormColorgraphProps>(
       return null;
     };
     on(host, "keydown", (event) => {
-      const { key, shiftKey } = event as KeyboardEvent;
-      const target = (event as KeyboardEvent).target as HTMLElement | null;
+      const { key, shiftKey, target } = event;
       if (
-        !target ||
+        !(target instanceof HTMLElement) ||
         (target.localName === "input" &&
           (key === "ArrowLeft" || key === "ArrowRight"))
       )

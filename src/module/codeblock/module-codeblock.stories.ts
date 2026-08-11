@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
+import { until } from "lit/directives/until.js";
 import { expect, spyOn, userEvent, waitFor, within } from "storybook/test";
 import {
+  highlightedSampleCode,
   ModuleCodeblock,
   type ModuleCodeblockArgs,
   sampleCode,
@@ -57,7 +59,7 @@ export const PropertyChanges: Story = {
   render: () => html`
     <module-codeblock>
       <module-scrollarea orientation="horizontal">
-        <pre><code class="language-js">${sampleCode}</code></pre>
+        <pre><code class="language-js">${until(highlightedSampleCode, sampleCode)}</code></pre>
       </module-scrollarea>
       <button type="button" class="overlay" aria-expanded="true">Expand</button>
     </module-codeblock>

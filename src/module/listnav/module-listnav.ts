@@ -1,4 +1,4 @@
-import { batch, createEffect, defineComponent } from "@zeix/le-truc";
+import { batch, createEffect, defineComponent, query } from "@zeix/le-truc";
 import type { FormListboxProps } from "../../form/listbox/form-listbox";
 import type { ModuleLazyloadProps } from "../lazyload/module-lazyload";
 
@@ -10,7 +10,8 @@ import type { ModuleLazyloadProps } from "../lazyload/module-lazyload";
 const getBasePath = (
   listbox: HTMLElement,
 ): { base: string; ext: string } | null => {
-  const firstOption = listbox.querySelector<HTMLButtonElement>(
+  const firstOption = query<HTMLButtonElement>(
+    listbox,
     'button[role="option"]',
   );
   if (!firstOption?.value) return null;
@@ -64,6 +65,18 @@ const valueToHash = (value: string, listbox: HTMLElement): string => {
   return hash;
 };
 
+/**
+ * Syncs a `form-listbox` selection with `location.hash` and passes the
+ * selected value to a `module-lazyload` as its `src`, so navigating the
+ * listbox loads the corresponding fragment and updates the URL (and vice
+ * versa for browser back/forward). Selection ↔ hash mapping assumes listbox
+ * option values are relative paths sharing a common base path and file
+ * extension (e.g. `./examples/form-combobox.html` ↔ `#form-combobox`). The
+ * host must contain exactly one `form-listbox` and one `module-lazyload`
+ * descendant.
+ *
+ * @demo {https://zeixcom.github.io/le-truc/examples.html#module-listnav} Interactive preview and usage examples
+ */
 export default defineComponent("module-listnav", ({ first, pass, watch }) => {
   const listbox = first(
     "form-listbox",
@@ -75,9 +88,7 @@ export default defineComponent("module-listnav", ({ first, pass, watch }) => {
   ) as HTMLElement & ModuleLazyloadProps;
 
   const hasOption = (value: string): boolean =>
-    !!listbox.querySelector(
-      `button[role="option"][value="${CSS.escape(value)}"]`,
-    );
+    !!query(listbox, `button[role="option"][value="${CSS.escape(value)}"]`);
 
   // Set initial selection from hash
   if (location.hash) {

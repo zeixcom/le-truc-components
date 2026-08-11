@@ -13,6 +13,7 @@ import {
 } from "../../_common/fetchWithCache";
 
 export type ModuleLazyloadProps = {
+  /** URL of the HTML fragment to fetch and inject. Setting a new value re-fetches. */
   src: string;
 };
 
@@ -22,6 +23,18 @@ declare global {
   }
 }
 
+/**
+ * Fetches an HTML fragment from `src` and injects it into a `.content`
+ * descendant, showing loading, error, and stale (dimmed, mid-refetch)
+ * states via `card-callout`/`.loading`/`.error` descendants. Guards against
+ * invalid and recursive URLs (a fragment pointing back at its own page) and
+ * caches fetched fragments; after the first successful load, subsequent
+ * loads smooth-scroll to the fragment's first heading. Injected markup is
+ * sanitized unless the host has an `allow-scripts` attribute, which permits
+ * `<script>` execution — use only with trusted content.
+ * @attribute {boolean} [allow-scripts=false] - When present, allows `<script>` elements in the fetched fragment to execute. Read once at connect time.
+ * @demo {https://zeixcom.github.io/le-truc/examples.html#module-lazyload} Interactive preview and usage examples
+ */
 export default defineComponent<ModuleLazyloadProps>(
   "module-lazyload",
   ({ expose, first, host, watch }) => {

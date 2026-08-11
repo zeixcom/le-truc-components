@@ -1,6 +1,7 @@
 import { createState, defineComponent } from "@zeix/le-truc";
 
 export type ModuleTabgroupProps = {
+  /** `aria-controls` id of the currently selected tab (i.e. the id of the visible panel). Read-only. */
   readonly selected: string;
 };
 
@@ -24,6 +25,17 @@ const getSelected = (
   return getAriaControls(tabs[newIndex]!);
 };
 
+/**
+ * An ARIA tabs pattern implementation: clicking a `button[role="tab"]` or
+ * using arrow/Home/End keys selects a tab and shows the corresponding
+ * `[role="tabpanel"]`, moving focus along with selection. Requires at least
+ * 2 tabs, each with an `aria-controls` referencing the unique `id` of a
+ * matching tabpanel. `selected` is read-only from the outside — it's
+ * derived from user interaction and the tab initially marked
+ * `aria-selected="true"`, not settable via attribute or property.
+ *
+ * @demo {https://zeixcom.github.io/le-truc/examples.html#module-tabgroup} Interactive preview and usage examples
+ */
 export default defineComponent<ModuleTabgroupProps>(
   "module-tabgroup",
   ({ all, expose, host, on, watch }) => {

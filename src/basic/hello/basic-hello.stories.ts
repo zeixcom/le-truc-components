@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import { expect, userEvent, within } from "storybook/test";
 import { BasicHello, type BasicHelloArgs } from "./basic-hello.html";
 import "./basic-hello.ts";
+import "./basic-hello.css";
 import type { BasicHelloProps } from "./basic-hello.ts";
 
 const meta: Meta<BasicHelloArgs> = {

@@ -10,6 +10,7 @@ import {
   type FormAssociatedElement,
   formAssociated,
   observedAttributes,
+  queryAll,
   schedule,
 } from "@zeix/le-truc";
 import {
@@ -142,10 +143,9 @@ export default defineComponent<FormListboxProps>(
 
     // Roving tabindex focus management for listbox
     const getVisibleOptions = () =>
-      Array.from(
-        listbox.querySelectorAll<HTMLButtonElement>(
-          'button[role="option"]:not([hidden])',
-        ),
+      queryAll<HTMLButtonElement>(
+        listbox,
+        'button[role="option"]:not([hidden])',
       );
 
     let focusIndex = getVisibleOptions().findIndex(
@@ -188,13 +188,13 @@ export default defineComponent<FormListboxProps>(
         host.dispatchEvent(new Event("change", { bubbles: true }));
       }
     });
-    on(listbox, "keydown", (e) => {
-      const { key } = e as KeyboardEvent;
+    on(listbox, "keydown", (event) => {
+      const { key } = event;
       if (!HANDLED_KEYS.includes(key)) return;
 
       const elements = getVisibleOptions();
-      e.preventDefault();
-      e.stopPropagation();
+      event.preventDefault();
+      event.stopPropagation();
       if (key === FIRST_KEY) focusIndex = 0;
       else if (key === LAST_KEY) focusIndex = elements.length - 1;
       else

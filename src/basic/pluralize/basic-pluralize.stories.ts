@@ -6,6 +6,7 @@ import {
   type BasicPluralizeArgs,
 } from "./basic-pluralize.html";
 import "./basic-pluralize.ts";
+import "./basic-pluralize.css";
 import type { BasicPluralizeProps } from "./basic-pluralize.ts";
 
 const meta: Meta<BasicPluralizeArgs> = {

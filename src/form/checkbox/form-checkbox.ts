@@ -25,6 +25,15 @@ declare global {
   }
 }
 
+/**
+ * A form-associated checkbox wrapper that syncs `checked` state and label
+ * text with a native `<input type="checkbox">` descendant. Participates in
+ * `<form>` submission, validation, and reset like a native checkbox — set
+ * `checked` and `disabled` on `<form-checkbox>` itself, not the inner input.
+ * Demonstrates `formAssociatedCheckbox()` for native form participation.
+ *
+ * @demo {https://zeixcom.github.io/le-truc/examples.html#form-checkbox} Interactive preview and usage examples
+ */
 export default defineComponent<FormCheckboxProps>(
   "form-checkbox",
   ({ expose, first, on, watch }) => {

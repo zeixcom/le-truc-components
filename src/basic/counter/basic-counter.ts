@@ -1,6 +1,7 @@
 import { asInteger, bindText, defineComponent } from "@zeix/le-truc";
 
 export type BasicCounterProps = {
+  /** Current count value, initialized from the `<span>`'s text content and incremented on click. */
   count: number;
 };
 
@@ -10,6 +11,13 @@ declare global {
   }
 }
 
+/**
+ * A button that increments a counter on click. Demonstrates a minimal
+ * `on('click')` + `watch()` + `bindText()` cycle: the host must contain a
+ * `<button>` and a `<span>` whose text content is the initial integer count.
+ *
+ * @demo {https://zeixcom.github.io/le-truc/examples.html#basic-counter} Interactive preview and usage examples
+ */
 export default defineComponent<BasicCounterProps>(
   "basic-counter",
   ({ expose, first, host, on, watch }) => {

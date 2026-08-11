@@ -5,6 +5,7 @@ import {
   type ModuleLazyloadArgs,
 } from "./module-lazyload.html";
 import "./module-lazyload.ts";
+import "./module-lazyload.css";
 import "../../card/callout/card-callout.css";
 import type { ModuleLazyloadProps } from "./module-lazyload.ts";
 

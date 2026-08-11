@@ -4,7 +4,13 @@ let typeChecker;
 
 export default {
   globs: ["src/**/*.ts"],
-  exclude: ["**/*.test.ts", "**/*.stories.ts"],
+  exclude: [
+    "**/*.test.ts",
+    "**/*.stories.ts",
+    "**/*.html.ts",
+    "src/main.ts",
+    "src/_common/*.ts",
+  ],
   overrideModuleCreation({ ts, globs }) {
     const program = ts.createProgram(globs, { strict: true });
     typeChecker = program.getTypeChecker();

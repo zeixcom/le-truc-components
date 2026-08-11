@@ -37,6 +37,18 @@ const observeOverflow =
     };
   };
 
+/**
+ * A scrollable container that exposes its overflow state as `:state(overflow)`,
+ * `:state(overflow-start)`, and `:state(overflow-end)` custom states (for CSS
+ * fade/shadow indicators), and sets `tabindex="0"` while overflowing so the
+ * region is keyboard-scrollable. Overflow direction (`horizontal` vs. the
+ * default vertical) is controlled by the `orientation` attribute, read once
+ * at connect time. Overflow-end is also tracked via `IntersectionObserver`
+ * against the host's first child, so it's detected even before any scroll
+ * event fires. The host must have exactly one child element to scroll.
+ * @attribute {'horizontal'|'vertical'} [orientation=vertical] - Scroll axis to track for overflow. Read once at connect time.
+ * @demo {https://zeixcom.github.io/le-truc/examples.html#module-scrollarea} Interactive preview and usage examples
+ */
 export default defineComponent(
   "module-scrollarea",
   ({ host, internals, on, watch }) => {

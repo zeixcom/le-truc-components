@@ -17,6 +17,8 @@ declare global {
  * A dynamic list component demonstrating the `createList()` keyed reconciliation API.
  * Items are added via a form submission and removed via delegated click handling,
  * with stable keys across reorders.
+ *
+ * @demo {https://zeixcom.github.io/le-truc/examples.html#module-list} Interactive preview and usage examples
  */
 export default defineComponent("module-list", ({ first, host, on, pass }) => {
   // Keyed reactive list of plain string items. The 'item' prefix feeds the
@@ -33,10 +35,8 @@ export default defineComponent("module-list", ({ first, host, on, pass }) => {
     "Add a container element for items.",
   );
   const template = first("template", "Add a template element for items.");
-  reconcile(container, template, list, (element, item) => {
-    element
-      .querySelector("slot")
-      ?.replaceWith(document.createTextNode(item.get()));
+  reconcile(container, template, list, (_element, item, _key, first) => {
+    first("slot")?.replaceWith(document.createTextNode(item.get()));
   });
 
   // Add on submit, then clear the input by calling the child's method.
@@ -45,8 +45,8 @@ export default defineComponent("module-list", ({ first, host, on, pass }) => {
     "form-textbox",
     "Add <form-textbox> component to enter a new list item.",
   ) as HTMLElement & FormTextboxProps;
-  on(form, "submit", (e) => {
-    e.preventDefault();
+  on(form, "submit", (event) => {
+    event.preventDefault();
     const value = textbox.value.trim();
     if (!value) return;
     list.add(value);
@@ -55,17 +55,17 @@ export default defineComponent("module-list", ({ first, host, on, pass }) => {
 
   // Event delegation: one handler removes any item whose Remove button
   // was clicked, scaling to any number of items.
-  on(host, "click", (e) => {
-    const target = e.target as HTMLElement;
+  on(host, "click", (event) => {
+    const target = event.target as HTMLElement;
     if (!target.closest("basic-button.remove")) return;
     const item = target.closest("[data-key]");
     if (!(item instanceof HTMLElement)) return;
-  // Disable the submit button while the textbox is empty.
-    e.stopPropagation();
+    event.stopPropagation();
     const key = item.dataset.key;
     if (key) list.remove(key);
   });
 
+  // Disable the submit button while the textbox is empty.
   const submit = first(
     "basic-button.submit",
     "Add <basic-button.submit> component to submit the form.",
