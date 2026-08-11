@@ -1,10 +1,10 @@
 # Component Model
 
-**Overview:** The Le Truc component model — factory form of `defineComponent`, reactivity flow, and signal types re-exported from `@zeix/cause-effect`.
+**Overview:** The Le Truc component model, `defineComponent`, reactivity flow, and signal types re-exported from `@zeix/cause-effect`.
 
 ---
 
-## `defineComponent` — Factory Form (v2.0)
+## `defineComponent` Factory
 
 ```typescript
 defineComponent<P extends ComponentProps>(name, factory, extensions?)
@@ -14,25 +14,7 @@ defineComponent<P extends ComponentProps>(name, factory, extensions?)
 |---|---|---|
 | `name` | `string` | Tag name — lowercase, must contain hyphen |
 | `factory` | `(context: FactoryContext<P>) => FactoryResult \| Falsy \| void` | Called at connect time; queries elements, calls `expose()`, calls effect helpers |
-| `extensions` | `ComponentExtension[]` | Optional dependency-injected features — `formAssociated()`, `formAssociatedCheckbox()` (must be listed first if present), `observedAttributes([...])` |
-
-### `observedAttributes(names)` — re-parse an attribute after connect
-
-Opt-in extension (v2.3+) that keeps a Parser-backed `expose()`d prop in sync with its attribute **after** connect — attributes normally only drive state once, at connect time (see Key Constraints below). Re-runs the same `Parser` retained from `expose()` against the attribute's new string value on every mutation.
-
-```typescript
-import { defineComponent, observedAttributes } from '@zeix/le-truc'
-
-export default defineComponent<MyProps>(
-  'my-component',
-  ({ expose /* ... */ }) => {
-    expose({ value: asOklch() })
-  },
-  [observedAttributes(['value'])],
-)
-```
-
-This is the interop escape hatch for consumers that only ever set DOM **attributes**, not properties — React, and any tool (Storybook's Controls addon) that mutates an attribute on an already-connected element. See `references/storybook.md` for the full failure mode and a regression-test pattern. Reach for it only for props that actually need this; it is not the default.
+| `extensions` | `ComponentExtension[]` (optional) | Opt-in capabilities — see [Extensions](#extensions) |
 
 ### Factory Context Helpers
 
@@ -67,21 +49,42 @@ defineComponent<MyProps>('my-component', ({ expose, first, host, on, watch }) =>
   // 3. Call effect helpers — each registers itself, no return needed
   on(button, 'click', () => { /* ... */ })
   watch('disabled', bindProperty(button, 'disabled'))
-  if (label) watch('label', bindText(label))  // guard for optional element
+  if (label) watch('label', bindText(label)) // guard for optional element
 })
 ```
 
-`watch()`, `on()`, `pass()`, `each()`, and `provideContexts()` register their descriptor in an ambient collector the moment they're called — the factory doesn't collect or return anything. Calling one of these helpers outside synchronous factory (or `each()` callback) execution — after an `await`, in a detached `setTimeout` — throws `NoActiveCollectorError` immediately, rather than silently doing nothing.
+`watch()`, `on()`, `pass()`, `each()`, and `provideContexts()` register their descriptor in an ambient collector the moment they're called. Calling one of these helpers outside synchronous factory (or `each()` callback) execution — after an `await`, in a detached `setTimeout` — throws `NoActiveCollectorError` immediately, rather than silently doing nothing.
 
-Explicit `return [...]` of the same descriptors still works (dual support in v2.3, deprecated as of v3.0) — see ADR 0018.
+Explicit `return [...]` of the same descriptors still works (dual support in v2.3, deprecated as of v3.0).
+
+---
+
+## Extensions
+
+`defineComponent`'s optional third argument is a `ComponentExtension[]`. Three are exported and opt-in — import and pass explicitly:
+
+| Extension | Adds |
+|---|---|
+| `formAssociated()` | Form participation via `ElementInternals` — value sync, reset, state restore, `disabled`, native-parity host contract. Widens the factory context with `internals` |
+| `formAssociatedCheckbox()` | Same host contract, keyed on `checked: boolean` instead of `value` — submits nothing when unchecked. Do not combine with `formAssociated()`: both declare `staticProps.formAssociated`, which throws `ExtensionCollisionError` in `DEV_MODE` |
+| `observedAttributes(names)` | Re-runs the retained `Parser` for each named prop when its attribute mutates post-connect (still not the default — see Key Constraints below). This is the sanctioned escape hatch for consumers that only ever set DOM **attributes**, not properties — React, and any tool (Storybook's Controls addon) that mutates an attribute on an already-connected element. See `references/storybook.md` for the full failure mode and a regression-test pattern |
+
+```typescript
+defineComponent('my-element', factory, [formAssociated()])
+```
+
+`ComponentExtension` contributes `staticProps`, `observedAttributes`, `reservedMembers`, and optional lifecycle hooks (`installOnPrototype`, `onConnect`, `onAttributeChanged`). `defineComponent()` folds every extension in the array once at class-definition time; `reservedMembers` and `observedAttributes` union across all extensions, so `expose()` throws `InvalidPropertyNameError` for a prop name any extension has reserved.
+
+A fourth extension, `debug()`, is **not exported and never appears in this array**. `defineComponent()` appends it to every component automatically whenever the app is built with `DEV_MODE=true` — no source change needed, including for components you didn't write. It adds a reactive `debug: boolean` property, toggled from the browser's properties panel or `metaKey`+click. While `true`, `on()`/`pass()`/`watch()` firings pulse the host and, where the target is knowable (`on()`, `pass()`, or a `bind*`-backed `watch()` handler), mark it with a `data-le-truc-on`/`-pass`/`-watch` attribute and log one `console.debug()` entry. `debug` does nothing in production builds — the extension providing the property was never merged in, so setting it is a no-op, not just hidden. `debug` is a reserved prop name on every component in a `DEV_MODE` build, even ones that never touch `debug()` — `expose({ debug: ... })` throws in dev, works in prod.
 
 ---
 
 ## Key Constraints
 
 - `expose()` **must** be called before any signal access that reads `host.propName`
-- `defineComponent` does not register `observedAttributes`/`attributeChangedCallback` by default — that support was dropped in v2.0. Parsers in `expose()` are called **once at connect time**; HTML authors configure via attributes in server-rendered markup, and attribute changes after connect **are not re-parsed** by default — reactive state flows through the property interface only
-- **Opt-in exception (v2.3+):** the `observedAttributes(names)` extension (third argument to `defineComponent`) re-runs a Parser-backed prop's retained `Parser` when its attribute mutates post-connect. This is the sanctioned escape hatch for frameworks that only ever set DOM attributes (React) or tools that mutate attributes on an already-mounted element (Storybook Controls) — see `references/storybook.md`
+- `defineComponent` doesn't register `observedAttributes` unless explicitly requested via `observedAttributes` extension
+- Parsers in `expose()` called **once at connect time** — HTML authors configure via attributes in server-rendered markup
+- Attribute changes after connect **are not re-parsed** — reactive state flows through property interface only
 - Effect helpers register themselves when called — no `return` needed. Explicit `return [...]` of a `FactoryResult` (`Array<EffectDescriptor | FactoryResult | Falsy>`) still works but is deprecated; nested arrays are flattened and falsy values filtered, so the legacy `element && watch(...)` pattern still works too, but prefer `if (element) watch(...)` in new code
 
 ---
@@ -95,16 +98,6 @@ Explicit `return [...]` of the same descriptors still works (dual support in v2.
 | `Signal` | Any `Signal<T>` | Used directly as backing signal |
 | Static value | Anything else (`string`, `number`, `boolean`, `[]`, ...) | Wrapped in `createState()` |
 | `MemoCallback<T>` | `() => T` (unbranded thunk) | Wrapped in `createComputed()` — reactive derived value |
-
-**Note:** No `Reader` type in v2.0. Read initial DOM values directly before `expose()`:
-
-```typescript
-expose({
-  count: asInteger(parseInt(countEl.textContent || '0') || 0),
-  value: textbox.value,
-  label: asString(labelEl?.textContent ?? ''),
-})
-```
 
 ---
 
