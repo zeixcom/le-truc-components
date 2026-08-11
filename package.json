@@ -28,7 +28,7 @@
     "@types/node": "^26.2.0",
     "@vitest/browser-playwright": "^4.1.10",
     "@vitest/coverage-v8": "^4.1.10",
-    "@zeix/cem-plugin-le-truc": "^0.3.2",
+    "@zeix/cem-plugin-le-truc": "^0.3.3",
     "lit": "^3.3.3",
     "playwright": "^1.62.1",
     "shiki": "^4.4.3",
