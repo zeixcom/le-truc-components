@@ -41,7 +41,7 @@ Check each link in order:
 
 ### Attribute → Signal (connect time only)
 - Parsers in `expose()` called **once** at connect time
-- Attribute changes after connect do NOT re-run parsers by default
+- Attribute changes after connect do NOT re-run parsers — no `observedAttributes`
 - Is attribute name exactly matching prop name passed to `expose()`?
 - **If the symptom is "a Storybook control / React prop edit does nothing after first render"**: this is expected default behavior, not a bug — the fix is opting the prop into `observedAttributes([...])` (v2.3+), not chasing the reactivity chain further. See `references/component-model.md` and `references/storybook.md`.
 
@@ -64,7 +64,9 @@ Check each link in order:
 
 ## Step 3: Enable Debug Logging
 
-Build with `--define process.env.DEV_MODE='"true"'` (the **string** `"true"` — guards check `process.env.DEV_MODE === 'true'` inline, so a bare boolean does not enable them) for enhanced error messages, dependency-timeout warnings, and unbranded-parser warnings. There is no per-instance debug flag — dev mode is decided at build time (or by the env var in unbundled runtimes like `bun test`), not by a runtime property on the host element.
+Build with `--define process.env.DEV_MODE='"true"'` (the **string** `"true"` — guards check `process.env.DEV_MODE === 'true'` inline, so a bare boolean does not enable them) for enhanced error messages, dependency-timeout warnings, and unbranded-parser warnings. `DEV_MODE` is decided at build time (or by the env var in unbundled runtimes like `bun test`), not per instance.
+
+Within a `DEV_MODE` build, every component also gets a reactive `debug: boolean` property for free (the `debug()` extension, auto-injected — no `expose()` change needed). Set `host.debug = true` from the console, the browser's properties panel, or `metaKey`+click on the element to scope diagnostics to one instance: a pulsing host indicator on every `on()`/`pass()`/`watch()` firing, a `data-le-truc-on`/`-pass`/`-watch` marking attribute on the target element where it's knowable, and one `console.debug()` entry per firing naming the component and, for `on()`, the event type. A `watch()` handler not produced by a `bind*` helper gets no element mark — only the host-level pulse, since a wrong highlight is worse than none.
 
 ---
 
