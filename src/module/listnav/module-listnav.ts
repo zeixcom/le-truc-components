@@ -1,4 +1,4 @@
-import { batch, createEffect, defineComponent } from "@zeix/le-truc";
+import { batch, createEffect, defineComponent, query } from "@zeix/le-truc";
 import type { FormListboxProps } from "../../form/listbox/form-listbox";
 import type { ModuleLazyloadProps } from "../lazyload/module-lazyload";
 
@@ -10,7 +10,8 @@ import type { ModuleLazyloadProps } from "../lazyload/module-lazyload";
 const getBasePath = (
   listbox: HTMLElement,
 ): { base: string; ext: string } | null => {
-  const firstOption = listbox.querySelector<HTMLButtonElement>(
+  const firstOption = query<HTMLButtonElement>(
+    listbox,
     'button[role="option"]',
   );
   if (!firstOption?.value) return null;
@@ -75,9 +76,7 @@ export default defineComponent("module-listnav", ({ first, pass, watch }) => {
   ) as HTMLElement & ModuleLazyloadProps;
 
   const hasOption = (value: string): boolean =>
-    !!listbox.querySelector(
-      `button[role="option"][value="${CSS.escape(value)}"]`,
-    );
+    !!query(listbox, `button[role="option"][value="${CSS.escape(value)}"]`);
 
   // Set initial selection from hash
   if (location.hash) {

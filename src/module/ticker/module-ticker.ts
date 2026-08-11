@@ -7,6 +7,8 @@ import {
   createSensor,
   defineComponent,
   each,
+  query,
+  queryAll,
 } from "@zeix/le-truc";
 
 /* === Fantasy symbol generator === */
@@ -85,14 +87,15 @@ export default defineComponent<ModuleTickerProps>(
     });
 
     // Read initial state from server-rendered HTML rows
-    const initial: TickerItem[] = Array.from(
-      host.querySelectorAll<HTMLTableRowElement>("tr[data-symbol]"),
+    const initial: TickerItem[] = queryAll<HTMLTableRowElement>(
+      host,
+      "tr[data-symbol]",
     ).map((row) => {
       const symbol = row.dataset.symbol ?? "";
       // Seed usedSymbols so generated symbols never collide with static ones
       _usedSymbols.add(symbol);
       const price = parseFloat(
-        (row.querySelector(".price")?.textContent ?? "0").replace(/,/g, ""),
+        (query(row, ".price")?.textContent ?? "0").replace(/,/g, ""),
       );
       return { symbol, open: price, price, volume: 0 };
     });
@@ -130,8 +133,8 @@ export default defineComponent<ModuleTickerProps>(
         const clone = template.content.cloneNode(true) as DocumentFragment;
         const tr = clone.firstElementChild as HTMLTableRowElement;
         tr.dataset.symbol = symbol;
-        const th = tr.querySelector("th");
-        const priceEl = tr.querySelector(".price");
+        const th = query(tr, "th");
+        const priceEl = query(tr, ".price");
         if (th) th.textContent = symbol;
         if (priceEl) priceEl.textContent = priceFormat.format(price);
         fragment.append(tr);
@@ -173,17 +176,16 @@ export default defineComponent<ModuleTickerProps>(
     // lazily when watch() first reads it and disconnects automatically
     // when the block's <tbody> is removed and each() tears the effect down.
     const blocks = all("tbody");
-    each(blocks, (tbody) => {
-      const section = tbody as HTMLTableSectionElement;
+    each(blocks, (tbody, first) => {
       const visible = createSensor(
         (set) => {
-          // Only ever observes `section`, so entries always has exactly one entry.
+          // Only ever observes `tbody`, so entries always has exactly one entry.
           const io = new IntersectionObserver(
-            // biome-ignore lint/style/noNonNullAssertion: this observer only ever watches `section`, so entries always has exactly one entry.
+            // biome-ignore lint/style/noNonNullAssertion: this observer only ever watches `tbody`, so entries always has exactly one entry.
             (entries) => set(entries[0]!.isIntersecting),
             { rootMargin: "400px" },
           );
-          io.observe(section);
+          io.observe(tbody);
           return () => io.disconnect();
         },
         { value: true }, // assume visible until the first callback corrects it
@@ -192,9 +194,9 @@ export default defineComponent<ModuleTickerProps>(
       watch(
         () => visible.get(),
         (isVisible) => {
-          const isVirtualized = !section.querySelector("tr[data-symbol]");
-          if (isVisible && isVirtualized) materializeBlock(section);
-          else if (!isVisible && !isVirtualized) virtualizeBlock(section);
+          const isVirtualized = !first("tr[data-symbol]");
+          if (isVisible && isVirtualized) materializeBlock(tbody);
+          else if (!isVisible && !isVirtualized) virtualizeBlock(tbody);
         },
       );
     });
@@ -219,14 +221,14 @@ export default defineComponent<ModuleTickerProps>(
     // covers the brief window between DOM removal and MutationObserver
     // firing where the row is detached but the effect hasn't cleaned up.
     const rows = all("tr[data-symbol]");
-    each(rows, (row) => {
+    each(rows, (row, first) => {
       const symbol = row.dataset.symbol ?? "";
       const item = tickers.byKey(symbol);
       if (!item || !row.isConnected) return;
 
-      const priceEl = row.querySelector(".price");
-      const changeEl = row.querySelector(".change");
-      const volumeEl = row.querySelector(".volume");
+      const priceEl = first(".price");
+      const changeEl = first(".change");
+      const volumeEl = first(".volume");
       if (!priceEl || !changeEl || !volumeEl) return;
 
       const changeMemo = createMemo(() => {
@@ -279,8 +281,8 @@ export default defineComponent<ModuleTickerProps>(
         const clone = template.content.cloneNode(true) as DocumentFragment;
         const tr = clone.firstElementChild as HTMLTableRowElement;
         tr.dataset.symbol = symbol;
-        const th = tr.querySelector("th");
-        const priceEl = tr.querySelector(".price");
+        const th = query(tr, "th");
+        const priceEl = query(tr, ".price");
         if (th) th.textContent = symbol;
         if (priceEl) priceEl.textContent = priceFormat.format(price);
         fragment.append(tr);

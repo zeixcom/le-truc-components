@@ -3690,7 +3690,7 @@
           "name": "BasicButton",
           "parameters": [
             {
-              "name": "{\n  label,\n  badge,\n  disabled,\n  variant,\n  size,\n  content,\n}",
+              "name": "{\n  label,\n  badge = \"\",\n  disabled = false,\n  variant,\n  size = \"medium\",\n  content = \"spans\",\n  type = \"button\",\n  hostClass,\n  ariaLabel,\n  ariaHaspopup,\n  ariaControls,\n  copySuccess,\n  copyError,\n}",
               "type": {
                 "text": "BasicButtonArgs"
               }
@@ -3739,34 +3739,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/basic/gauge/basic-gauge.html.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "BasicGauge",
-          "parameters": [
-            {
-              "name": "{\n  value,\n  thresholds,\n  id = \"basic-gauge-label\",\n}",
-              "type": {
-                "text": "BasicGaugeArgs"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "BasicGauge",
-          "declaration": {
-            "name": "BasicGauge",
-            "module": "src/basic/gauge/basic-gauge.html.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/basic/number/basic-number.html.ts",
       "declarations": [
         {
@@ -3774,9 +3746,9 @@
           "name": "BasicNumber",
           "parameters": [
             {
-              "name": "{\n  value,\n  options,\n  lang,\n}",
+              "name": "{\n  value,\n  options,\n  lang,\n  class: cls,\n}",
               "type": {
-                "text": "Pick<BasicNumberArgs, \"value\" | \"options\" | \"lang\">"
+                "text": "Pick<BasicNumberArgs, \"value\" | \"options\" | \"lang\" | \"class\">"
               }
             }
           ]
@@ -3809,6 +3781,90 @@
           "declaration": {
             "name": "NumberDemo",
             "module": "src/basic/number/basic-number.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/gauge/basic-gauge.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "BasicGauge",
+          "parameters": [
+            {
+              "name": "{\n  value,\n  thresholds,\n  id = \"basic-gauge-label\",\n}",
+              "type": {
+                "text": "BasicGaugeArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "BasicGauge",
+          "declaration": {
+            "name": "BasicGauge",
+            "module": "src/basic/gauge/basic-gauge.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/hello/basic-hello.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "BasicHello",
+          "parameters": [
+            {
+              "name": "{ subject }",
+              "type": {
+                "text": "BasicHelloArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "BasicHello",
+          "declaration": {
+            "name": "BasicHello",
+            "module": "src/basic/hello/basic-hello.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/pluralize/basic-pluralize.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "BasicPluralize",
+          "parameters": [
+            {
+              "name": "{\n  count,\n  ordinal,\n  lang,\n}",
+              "type": {
+                "text": "BasicPluralizeArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "BasicPluralize",
+          "declaration": {
+            "name": "BasicPluralize",
+            "module": "src/basic/pluralize/basic-pluralize.html.ts"
           }
         }
       ]
@@ -3912,34 +3968,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/basic/hello/basic-hello.html.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "BasicHello",
-          "parameters": [
-            {
-              "name": "{ subject }",
-              "type": {
-                "text": "BasicHelloArgs"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "BasicHello",
-          "declaration": {
-            "name": "BasicHello",
-            "module": "src/basic/hello/basic-hello.html.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/card/collapsible/card-collapsible.html.ts",
       "declarations": [
         {
@@ -3962,34 +3990,6 @@
           "declaration": {
             "name": "CardCollapsible",
             "module": "src/card/collapsible/card-collapsible.html.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/basic/pluralize/basic-pluralize.html.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "BasicPluralize",
-          "parameters": [
-            {
-              "name": "{\n  count,\n  ordinal,\n  lang,\n}",
-              "type": {
-                "text": "BasicPluralizeArgs"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "BasicPluralize",
-          "declaration": {
-            "name": "BasicPluralize",
-            "module": "src/basic/pluralize/basic-pluralize.html.ts"
           }
         }
       ]
@@ -4164,6 +4164,34 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/form/listbox/form-listbox.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "FormListbox",
+          "parameters": [
+            {
+              "name": "{\n  value,\n  id = \"colors\",\n  name = \"color\",\n  ariaLabel = \"Colors\",\n  ariaLabelledby,\n  wrapInForm = true,\n  showSelected = true,\n}",
+              "type": {
+                "text": "FormListboxArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FormListbox",
+          "declaration": {
+            "name": "FormListbox",
+            "module": "src/form/listbox/form-listbox.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/form/combobox/form-combobox.html.ts",
       "declarations": [
         {
@@ -4220,34 +4248,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/form/listbox/form-listbox.html.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "FormListbox",
-          "parameters": [
-            {
-              "name": "{ value }",
-              "type": {
-                "text": "FormListboxArgs"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "FormListbox",
-          "declaration": {
-            "name": "FormListbox",
-            "module": "src/form/listbox/form-listbox.html.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/form/radiogroup/form-radiogroup.html.ts",
       "declarations": [
         {
@@ -4283,7 +4283,7 @@
           "name": "FormTextbox",
           "parameters": [
             {
-              "name": "{\n  value,\n  description,\n  clearable,\n}",
+              "name": "{\n  value = \"\",\n  description,\n  clearable = false,\n  label = \"Name\",\n  id = \"name-input\",\n  name = \"name\",\n  autocomplete = \"name\",\n  placeholder,\n  required = true,\n  showError = true,\n  clearLabel = \"Clear input\",\n  hostClass,\n  hostName,\n}",
               "type": {
                 "text": "FormTextboxArgs"
               }
@@ -4386,6 +4386,34 @@
           "declaration": {
             "name": "ModuleCemList",
             "module": "src/module/cem-list/module-cem-list.html.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/scrollarea/module-scrollarea.html.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "ModuleScrollarea",
+          "parameters": [
+            {
+              "name": "{\n  orientation = \"vertical\",\n  content = PLACEHOLDER_CONTENT,\n  style = \"height: 200px; width: 300px; border: 1px solid #ccc;\",\n}",
+              "type": {
+                "text": "ModuleScrollareaArgs"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ModuleScrollarea",
+          "declaration": {
+            "name": "ModuleScrollarea",
+            "module": "src/module/scrollarea/module-scrollarea.html.ts"
           }
         }
       ]
@@ -4607,34 +4635,6 @@
           "declaration": {
             "name": "ModulePagination",
             "module": "src/module/pagination/module-pagination.html.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/module/scrollarea/module-scrollarea.html.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "ModuleScrollarea",
-          "parameters": [
-            {
-              "name": "{ orientation }",
-              "type": {
-                "text": "ModuleScrollareaArgs"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ModuleScrollarea",
-          "declaration": {
-            "name": "ModuleScrollarea",
-            "module": "src/module/scrollarea/module-scrollarea.html.ts"
           }
         }
       ]
