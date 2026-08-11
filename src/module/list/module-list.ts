@@ -17,6 +17,8 @@ declare global {
  * A dynamic list component demonstrating the `createList()` keyed reconciliation API.
  * Items are added via a form submission and removed via delegated click handling,
  * with stable keys across reorders.
+ *
+ * @demo {https://zeixcom.github.io/le-truc/examples.html#module-list} Interactive preview and usage examples
  */
 export default defineComponent("module-list", ({ first, host, on, pass }) => {
   // Keyed reactive list of plain string items. The 'item' prefix feeds the

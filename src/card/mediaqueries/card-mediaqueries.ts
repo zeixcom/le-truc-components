@@ -6,6 +6,17 @@ import {
   MEDIA_VIEWPORT,
 } from "../../context/media/context-media";
 
+/**
+ * Displays the current motion preference, color theme, viewport bucket, and
+ * orientation, sourced from an ancestor `context-media` provider via
+ * `requestContext()`. Demonstrates consuming context in a leaf component;
+ * the host may contain any subset of `.motion`, `.theme`, `.viewport`,
+ * `.orientation` elements — only those present are updated — and must be a
+ * descendant of `<context-media>` to receive live values (each falls back
+ * to the literal text `"unknown"` otherwise).
+ *
+ * @demo {https://zeixcom.github.io/le-truc/examples.html#card-mediaqueries} Interactive preview and usage examples
+ */
 export default defineComponent(
   "card-mediaqueries",
   ({ first, requestContext, watch }) => {

@@ -6,6 +6,7 @@ import {
 } from "@zeix/le-truc";
 
 export type ModuleCarouselProps = {
+  /** Index of the currently visible slide, initialized from the slide whose `aria-current` is `"true"`. */
   index: number;
 };
 
@@ -18,6 +19,17 @@ declare global {
 const clamp = (index: number, total: number) =>
   Math.max(0, Math.min(index, total - 1));
 
+/**
+ * A scroll-snap carousel that stays in sync between manual scrolling, prev/next
+ * buttons, dot navigation, and keyboard input (Arrow Left/Right, Home, End on
+ * any nav button). Slides are tracked via `[role="tabpanel"]` and an
+ * `IntersectionObserver` detects scroll-driven navigation; dots use
+ * `button[role="tab"]`. Focus moves off a prev/next button automatically when
+ * it becomes hidden at the start/end of the slide list. The host should
+ * follow the ARIA tabpanel/tab pattern for slide and dot markup.
+ *
+ * @demo {https://zeixcom.github.io/le-truc/examples.html#module-carousel} Interactive preview and usage examples
+ */
 export default defineComponent<ModuleCarouselProps>(
   "module-carousel",
   ({ all, expose, first, host, on, watch }) => {

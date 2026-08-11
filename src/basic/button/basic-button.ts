@@ -1,8 +1,11 @@
 import { bindProperty, bindText, defineComponent } from "@zeix/le-truc";
 
 export type BasicButtonProps = {
+  /** Whether the button is disabled. Synced from the native `<button>`'s own `disabled` property. */
   disabled: boolean;
+  /** Visible label text. Read from `span.label`, falling back to the button's own text content. */
   label: string;
+  /** Badge text shown alongside the label, e.g. a count. Read from `span.badge`. */
   badge: string;
 };
 
@@ -12,6 +15,15 @@ declare global {
   }
 }
 
+/**
+ * A button wrapper that syncs `disabled` state, label text, and an optional
+ * badge with the native `<button>` descendant. Use it wherever a Le Truc
+ * component needs to drive a button's disabled state or text reactively;
+ * for copy-to-clipboard behavior, see `module-codeblock`'s use of
+ * `copyToClipboard()` on this component.
+ *
+ * @demo {https://zeixcom.github.io/le-truc/examples.html#basic-button} Interactive preview and usage examples
+ */
 export default defineComponent<BasicButtonProps>(
   "basic-button",
   ({ expose, first, watch }) => {

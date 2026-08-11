@@ -1,6 +1,7 @@
 import { defineComponent } from "@zeix/le-truc";
 
 export type ModuleDialogProps = {
+  /** Whether the dialog is open. Setting this shows/hides the native `<dialog>` as a modal. */
   open: boolean;
 };
 
@@ -12,6 +13,16 @@ declare global {
 
 const SCROLL_LOCK_CLASS = "scroll-lock";
 
+/**
+ * A modal dialog wrapper around the native `<dialog>` element. Opens via a
+ * `button[aria-haspopup="dialog"]` descendant, closes via a
+ * `dialog button.close` descendant, clicking the dialog backdrop, or the
+ * Escape key. While open, locks background scroll (preserving scroll
+ * position) and restores focus to whichever element was focused before
+ * opening. The host must contain both buttons and a native `<dialog>`.
+ *
+ * @demo {https://zeixcom.github.io/le-truc/examples.html#module-dialog} Interactive preview and usage examples
+ */
 export default defineComponent<ModuleDialogProps>(
   "module-dialog",
   ({ expose, first, on, watch }) => {

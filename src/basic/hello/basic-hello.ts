@@ -1,6 +1,7 @@
 import { bindText, defineComponent } from "@zeix/le-truc";
 
 export type BasicHelloProps = {
+  /** Text greeted, echoed live from the `<input>`; falls back to the `<output>`'s initial text content when the input is empty. */
   subject: string;
 };
 
@@ -10,6 +11,14 @@ declare global {
   }
 }
 
+/**
+ * A minimal greeting example: types into an `<input>` and echoes the value
+ * live into an `<output>`. Demonstrates the smallest possible `on('input')`
+ * + `watch()` + `bindText()` cycle. The host must contain a native `<input>`
+ * and an `<output>` element.
+ *
+ * @demo {https://zeixcom.github.io/le-truc/examples.html#basic-hello} Interactive preview and usage examples
+ */
 export default defineComponent<BasicHelloProps>(
   "basic-hello",
   ({ expose, first, on, watch }) => {

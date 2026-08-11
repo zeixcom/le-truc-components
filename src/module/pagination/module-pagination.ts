@@ -6,7 +6,9 @@ import {
 } from "@zeix/le-truc";
 
 export type ModulePaginationProps = {
+  /** Highest selectable page number, initialized from the `<input>`'s `max` attribute. The host is hidden entirely (`hidden`) when this is `1` or less. */
   max: number;
+  /** Current page number (1-based), initialized from the `<input>`'s value and clamped to `[1, max]`. */
   value: number;
 };
 
@@ -16,6 +18,16 @@ declare global {
   }
 }
 
+/**
+ * A page-number stepper with prev/next buttons and a number `<input>`, kept
+ * in sync with clamping to `[1, max]`. Supports keyboard navigation (Arrow
+ * Left/Right or `-`/`+` keys) anywhere in the host except while focus is in
+ * the `<input>` itself, and moves focus off a prev/next button automatically
+ * when it becomes disabled at the start/end of the range. The host must
+ * contain a number `<input>`, a `button.prev`, and a `button.next`.
+ *
+ * @demo {https://zeixcom.github.io/le-truc/examples.html#module-pagination} Interactive preview and usage examples
+ */
 export default defineComponent<ModulePaginationProps>(
   "module-pagination",
   ({ expose, first, host, on, watch }) => {

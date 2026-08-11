@@ -31,32 +31,23 @@ declare global {
 }
 
 /**
- * A numeric spinbutton with increment/decrement buttons and keyboard support.
- * Use it for numeric input within a bounded range — provides ARIA spinbutton
- * semantics and Arrow key support for incrementing and decrementing the value.
- * Step size is read from the host's `step` attribute (falling back to the
- * nested `input.step`, default `1`); a fractional step (e.g. `step="0.1"`)
- * switches the whole component to floating-point mode, so `value`/`min`/`max`
- * are parsed and rounded as decimals instead of integers. An optional
- * `big-step` attribute (default `step * 10`) sets the increment used when
- * Shift is held or `stepDown(true)`/`stepUp(true)` is called. `min` is no
- * longer fixed at `0` — negative ranges work, and typing `-`/`+` directly
- * into a focused input is left to the browser rather than intercepted as a
- * step shortcut (only Arrow keys and clicks on the buttons step by `±1`
- * character). Form participation and range validation are via ElementInternals
- * (`formAssociated()`, `setFormValue`, `relayValidity`). Exposes
- * `stepDown`/`stepUp` methods (clamped to `min`/`max`) so other components can
- * drive the value without duplicating the clamp logic. An optional `.error`
- * descendant, if present, shows `host.validationMessage` — whichever of the
- * range constraint or an externally-set `customError` currently applies (see
- * `module-catalog.ts` for a composed example: a stock-availability check that
- * sets both). A required `fieldset` descendant wraps the interactive
- * controls: native `disabled` cascade to all of them when `host.disabled` is
- * set, without per-element wiring. An optional `.zero` descendant opts into
+ * A numeric spinbutton with increment/decrement buttons and keyboard support
+ * (Arrow keys, Shift for the big-step). Use it for numeric input within a
+ * bounded range. Step size is read from the host's `step` attribute
+ * (falling back to the nested `input.step`, default `1`); a fractional step
+ * (e.g. `step="0.1"`) switches the whole component to floating-point mode.
+ * Form participation and range validation are via ElementInternals
+ * (`formAssociated()`, `setFormValue`, `relayValidity`). An optional
+ * `.error` descendant, if present, shows `host.validationMessage` (see
+ * `module-catalog.ts` for a composed example: a stock-availability check
+ * that sets a custom error alongside the range constraint). A required
+ * `fieldset` descendant wraps the interactive controls, so `host.disabled`
+ * cascades to them natively. An optional `.zero` descendant opts into
  * hiding the input/decrement button and swapping the increment label at
- * `value === 0` (e.g. a "Add to Cart" affordance) — without it, this is a
+ * `value === 0` (e.g. an "Add to Cart" affordance) — without it, this is a
  * plain generic spinbutton.
  *
+ * @attribute {number} [big-step=step*10] - Increment used when Shift is held or `stepDown(true)`/`stepUp(true)` is called.
  * @demo {https://zeixcom.github.io/le-truc/examples.html#form-spinbutton} Interactive preview and usage examples
  **/
 export default defineComponent<FormSpinbuttonProps>(

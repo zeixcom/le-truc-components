@@ -44,6 +44,8 @@ let idCounter = 0;
  * when adapting it for production use.
  * Exposes the active filter as custom states (`:state(filter-active)`, `:state(filter-completed)`)
  * for CSS-based item visibility, so filter state cannot be spoofed by setting an attribute.
+ *
+ * @demo {https://zeixcom.github.io/le-truc/examples.html#module-todo} Interactive preview and usage examples
  */
 export default defineComponent(
   "module-todo",

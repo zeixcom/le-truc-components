@@ -22,10 +22,15 @@ export type FormColorgraphAxis = "l" | "c" | "h";
 export type FormColorgraphProps = {
   /** Current color as a CSS string (e.g. `oklch(0.48 0.23 263)`). Form value. */
   value: string;
+  /** Lightness component of the current color, in the Oklch range `[0, 1]` (read-only). */
   readonly lightness: number;
+  /** Chroma component of the current color, in the Oklch range `[0, 0.4]` (read-only). */
   readonly chroma: number;
+  /** Hue component of the current color, in degrees `[0, 360]` (read-only). */
   readonly hue: number;
+  /** Decrements the given axis by its `<form-spinbutton>`'s step (or big-step, if `bigStep` is `true`). */
   stepDown: (axis: FormColorgraphAxis, bigStep?: boolean) => void;
+  /** Increments the given axis by its `<form-spinbutton>`'s step (or big-step, if `bigStep` is `true`). */
   stepUp: (axis: FormColorgraphAxis, bigStep?: boolean) => void;
 };
 
