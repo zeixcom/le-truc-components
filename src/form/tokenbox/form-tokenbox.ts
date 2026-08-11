@@ -116,11 +116,13 @@ export default defineComponent<FormTokenboxProps>(
     });
 
     on(textbox, "keydown", (event) => {
-      const e = event as KeyboardEvent;
-      if (e.key === ",") {
-        e.preventDefault();
+      const { key } = event;
+      if (key === "," || key === "Enter") {
+        // Enter would otherwise submit an enclosing <form>; committing the
+        // draft text as a token is the more useful default here.
+        event.preventDefault();
         commit(textbox.value);
-      } else if (e.key === "Backspace" && textbox.value === "") {
+      } else if (key === "Backspace" && textbox.value === "") {
         const lastKey = tokens.keyAt(tokens.length - 1);
         if (lastKey) removeToken(lastKey);
       }

@@ -4,259 +4,6 @@
   "modules": [
     {
       "kind": "javascript-module",
-      "path": "src/basic/button/basic-button.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "customElement": true,
-          "tagName": "basic-button",
-          "name": "BasicButton",
-          "description": "A button wrapper that syncs `disabled` state, label text, and an optional\nbadge with the native `<button>` descendant. Use it wherever a Le Truc\ncomponent needs to drive a button's disabled state or text reactively;\nfor copy-to-clipboard behavior, see `module-codeblock`'s use of\n`copyToClipboard()` on this component.",
-          "members": [
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Whether the button is disabled. Synced from the native `<button>`'s own `disabled` property."
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "description": "Visible label text. Read from `span.label`, falling back to the button's own text content."
-            },
-            {
-              "kind": "field",
-              "name": "badge",
-              "type": {
-                "text": "string"
-              },
-              "description": "Badge text shown alongside the label, e.g. a count. Read from `span.badge`."
-            }
-          ],
-          "demos": [
-            {
-              "url": "https://zeixcom.github.io/le-truc/examples.html#basic-button",
-              "description": "Interactive preview and usage examples"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "BasicButton",
-            "module": "src/basic/button/basic-button.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "basic-button",
-          "declaration": {
-            "name": "BasicButton",
-            "module": "src/basic/button/basic-button.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/basic/button/copyToClipboard.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "copyToClipboard",
-          "return": {
-            "type": {
-              "text": "EffectDescriptor"
-            }
-          },
-          "parameters": [
-            {
-              "name": "container",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "name": "button",
-              "type": {
-                "text": "HTMLElement & BasicButtonProps"
-              }
-            },
-            {
-              "name": "messages",
-              "type": {
-                "text": "{ [COPY_ERROR]?: string; [COPY_SUCCESS]?: string }"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "copyToClipboard",
-          "declaration": {
-            "name": "copyToClipboard",
-            "module": "src/basic/button/copyToClipboard.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/basic/counter/basic-counter.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "customElement": true,
-          "tagName": "basic-counter",
-          "name": "BasicCounter",
-          "description": "A button that increments a counter on click. Demonstrates a minimal\n`on('click')` + `watch()` + `bindText()` cycle: the host must contain a\n`<button>` and a `<span>` whose text content is the initial integer count.",
-          "members": [
-            {
-              "kind": "field",
-              "name": "count",
-              "type": {
-                "text": "number"
-              },
-              "description": "Current count value, initialized from the `<span>`'s text content and incremented on click."
-            }
-          ],
-          "demos": [
-            {
-              "url": "https://zeixcom.github.io/le-truc/examples.html#basic-counter",
-              "description": "Interactive preview and usage examples"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "BasicCounter",
-            "module": "src/basic/counter/basic-counter.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "basic-counter",
-          "declaration": {
-            "name": "BasicCounter",
-            "module": "src/basic/counter/basic-counter.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/basic/gauge/basic-gauge.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "customElement": true,
-          "tagName": "basic-gauge",
-          "name": "BasicGauge",
-          "description": "A gauge that displays a numeric value as a meter with color-coded thresholds.\nUse it for visualising a value within a known range — the needle rotates\nto reflect the current value and the color indicates which threshold applies.\nThe `value` must be a number within the range defined by the thresholds.\nThresholds should be ordered by `min` value for correct color assignment.\nThe `value` attribute is observed post-connect, so setting it at runtime\n(e.g. `gauge.setAttribute('value', '0.5')`) updates the gauge too, not just\nthe initial `value` property.",
-          "members": [
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "number"
-              },
-              "description": "Current gauge value in the range [0, meter.max]. Read from the `value`\nattribute at connect time (falling back to the inner `<meter>`'s value\nfor markup that only sets it there), and re-parsed on later `value`\nattribute mutations — e.g. from frameworks like React that set DOM\nattributes rather than properties."
-            }
-          ],
-          "attributes": [
-            {
-              "name": "value",
-              "fieldName": "value",
-              "type": {
-                "text": "number"
-              },
-              "default": "0"
-            },
-            {
-              "name": "thresholds",
-              "type": {
-                "text": "BasicGaugeThreshold[]"
-              },
-              "description": "Color-coded thresholds as a JSON array, e.g. `[{\"min\":0,\"label\":\"Low\",\"color\":\"red\"}]`. Defaults to an empty array (no color/label applied) if omitted. Read once at connect time."
-            }
-          ],
-          "cssProperties": [
-            {
-              "name": "--basic-gauge-background",
-              "description": "Background color behind the ring. Defaults to `--color-background`."
-            },
-            {
-              "name": "--basic-gauge-label-color",
-              "description": "Text color of the qualification label. Defaults to `--color-text-soft`."
-            },
-            {
-              "name": "--basic-gauge-label-font-size",
-              "description": "Font size of the qualification label. Defaults to `--font-size-s`."
-            },
-            {
-              "name": "--basic-gauge-metric-color",
-              "description": "Text color of the numeric value. Defaults to `--color-text`."
-            },
-            {
-              "name": "--basic-gauge-metric-font-size",
-              "description": "Font size of the numeric value. Defaults to `--font-size-xl`."
-            },
-            {
-              "name": "--basic-gauge-ring-width",
-              "description": "Ring thickness. Accepts any CSS length; defaults to `--space-xs`."
-            },
-            {
-              "name": "--basic-gauge-size",
-              "description": "Overall gauge diameter. Accepts any CSS length; defaults to `8rem`."
-            },
-            {
-              "name": "--basic-gauge-track-color",
-              "description": "Background color of the unfilled ring track. Defaults to `--color-secondary`."
-            }
-          ],
-          "demos": [
-            {
-              "url": "https://zeixcom.github.io/le-truc/examples.html#basic-gauge",
-              "description": "Interactive preview and usage examples"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "BasicGauge",
-            "module": "src/basic/gauge/basic-gauge.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "basic-gauge",
-          "declaration": {
-            "name": "BasicGauge",
-            "module": "src/basic/gauge/basic-gauge.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/_common/getLocale.ts",
       "declarations": [
         {
@@ -284,78 +31,6 @@
           "declaration": {
             "name": "getLocale",
             "module": "src/_common/getLocale.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/basic/pluralize/basic-pluralize.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "customElement": true,
-          "tagName": "basic-pluralize",
-          "name": "BasicPluralize",
-          "description": "Selects which of several child elements to show based on the CLDR plural\ncategory (`zero`, `one`, `two`, `few`, `many`, `other`) or none/some state\nfor `count`, using `Intl.PluralRules`. The host may contain any subset of\n`.zero`, `.one`, `.two`, `.few`, `.many`, `.other`, `.none`, `.some`\nelements — only those present are toggled — plus an optional `.count`\nelement that displays the raw count. Locale is resolved from the nearest\nancestor's `lang` attribute (falling back to `en`).",
-          "members": [
-            {
-              "kind": "field",
-              "name": "count",
-              "type": {
-                "text": "number"
-              },
-              "description": "The count driving pluralization; clamped to a non-negative integer."
-            }
-          ],
-          "attributes": [
-            {
-              "name": "count",
-              "fieldName": "count",
-              "type": {
-                "text": "number"
-              },
-              "default": "0"
-            },
-            {
-              "name": "lang",
-              "type": {
-                "text": "string"
-              },
-              "description": "BCP 47 locale tag (e.g. `de-CH`). Falls back to the nearest ancestor's `lang` attribute, or `en` if none is set. Read once at connect time."
-            },
-            {
-              "name": "ordinal",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "When present, use ordinal (1st, 2nd, 3rd) instead of cardinal plural rules. Read once at connect time."
-            }
-          ],
-          "demos": [
-            {
-              "url": "https://zeixcom.github.io/le-truc/examples.html#basic-pluralize",
-              "description": "Interactive preview and usage examples"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "BasicPluralize",
-            "module": "src/basic/pluralize/basic-pluralize.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "basic-pluralize",
-          "declaration": {
-            "name": "BasicPluralize",
-            "module": "src/basic/pluralize/basic-pluralize.ts"
           }
         }
       ]
@@ -393,214 +68,6 @@
           "declaration": {
             "name": "CardBlogmeta",
             "module": "src/card/blogmeta/card-blogmeta.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/basic/hello/basic-hello.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "customElement": true,
-          "tagName": "basic-hello",
-          "name": "BasicHello",
-          "description": "A minimal greeting example: types into an `<input>` and echoes the value\nlive into an `<output>`. Demonstrates the smallest possible `on('input')`\n+ `watch()` + `bindText()` cycle. The host must contain a native `<input>`\nand an `<output>` element.",
-          "members": [
-            {
-              "kind": "field",
-              "name": "subject",
-              "type": {
-                "text": "string"
-              },
-              "description": "Text greeted, echoed live from the `<input>`; falls back to the `<output>`'s initial text content when the input is empty."
-            }
-          ],
-          "demos": [
-            {
-              "url": "https://zeixcom.github.io/le-truc/examples.html#basic-hello",
-              "description": "Interactive preview and usage examples"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "BasicHello",
-            "module": "src/basic/hello/basic-hello.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "basic-hello",
-          "declaration": {
-            "name": "BasicHello",
-            "module": "src/basic/hello/basic-hello.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/_common/getNumberFormatter.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "getNumberFormatter",
-          "parameters": [
-            {
-              "name": "locale",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "rawOptions",
-              "type": {
-                "text": "string | null"
-              }
-            },
-            {
-              "name": "logger",
-              "default": "DEFAULT_LOGGER",
-              "type": {
-                "text": "NumberFormatterLogger"
-              }
-            }
-          ],
-          "description": "Builds an `Intl.NumberFormat` from a locale and a JSON-encoded\n`Intl.NumberFormatOptions` string (typically an element's `options`\nattribute). Validates `style: \"currency\"` and `style: \"unit\"` requirements,\ndrops options that don't apply to the resolved style, and swaps inverted\nmin/max digit pairs. Falls back to `new Intl.NumberFormat(locale)` for\nmissing/invalid input, logging via `logger`."
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "getNumberFormatter",
-          "declaration": {
-            "name": "getNumberFormatter",
-            "module": "src/_common/getNumberFormatter.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/basic/number/basic-number.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "customElement": true,
-          "tagName": "basic-number",
-          "name": "BasicNumber",
-          "description": "Displays a `value` formatted with `Intl.NumberFormat`, re-formatting live\nwhenever `value` changes. Locale is resolved from the nearest ancestor's\n`lang` attribute (falling back to `en`); formatting options are read once\nat connect time from the `options` attribute as a JSON\n`Intl.NumberFormatOptions` object, e.g. `{\"style\":\"currency\",\"currency\":\"EUR\"}`.",
-          "members": [
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "number"
-              },
-              "description": "The numeric value to display, formatted via `Intl.NumberFormat`."
-            }
-          ],
-          "attributes": [
-            {
-              "name": "value",
-              "fieldName": "value",
-              "type": {
-                "text": "number"
-              },
-              "default": "0"
-            },
-            {
-              "name": "lang",
-              "type": {
-                "text": "string"
-              },
-              "description": "BCP 47 locale tag (e.g. `de-CH`). Falls back to the nearest ancestor's `lang` attribute, or `en` if none is set. Read once at connect time."
-            },
-            {
-              "name": "options",
-              "type": {
-                "text": "Intl.NumberFormatOptions"
-              },
-              "default": "{}",
-              "description": "`Intl.NumberFormat` options as a JSON object. Read once at connect time."
-            }
-          ],
-          "demos": [
-            {
-              "url": "https://zeixcom.github.io/le-truc/examples.html#basic-number",
-              "description": "Interactive preview and usage examples"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "BasicNumber",
-            "module": "src/basic/number/basic-number.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "basic-number",
-          "declaration": {
-            "name": "BasicNumber",
-            "module": "src/basic/number/basic-number.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/card/collapsible/card-collapsible.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "customElement": true,
-          "tagName": "card-collapsible",
-          "name": "CardCollapsible",
-          "description": "A collapsible card wrapping a native `<details>`/`<summary>` element.\nUse it for any content that should be expandable/collapsible — content-agnostic,\nthe header goes in `<summary>`, the body is the rest of `<details>`'s content.\nNative disclosure semantics provide keyboard toggling (Enter/Space on the summary)\nand find-in-page support for free; the `open` reactive property mirrors the\ndescendant `<details>` element's `open` state for programmatic read/control.",
-          "members": [
-            {
-              "kind": "field",
-              "name": "open",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Whether the card is expanded. Reflects the descendant `<details>` element's `open` state."
-            }
-          ],
-          "demos": [
-            {
-              "url": "https://zeixcom.github.io/le-truc/examples.html#card-collapsible",
-              "description": "Interactive preview and usage examples"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "CardCollapsible",
-            "module": "src/card/collapsible/card-collapsible.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "card-collapsible",
-          "declaration": {
-            "name": "CardCollapsible",
-            "module": "src/card/collapsible/card-collapsible.ts"
           }
         }
       ]
@@ -933,6 +400,539 @@
           "declaration": {
             "name": "CardMediaqueries",
             "module": "src/card/mediaqueries/card-mediaqueries.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/card/collapsible/card-collapsible.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "card-collapsible",
+          "name": "CardCollapsible",
+          "description": "A collapsible card wrapping a native `<details>`/`<summary>` element.\nUse it for any content that should be expandable/collapsible — content-agnostic,\nthe header goes in `<summary>`, the body is the rest of `<details>`'s content.\nNative disclosure semantics provide keyboard toggling (Enter/Space on the summary)\nand find-in-page support for free; the `open` reactive property mirrors the\ndescendant `<details>` element's `open` state for programmatic read/control.",
+          "members": [
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the card is expanded. Reflects the descendant `<details>` element's `open` state."
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#card-collapsible",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "CardCollapsible",
+            "module": "src/card/collapsible/card-collapsible.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "card-collapsible",
+          "declaration": {
+            "name": "CardCollapsible",
+            "module": "src/card/collapsible/card-collapsible.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/counter/basic-counter.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "basic-counter",
+          "name": "BasicCounter",
+          "description": "A button that increments a counter on click. Demonstrates a minimal\n`on('click')` + `watch()` + `bindText()` cycle: the host must contain a\n`<button>` and a `<span>` whose text content is the initial integer count.",
+          "members": [
+            {
+              "kind": "field",
+              "name": "count",
+              "type": {
+                "text": "number"
+              },
+              "description": "Current count value, initialized from the `<span>`'s text content and incremented on click."
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#basic-counter",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "BasicCounter",
+            "module": "src/basic/counter/basic-counter.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "basic-counter",
+          "declaration": {
+            "name": "BasicCounter",
+            "module": "src/basic/counter/basic-counter.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/gauge/basic-gauge.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "basic-gauge",
+          "name": "BasicGauge",
+          "description": "A gauge that displays a numeric value as a meter with color-coded thresholds.\nUse it for visualising a value within a known range — the needle rotates\nto reflect the current value and the color indicates which threshold applies.\nThe `value` must be a number within the range defined by the thresholds.\nThresholds should be ordered by `min` value for correct color assignment.\nThe `value` attribute is observed post-connect, so setting it at runtime\n(e.g. `gauge.setAttribute('value', '0.5')`) updates the gauge too, not just\nthe initial `value` property.",
+          "members": [
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "number"
+              },
+              "description": "Current gauge value in the range [0, meter.max]. Read from the `value`\nattribute at connect time (falling back to the inner `<meter>`'s value\nfor markup that only sets it there), and re-parsed on later `value`\nattribute mutations — e.g. from frameworks like React that set DOM\nattributes rather than properties."
+            }
+          ],
+          "attributes": [
+            {
+              "name": "value",
+              "fieldName": "value",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "name": "thresholds",
+              "type": {
+                "text": "BasicGaugeThreshold[]"
+              },
+              "description": "Color-coded thresholds as a JSON array, e.g. `[{\"min\":0,\"label\":\"Low\",\"color\":\"red\"}]`. Defaults to an empty array (no color/label applied) if omitted. Read once at connect time."
+            }
+          ],
+          "cssProperties": [
+            {
+              "name": "--basic-gauge-background",
+              "description": "Background color behind the ring. Defaults to `--color-background`."
+            },
+            {
+              "name": "--basic-gauge-label-color",
+              "description": "Text color of the qualification label. Defaults to `--color-text-soft`."
+            },
+            {
+              "name": "--basic-gauge-label-font-size",
+              "description": "Font size of the qualification label. Defaults to `--font-size-s`."
+            },
+            {
+              "name": "--basic-gauge-metric-color",
+              "description": "Text color of the numeric value. Defaults to `--color-text`."
+            },
+            {
+              "name": "--basic-gauge-metric-font-size",
+              "description": "Font size of the numeric value. Defaults to `--font-size-xl`."
+            },
+            {
+              "name": "--basic-gauge-ring-width",
+              "description": "Ring thickness. Accepts any CSS length; defaults to `--space-xs`."
+            },
+            {
+              "name": "--basic-gauge-size",
+              "description": "Overall gauge diameter. Accepts any CSS length; defaults to `8rem`."
+            },
+            {
+              "name": "--basic-gauge-track-color",
+              "description": "Background color of the unfilled ring track. Defaults to `--color-secondary`."
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#basic-gauge",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "BasicGauge",
+            "module": "src/basic/gauge/basic-gauge.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "basic-gauge",
+          "declaration": {
+            "name": "BasicGauge",
+            "module": "src/basic/gauge/basic-gauge.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/button/basic-button.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "basic-button",
+          "name": "BasicButton",
+          "description": "A button wrapper that syncs `disabled` state, label text, and an optional\nbadge with the native `<button>` descendant. Use it wherever a Le Truc\ncomponent needs to drive a button's disabled state or text reactively;\nfor copy-to-clipboard behavior, see `module-codeblock`'s use of\n`copyToClipboard()` on this component.",
+          "members": [
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the button is disabled. Synced from the native `<button>`'s own `disabled` property."
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Visible label text. Read from `span.label`, falling back to the button's own text content."
+            },
+            {
+              "kind": "field",
+              "name": "badge",
+              "type": {
+                "text": "string"
+              },
+              "description": "Badge text shown alongside the label, e.g. a count. Read from `span.badge`."
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#basic-button",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "BasicButton",
+            "module": "src/basic/button/basic-button.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "basic-button",
+          "declaration": {
+            "name": "BasicButton",
+            "module": "src/basic/button/basic-button.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/button/copyToClipboard.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "copyToClipboard",
+          "return": {
+            "type": {
+              "text": "EffectDescriptor"
+            }
+          },
+          "parameters": [
+            {
+              "name": "container",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "name": "button",
+              "type": {
+                "text": "HTMLElement & BasicButtonProps"
+              }
+            },
+            {
+              "name": "messages",
+              "type": {
+                "text": "{ [COPY_ERROR]?: string; [COPY_SUCCESS]?: string }"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "copyToClipboard",
+          "declaration": {
+            "name": "copyToClipboard",
+            "module": "src/basic/button/copyToClipboard.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/hello/basic-hello.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "basic-hello",
+          "name": "BasicHello",
+          "description": "A minimal greeting example: types into an `<input>` and echoes the value\nlive into an `<output>`. Demonstrates the smallest possible `on('input')`\n+ `watch()` + `bindText()` cycle. The host must contain a native `<input>`\nand an `<output>` element.",
+          "members": [
+            {
+              "kind": "field",
+              "name": "subject",
+              "type": {
+                "text": "string"
+              },
+              "description": "Text greeted, echoed live from the `<input>`; falls back to the `<output>`'s initial text content when the input is empty."
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#basic-hello",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "BasicHello",
+            "module": "src/basic/hello/basic-hello.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "basic-hello",
+          "declaration": {
+            "name": "BasicHello",
+            "module": "src/basic/hello/basic-hello.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/_common/getNumberFormatter.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "getNumberFormatter",
+          "parameters": [
+            {
+              "name": "locale",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "rawOptions",
+              "type": {
+                "text": "string | null"
+              }
+            },
+            {
+              "name": "logger",
+              "default": "DEFAULT_LOGGER",
+              "type": {
+                "text": "NumberFormatterLogger"
+              }
+            }
+          ],
+          "description": "Builds an `Intl.NumberFormat` from a locale and a JSON-encoded\n`Intl.NumberFormatOptions` string (typically an element's `options`\nattribute). Validates `style: \"currency\"` and `style: \"unit\"` requirements,\ndrops options that don't apply to the resolved style, and swaps inverted\nmin/max digit pairs. Falls back to `new Intl.NumberFormat(locale)` for\nmissing/invalid input, logging via `logger`."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "getNumberFormatter",
+          "declaration": {
+            "name": "getNumberFormatter",
+            "module": "src/_common/getNumberFormatter.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/number/basic-number.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "basic-number",
+          "name": "BasicNumber",
+          "description": "Displays a `value` formatted with `Intl.NumberFormat`, re-formatting live\nwhenever `value` changes. Locale is resolved from the nearest ancestor's\n`lang` attribute (falling back to `en`); formatting options are read once\nat connect time from the `options` attribute as a JSON\n`Intl.NumberFormatOptions` object, e.g. `{\"style\":\"currency\",\"currency\":\"EUR\"}`.",
+          "members": [
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "number"
+              },
+              "description": "The numeric value to display, formatted via `Intl.NumberFormat`."
+            }
+          ],
+          "attributes": [
+            {
+              "name": "value",
+              "fieldName": "value",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "name": "lang",
+              "type": {
+                "text": "string"
+              },
+              "description": "BCP 47 locale tag (e.g. `de-CH`). Falls back to the nearest ancestor's `lang` attribute, or `en` if none is set. Read once at connect time."
+            },
+            {
+              "name": "options",
+              "type": {
+                "text": "Intl.NumberFormatOptions"
+              },
+              "default": "{}",
+              "description": "`Intl.NumberFormat` options as a JSON object. Read once at connect time."
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#basic-number",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "BasicNumber",
+            "module": "src/basic/number/basic-number.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "basic-number",
+          "declaration": {
+            "name": "BasicNumber",
+            "module": "src/basic/number/basic-number.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/basic/pluralize/basic-pluralize.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "basic-pluralize",
+          "name": "BasicPluralize",
+          "description": "Selects which of several child elements to show based on the CLDR plural\ncategory (`zero`, `one`, `two`, `few`, `many`, `other`) or none/some state\nfor `count`, using `Intl.PluralRules`. The host may contain any subset of\n`.zero`, `.one`, `.two`, `.few`, `.many`, `.other`, `.none`, `.some`\nelements — only those present are toggled — plus an optional `.count`\nelement that displays the raw count. Locale is resolved from the nearest\nancestor's `lang` attribute (falling back to `en`).",
+          "members": [
+            {
+              "kind": "field",
+              "name": "count",
+              "type": {
+                "text": "number"
+              },
+              "description": "The count driving pluralization; clamped to a non-negative integer."
+            }
+          ],
+          "attributes": [
+            {
+              "name": "count",
+              "fieldName": "count",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "name": "lang",
+              "type": {
+                "text": "string"
+              },
+              "description": "BCP 47 locale tag (e.g. `de-CH`). Falls back to the nearest ancestor's `lang` attribute, or `en` if none is set. Read once at connect time."
+            },
+            {
+              "name": "ordinal",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "When present, use ordinal (1st, 2nd, 3rd) instead of cardinal plural rules. Read once at connect time."
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#basic-pluralize",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "BasicPluralize",
+            "module": "src/basic/pluralize/basic-pluralize.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "basic-pluralize",
+          "declaration": {
+            "name": "BasicPluralize",
+            "module": "src/basic/pluralize/basic-pluralize.ts"
           }
         }
       ]
@@ -2541,6 +2541,189 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/form/textbox/form-textbox.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "form-textbox",
+          "name": "FormTextbox",
+          "description": "A single-line or multiline text input with validation, optional clear button, and helper text.\nUse it when you need a styled text field — the underlying native input provides\nkeyboard accessibility and standard ARIA textbox semantics. Form participation\nand validity are via ElementInternals (`formAssociated()`).\nExternal consumers read `host.validationMessage` / `host.validity` like on a\nnative input; the inline `.error` element watches the same reactive\n`validationMessage` prop, so it stays in sync without any extra plumbing.",
+          "members": [
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "description": "Current text value. Synced with the native input or textarea."
+            },
+            {
+              "kind": "field",
+              "name": "length",
+              "type": {
+                "text": "number"
+              },
+              "description": "Character length of the current value (read-only)."
+            },
+            {
+              "kind": "field",
+              "name": "description",
+              "type": {
+                "text": "string"
+              },
+              "description": "Helper text shown below the input. May include a remaining-characters template."
+            },
+            {
+              "kind": "method",
+              "name": "clear",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Clears the input value and dispatches `input` and `change` events."
+            },
+            {
+              "kind": "field",
+              "name": "form",
+              "type": {
+                "text": "HTMLFormElement | null"
+              },
+              "description": "The form this element is associated with, or null."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "The form control's name, reflects the name attribute."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the form control is disabled, reflects the disabled attribute."
+            },
+            {
+              "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "NodeList"
+              },
+              "description": "The label elements associated with this form control."
+            },
+            {
+              "kind": "field",
+              "name": "validity",
+              "type": {
+                "text": "ValidityState"
+              },
+              "description": "The validity state of the form control."
+            },
+            {
+              "kind": "field",
+              "name": "validationMessage",
+              "type": {
+                "text": "string"
+              },
+              "description": "The validation message of the form control."
+            },
+            {
+              "kind": "field",
+              "name": "willValidate",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the form control will be validated."
+            },
+            {
+              "kind": "method",
+              "name": "checkValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Checks the validity of the form control."
+            },
+            {
+              "kind": "method",
+              "name": "reportValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Checks the validity of the form control and reports it to the user."
+            },
+            {
+              "kind": "method",
+              "name": "setCustomValidity",
+              "parameters": [
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Sets a custom validity message on the form control."
+            }
+          ],
+          "attributes": [
+            {
+              "name": "name",
+              "fieldName": "name",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#form-textbox",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "FormTextbox",
+            "module": "src/form/textbox/form-textbox.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "form-textbox",
+          "declaration": {
+            "name": "FormTextbox",
+            "module": "src/form/textbox/form-textbox.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/form/tokenbox/form-tokenbox.ts",
       "declarations": [
         {
@@ -2854,226 +3037,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/module/cem-list/module-cem-list.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "customElement": true,
-          "tagName": "module-cem-list",
-          "name": "ModuleCemList",
-          "description": "A catalog of custom-element declarations, rendered server-side from a\ncustom-elements-manifest by the `{% cem-list %}` Markdoc tag — the client\nreceives fully-formed `card-collapsible` markup and only needs to register\nthe tag name; `card-collapsible` and `module-tabgroup` provide all the\ninteractive behavior. A `<form-textbox>` descendant filters the cards by\nmatching its value against each card's full text content (name, tag name,\ndescription, and members) — a client-side layer over pre-rendered markup,\nno re-fetching or re-rendering involved.",
-          "demos": [
-            {
-              "url": "https://zeixcom.github.io/le-truc/examples.html#module-cem-list",
-              "description": "Interactive preview and usage examples"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "ModuleCemList",
-            "module": "src/module/cem-list/module-cem-list.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "module-cem-list",
-          "declaration": {
-            "name": "ModuleCemList",
-            "module": "src/module/cem-list/module-cem-list.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/form/textbox/form-textbox.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "customElement": true,
-          "tagName": "form-textbox",
-          "name": "FormTextbox",
-          "description": "A single-line or multiline text input with validation, optional clear button, and helper text.\nUse it when you need a styled text field — the underlying native input provides\nkeyboard accessibility and standard ARIA textbox semantics. Form participation\nand validity are via ElementInternals (`formAssociated()`).\nExternal consumers read `host.validationMessage` / `host.validity` like on a\nnative input; the inline `.error` element watches the same reactive\n`validationMessage` prop, so it stays in sync without any extra plumbing.",
-          "members": [
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "description": "Current text value. Synced with the native input or textarea."
-            },
-            {
-              "kind": "field",
-              "name": "length",
-              "type": {
-                "text": "number"
-              },
-              "description": "Character length of the current value (read-only)."
-            },
-            {
-              "kind": "field",
-              "name": "description",
-              "type": {
-                "text": "string"
-              },
-              "description": "Helper text shown below the input. May include a remaining-characters template."
-            },
-            {
-              "kind": "method",
-              "name": "clear",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
-              "description": "Clears the input value and dispatches `input` and `change` events."
-            },
-            {
-              "kind": "field",
-              "name": "form",
-              "type": {
-                "text": "HTMLFormElement | null"
-              },
-              "description": "The form this element is associated with, or null."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "description": "The form control's name, reflects the name attribute."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Whether the form control is disabled, reflects the disabled attribute."
-            },
-            {
-              "kind": "field",
-              "name": "labels",
-              "type": {
-                "text": "NodeList"
-              },
-              "description": "The label elements associated with this form control."
-            },
-            {
-              "kind": "field",
-              "name": "validity",
-              "type": {
-                "text": "ValidityState"
-              },
-              "description": "The validity state of the form control."
-            },
-            {
-              "kind": "field",
-              "name": "validationMessage",
-              "type": {
-                "text": "string"
-              },
-              "description": "The validation message of the form control."
-            },
-            {
-              "kind": "field",
-              "name": "willValidate",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Whether the form control will be validated."
-            },
-            {
-              "kind": "method",
-              "name": "checkValidity",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "description": "Checks the validity of the form control."
-            },
-            {
-              "kind": "method",
-              "name": "reportValidity",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "description": "Checks the validity of the form control and reports it to the user."
-            },
-            {
-              "kind": "method",
-              "name": "setCustomValidity",
-              "parameters": [
-                {
-                  "name": "message",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
-              "description": "Sets a custom validity message on the form control."
-            }
-          ],
-          "attributes": [
-            {
-              "name": "name",
-              "fieldName": "name",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "demos": [
-            {
-              "url": "https://zeixcom.github.io/le-truc/examples.html#form-textbox",
-              "description": "Interactive preview and usage examples"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "FormTextbox",
-            "module": "src/form/textbox/form-textbox.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "form-textbox",
-          "declaration": {
-            "name": "FormTextbox",
-            "module": "src/form/textbox/form-textbox.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/module/codeblock/module-codeblock.ts",
       "declarations": [
         {
@@ -3235,106 +3198,27 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/module/colorinfo/module-colorinfo.ts",
+      "path": "src/module/dialog/module-dialog.ts",
       "declarations": [
         {
           "kind": "class",
           "customElement": true,
-          "tagName": "module-colorinfo",
-          "name": "ModuleColorinfo",
-          "description": "Displays detailed color information (CSS, HEX, RGB, HSL, Oklch channels) for a given color.\nUse it for inspecting a color's various representations — useful when you need\nto evaluate contrast for accessibility or copy a specific format.\nThe `value` attribute accepts any valid CSS color string and is parsed\ninternally into Oklch via `asOklch`.",
+          "tagName": "module-dialog",
+          "name": "ModuleDialog",
+          "description": "A modal dialog wrapper around the native `<dialog>` element. Opens via a\n`button[aria-haspopup=\"dialog\"]` descendant, closes via a\n`dialog button.close` descendant, clicking the dialog backdrop, or the\nEscape key. While open, locks background scroll (preserving scroll\nposition) and restores focus to whichever element was focused before\nopening. The host must contain both buttons and a native `<dialog>`.",
           "members": [
             {
               "kind": "field",
-              "name": "label",
+              "name": "open",
               "type": {
-                "text": "string"
+                "text": "boolean"
               },
-              "description": "Display name of the color swatch (e.g. \"Blue 500\")."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "Oklch"
-              },
-              "description": "Color value in Oklch format. Parsed from the `value` attribute at connect time."
-            },
-            {
-              "kind": "field",
-              "name": "css",
-              "type": {
-                "text": "string"
-              },
-              "description": "CSS color string derived from `value` (read-only, computed)."
-            },
-            {
-              "kind": "field",
-              "name": "hex",
-              "type": {
-                "text": "string"
-              },
-              "description": "Hex color string derived from `value` (read-only, computed)."
-            },
-            {
-              "kind": "field",
-              "name": "rgb",
-              "type": {
-                "text": "string"
-              },
-              "description": "RGB color string derived from `value` (read-only, computed)."
-            },
-            {
-              "kind": "field",
-              "name": "hsl",
-              "type": {
-                "text": "string"
-              },
-              "description": "HSL color string derived from `value` (read-only, computed)."
-            },
-            {
-              "kind": "field",
-              "name": "lightness",
-              "type": {
-                "text": "number"
-              },
-              "description": "Lightness channel of `value` (read-only, computed)."
-            },
-            {
-              "kind": "field",
-              "name": "chroma",
-              "type": {
-                "text": "number"
-              },
-              "description": "Chroma channel of `value` (read-only, computed)."
-            },
-            {
-              "kind": "field",
-              "name": "hue",
-              "type": {
-                "text": "number"
-              },
-              "description": "Hue channel of `value` (read-only, computed)."
-            }
-          ],
-          "attributes": [
-            {
-              "name": "value",
-              "fieldName": "value",
-              "type": {
-                "text": "Oklch"
-              }
-            }
-          ],
-          "cssProperties": [
-            {
-              "name": "--module-colorinfo-swatch-size",
-              "description": "The size of the color swatch."
+              "description": "Whether the dialog is open. Setting this shows/hides the native `<dialog>` as a modal."
             }
           ],
           "demos": [
             {
-              "url": "https://zeixcom.github.io/le-truc/examples.html#module-colorinfo",
+              "url": "https://zeixcom.github.io/le-truc/examples.html#module-dialog",
               "description": "Interactive preview and usage examples"
             }
           ]
@@ -3345,16 +3229,53 @@
           "kind": "js",
           "name": "default",
           "declaration": {
-            "name": "ModuleColorinfo",
-            "module": "src/module/colorinfo/module-colorinfo.ts"
+            "name": "ModuleDialog",
+            "module": "src/module/dialog/module-dialog.ts"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "module-colorinfo",
+          "name": "module-dialog",
           "declaration": {
-            "name": "ModuleColorinfo",
-            "module": "src/module/colorinfo/module-colorinfo.ts"
+            "name": "ModuleDialog",
+            "module": "src/module/dialog/module-dialog.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/cem-list/module-cem-list.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "module-cem-list",
+          "name": "ModuleCemList",
+          "description": "A catalog of custom-element declarations, rendered server-side from a\ncustom-elements-manifest by the `{% cem-list %}` Markdoc tag — the client\nreceives fully-formed `card-collapsible` markup and only needs to register\nthe tag name; `card-collapsible` and `module-tabgroup` provide all the\ninteractive behavior. A `<form-textbox>` descendant filters the cards by\nmatching its value against each card's full text content (name, tag name,\ndescription, and members) — a client-side layer over pre-rendered markup,\nno re-fetching or re-rendering involved.",
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#module-cem-list",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ModuleCemList",
+            "module": "src/module/cem-list/module-cem-list.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "module-cem-list",
+          "declaration": {
+            "name": "ModuleCemList",
+            "module": "src/module/cem-list/module-cem-list.ts"
           }
         }
       ]
@@ -3573,6 +3494,132 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/module/colorinfo/module-colorinfo.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "module-colorinfo",
+          "name": "ModuleColorinfo",
+          "description": "Displays detailed color information (CSS, HEX, RGB, HSL, Oklch channels) for a given color.\nUse it for inspecting a color's various representations — useful when you need\nto evaluate contrast for accessibility or copy a specific format.\nThe `value` attribute accepts any valid CSS color string and is parsed\ninternally into Oklch via `asOklch`.",
+          "members": [
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Display name of the color swatch (e.g. \"Blue 500\")."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "Oklch"
+              },
+              "description": "Color value in Oklch format. Parsed from the `value` attribute at connect time."
+            },
+            {
+              "kind": "field",
+              "name": "css",
+              "type": {
+                "text": "string"
+              },
+              "description": "CSS color string derived from `value` (read-only, computed)."
+            },
+            {
+              "kind": "field",
+              "name": "hex",
+              "type": {
+                "text": "string"
+              },
+              "description": "Hex color string derived from `value` (read-only, computed)."
+            },
+            {
+              "kind": "field",
+              "name": "rgb",
+              "type": {
+                "text": "string"
+              },
+              "description": "RGB color string derived from `value` (read-only, computed)."
+            },
+            {
+              "kind": "field",
+              "name": "hsl",
+              "type": {
+                "text": "string"
+              },
+              "description": "HSL color string derived from `value` (read-only, computed)."
+            },
+            {
+              "kind": "field",
+              "name": "lightness",
+              "type": {
+                "text": "number"
+              },
+              "description": "Lightness channel of `value` (read-only, computed)."
+            },
+            {
+              "kind": "field",
+              "name": "chroma",
+              "type": {
+                "text": "number"
+              },
+              "description": "Chroma channel of `value` (read-only, computed)."
+            },
+            {
+              "kind": "field",
+              "name": "hue",
+              "type": {
+                "text": "number"
+              },
+              "description": "Hue channel of `value` (read-only, computed)."
+            }
+          ],
+          "attributes": [
+            {
+              "name": "value",
+              "fieldName": "value",
+              "type": {
+                "text": "Oklch"
+              }
+            }
+          ],
+          "cssProperties": [
+            {
+              "name": "--module-colorinfo-swatch-size",
+              "description": "The size of the color swatch."
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#module-colorinfo",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ModuleColorinfo",
+            "module": "src/module/colorinfo/module-colorinfo.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "module-colorinfo",
+          "declaration": {
+            "name": "ModuleColorinfo",
+            "module": "src/module/colorinfo/module-colorinfo.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/module/scrollarea/module-scrollarea.ts",
       "declarations": [
         {
@@ -3614,6 +3661,53 @@
           "declaration": {
             "name": "ModuleScrollarea",
             "module": "src/module/scrollarea/module-scrollarea.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/module/tabgroup/module-tabgroup.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "customElement": true,
+          "tagName": "module-tabgroup",
+          "name": "ModuleTabgroup",
+          "description": "An ARIA tabs pattern implementation: clicking a `button[role=\"tab\"]` or\nusing arrow/Home/End keys selects a tab and shows the corresponding\n`[role=\"tabpanel\"]`, moving focus along with selection. Requires at least\n2 tabs, each with an `aria-controls` referencing the unique `id` of a\nmatching tabpanel. `selected` is read-only from the outside — it's\nderived from user interaction and the tab initially marked\n`aria-selected=\"true\"`, not settable via attribute or property.",
+          "members": [
+            {
+              "kind": "field",
+              "name": "selected",
+              "type": {
+                "text": "string"
+              },
+              "description": "`aria-controls` id of the currently selected tab (i.e. the id of the visible panel). Read-only."
+            }
+          ],
+          "demos": [
+            {
+              "url": "https://zeixcom.github.io/le-truc/examples.html#module-tabgroup",
+              "description": "Interactive preview and usage examples"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ModuleTabgroup",
+            "module": "src/module/tabgroup/module-tabgroup.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "module-tabgroup",
+          "declaration": {
+            "name": "ModuleTabgroup",
+            "module": "src/module/tabgroup/module-tabgroup.ts"
           }
         }
       ]
@@ -3685,27 +3779,17 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/module/dialog/module-dialog.ts",
+      "path": "src/module/todo/module-todo.ts",
       "declarations": [
         {
           "kind": "class",
           "customElement": true,
-          "tagName": "module-dialog",
-          "name": "ModuleDialog",
-          "description": "A modal dialog wrapper around the native `<dialog>` element. Opens via a\n`button[aria-haspopup=\"dialog\"]` descendant, closes via a\n`dialog button.close` descendant, clicking the dialog backdrop, or the\nEscape key. While open, locks background scroll (preserving scroll\nposition) and restores focus to whichever element was focused before\nopening. The host must contain both buttons and a native `<dialog>`.",
-          "members": [
-            {
-              "kind": "field",
-              "name": "open",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Whether the dialog is open. Setting this shows/hides the native `<dialog>` as a modal."
-            }
-          ],
+          "tagName": "module-todo",
+          "name": "ModuleTodo",
+          "description": "A full-featured todo list with add, remove, complete, filter, inline editing, and\ndrag-and-drop reordering. Use it as a reference example of a complete Le Truc\napplication — keyboard accessible controls and ARIA labelling should be considered\nwhen adapting it for production use.\nExposes the active filter as custom states (`:state(filter-active)`, `:state(filter-completed)`)\nfor CSS-based item visibility, so filter state cannot be spoofed by setting an attribute.",
           "demos": [
             {
-              "url": "https://zeixcom.github.io/le-truc/examples.html#module-dialog",
+              "url": "https://zeixcom.github.io/le-truc/examples.html#module-todo",
               "description": "Interactive preview and usage examples"
             }
           ]
@@ -3716,63 +3800,16 @@
           "kind": "js",
           "name": "default",
           "declaration": {
-            "name": "ModuleDialog",
-            "module": "src/module/dialog/module-dialog.ts"
+            "name": "ModuleTodo",
+            "module": "src/module/todo/module-todo.ts"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "module-dialog",
+          "name": "module-todo",
           "declaration": {
-            "name": "ModuleDialog",
-            "module": "src/module/dialog/module-dialog.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/module/tabgroup/module-tabgroup.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "customElement": true,
-          "tagName": "module-tabgroup",
-          "name": "ModuleTabgroup",
-          "description": "An ARIA tabs pattern implementation: clicking a `button[role=\"tab\"]` or\nusing arrow/Home/End keys selects a tab and shows the corresponding\n`[role=\"tabpanel\"]`, moving focus along with selection. Requires at least\n2 tabs, each with an `aria-controls` referencing the unique `id` of a\nmatching tabpanel. `selected` is read-only from the outside — it's\nderived from user interaction and the tab initially marked\n`aria-selected=\"true\"`, not settable via attribute or property.",
-          "members": [
-            {
-              "kind": "field",
-              "name": "selected",
-              "type": {
-                "text": "string"
-              },
-              "description": "`aria-controls` id of the currently selected tab (i.e. the id of the visible panel). Read-only."
-            }
-          ],
-          "demos": [
-            {
-              "url": "https://zeixcom.github.io/le-truc/examples.html#module-tabgroup",
-              "description": "Interactive preview and usage examples"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "ModuleTabgroup",
-            "module": "src/module/tabgroup/module-tabgroup.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "module-tabgroup",
-          "declaration": {
-            "name": "ModuleTabgroup",
-            "module": "src/module/tabgroup/module-tabgroup.ts"
+            "name": "ModuleTodo",
+            "module": "src/module/todo/module-todo.ts"
           }
         }
       ]
@@ -3838,43 +3875,6 @@
           "declaration": {
             "name": "ModuleTicker",
             "module": "src/module/ticker/module-ticker.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/module/todo/module-todo.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "customElement": true,
-          "tagName": "module-todo",
-          "name": "ModuleTodo",
-          "description": "A full-featured todo list with add, remove, complete, filter, inline editing, and\ndrag-and-drop reordering. Use it as a reference example of a complete Le Truc\napplication — keyboard accessible controls and ARIA labelling should be considered\nwhen adapting it for production use.\nExposes the active filter as custom states (`:state(filter-active)`, `:state(filter-completed)`)\nfor CSS-based item visibility, so filter state cannot be spoofed by setting an attribute.",
-          "demos": [
-            {
-              "url": "https://zeixcom.github.io/le-truc/examples.html#module-todo",
-              "description": "Interactive preview and usage examples"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "ModuleTodo",
-            "module": "src/module/todo/module-todo.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "module-todo",
-          "declaration": {
-            "name": "ModuleTodo",
-            "module": "src/module/todo/module-todo.ts"
           }
         }
       ]

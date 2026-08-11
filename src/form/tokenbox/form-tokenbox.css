@@ -55,7 +55,7 @@ form-tokenbox {
   }
 
   /* Native validity styling — matches form-textbox's :user-invalid hook. */
-  &:user-invalid .input {
+  &:invalid .input:has(input:invalid) {
     box-shadow: 0 0 var(--space-xxs) 2px var(--color-error-invalid);
   }
 

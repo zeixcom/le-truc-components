@@ -81,6 +81,11 @@ export const Default: Story = {
     await expect(el.value).toBe("css, js");
     await userEvent.click(canvas.getByRole("button", { name: "Remove css" }));
     await expect(el.value).toBe("js");
+
+    // Enter commits the draft text too, and doesn't submit an enclosing form.
+    await userEvent.type(input, "typescript{Enter}");
+    await expect(input).toHaveValue("");
+    await expect(el.value).toBe("js, typescript");
   },
 };
 
