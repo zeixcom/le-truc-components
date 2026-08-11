@@ -1,0 +1,148 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as FormTokenboxStories from './form-tokenbox.stories';
+
+<Meta of={FormTokenboxStories} />
+
+### Form Tokenbox
+
+A tokenized text input: typed text becomes a removable pill on `,` or when the input loses
+focus, gated by the descendant `<input>`'s own constraint validation (`type`, `pattern`,
+`maxlength`, …) — an invalid candidate stays in the input and surfaces via `validationMessage`
+instead of becoming a pill. Form participation and validity are via ElementInternals
+(`formAssociated()`); the exposed `value` is the committed tokens joined by `", "`. External
+consumers read `host.validationMessage` / `host.validity` like on a native input, and the inline
+`.error` element watches the same reactive `validationMessage` prop.
+
+#### Tag Name
+
+`form-tokenbox`
+
+#### Preview
+
+<Canvas of={FormTokenboxStories.Default} />
+
+#### Controls
+
+<Controls of={FormTokenboxStories.Default} />
+
+#### Reactive Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>value</code></td>
+      <td><code>string</code></td>
+      <td><code>''</code></td>
+      <td>Committed tokens joined by <code>", "</code>. Setting it re-splits on <code>,</code> and rebuilds the pills</td>
+    </tr>
+    <tr>
+      <td><code>description</code></td>
+      <td><code>string</code></td>
+      <td>text content of <code>.description</code></td>
+      <td>Helper text shown below the input</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Methods
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>clear</code></td>
+      <td><code>() =&gt; void</code></td>
+      <td>Removes all tokens and clears the input, then emits <code>input</code>/<code>change</code> events</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Descendant Elements
+
+<table>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>first('input')</code></td>
+      <td><code>HTMLInputElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Native text field for typing new tokens. Server-rendered <code>value</code> (comma-separated) seeds the initial pills. Mark it <code>data-unreconciled</code> so token reconciliation leaves it alone</td>
+    </tr>
+    <tr>
+      <td><code>first('[data-container]')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Flex container holding the token pills and the native input; the input's <code>flex</code> shrinks it to the remaining horizontal space as pills accumulate</td>
+    </tr>
+    <tr>
+      <td><code>first('template')</code></td>
+      <td><code>HTMLTemplateElement</code></td>
+      <td><strong>required</strong></td>
+      <td>Sibling of <code>[data-container]</code> (not a child — <code>reconcile()</code> would otherwise treat the <code>&lt;template&gt;</code> itself as an unkeyed child and remove it). Single root element with a <code>&lt;slot&gt;</code> placeholder for the token text and a <code>button.remove</code></td>
+    </tr>
+    <tr>
+      <td><code>first('.error')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Inline validation message target; text watches the reactive <code>validationMessage</code> prop</td>
+    </tr>
+    <tr>
+      <td><code>first('.description')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Description target linked by <code>aria-describedby</code></td>
+    </tr>
+    <tr>
+      <td><code>first('.status')</code></td>
+      <td><code>HTMLElement</code></td>
+      <td>optional</td>
+      <td>Visually-hidden <code>role="status"</code> live region; announces "Added token: …" / "Removed token: …" for screen reader users</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Keyboard
+
+<table>
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><kbd>,</kbd> or <kbd>Enter</kbd></td>
+      <td>Commits the current draft text as a token pill (if it passes the input's own validation)</td>
+    </tr>
+    <tr>
+      <td><kbd>Backspace</kbd> (input empty)</td>
+      <td>Removes the last token</td>
+    </tr>
+    <tr>
+      <td><kbd>Tab</kbd> / focus loss</td>
+      <td>Commits any remaining draft text as a token pill</td>
+    </tr>
+  </tbody>
+</table>
