@@ -31,6 +31,7 @@
     "@zeix/cem-plugin-le-truc": "^0.3.2",
     "lit": "^3.3.3",
     "playwright": "^1.62.1",
+    "shiki": "^4.4.3",
     "storybook": "^10.5.7",
     "typescript": "^7.0.2",
     "vite": "^8.2.1",
