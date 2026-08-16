@@ -77,8 +77,8 @@ export default defineComponent<FormTextboxProps>(
     });
 
     on(textbox, "change", () => {
-      textbox.checkValidity()
-			host.setCustomValidity(textbox.validationMessage ?? '')
+      textbox.checkValidity();
+      host.setCustomValidity(textbox.validationMessage ?? "");
       return { value: textbox.value };
     });
     on(textbox, "input", () => {

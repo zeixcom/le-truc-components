@@ -8,9 +8,9 @@ import {
   createStore,
   defineComponent,
   each,
+  type MutableStore,
   query,
   reconcile,
-  type Store,
 } from "@zeix/le-truc";
 import type { BasicButtonProps } from "../../basic/button/basic-button";
 import type { BasicPluralizeProps } from "../../basic/pluralize/basic-pluralize";
@@ -59,7 +59,7 @@ export default defineComponent(
       "Add a live region for status messages.",
     );
 
-    const list = createList<TodoItem, Store<TodoItem>>([], {
+    const list = createList<TodoItem, MutableStore<TodoItem>>([], {
       keyConfig: (item) => item.id,
       createItem: createStore,
     });
