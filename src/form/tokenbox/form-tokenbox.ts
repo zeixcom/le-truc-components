@@ -6,6 +6,7 @@ import {
   type FormAssociatedElement,
   formAssociated,
   type MutableList,
+  observedAttributes,
   reconcile,
 } from "@zeix/le-truc";
 
@@ -60,11 +61,12 @@ export default defineComponent<FormTokenboxProps>(
 
     // Server-rendered input value seeds the initial tokens (progressive
     // enhancement); the input itself only ever holds in-progress draft text.
-    const initialTokens = splitTokens(textbox.value);
-    textbox.value = "";
-    const tokens: MutableList<string> = createList<string>(initialTokens, {
-      keyConfig: "token",
-    });
+    const tokens: MutableList<string> = createList<string>(
+      splitTokens(textbox.value),
+      {
+        keyConfig: "token",
+      },
+    );
 
     const statusEl = first(".status");
     const announce = (message: string) => {
@@ -86,7 +88,6 @@ export default defineComponent<FormTokenboxProps>(
       }
       host.setCustomValidity("");
       tokens.add(trimmed);
-      host.value = tokens.get().join(", ");
       textbox.value = "";
       announce(`Added token: ${trimmed}`);
       return true;
@@ -95,16 +96,14 @@ export default defineComponent<FormTokenboxProps>(
     const removeToken = (key: string) => {
       const value = tokens.byKey(key)?.get();
       tokens.remove(key);
-      host.value = tokens.get().join(", ");
       if (value) announce(`Removed token: ${value}`);
     };
 
     expose({
-      value: initialTokens.join(", "),
+      value: tokens.get().join(", "),
       description: first(".description")?.textContent?.trim() ?? "",
       clear: defineMethod(() => {
         tokens.set([]);
-        host.value = "";
         host.setCustomValidity("");
         textbox.value = "";
         textbox.setCustomValidity("");
@@ -131,10 +130,17 @@ export default defineComponent<FormTokenboxProps>(
       commit(textbox.value);
     });
 
+    // `tokens` is the single source of truth; `value` is its joined
+    // reflection. One effect derives it, replacing the ad-hoc
+    // `tokens.get().join(", ")` previously repeated at every mutation site.
+    watch(tokens, (list) => {
+      host.value = list.join(", ");
+    });
+
     // Re-split and rebuild the pills when `value` is set from outside
     // (consumer code, form reset, form state restore). Equality-guarded so
-    // this doesn't re-run when `value` changed because of our own commit /
-    // removeToken above (which already updated `tokens` to match).
+    // this doesn't re-run when `value` changed because of the watch(tokens, ...)
+    // sync above.
     watch("value", (v) => {
       const parsed = splitTokens(v);
       if (!sameTokens(parsed, tokens.get())) tokens.set(parsed);
@@ -179,5 +185,5 @@ export default defineComponent<FormTokenboxProps>(
     const errorEl = first(".error");
     if (errorEl) watch("validationMessage", bindText(errorEl));
   },
-  [formAssociated()],
+  [formAssociated(), observedAttributes(["value", "description"])],
 );
