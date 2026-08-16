@@ -85,8 +85,8 @@ export default defineComponent<FormComboboxProps>(
     on(textbox, "input", () => {
       length.set(textbox.value.length);
       batch(() => {
-        textbox.checkValidity()
-        host.setCustomValidity(textbox.validationMessage ?? '')
+        textbox.checkValidity();
+        host.setCustomValidity(textbox.validationMessage ?? "");
         host.value = textbox.value;
         showPopup.set(true);
       });
@@ -104,8 +104,8 @@ export default defineComponent<FormComboboxProps>(
       const optionValue = listbox.value;
       textbox.value = optionValue;
       batch(() => {
-        textbox.checkValidity()
-        host.setCustomValidity(textbox.validationMessage ?? '')
+        textbox.checkValidity();
+        host.setCustomValidity(textbox.validationMessage ?? "");
         host.value = optionValue;
         showPopup.set(false);
         textbox.focus();

@@ -5,7 +5,7 @@ import {
   defineMethod,
   type FormAssociatedElement,
   formAssociated,
-  type List,
+  type MutableList,
   reconcile,
 } from "@zeix/le-truc";
 
@@ -62,7 +62,7 @@ export default defineComponent<FormTokenboxProps>(
     // enhancement); the input itself only ever holds in-progress draft text.
     const initialTokens = splitTokens(textbox.value);
     textbox.value = "";
-    const tokens: List<string> = createList<string>(initialTokens, {
+    const tokens: MutableList<string> = createList<string>(initialTokens, {
       keyConfig: "token",
     });
 
