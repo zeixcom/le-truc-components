@@ -13,7 +13,7 @@
     "build-storybook": "npm run analyze && storybook build"
   },
   "dependencies": {
-    "@zeix/le-truc": "^2.4.0",
+    "@zeix/le-truc": "^2.6.0",
     "culori": "^4.0.2"
   },
   "devDependencies": {

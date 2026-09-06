@@ -1,4 +1,4 @@
-import { createState, defineComponent, each } from "@zeix/le-truc";
+import { createCell, defineComponent, each } from "@zeix/le-truc";
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -23,7 +23,7 @@ export default defineComponent(
     const filterEl = first("form-textbox");
     if (!filterEl) return;
 
-    const filterText = createState("");
+    const filterText = createCell("");
     on(filterEl, "input", (e) => {
       filterText.set((e.target as HTMLInputElement).value.trim().toLowerCase());
     });

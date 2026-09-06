@@ -50,13 +50,13 @@ An accessible tab group with full keyboard navigation. It demonstrates managing 
   <tbody>
     <tr>
       <td><code>all('button[role="tab"]')</code></td>
-      <td><code>Memo&lt;HTMLButtonElement[]&gt;</code></td>
+      <td><code>Cell&lt;HTMLButtonElement[]&gt;</code></td>
       <td><strong>required</strong></td>
       <td>Tab buttons (at least 2); each must have <code>aria-controls</code> pointing to a panel <code>id</code>; receives <code>ariaSelected</code> and <code>tabIndex</code></td>
     </tr>
     <tr>
       <td><code>all('[role="tabpanel"]')</code></td>
-      <td><code>Memo&lt;HTMLElement[]&gt;</code></td>
+      <td><code>Cell&lt;HTMLElement[]&gt;</code></td>
       <td><strong>required</strong></td>
       <td>Tab panels (at least 2); each must have a unique <code>id</code> matching a tab's <code>aria-controls</code>; shown/hidden by <code>show()</code></td>
     </tr>

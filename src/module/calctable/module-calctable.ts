@@ -4,10 +4,11 @@ import {
   createMemo,
   createStore,
   defineComponent,
+  deriveList,
+  type MutableStore,
   query,
   queryAll,
   reconcile,
-  type Store,
 } from "@zeix/le-truc";
 import { getLocale } from "../../_common/getLocale";
 import { getNumberFormatter } from "../../_common/getNumberFormatter";
@@ -88,11 +89,12 @@ export default defineComponent(
       };
     });
 
-    const list = createList<CalcItem, Store<CalcItem>>(initialItems, {
+    const list = createList<CalcItem, MutableStore<CalcItem>>(initialItems, {
       keyConfig: (item) => item.id,
       createItem: createStore,
     });
-    const rowPrices = list.deriveCollection(
+    const rowPrices = deriveList(
+      list,
       (item) => item.amount * item.pricePerUnit,
     );
     const amountTotal = createMemo(() =>

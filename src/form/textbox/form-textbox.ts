@@ -2,8 +2,8 @@ import {
   bindProperty,
   bindText,
   bindVisible,
+  createCell,
   createMemo,
-  createState,
   defineComponent,
   defineMethod,
   type FormAssociatedElement,
@@ -45,7 +45,7 @@ export default defineComponent<FormTextboxProps>(
       "input, textarea",
       "Add a native input or textarea as descendant element.",
     );
-    const length = createState(textbox.value.length);
+    const length = createCell(textbox.value.length);
 
     // Reactive description: tracks remaining character count if template is present
     const descriptionEl = first(".description");
@@ -77,8 +77,8 @@ export default defineComponent<FormTextboxProps>(
     });
 
     on(textbox, "change", () => {
-      textbox.checkValidity()
-			host.setCustomValidity(textbox.validationMessage ?? '')
+      textbox.checkValidity();
+      host.setCustomValidity(textbox.validationMessage ?? "");
       return { value: textbox.value };
     });
     on(textbox, "input", () => {
