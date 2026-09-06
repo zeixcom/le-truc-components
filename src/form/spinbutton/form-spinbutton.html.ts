@@ -61,13 +61,19 @@ export const FormSpinbutton = ({
   errorId,
 }: FormSpinbuttonArgs) => {
   const isZero = zeroLabel !== undefined && value === 0;
+  // An unbounded step permits typing values with more precision than the
+  // host's step grid, but it also forfeits the UA's shrink-to-min/max-range
+  // sizing for number inputs — so only fractional steps opt out, where typed
+  // precision matters more than compactness.
+  const inputStep =
+    step !== undefined && !Number.isInteger(step) ? "any" : nothing;
   const inputEl = html`
     <input
       type="number"
       class="value"
       id=${id || nothing}
       value=${value}
-      step="any"
+      step=${inputStep}
       aria-label=${label ? nothing : ariaLabel || nothing}
       ?hidden=${isZero}
     />
