@@ -197,5 +197,5 @@ export default defineComponent<FormTokenboxProps>(
     const errorEl = first(".error");
     if (errorEl) watch("validationMessage", bindText(errorEl));
   },
-  [formAssociated()],
+  [formAssociated(), observedAttributes(["value", "description"])],
 );
