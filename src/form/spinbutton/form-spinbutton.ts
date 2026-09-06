@@ -92,6 +92,13 @@ export default defineComponent<FormSpinbuttonProps>(
       fromHostOrInput("max") ??
       (isInteger ? Number.MAX_SAFE_INTEGER : Number.MAX_VALUE);
 
+    // A fractional step lifts the native step constraint so manually entered
+    // values keep full precision; an integer step keeps the bounded default,
+    // which — with the min/max the watch below reflects onto the input — is
+    // what makes Chrome shrink-wrap the input to its range instead of
+    // falling back to its 20-character default width.
+    if (!isInteger) input.step = "any";
+
     expose({
       value: clamp(fromHostOrInput("value") ?? minValue),
       max: maxValue,

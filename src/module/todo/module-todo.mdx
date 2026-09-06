@@ -90,19 +90,19 @@ None. This component orchestrates behavior by passing state and events between d
     </tr>
     <tr>
       <td><code>all('button.reorder')</code></td>
-      <td><code>Memo&lt;HTMLButtonElement[]&gt;</code></td>
+      <td><code>Cell&lt;HTMLButtonElement[]&gt;</code></td>
       <td><strong>required</strong></td>
       <td>Drag handle and keyboard reorder buttons; disabled via <code>each()</code> + <code>pass()</code> when only one item remains</td>
     </tr>
     <tr>
       <td><code>all('form-checkbox')</code></td>
-      <td><code>Memo&lt;(HTMLElement &amp; FormCheckboxProps)[]&gt;</code></td>
+      <td><code>Cell&lt;(HTMLElement &amp; FormCheckboxProps)[]&gt;</code></td>
       <td><strong>required</strong></td>
       <td>Per-item checkbox components; each receives its item's <code>completed</code> state signal directly via <code>pass()</code></td>
     </tr>
     <tr>
       <td><code>all('form-inplace-edit')</code></td>
-      <td><code>Memo&lt;HTMLElement[]&gt;</code></td>
+      <td><code>Cell&lt;HTMLElement[]&gt;</code></td>
       <td><strong>required</strong></td>
       <td>Per-item inline editors; each receives its item's <code>label</code> state signal directly via <code>pass()</code></td>
     </tr>

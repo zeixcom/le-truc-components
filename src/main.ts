@@ -1,10 +1,10 @@
+import "./basic/blogmeta/basic-blogmeta.ts";
 import "./basic/button/basic-button.ts";
 import "./basic/counter/basic-counter.ts";
 import "./basic/gauge/basic-gauge.ts";
 import "./basic/hello/basic-hello.ts";
 import "./basic/number/basic-number.ts";
 import "./basic/pluralize/basic-pluralize.ts";
-import "./card/blogmeta/card-blogmeta.ts";
 import "./card/collapsible/card-collapsible.ts";
 import "./card/colorscale/card-colorscale.ts";
 import "./card/mediaqueries/card-mediaqueries.ts";

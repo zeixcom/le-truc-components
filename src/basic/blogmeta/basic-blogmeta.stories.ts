@@ -2,20 +2,20 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import { expect } from "storybook/test";
 import { timestamp } from "../../_common/storyArgs";
 import {
+  BasicBlogmeta,
+  type BasicBlogmetaArgs,
   blogmetaArgTypes,
-  CardBlogmeta,
-  type CardBlogmetaArgs,
-} from "./card-blogmeta.html";
-import "./card-blogmeta.ts";
-import "./card-blogmeta.css";
+} from "./basic-blogmeta.html";
+import "./basic-blogmeta.ts";
+import "./basic-blogmeta.css";
 
-const meta: Meta<CardBlogmetaArgs> = {
-  title: "Card/Blogmeta",
-  render: CardBlogmeta,
+const meta: Meta<BasicBlogmetaArgs> = {
+  title: "Basic/Blogmeta",
+  render: BasicBlogmeta,
   argTypes: blogmetaArgTypes,
 };
 export default meta;
-type Story = StoryObj<CardBlogmetaArgs>;
+type Story = StoryObj<BasicBlogmetaArgs>;
 
 export const Default: Story = {
   args: {
@@ -41,7 +41,7 @@ export const WithModifiedDate: Story = {
   },
 };
 
-// No avatarSrc: card-blogmeta falls back to a stylized inline SVG placeholder avatar
+// No avatarSrc: basic-blogmeta falls back to a stylized inline SVG placeholder avatar
 export const WithoutAvatar: Story = {
   args: {
     author: "Anonymous Contributor",
@@ -52,8 +52,8 @@ export const WithoutAvatar: Story = {
     lang: "",
   },
   play: async ({ canvasElement }) => {
-    await customElements.whenDefined("card-blogmeta");
-    const el = canvasElement.querySelector("card-blogmeta");
+    await customElements.whenDefined("basic-blogmeta");
+    const el = canvasElement.querySelector("basic-blogmeta");
     await expect(el?.querySelector(".author img")).not.toBeInTheDocument();
     await expect(el?.querySelector(".author svg.avatar")).toBeInTheDocument();
   },
@@ -71,8 +71,8 @@ export const GermanLocale: Story = {
     lang: "de",
   },
   play: async ({ canvasElement }) => {
-    await customElements.whenDefined("card-blogmeta");
-    const el = canvasElement.querySelector("card-blogmeta");
+    await customElements.whenDefined("basic-blogmeta");
+    const el = canvasElement.querySelector("basic-blogmeta");
     const expected = new Intl.DateTimeFormat("de", {
       dateStyle: "long",
     }).format(new Date(2026, 2, 9));

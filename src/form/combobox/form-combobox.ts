@@ -1,9 +1,10 @@
 import {
   batch,
+  bindAria,
   bindText,
   bindVisible,
+  createCell,
   createMemo,
-  createState,
   defineComponent,
   defineMethod,
   type FormAssociatedElement,
@@ -49,14 +50,17 @@ export default defineComponent<FormComboboxProps>(
     );
     const descriptionEl = first(".description");
 
-    const descriptionId = descriptionEl?.id;
-    if (descriptionId) textbox.setAttribute("aria-describedby", descriptionId);
+    // Element reference instead of hand-rolled ID plumbing — static,
+    // one-time wiring stays imperative; no bindAria() call for a statement
+    // already shorter than its helper. The IDL write mirrors into the
+    // aria-describedby content attribute.
+    if (descriptionEl) textbox.ariaDescribedByElements = [descriptionEl];
 
-    const showPopup = createState(false);
+    const showPopup = createCell(false);
     const isExpanded = createMemo(
       () => showPopup.get() && listbox.options.length > 0,
     );
-    const length = createState(textbox.value.length);
+    const length = createCell(textbox.value.length);
 
     expose({
       value: textbox.value,
@@ -130,10 +134,10 @@ export default defineComponent<FormComboboxProps>(
     // driven by Controls.
     if (descriptionEl) watch("description", bindText(descriptionEl, true));
 
-    watch(isExpanded, (expanded) => {
-      listbox.hidden = !expanded;
-      textbox.ariaExpanded = String(expanded);
-    });
+    watch(isExpanded, bindVisible(listbox));
+    // bindAria() gives the boolean coercion ('true'/'false', never manual
+    // String()); the IDL write mirrors into the aria-expanded attribute.
+    watch(isExpanded, bindAria(textbox, "ariaExpanded"));
     if (clearBtn) watch(length, bindVisible(clearBtn));
   },
   [formAssociated()],

@@ -1,4 +1,4 @@
-import { createState, defineComponent } from "@zeix/le-truc";
+import { createCell, defineComponent } from "@zeix/le-truc";
 
 export type ModuleTabgroupProps = {
   /** `aria-controls` id of the currently selected tab (i.e. the id of the visible panel). Read-only. */
@@ -48,7 +48,7 @@ export default defineComponent<ModuleTabgroupProps>(
       host.selected === tab.getAttribute("aria-controls");
 
     // Private mutable state; expose as read-only via Memo so external code can't set it
-    const selectedState = createState(
+    const selectedState = createCell(
       getSelected(tabs.get(), (tab) => tab.ariaSelected === "true"),
     );
 

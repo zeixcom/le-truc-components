@@ -1,4 +1,4 @@
-import { batch, bindState, createState, defineComponent } from "@zeix/le-truc";
+import { batch, bindState, createCell, defineComponent } from "@zeix/le-truc";
 
 const MIN_INTERSECTION_RATIO = 0;
 const MAX_INTERSECTION_RATIO = 0.99; // ignore rounding errors of fraction pixels
@@ -55,8 +55,8 @@ export default defineComponent(
     const child = host.firstElementChild;
     if (!child) return;
 
-    const overflowStart = createState(false);
-    const overflowEnd = createState(false);
+    const overflowStart = createCell(false);
+    const overflowEnd = createCell(false);
     const hasOverflow = () => overflowStart.get() || overflowEnd.get();
 
     const scrollCallback =

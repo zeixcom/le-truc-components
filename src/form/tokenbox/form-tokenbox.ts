@@ -1,12 +1,12 @@
 import {
   bindText,
   createList,
+  DuplicateKeyError,
   defineComponent,
   defineMethod,
   type FormAssociatedElement,
   formAssociated,
   type MutableList,
-  observedAttributes,
   reconcile,
 } from "@zeix/le-truc";
 
@@ -25,14 +25,20 @@ declare global {
   }
 }
 
-const splitTokens = (raw: string): string[] =>
-  raw
+const splitTokens = (raw: string): string[] => {
+  const seen = new Set<string>();
+  const parts = raw
     .split(",")
     .map((part) => part.trim())
-    .filter(Boolean);
-
-const sameTokens = (a: string[], b: string[]): boolean =>
-  a.length === b.length && a.every((v, i) => v === b[i]);
+    .filter((part) => {
+      if (!part) return false;
+      const key = part.toLowerCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  return parts;
+};
 
 /**
  * A tokenized text input: typed text becomes a removable pill on `,` or on blur,
@@ -61,12 +67,13 @@ export default defineComponent<FormTokenboxProps>(
 
     // Server-rendered input value seeds the initial tokens (progressive
     // enhancement); the input itself only ever holds in-progress draft text.
-    const tokens: MutableList<string> = createList<string>(
-      splitTokens(textbox.value),
-      {
-        keyConfig: "token",
-      },
-    );
+    const initialTokens = splitTokens(textbox.value);
+    textbox.value = "";
+    // Keys are the lowercased token values, so a duplicate add throws
+    // DuplicateKeyError instead of creating a look-alike pill.
+    const tokens: MutableList<string> = createList<string>(initialTokens, {
+      keyConfig: (v) => v.toLowerCase(),
+    });
 
     const statusEl = first(".status");
     const announce = (message: string) => {
@@ -77,7 +84,10 @@ export default defineComponent<FormTokenboxProps>(
     // Gated by the native input's own constraint validation, so `pattern` /
     // `maxlength` / etc. left on the descendant <input> still apply — an
     // invalid candidate stays in the input and surfaces via validationMessage
-    // instead of becoming a pill.
+    // instead of becoming a pill. A duplicate is surfaced the same way
+    // (custom validity, text left in the input for correction) rather than
+    // silently dropped, since it's the same "this candidate can't become a
+    // pill" case.
     const commit = (raw: string): boolean => {
       const trimmed = raw.trim();
       if (!trimmed) return false;
@@ -86,8 +96,16 @@ export default defineComponent<FormTokenboxProps>(
         host.setCustomValidity(textbox.validationMessage);
         return false;
       }
-      host.setCustomValidity("");
-      tokens.add(trimmed);
+      try {
+        tokens.add(trimmed);
+        host.setCustomValidity("");
+      } catch (e) {
+        if (e instanceof DuplicateKeyError) {
+          host.setCustomValidity(`${trimmed} is already in the list`);
+          return false;
+        }
+        throw e;
+      }
       textbox.value = "";
       announce(`Added token: ${trimmed}`);
       return true;
@@ -100,7 +118,17 @@ export default defineComponent<FormTokenboxProps>(
     };
 
     expose({
-      value: tokens.get().join(", "),
+      // `tokens` is the single source of truth; `value` is a mediated view
+      // onto it (SlotDescriptor, le-truc 2.5.1+). The setter re-splits and
+      // rebuilds the pills when `value` is set from outside (consumer code,
+      // form state restore). `tokens.set()` already no-ops on a
+      // content-equal array (MutableList diffs by key before propagating),
+      // so no manual equality guard here — and no hand-synced watch()
+      // keeping `value` and `tokens` in step.
+      value: {
+        get: () => tokens.get().join(", "),
+        set: (v: string) => tokens.set(splitTokens(v)),
+      },
       description: first(".description")?.textContent?.trim() ?? "",
       clear: defineMethod(() => {
         tokens.set([]);
@@ -128,22 +156,6 @@ export default defineComponent<FormTokenboxProps>(
     });
     on(textbox, "blur", () => {
       commit(textbox.value);
-    });
-
-    // `tokens` is the single source of truth; `value` is its joined
-    // reflection. One effect derives it, replacing the ad-hoc
-    // `tokens.get().join(", ")` previously repeated at every mutation site.
-    watch(tokens, (list) => {
-      host.value = list.join(", ");
-    });
-
-    // Re-split and rebuild the pills when `value` is set from outside
-    // (consumer code, form reset, form state restore). Equality-guarded so
-    // this doesn't re-run when `value` changed because of the watch(tokens, ...)
-    // sync above.
-    watch("value", (v) => {
-      const parsed = splitTokens(v);
-      if (!sameTokens(parsed, tokens.get())) tokens.set(parsed);
     });
 
     reconcile(container, template, tokens, (_element, item, _key, first) => {

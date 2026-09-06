@@ -2,9 +2,9 @@ import {
   bindProperty,
   bindState,
   bindText,
+  createCell,
   createList,
   createMemo,
-  createState,
   createStore,
   defineComponent,
   each,
@@ -68,7 +68,7 @@ export default defineComponent(
       () => list.get().filter((item) => item.completed).length,
     );
     const activeCount = createMemo(() => list.length - completedCount.get());
-    const status = createState(liveRegion.textContent);
+    const status = createCell(liveRegion.textContent);
 
     let selectedItem: HTMLElement | null = null;
     let dragItem: HTMLElement | null = null;
@@ -371,12 +371,14 @@ export default defineComponent(
       "Add <form-radiogroup> component to filter todo items.",
     ) as HTMLElement & FormRadiogroupProps;
     watch(
-      () => (filter.value || "all") === "active",
-      bindState(internals, "filter-active"),
-    );
-    watch(
-      () => (filter.value || "all") === "completed",
-      bindState(internals, "filter-completed"),
+      () => {
+        const value = filter.value || "all";
+        return {
+          "filter-active": value === "active",
+          "filter-completed": value === "completed",
+        };
+      },
+      bindState(internals, ["filter-active", "filter-completed"]),
     );
 
     watch(status, bindText(liveRegion));

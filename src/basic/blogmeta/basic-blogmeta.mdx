@@ -1,23 +1,23 @@
 import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
-import * as CardBlogmetaStories from "./card-blogmeta.stories";
+import * as BasicBlogmetaStories from "./basic-blogmeta.stories";
 
-<Meta of={CardBlogmetaStories} />
+<Meta of={BasicBlogmetaStories} />
 
-### Card Blogmeta
+### Basic Blogmeta
 
 Displays a blog post's byline — author, publication date, optional modification date, and estimated read time. The markup carries schema.org `BlogPosting` metadata for search engines and other structured-data consumers, and shows a placeholder avatar automatically when none is provided.
 
 #### Tag Name
 
-`card-blogmeta`
+`basic-blogmeta`
 
 #### Preview
 
-<Canvas of={CardBlogmetaStories.Default} />
+<Canvas of={BasicBlogmetaStories.Default} />
 
 #### Controls
 
-<Controls of={CardBlogmetaStories.Default} />
+<Controls of={BasicBlogmetaStories.Default} />
 
 See the `WithModifiedDate` and `WithoutAvatar` stories for variants.
 

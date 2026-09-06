@@ -2,10 +2,11 @@ import "culori/css";
 import {
   asString,
   batch,
+  bindAria,
   bindStyle,
   bindText,
+  createCell,
   createMemo,
-  createState,
   defineComponent,
   defineMethod,
   type FormAssociatedElement,
@@ -124,7 +125,7 @@ export default defineComponent<FormColorgraphProps>(
     sliderEl.setAttribute("aria-valuemax", "360");
 
     // Internal states
-    const canvasSize = createState(graphEl.getBoundingClientRect().width);
+    const canvasSize = createCell(graphEl.getBoundingClientRect().width);
     const trackWidth = createMemo(() => canvasSize.get() - 2 * TRACK_OFFSET);
     // Out-of-gamut is a single joint constraint over all three axes, not a
     // per-axis one — the color can usually be brought back in gamut by
@@ -154,18 +155,22 @@ export default defineComponent<FormColorgraphProps>(
         h,
         alpha,
       });
-    const setStepPosition = (target: HTMLLIElement, color: Oklch): void => {
-      const size = canvasSize.get();
-      const x = Math.round((color.c * size) / AXIS_MAX.c);
-      const y = Math.round((1 - color.l) * size);
-      target.style.setProperty("background-color", formatCss(color));
-      target.style.setProperty(
-        "border-color",
-        color.l > CONTRAST_THRESHOLD ? "black" : "white",
-      );
-      target.style.setProperty("left", `${x}px`);
-      target.style.setProperty("top", `${y}px`);
-    };
+    const STEP_STYLE_PROPS = [
+      "background-color",
+      "border-color",
+      "left",
+      "top",
+    ] as const;
+
+    const stepStyle = (
+      size: number,
+      color: Oklch,
+    ): Record<(typeof STEP_STYLE_PROPS)[number], string> => ({
+      "background-color": formatCss(color),
+      "border-color": color.l > CONTRAST_THRESHOLD ? "black" : "white",
+      left: `${Math.round((color.c * size) / AXIS_MAX.c)}px`,
+      top: `${Math.round((1 - color.l) * size)}px`,
+    });
     const getHueFromPosition = (x: number): Oklch => {
       const newColor = { ...color.get(), h: x * AXIS_MAX.h };
       if (inRGBGamut(newColor)) return newColor;
@@ -323,24 +328,19 @@ export default defineComponent<FormColorgraphProps>(
       },
     );
 
-    // Knob position
+    // Knob position — map-form bindStyle() drives all three writes from one
+    // derived style map (le-truc 2.6 overloads).
     watch(
-      () => ({
-        l: color.get().l,
-        c: color.get().c,
-        size: canvasSize.get(),
-      }),
-      ({ l, c, size }) => {
-        knob.style.setProperty("top", `${Math.round((1 - l) * size)}px`);
-        knob.style.setProperty(
-          "left",
-          `${Math.round((c * size) / AXIS_MAX.c)}px`,
-        );
-        knob.style.setProperty(
-          "--color-border",
-          l > CONTRAST_THRESHOLD ? "black" : "white",
-        );
+      () => {
+        const { l, c } = color.get();
+        const size = canvasSize.get();
+        return {
+          top: `${Math.round((1 - l) * size)}px`,
+          left: `${Math.round((c * size) / AXIS_MAX.c)}px`,
+          "--color-border": l > CONTRAST_THRESHOLD ? "black" : "white",
+        };
       },
+      bindStyle(knob, ["top", "left", "--color-border"]),
     );
 
     // Slider pointer interaction + ARIA + CSS variable
@@ -363,11 +363,17 @@ export default defineComponent<FormColorgraphProps>(
       sliderEl.addEventListener("pointercancel", handleUp);
     });
     watch(() => `${trackWidth.get()}px`, bindStyle(sliderEl, "--track-width"));
-    watch(color, (c) => {
-      const hue = c.h ?? 0;
-      sliderEl.setAttribute("aria-valuenow", String(hue));
-      sliderEl.setAttribute("aria-valuetext", `${fn2Digits(hue)}°`);
-    });
+    // bindAria()'s map form: one thunk source derives both properties from
+    // the same hue read. `sliderEl` is a native Element (role="slider" set
+    // statically in markup), so this stays the attribute channel — the
+    // helper's number coercion replaces the manual String() writes.
+    watch(
+      () => {
+        const hue = color.get().h ?? 0;
+        return { ariaValueNow: hue, ariaValueText: `${fn2Digits(hue)}°` };
+      },
+      bindAria(sliderEl, ["ariaValueNow", "ariaValueText"]),
+    );
 
     // Track canvas: redraw on color or track width change
     watch(
@@ -386,21 +392,16 @@ export default defineComponent<FormColorgraphProps>(
 
     // Thumb position
     watch(
-      () => ({
-        hue: color.get().h ?? 0,
-        l: color.get().l,
-        tw: trackWidth.get(),
-      }),
-      ({ hue, l, tw }) => {
-        thumb.style.setProperty(
-          "left",
-          `${Math.round((hue * tw) / AXIS_MAX.h) + TRACK_OFFSET}px`,
-        );
-        thumb.style.setProperty(
-          "--color-border",
-          l > CONTRAST_THRESHOLD ? "black" : "white",
-        );
+      () => {
+        const { l } = color.get();
+        const hue = color.get().h ?? 0;
+        const tw = trackWidth.get();
+        return {
+          left: `${Math.round((hue * tw) / AXIS_MAX.h) + TRACK_OFFSET}px`,
+          "--color-border": l > CONTRAST_THRESHOLD ? "black" : "white",
+        };
       },
+      bindStyle(thumb, ["left", "--color-border"]),
     );
 
     // Keyboard navigation. Arrow Up/Down and +/- while focus is inside a
@@ -465,20 +466,21 @@ export default defineComponent<FormColorgraphProps>(
       const li = first(`li.lighten${(5 - i) * 20}`);
       if (li)
         watch(
-          () => ({ c: color.get(), size: canvasSize.get() }),
-          ({ c }) => {
-            setStepPosition(li, getStepColor(c, 1 - i / 10));
-          },
+          () =>
+            stepStyle(canvasSize.get(), getStepColor(color.get(), 1 - i / 10)),
+          bindStyle(li, STEP_STYLE_PROPS),
         );
     }
     for (let i = 1; i < 5; i++) {
       const li = first(`li.darken${i * 20}`);
       if (li)
         watch(
-          () => ({ c: color.get(), size: canvasSize.get() }),
-          ({ c }) => {
-            setStepPosition(li, getStepColor(c, 1 - (i + 5) / 10));
-          },
+          () =>
+            stepStyle(
+              canvasSize.get(),
+              getStepColor(color.get(), 1 - (i + 5) / 10),
+            ),
+          bindStyle(li, STEP_STYLE_PROPS),
         );
     }
   },
