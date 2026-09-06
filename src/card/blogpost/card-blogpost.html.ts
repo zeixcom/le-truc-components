@@ -1,10 +1,10 @@
 import { html } from "lit";
 import {
-  CardBlogmeta,
-  type CardBlogmetaArgs,
-} from "../blogmeta/card-blogmeta.html";
+  BasicBlogmeta,
+  type BasicBlogmetaArgs,
+} from "../../basic/blogmeta/basic-blogmeta.html";
 
-export type CardBlogpostArgs = CardBlogmetaArgs & {
+export type CardBlogpostArgs = BasicBlogmetaArgs & {
   title: string;
   href: string;
   excerpt: string;
@@ -22,7 +22,7 @@ export const CardBlogpost = ({
         ><span itemprop="headline">${title}</span></a
       >
     </h2>
-    ${CardBlogmeta(blogmetaArgs)}
+    ${BasicBlogmeta(blogmetaArgs)}
     <p itemprop="description">${excerpt}</p>
   </card-blogpost>
 `;

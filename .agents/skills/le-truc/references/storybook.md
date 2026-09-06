@@ -39,7 +39,7 @@ export const MyComponent = ({ label, disabled }: MyComponentArgs) => html`
 `
 ```
 
-- Export the render function under the **PascalCase form of the full tag name** — the same name the Custom Elements Manifest (CEM) plugin reports for the component (`card-blogmeta` → `CardBlogmeta`, `card-colorscale` → `CardColorscale`, `form-checkbox` → `FormCheckbox`), not a short concept name and not the raw tag name. This used to be a bare concept name (`Blogmeta`, `Colorscale`, `Checkbox`) — that convention is retired because short names collide with reserved words (`basic-number`'s render function can't be called `Number`) and with each other across unrelated components (`module-list`'s `List` vs. le-truc's own exported `List` type). The full tag-derived name is always unique and never collides with a JS/TS built-in.
+- Export the render function under the **PascalCase form of the full tag name** — the same name the Custom Elements Manifest (CEM) plugin reports for the component (`basic-blogmeta` → `BasicBlogmeta`, `card-colorscale` → `CardColorscale`, `form-checkbox` → `FormCheckbox`), not a short concept name and not the raw tag name. This used to be a bare concept name (`Blogmeta`, `Colorscale`, `Checkbox`) — that convention is retired because short names collide with reserved words (`basic-number`'s render function can't be called `Number`) and with each other across unrelated components (`module-list`'s `List` vs. le-truc's own exported `List` type). The full tag-derived name is always unique and never collides with a JS/TS built-in.
 - Export the `Args` type alongside it — consumers need it for composition.
 - No `import type { Meta }` unless the file also exports a reusable `argTypes` object (see below) — otherwise keep this file free of Storybook packages.
 - Only register custom-element/CSS **side effects** (`import "./component.ts"`, `import "./component.css"`) in `component.stories.ts`, never in `.html.ts` — registration is a story/test concern, not a template concern.
@@ -50,12 +50,12 @@ When one component's story embeds another's, import the render function from its
 
 ```typescript
 // card-blogpost.html.ts
-import { CardBlogmeta, type CardBlogmetaArgs } from '../blogmeta/card-blogmeta.html'
+import { BasicBlogmeta, type BasicBlogmetaArgs } from '../blogmeta/basic-blogmeta.html'
 
 export const CardBlogpost = ({ title, href, excerpt, ...blogmetaArgs }: CardBlogpostArgs) => html`
   <card-blogpost>
     <h2><a href=${href}>${title}</a></h2>
-    ${CardBlogmeta(blogmetaArgs)}
+    ${BasicBlogmeta(blogmetaArgs)}
     <p>${excerpt}</p>
   </card-blogpost>
 `
@@ -65,19 +65,19 @@ Two components can legitimately import each other's render function (e.g. a card
 
 ### Reusable `argTypes`
 
-If a render function's controls need to be merged into a composing component's own `argTypes` (e.g. `card-blogpost` folding in every `card-blogmeta` control), export the `argTypes` object from `.html.ts` too — but use `satisfies`, not a `: Meta<Args>["argTypes"]` annotation:
+If a render function's controls need to be merged into a composing component's own `argTypes` (e.g. `card-blogpost` folding in every `basic-blogmeta` control), export the `argTypes` object from `.html.ts` too — but use `satisfies`, not a `: Meta<Args>["argTypes"]` annotation:
 
 ```typescript
 // ✅ satisfies preserves the literal object type
 export const blogmetaArgTypes = {
   author: { control: 'text', table: { category: 'Content' } },
   // ...
-} satisfies Meta<CardBlogmetaArgs>['argTypes']
+} satisfies Meta<BasicBlogmetaArgs>['argTypes']
 
 // ❌ this annotation widens to `X | undefined` (exactOptionalPropertyTypes),
 // which then fails to satisfy another object's `argTypes` field once imported
 // across a module boundary
-export const blogmetaArgTypes: Meta<CardBlogmetaArgs>['argTypes'] = { /* ... */ }
+export const blogmetaArgTypes: Meta<BasicBlogmetaArgs>['argTypes'] = { /* ... */ }
 ```
 
 ---

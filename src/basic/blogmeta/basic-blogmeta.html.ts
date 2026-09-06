@@ -2,7 +2,7 @@ import type { Meta } from "@storybook/web-components";
 import { html, nothing } from "lit";
 import { toISODate } from "../../_common/storyArgs";
 
-export type CardBlogmetaArgs = {
+export type BasicBlogmetaArgs = {
   author: string;
   avatarSrc: string;
   datePublished: number;
@@ -12,16 +12,16 @@ export type CardBlogmetaArgs = {
 };
 
 // Exported so card-blogpost.html.ts can embed a blogmeta instance via
-// ${CardBlogmeta(args)} instead of duplicating its markup.
-export const CardBlogmeta = ({
+// ${BasicBlogmeta(args)} instead of duplicating its markup.
+export const BasicBlogmeta = ({
   author,
   avatarSrc,
   datePublished,
   dateModified,
   timeRequired,
   lang,
-}: CardBlogmetaArgs) => html`
-  <card-blogmeta lang=${lang || nothing}>
+}: BasicBlogmetaArgs) => html`
+  <basic-blogmeta lang=${lang || nothing}>
     <span
       class="author"
       itemprop="author"
@@ -59,11 +59,11 @@ export const CardBlogmeta = ({
       <meta itemprop="timeRequired" content="PT${timeRequired}M" />${timeRequired}
       min read
     </span>
-  </card-blogmeta>
+  </basic-blogmeta>
 `;
 
 // Exported so card-blogpost.html.ts can fold these into its own
-// argTypes when it embeds CardBlogmeta(args).
+// argTypes when it embeds BasicBlogmeta(args).
 export const blogmetaArgTypes = {
   author: {
     control: "text",
@@ -100,4 +100,4 @@ export const blogmetaArgTypes = {
       "Optional BCP 47 language tag — demonstrates that dates are formatted according to the (possibly inherited) locale",
     table: { category: "Attributes" },
   },
-} satisfies Meta<CardBlogmetaArgs>["argTypes"];
+} satisfies Meta<BasicBlogmetaArgs>["argTypes"];
